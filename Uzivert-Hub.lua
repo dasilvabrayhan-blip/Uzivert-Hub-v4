@@ -1,25 +1,23 @@
--- Ofuscado con NexOfb — 2026-10-08
-local function _0xe1e0d8(t) local s="" for i=1,#t do s=s..string.char(t[i]) end return s end
+-- ============================================
+-- UZIVERT HUB | v4.6.4 HALLOWEEN 🎃
+-- Proyecto inicial por Uzivert
+-- Con ayuda explicativa de Nexvyr
+-- ============================================
 
+local Players = game:GetService("Players")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local Stats = game:GetService("Stats")
+local Lighting = game:GetService("Lighting")
+local HttpService = game:GetService("HttpService")
+local Debris = game:GetService("Debris")
 
+local VERSION = "v4.6.4 HALLOWEEN"
 
-
-
-
-local _0x73fbe8 = game:GetService(_0xe1e0d8({80,108,97,121,101,114,115}))
-local _0x9e40ad = workspace.CurrentCamera
-local _0xe3a36b = _0x73fbe8.LocalPlayer
-local _0x881c95 = game:GetService(_0xe1e0d8({85,115,101,114,73,110,112,117,116,83,101,114,118,105,99,101}))
-local _0x5fb1bf = game:GetService(_0xe1e0d8({84,119,101,101,110,83,101,114,118,105,99,101}))
-local _0x258f47 = game:GetService(_0xe1e0d8({82,117,110,83,101,114,118,105,99,101}))
-local _0x9758ec = game:GetService(_0xe1e0d8({83,116,97,116,115}))
-local _0xb0b784 = game:GetService(_0xe1e0d8({76,105,103,104,116,105,110,103}))
-local _0xcee13e = game:GetService(_0xe1e0d8({72,116,116,112,83,101,114,118,105,99,101}))
-local _0xfcd290 = game:GetService(_0xe1e0d8({68,101,98,114,105,115}))
-
-local _0x85df87 = _0xe1e0d8({118,52,46,54,46,52,32,72,65,76,76,79,87,69,69,78})
-
-local _0xa12647 = {
+local COLORES = {
     Fondo = Color3.fromRGB(10, 5, 15),
     FondoPanel = Color3.fromRGB(20, 10, 25),
     Sidebar = Color3.fromRGB(15, 5, 20),
@@ -37,17 +35,17 @@ local _0xa12647 = {
     Mantenimiento = Color3.fromRGB(255, 180, 80),
 }
 
-_0xa12647.FondoPrincipal = _0xa12647.Fondo
-_0xa12647.FondoSecundario = _0xa12647.FondoPanel
-_0xa12647.Acento = _0xa12647.Naranja1
-_0xa12647.AcentoBrillo = _0xa12647.Naranja2
-_0xa12647.TextoSecundario = _0xa12647.Sub
-_0xa12647.AzulOscuro = _0xa12647.Morado3
-_0xa12647.AzulOscuroBorde = _0xa12647.Naranja1
+COLORES.FondoPrincipal = COLORES.Fondo
+COLORES.FondoSecundario = COLORES.FondoPanel
+COLORES.Acento = COLORES.Naranja1
+COLORES.AcentoBrillo = COLORES.Naranja2
+COLORES.TextoSecundario = COLORES.Sub
+COLORES.AzulOscuro = COLORES.Morado3
+COLORES.AzulOscuroBorde = COLORES.Naranja1
 
-local _0x30d4a0 = _0xe1e0d8({85,122,105,118,101,114,116,72,117,98,95,67,111,110,102,105,103,95,118,52,54,52,46,106,115,111,110})
+local ARCHIVO_CONFIG = "UzivertHub_Config_v464.json"
 
-local _0x32736f = {
+local CONFIG_DEFAULT = {
     ESP = true, GunESP = false, AntiFling = false, Noclip = false,
     Walkspeed = 16, Spinbot = false, Monitor = false, FPSBoost = false,
     Anims = false,
@@ -76,754 +74,754 @@ local _0x32736f = {
 }
 
 
-local _0x2c86f3 = {}
+local CONFIG = {}
 
-local function _0xb17bd6()
-    if isfile and isfile(_0x30d4a0) then
-        local _0x04fef1, _0x05ccaa = pcall(function()
-            return _0xcee13e:JSONDecode(readfile(_0x30d4a0))
+local function cargarConfig()
+    if isfile and isfile(ARCHIVO_CONFIG) then
+        local ok, data = pcall(function()
+            return HttpService:JSONDecode(readfile(ARCHIVO_CONFIG))
         end)
-        if _0x04fef1 and _0x05ccaa then
-            _0x2c86f3 = _0x05ccaa
-            print(_0xe1e0d8({240,159,142,131,32,67,111,110,102,105,103,117,114,97,99,105,195,179,110,32,118,52,46,54,46,52,32,99,97,114,103,97,100,97}))
+        if ok and data then
+            CONFIG = data
+            print("🎃 Configuración v4.6.4 cargada")
             return true
         end
     end
-    _0x2c86f3 = _0x32736f
-    print(_0xe1e0d8({240,159,147,157,32,67,111,110,102,105,103,117,114,97,99,105,195,179,110,32,118,52,46,54,46,52,32,112,111,114,32,100,101,102,101,99,116,111}))
+    CONFIG = CONFIG_DEFAULT
+    print("📝 Configuración v4.6.4 por defecto")
     return false
 end
 
-local function _0x4cda06()
+local function guardarConfig()
     if writefile then
         pcall(function()
-            writefile(_0x30d4a0, _0xcee13e:JSONEncode(_0x2c86f3))
+            writefile(ARCHIVO_CONFIG, HttpService:JSONEncode(CONFIG))
         end)
     end
 end
 
-_0xb17bd6()
+cargarConfig()
 
-local _0x4ad7fb = _0x2c86f3.ESP
-local _0x5a1745 = _0x2c86f3.GunESP
-local _0x0bbaf8 = _0x2c86f3.AntiFling
-local _0xbf1b35 = _0x2c86f3.Noclip
-local _0xed8245 = _0x2c86f3.Walkspeed
-local _0xfdb4be = _0x2c86f3.Spinbot
-local _0x94592c = _0x2c86f3.Monitor
-local _0x18a16e = _0x2c86f3.FPSBoost
-local _0x31f725 = _0x2c86f3.Anims
-local _0x8704f8 = _0x2c86f3.AutoGrabAntiM
-local _0x7e7805 = _0x2c86f3.AutoGrabDistMurder
-local _0xb00e9d = _0x2c86f3.AutoGrabRegresar
-local _0x30abb0 = _0x2c86f3.ShootMostrar ~= false
-local _0x888352 = _0x2c86f3.ShootAvzMostrar or false
-local _0xdb7590 = _0x2c86f3.ShootAltura or 1.55
-local _0xd48fce = _0x2c86f3.ShootPredVel or 0.11
-local _0x727831 = _0x2c86f3.ShootPredMov or 0.13
-local _0xe36e6a = _0x2c86f3.ShootBurst or 3
-local _0x22159c = _0x2c86f3.ShootBurstDelay or 0.04
-local _0x07c00e = _0x2c86f3.ShootRangoMax or 350
-local _0x62cf02 = _0x2c86f3.ShootRangoMin or 3
-local _0xf5c6f7 = _0x2c86f3.ShootWallCheck ~= false
-local _0xeea8b9 = _0x2c86f3.ShootAuto
-local _0x56182b = _0x2c86f3.ShootPing or 60
-local _0xcc1244 = _0x2c86f3.ShootPingAuto ~= false
-local _0x4f4b4d = _0x2c86f3.AutoPrankBomb or false
-local _0xf8dc01 = nil
-local _0xea3256 = _0x2c86f3.KillAllActivo or false
+local ESP_ACTIVO = CONFIG.ESP
+local GUN_ESP_ACTIVO = CONFIG.GunESP
+local ANTI_FLING_ACTIVO = CONFIG.AntiFling
+local NOCLIP_ACTIVO = CONFIG.Noclip
+local WALKSPEED_VALOR = CONFIG.Walkspeed
+local SPINBOT_ACTIVO = CONFIG.Spinbot
+local MONITOR_ACTIVO = CONFIG.Monitor
+local FPS_BOOST_ACTIVO = CONFIG.FPSBoost
+local ANIMS_ACTIVO = CONFIG.Anims
+local GRAB_ANTI_MURDERER = CONFIG.AutoGrabAntiM
+local GRAB_MURDERER_RANGO = CONFIG.AutoGrabDistMurder
+local GRAB_REGRESAR = CONFIG.AutoGrabRegresar
+local SHOOT_MOSTRAR = CONFIG.ShootMostrar ~= false
+local SHOOT_AVZ_MOSTRAR = CONFIG.ShootAvzMostrar or false
+local SHOOT_ALTURA = CONFIG.ShootAltura or 1.55
+local SHOOT_PRED_VEL = CONFIG.ShootPredVel or 0.11
+local SHOOT_PRED_MOV = CONFIG.ShootPredMov or 0.13
+local SHOOT_BURST = CONFIG.ShootBurst or 3
+local SHOOT_BURST_DELAY = CONFIG.ShootBurstDelay or 0.04
+local SHOOT_RANGO_MAX = CONFIG.ShootRangoMax or 350
+local SHOOT_RANGO_MIN = CONFIG.ShootRangoMin or 3
+local SHOOT_WALL_CHECK = CONFIG.ShootWallCheck ~= false
+local SHOOT_AUTO = CONFIG.ShootAuto
+local SHOOT_PING = CONFIG.ShootPing or 60
+local SHOOT_PING_AUTO = CONFIG.ShootPingAuto ~= false
+local AUTO_PRANK_BOMB_ACTIVO = CONFIG.AutoPrankBomb or false
+local prankBombConnection = nil
+local KILL_ALL_ACTIVO = CONFIG.KillAllActivo or false
 
-print(_0xe1e0d8({240,159,142,131,32,80,97,114,116,101,32,49,47,49,48,32,99,97,114,103,97,100,97,32,45,32,118,52,46,54,46,52,32,72,65,76,76,79,87,69,69,78}))
+print("🎃 Parte 1/10 cargada - v4.6.4 HALLOWEEN")
 
-
+-- 🎃 Ping a la API (cada 2 min)
 task.spawn(function()
     pcall(function()
-        game:HttpGet(_0xe1e0d8({104,116,116,112,115,58,47,47,117,122,105,118,101,114,116,45,97,112,105,46,111,110,114,101,110,100,101,114,46,99,111,109,47,114,101,103,105,115,116,114,97,114,63,117,115,101,114,61}) .. _0xe3a36b.Name)
+        game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name)
     end)
     
     while task.wait(120) do
         pcall(function()
-            game:HttpGet(_0xe1e0d8({104,116,116,112,115,58,47,47,117,122,105,118,101,114,116,45,97,112,105,46,111,110,114,101,110,100,101,114,46,99,111,109,47,114,101,103,105,115,116,114,97,114,63,117,115,101,114,61}) .. _0xe3a36b.Name)
+            game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name)
         end)
     end
 end)
 
-local _0xeba3c3 = _0xe3a36b:WaitForChild(_0xe1e0d8({80,108,97,121,101,114,71,117,105}))
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
-local _0x4ebb04 = Instance.new(_0xe1e0d8({83,99,114,101,101,110,71,117,105}))
-_0x4ebb04.Name = _0xe1e0d8({85,122,105,118,101,114,116,72,117,98})
-_0x4ebb04.ResetOnSpawn = false
-_0x4ebb04.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-_0x4ebb04.IgnoreGuiInset = true
-_0x4ebb04.DisplayOrder = 999
-_0x4ebb04.Parent = _0xeba3c3
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "UzivertHub"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.DisplayOrder = 999
+ScreenGui.Parent = PlayerGui
 
-local _0x41bc83 = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-_0x41bc83.Size = UDim2.new(0, 65, 0, 65)
-_0x41bc83.Position = UDim2.new(0, 30, 0.5, -32)
-_0x41bc83.BackgroundColor3 = _0xa12647.FondoPanel
-_0x41bc83.Text = _0xe1e0d8({})
-_0x41bc83.BorderSizePixel = 0
-_0x41bc83.Active = true
-_0x41bc83.Draggable = true
-_0x41bc83.ClipsDescendants = true
-_0x41bc83.Parent = _0x4ebb04
+local BotonFlotante = Instance.new("TextButton")
+BotonFlotante.Size = UDim2.new(0, 65, 0, 65)
+BotonFlotante.Position = UDim2.new(0, 30, 0.5, -32)
+BotonFlotante.BackgroundColor3 = COLORES.FondoPanel
+BotonFlotante.Text = ""
+BotonFlotante.BorderSizePixel = 0
+BotonFlotante.Active = true
+BotonFlotante.Draggable = true
+BotonFlotante.ClipsDescendants = true
+BotonFlotante.Parent = ScreenGui
 
-local _0x189089 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0x189089.CornerRadius = UDim.new(1, 0)
-_0x189089.Parent = _0x41bc83
+local cBoton = Instance.new("UICorner")
+cBoton.CornerRadius = UDim.new(1, 0)
+cBoton.Parent = BotonFlotante
 
-local _0x145e07 = Instance.new(_0xe1e0d8({85,73,71,114,97,100,105,101,110,116}))
-_0x145e07.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, _0xa12647.Naranja3),
-    ColorSequenceKeypoint.new(0.5, _0xa12647.Naranja1),
-    ColorSequenceKeypoint.new(1, _0xa12647.Morado3),
+local gradBoton = Instance.new("UIGradient")
+gradBoton.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, COLORES.Naranja3),
+    ColorSequenceKeypoint.new(0.5, COLORES.Naranja1),
+    ColorSequenceKeypoint.new(1, COLORES.Morado3),
 })
-_0x145e07.Rotation = 45
-_0x145e07.Parent = _0x41bc83
+gradBoton.Rotation = 45
+gradBoton.Parent = BotonFlotante
 
-local _0x3c7467 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-_0x3c7467.Size = UDim2.new(1, 0, 1, 0)
-_0x3c7467.BackgroundTransparency = 1
-_0x3c7467.Text = _0xe1e0d8({240,159,142,131})
-_0x3c7467.TextColor3 = _0xa12647.Texto
-_0x3c7467.Font = Enum.Font.GothamBlack
-_0x3c7467.TextSize = 32
-_0x3c7467.ZIndex = 2
-_0x3c7467.Parent = _0x41bc83
+local LetraU = Instance.new("TextLabel")
+LetraU.Size = UDim2.new(1, 0, 1, 0)
+LetraU.BackgroundTransparency = 1
+LetraU.Text = "🎃"
+LetraU.TextColor3 = COLORES.Texto
+LetraU.Font = Enum.Font.GothamBlack
+LetraU.TextSize = 32
+LetraU.ZIndex = 2
+LetraU.Parent = BotonFlotante
 
-local _0x5e1f6f = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-_0x5e1f6f.Color = _0xa12647.Naranja2
-_0x5e1f6f.Thickness = 2
-_0x5e1f6f.Transparency = 0.3
-_0x5e1f6f.Parent = _0x41bc83
+local sBoton = Instance.new("UIStroke")
+sBoton.Color = COLORES.Naranja2
+sBoton.Thickness = 2
+sBoton.Transparency = 0.3
+sBoton.Parent = BotonFlotante
 
 task.spawn(function()
     while task.wait() do
-        local _0xe9cedc = tick()
-        local _0xda933d = (math.sin(_0xe9cedc * 2) + 1) / 2
-        _0x5e1f6f.Color = _0xa12647.Naranja1:Lerp(_0xa12647.Morado2, _0xda933d)
-        _0x5e1f6f.Transparency = 0.5 - _0xda933d * 0.3
+        local t = tick()
+        local a = (math.sin(t * 2) + 1) / 2
+        sBoton.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
+        sBoton.Transparency = 0.5 - a * 0.3
     end
 end)
 
-local _0x1f67fe = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-_0x1f67fe.Name = _0xe1e0d8({85,122,105,118,101,114,116,80,97,110,101,108})
-_0x1f67fe.Size = UDim2.new(0, 520, 0, 340)
-_0x1f67fe.Position = UDim2.new(0.5, -260, 0.5, -170)
-_0x1f67fe.BackgroundColor3 = _0xa12647.Fondo
-_0x1f67fe.BackgroundTransparency = 0.15
-_0x1f67fe.BorderSizePixel = 0
-_0x1f67fe.Visible = false
-_0x1f67fe.Active = true
-_0x1f67fe.Draggable = true
-_0x1f67fe.ClipsDescendants = true
-_0x1f67fe.Parent = _0x4ebb04
+local Panel = Instance.new("Frame")
+Panel.Name = "UzivertPanel"
+Panel.Size = UDim2.new(0, 520, 0, 340)
+Panel.Position = UDim2.new(0.5, -260, 0.5, -170)
+Panel.BackgroundColor3 = COLORES.Fondo
+Panel.BackgroundTransparency = 0.15
+Panel.BorderSizePixel = 0
+Panel.Visible = false
+Panel.Active = true
+Panel.Draggable = true
+Panel.ClipsDescendants = true
+Panel.Parent = ScreenGui
 
-local _0x664d5b = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0x664d5b.CornerRadius = UDim.new(0, 16)
-_0x664d5b.Parent = _0x1f67fe
+local cP = Instance.new("UICorner")
+cP.CornerRadius = UDim.new(0, 16)
+cP.Parent = Panel
 
-local _0x12f8df = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-_0x12f8df.Color = _0xa12647.Naranja1
-_0x12f8df.Thickness = 2
-_0x12f8df.Transparency = 0.3
-_0x12f8df.Parent = _0x1f67fe
+local sP = Instance.new("UIStroke")
+sP.Color = COLORES.Naranja1
+sP.Thickness = 2
+sP.Transparency = 0.3
+sP.Parent = Panel
 
 task.spawn(function()
     while task.wait() do
-        local _0xe9cedc = tick()
-        local _0xda933d = (math.sin(_0xe9cedc * 1.5) + 1) / 2
-        _0x12f8df.Color = _0xa12647.Naranja1:Lerp(_0xa12647.Morado2, _0xda933d)
-        _0x12f8df.Transparency = 0.5 - _0xda933d * 0.3
+        local t = tick()
+        local a = (math.sin(t * 1.5) + 1) / 2
+        sP.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
+        sP.Transparency = 0.5 - a * 0.3
     end
 end)
 
-local _0xf3f27c = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-_0xf3f27c.Size = UDim2.new(0, 200, 0, 200)
-_0xf3f27c.Position = UDim2.new(-0.2, 0, 0.3, 0)
-_0xf3f27c.BackgroundColor3 = _0xa12647.Morado1
-_0xf3f27c.BackgroundTransparency = 0.9
-_0xf3f27c.BorderSizePixel = 0
-_0xf3f27c.ZIndex = 0
-_0xf3f27c.Parent = _0x1f67fe
+local Niebla1 = Instance.new("Frame")
+Niebla1.Size = UDim2.new(0, 200, 0, 200)
+Niebla1.Position = UDim2.new(-0.2, 0, 0.3, 0)
+Niebla1.BackgroundColor3 = COLORES.Morado1
+Niebla1.BackgroundTransparency = 0.9
+Niebla1.BorderSizePixel = 0
+Niebla1.ZIndex = 0
+Niebla1.Parent = Panel
 
-local _0xa156b9 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0xa156b9.CornerRadius = UDim.new(1, 0)
-_0xa156b9.Parent = _0xf3f27c
+local cN1 = Instance.new("UICorner")
+cN1.CornerRadius = UDim.new(1, 0)
+cN1.Parent = Niebla1
 
-local _0x02e5e1 = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-_0x02e5e1.Size = UDim2.new(0, 250, 0, 250)
-_0x02e5e1.Position = UDim2.new(0.7, 0, 0.5, 0)
-_0x02e5e1.BackgroundColor3 = _0xa12647.Morado2
-_0x02e5e1.BackgroundTransparency = 0.9
-_0x02e5e1.BorderSizePixel = 0
-_0x02e5e1.ZIndex = 0
-_0x02e5e1.Parent = _0x1f67fe
+local Niebla2 = Instance.new("Frame")
+Niebla2.Size = UDim2.new(0, 250, 0, 250)
+Niebla2.Position = UDim2.new(0.7, 0, 0.5, 0)
+Niebla2.BackgroundColor3 = COLORES.Morado2
+Niebla2.BackgroundTransparency = 0.9
+Niebla2.BorderSizePixel = 0
+Niebla2.ZIndex = 0
+Niebla2.Parent = Panel
 
-local _0x99bb08 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0x99bb08.CornerRadius = UDim.new(1, 0)
-_0x99bb08.Parent = _0x02e5e1
+local cN2 = Instance.new("UICorner")
+cN2.CornerRadius = UDim.new(1, 0)
+cN2.Parent = Niebla2
 
 task.spawn(function()
     while task.wait() do
-        local _0xe9cedc = tick()
-        _0xf3f27c.Position = UDim2.new(-0.2 + math.sin(_0xe9cedc * 0.3) * 0.05, 0, 0.3 + math.cos(_0xe9cedc * 0.3) * 0.05, 0)
-        _0x02e5e1.Position = UDim2.new(0.7 + math.sin(_0xe9cedc * 0.4) * 0.05, 0, 0.5 + math.cos(_0xe9cedc * 0.4) * 0.05, 0)
+        local t = tick()
+        Niebla1.Position = UDim2.new(-0.2 + math.sin(t * 0.3) * 0.05, 0, 0.3 + math.cos(t * 0.3) * 0.05, 0)
+        Niebla2.Position = UDim2.new(0.7 + math.sin(t * 0.4) * 0.05, 0, 0.5 + math.cos(t * 0.4) * 0.05, 0)
     end
 end)
 
 task.spawn(function()
     while true do
-        if _0x1f67fe.Visible then
-            local _0xe521e4 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-            _0xe521e4.Size = UDim2.new(0, 20, 0, 20)
-            _0xe521e4.BackgroundTransparency = 1
-            _0xe521e4.Text = _0xe1e0d8({240,159,166,135})
-            _0xe521e4.TextSize = math.random(12, 20)
-            _0xe521e4.TextColor3 = Color3.fromRGB(50, 30, 60)
-            _0xe521e4.Position = UDim2.new(-0.1, 0, math.random(), 0)
-            _0xe521e4.ZIndex = 1
-            _0xe521e4.Parent = _0x1f67fe
-            local _0x1d444e = math.random(6, 12)
-            local _0x9a9a71 = _0xe521e4.Position.Y.Scale + (math.random() - 0.5) * 0.3
-            _0x5fb1bf:Create(_0xe521e4, TweenInfo.new(_0x1d444e, Enum.EasingStyle.Linear), {
-                Position = UDim2.new(1.1, 0, _0x9a9a71, 0),
+        if Panel.Visible then
+            local bat = Instance.new("TextLabel")
+            bat.Size = UDim2.new(0, 20, 0, 20)
+            bat.BackgroundTransparency = 1
+            bat.Text = "🦇"
+            bat.TextSize = math.random(12, 20)
+            bat.TextColor3 = Color3.fromRGB(50, 30, 60)
+            bat.Position = UDim2.new(-0.1, 0, math.random(), 0)
+            bat.ZIndex = 1
+            bat.Parent = Panel
+            local duracion = math.random(6, 12)
+            local targetY = bat.Position.Y.Scale + (math.random() - 0.5) * 0.3
+            TweenService:Create(bat, TweenInfo.new(duracion, Enum.EasingStyle.Linear), {
+                Position = UDim2.new(1.1, 0, targetY, 0),
             }):Play()
-            _0xfcd290:AddItem(_0xe521e4, _0x1d444e + 1)
+            Debris:AddItem(bat, duracion + 1)
         end
         task.wait(math.random(15, 35) / 10)
     end
 end)
 
-local function _0x6192cd(_0x452058, _0xe5927f, _0xc2f10b)
-    local _0x909eee = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-    _0x909eee.Size = UDim2.new(0, 80, 0, 80)
-    _0x909eee.Position = UDim2.new(_0x452058, 0, _0xe5927f, 0)
-    _0x909eee.BackgroundTransparency = 1
-    _0x909eee.Text = _0xe1e0d8({240,159,149,184,239,184,143})
-    _0x909eee.TextSize = 60
-    _0x909eee.TextColor3 = Color3.fromRGB(200, 200, 220)
-    _0x909eee.TextTransparency = 0.3
-    _0x909eee.Rotation = _0xc2f10b
-    _0x909eee.ZIndex = 1
-    _0x909eee.Parent = _0x1f67fe
+local function crearTelarana(posX, posY, rot)
+    local web = Instance.new("TextLabel")
+    web.Size = UDim2.new(0, 80, 0, 80)
+    web.Position = UDim2.new(posX, 0, posY, 0)
+    web.BackgroundTransparency = 1
+    web.Text = "🕸️"
+    web.TextSize = 60
+    web.TextColor3 = Color3.fromRGB(200, 200, 220)
+    web.TextTransparency = 0.3
+    web.Rotation = rot
+    web.ZIndex = 1
+    web.Parent = Panel
 end
 
-_0x6192cd(0, 0, 0)
-_0x6192cd(1, 0, 90)
-_0x6192cd(0, 1, -90)
-_0x6192cd(1, 1, 180)
+crearTelarana(0, 0, 0)
+crearTelarana(1, 0, 90)
+crearTelarana(0, 1, -90)
+crearTelarana(1, 1, 180)
 
-local _0x2a1cd8 = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-_0x2a1cd8.Size = UDim2.new(0, 130, 1, 0)
-_0x2a1cd8.BackgroundColor3 = _0xa12647.Sidebar
-_0x2a1cd8.BackgroundTransparency = 0.35
-_0x2a1cd8.BorderSizePixel = 0
-_0x2a1cd8.ZIndex = 2
-_0x2a1cd8.ClipsDescendants = true
-_0x2a1cd8.Parent = _0x1f67fe
+local Sidebar = Instance.new("Frame")
+Sidebar.Size = UDim2.new(0, 130, 1, 0)
+Sidebar.BackgroundColor3 = COLORES.Sidebar
+Sidebar.BackgroundTransparency = 0.35
+Sidebar.BorderSizePixel = 0
+Sidebar.ZIndex = 2
+Sidebar.ClipsDescendants = true
+Sidebar.Parent = Panel
 
-local _0x07b752 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0x07b752.CornerRadius = UDim.new(0, 16)
-_0x07b752.Parent = _0x2a1cd8
+local cSidebar = Instance.new("UICorner")
+cSidebar.CornerRadius = UDim.new(0, 16)
+cSidebar.Parent = Sidebar
 
-local _0xa3a639 = Instance.new(_0xe1e0d8({83,99,114,111,108,108,105,110,103,70,114,97,109,101}))
-_0xa3a639.Size = UDim2.new(1, 0, 1, 0)
-_0xa3a639.Position = UDim2.new(0, 0, 0, 0)
-_0xa3a639.BackgroundTransparency = 1
-_0xa3a639.BorderSizePixel = 0
-_0xa3a639.ScrollBarThickness = 3
-_0xa3a639.ScrollBarImageColor3 = _0xa12647.Naranja1
-_0xa3a639.ScrollBarImageTransparency = 0.5
-_0xa3a639.CanvasSize = UDim2.new(0, 0, 0, 0)
-_0xa3a639.AutomaticCanvasSize = Enum.AutomaticSize.Y
-_0xa3a639.ScrollingDirection = Enum.ScrollingDirection.Y
-_0xa3a639.ScrollingEnabled = true
-_0xa3a639.Active = true
-_0xa3a639.ClipsDescendants = true
-_0xa3a639.ZIndex = 3
-_0xa3a639.Parent = _0x2a1cd8
+local SidebarScroll = Instance.new("ScrollingFrame")
+SidebarScroll.Size = UDim2.new(1, 0, 1, 0)
+SidebarScroll.Position = UDim2.new(0, 0, 0, 0)
+SidebarScroll.BackgroundTransparency = 1
+SidebarScroll.BorderSizePixel = 0
+SidebarScroll.ScrollBarThickness = 3
+SidebarScroll.ScrollBarImageColor3 = COLORES.Naranja1
+SidebarScroll.ScrollBarImageTransparency = 0.5
+SidebarScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+SidebarScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+SidebarScroll.ScrollingDirection = Enum.ScrollingDirection.Y
+SidebarScroll.ScrollingEnabled = true
+SidebarScroll.Active = true
+SidebarScroll.ClipsDescendants = true
+SidebarScroll.ZIndex = 3
+SidebarScroll.Parent = Sidebar
 
-local _0x1b2c34 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0x1b2c34.CornerRadius = UDim.new(0, 16)
-_0x1b2c34.Parent = _0xa3a639
+local cScroll = Instance.new("UICorner")
+cScroll.CornerRadius = UDim.new(0, 16)
+cScroll.Parent = SidebarScroll
 
-local _0xa75707 = Instance.new(_0xe1e0d8({85,73,76,105,115,116,76,97,121,111,117,116}))
-_0xa75707.Padding = UDim.new(0, 4)
-_0xa75707.SortOrder = Enum.SortOrder.LayoutOrder
-_0xa75707.HorizontalAlignment = Enum.HorizontalAlignment.Center
-_0xa75707.Parent = _0xa3a639
+local sidebarLayout = Instance.new("UIListLayout")
+sidebarLayout.Padding = UDim.new(0, 4)
+sidebarLayout.SortOrder = Enum.SortOrder.LayoutOrder
+sidebarLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+sidebarLayout.Parent = SidebarScroll
 
-local _0xad98b2 = Instance.new(_0xe1e0d8({85,73,80,97,100,100,105,110,103}))
-_0xad98b2.PaddingTop = UDim.new(0, 100)
-_0xad98b2.PaddingBottom = UDim.new(0, 20)
-_0xad98b2.PaddingLeft = UDim.new(0, 6)
-_0xad98b2.PaddingRight = UDim.new(0, 6)
-_0xad98b2.Parent = _0xa3a639
+local sidebarPadding = Instance.new("UIPadding")
+sidebarPadding.PaddingTop = UDim.new(0, 100)
+sidebarPadding.PaddingBottom = UDim.new(0, 20)
+sidebarPadding.PaddingLeft = UDim.new(0, 6)
+sidebarPadding.PaddingRight = UDim.new(0, 6)
+sidebarPadding.Parent = SidebarScroll
 
-local _0xdc7b59 = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-_0xdc7b59.Size = UDim2.new(0, 16, 1, 0)
-_0xdc7b59.Position = UDim2.new(1, -16, 0, 0)
-_0xdc7b59.BackgroundColor3 = _0xa12647.Sidebar
-_0xdc7b59.BackgroundTransparency = 0.35
-_0xdc7b59.BorderSizePixel = 0
-_0xdc7b59.ZIndex = 5
-_0xdc7b59.Parent = _0x2a1cd8
+local SidebarFix = Instance.new("Frame")
+SidebarFix.Size = UDim2.new(0, 16, 1, 0)
+SidebarFix.Position = UDim2.new(1, -16, 0, 0)
+SidebarFix.BackgroundColor3 = COLORES.Sidebar
+SidebarFix.BackgroundTransparency = 0.35
+SidebarFix.BorderSizePixel = 0
+SidebarFix.ZIndex = 5
+SidebarFix.Parent = Sidebar
 
-local _0xd1256c = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-_0xd1256c.Size = UDim2.new(1, 0, 0, 32)
-_0xd1256c.Position = UDim2.new(0, 0, 0, 10)
-_0xd1256c.BackgroundTransparency = 1
-_0xd1256c.Text = _0xe1e0d8({240,159,142,131})
-_0xd1256c.TextColor3 = _0xa12647.Naranja2
-_0xd1256c.Font = Enum.Font.GothamBlack
-_0xd1256c.TextSize = 26
-_0xd1256c.ZIndex = 6
-_0xd1256c.Parent = _0x2a1cd8
+local LogoU = Instance.new("TextLabel")
+LogoU.Size = UDim2.new(1, 0, 0, 32)
+LogoU.Position = UDim2.new(0, 0, 0, 10)
+LogoU.BackgroundTransparency = 1
+LogoU.Text = "🎃"
+LogoU.TextColor3 = COLORES.Naranja2
+LogoU.Font = Enum.Font.GothamBlack
+LogoU.TextSize = 26
+LogoU.ZIndex = 6
+LogoU.Parent = Sidebar
 
-local _0xcdf67d = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-_0xcdf67d.Size = UDim2.new(1, -20, 0, 22)
-_0xcdf67d.Position = UDim2.new(0, 10, 0, 44)
-_0xcdf67d.BackgroundTransparency = 1
-_0xcdf67d.Text = _0xe1e0d8({85,122,105,118,101,114,116})
-_0xcdf67d.TextColor3 = _0xa12647.Naranja2
-_0xcdf67d.Font = Enum.Font.GothamBlack
-_0xcdf67d.TextSize = 16
-_0xcdf67d.ZIndex = 6
-_0xcdf67d.Parent = _0x2a1cd8
+local Titulo = Instance.new("TextLabel")
+Titulo.Size = UDim2.new(1, -20, 0, 22)
+Titulo.Position = UDim2.new(0, 10, 0, 44)
+Titulo.BackgroundTransparency = 1
+Titulo.Text = "Uzivert"
+Titulo.TextColor3 = COLORES.Naranja2
+Titulo.Font = Enum.Font.GothamBlack
+Titulo.TextSize = 16
+Titulo.ZIndex = 6
+Titulo.Parent = Sidebar
 
-local _0x79e3aa = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-_0x79e3aa.Size = UDim2.new(1, -20, 0, 14)
-_0x79e3aa.Position = UDim2.new(0, 10, 0, 68)
-_0x79e3aa.BackgroundTransparency = 1
-_0x79e3aa.Text = _0xe1e0d8({226,152,133,32}) .. _0x85df87 .. _0xe1e0d8({32,226,152,133})
-_0x79e3aa.TextColor3 = _0xa12647.Morado2
-_0x79e3aa.Font = Enum.Font.Gotham
-_0x79e3aa.TextSize = 9
-_0x79e3aa.ZIndex = 6
-_0x79e3aa.Parent = _0x2a1cd8
+local Subtitulo = Instance.new("TextLabel")
+Subtitulo.Size = UDim2.new(1, -20, 0, 14)
+Subtitulo.Position = UDim2.new(0, 10, 0, 68)
+Subtitulo.BackgroundTransparency = 1
+Subtitulo.Text = "★ " .. VERSION .. " ★"
+Subtitulo.TextColor3 = COLORES.Morado2
+Subtitulo.Font = Enum.Font.Gotham
+Subtitulo.TextSize = 9
+Subtitulo.ZIndex = 6
+Subtitulo.Parent = Sidebar
 
-local _0xbb9628 = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-_0xbb9628.Size = UDim2.new(1, -24, 0, 1)
-_0xbb9628.Position = UDim2.new(0, 12, 0, 90)
-_0xbb9628.BackgroundColor3 = _0xa12647.Naranja1
-_0xbb9628.BackgroundTransparency = 0.5
-_0xbb9628.BorderSizePixel = 0
-_0xbb9628.ZIndex = 6
-_0xbb9628.Parent = _0x2a1cd8
+local Sep = Instance.new("Frame")
+Sep.Size = UDim2.new(1, -24, 0, 1)
+Sep.Position = UDim2.new(0, 12, 0, 90)
+Sep.BackgroundColor3 = COLORES.Naranja1
+Sep.BackgroundTransparency = 0.5
+Sep.BorderSizePixel = 0
+Sep.ZIndex = 6
+Sep.Parent = Sidebar
 
-local _0x97d2aa = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-_0x97d2aa.Size = UDim2.new(0, 22, 0, 22)
-_0x97d2aa.Position = UDim2.new(1, -28, 0, 12)
-_0x97d2aa.BackgroundColor3 = _0xa12647.Rojo
-_0x97d2aa.Text = _0xe1e0d8({195,151})
-_0x97d2aa.TextColor3 = _0xa12647.Texto
-_0x97d2aa.Font = Enum.Font.GothamBold
-_0x97d2aa.TextSize = 16
-_0x97d2aa.BorderSizePixel = 0
-_0x97d2aa.ZIndex = 10
-_0x97d2aa.Parent = _0x1f67fe
+local BotonCerrar = Instance.new("TextButton")
+BotonCerrar.Size = UDim2.new(0, 22, 0, 22)
+BotonCerrar.Position = UDim2.new(1, -28, 0, 12)
+BotonCerrar.BackgroundColor3 = COLORES.Rojo
+BotonCerrar.Text = "×"
+BotonCerrar.TextColor3 = COLORES.Texto
+BotonCerrar.Font = Enum.Font.GothamBold
+BotonCerrar.TextSize = 16
+BotonCerrar.BorderSizePixel = 0
+BotonCerrar.ZIndex = 10
+BotonCerrar.Parent = Panel
 
-local _0x5ef656 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0x5ef656.CornerRadius = UDim.new(1, 0)
-_0x5ef656.Parent = _0x97d2aa
+local cCerrar = Instance.new("UICorner")
+cCerrar.CornerRadius = UDim.new(1, 0)
+cCerrar.Parent = BotonCerrar
 
-local _0xe12c0b = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-_0xe12c0b.Size = UDim2.new(0, 22, 0, 22)
-_0xe12c0b.Position = UDim2.new(1, -54, 0, 12)
-_0xe12c0b.BackgroundColor3 = _0xa12647.Amarillo
-_0xe12c0b.Text = _0xe1e0d8({226,136,146})
-_0xe12c0b.TextColor3 = _0xa12647.Texto
-_0xe12c0b.Font = Enum.Font.GothamBold
-_0xe12c0b.TextSize = 16
-_0xe12c0b.BorderSizePixel = 0
-_0xe12c0b.ZIndex = 10
-_0xe12c0b.Parent = _0x1f67fe
+local BotonMin = Instance.new("TextButton")
+BotonMin.Size = UDim2.new(0, 22, 0, 22)
+BotonMin.Position = UDim2.new(1, -54, 0, 12)
+BotonMin.BackgroundColor3 = COLORES.Amarillo
+BotonMin.Text = "−"
+BotonMin.TextColor3 = COLORES.Texto
+BotonMin.Font = Enum.Font.GothamBold
+BotonMin.TextSize = 16
+BotonMin.BorderSizePixel = 0
+BotonMin.ZIndex = 10
+BotonMin.Parent = Panel
 
-local _0x35f9e4 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0x35f9e4.CornerRadius = UDim.new(1, 0)
-_0x35f9e4.Parent = _0xe12c0b
+local cMin = Instance.new("UICorner")
+cMin.CornerRadius = UDim.new(1, 0)
+cMin.Parent = BotonMin
 
-_0x97d2aa.MouseButton1Click:Connect(function()
-    _0x1f67fe.Visible = false
-    _0x41bc83.Visible = true
+BotonCerrar.MouseButton1Click:Connect(function()
+    Panel.Visible = false
+    BotonFlotante.Visible = true
 end)
 
-_0xe12c0b.MouseButton1Click:Connect(function()
-    _0x1f67fe.Visible = false
-    _0x41bc83.Visible = true
+BotonMin.MouseButton1Click:Connect(function()
+    Panel.Visible = false
+    BotonFlotante.Visible = true
 end)
 
-_0x41bc83.MouseButton1Click:Connect(function()
-    _0x1f67fe.Visible = not _0x1f67fe.Visible
-    if _0x1f67fe.Visible then _0x41bc83.Visible = false end
+BotonFlotante.MouseButton1Click:Connect(function()
+    Panel.Visible = not Panel.Visible
+    if Panel.Visible then BotonFlotante.Visible = false end
 end)
 
-local _0xaa4f93 = {}
+local Paginas = {}
 
-local function _0xcae5a9(_0xde4744)
-    _0xde4744.MouseButton1Down:Connect(function()
-        local _0xfd9581 = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-        _0xfd9581.Size = UDim2.new(0, 0, 0, 0)
-        _0xfd9581.Position = UDim2.new(0.5, 0, 0.5, 0)
-        _0xfd9581.AnchorPoint = Vector2.new(0.5, 0.5)
-        _0xfd9581.BackgroundColor3 = _0xa12647.Naranja2
-        _0xfd9581.BackgroundTransparency = 0.6
-        _0xfd9581.BorderSizePixel = 0
-        _0xfd9581.ZIndex = 10
-        _0xfd9581.Parent = _0xde4744
-        local _0x29a863 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-        _0x29a863.CornerRadius = UDim.new(1, 0)
-        _0x29a863.Parent = _0xfd9581
-        _0x5fb1bf:Create(_0xfd9581, TweenInfo.new(0.5), {
+local function crearRipple(boton)
+    boton.MouseButton1Down:Connect(function()
+        local ripple = Instance.new("Frame")
+        ripple.Size = UDim2.new(0, 0, 0, 0)
+        ripple.Position = UDim2.new(0.5, 0, 0.5, 0)
+        ripple.AnchorPoint = Vector2.new(0.5, 0.5)
+        ripple.BackgroundColor3 = COLORES.Naranja2
+        ripple.BackgroundTransparency = 0.6
+        ripple.BorderSizePixel = 0
+        ripple.ZIndex = 10
+        ripple.Parent = boton
+        local c = Instance.new("UICorner")
+        c.CornerRadius = UDim.new(1, 0)
+        c.Parent = ripple
+        TweenService:Create(ripple, TweenInfo.new(0.5), {
             Size = UDim2.new(0, 300, 0, 300),
             BackgroundTransparency = 1,
         }):Play()
         task.wait(0.6)
-        _0xfd9581:Destroy()
+        ripple:Destroy()
     end)
 end
 
-local function _0x2a5d08(_0xb600ca, _0xc6c50e, _0x44b6e7)
-    local _0xde4744 = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-    _0xde4744.Size = UDim2.new(1, -12, 0, 30)
-    _0xde4744.Position = UDim2.new(0, 0, 0, 0)
-    _0xde4744.LayoutOrder = _0x44b6e7
-    _0xde4744.BackgroundColor3 = _0xa12647.Sidebar
-    _0xde4744.BackgroundTransparency = 0.6
-    _0xde4744.Text = _0xe1e0d8({})
-    _0xde4744.BorderSizePixel = 0
-    _0xde4744.ZIndex = 4
-    _0xde4744.ClipsDescendants = true
-    _0xde4744.Parent = _0xa3a639
+local function crearPagina(nombre, icono, orden)
+    local boton = Instance.new("TextButton")
+    boton.Size = UDim2.new(1, -12, 0, 30)
+    boton.Position = UDim2.new(0, 0, 0, 0)
+    boton.LayoutOrder = orden
+    boton.BackgroundColor3 = COLORES.Sidebar
+    boton.BackgroundTransparency = 0.6
+    boton.Text = ""
+    boton.BorderSizePixel = 0
+    boton.ZIndex = 4
+    boton.ClipsDescendants = true
+    boton.Parent = SidebarScroll
 
-    local _0x29a863 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-    _0x29a863.CornerRadius = UDim.new(0, 7)
-    _0x29a863.Parent = _0xde4744
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 7)
+    c.Parent = boton
 
-    local _0x82a32c = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-    _0x82a32c.Color = _0xa12647.Naranja1
-    _0x82a32c.Thickness = 1
-    _0x82a32c.Transparency = 0.6
-    _0x82a32c.Parent = _0xde4744
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = COLORES.Naranja1
+    stroke.Thickness = 1
+    stroke.Transparency = 0.6
+    stroke.Parent = boton
 
-    _0xcae5a9(_0xde4744)
+    crearRipple(boton)
 
-    local _0x804bca = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-    _0x804bca.Size = UDim2.new(0, 24, 1, 0)
-    _0x804bca.Position = UDim2.new(0, 6, 0, 0)
-    _0x804bca.BackgroundTransparency = 1
-    _0x804bca.Text = _0xc6c50e or _0xe1e0d8({226,128,162})
-    _0x804bca.TextColor3 = _0xa12647.Naranja2
-    _0x804bca.TextSize = 14
-    _0x804bca.Font = Enum.Font.GothamBold
-    _0x804bca.ZIndex = 5
-    _0x804bca.Parent = _0xde4744
+    local iconLbl = Instance.new("TextLabel")
+    iconLbl.Size = UDim2.new(0, 24, 1, 0)
+    iconLbl.Position = UDim2.new(0, 6, 0, 0)
+    iconLbl.BackgroundTransparency = 1
+    iconLbl.Text = icono or "•"
+    iconLbl.TextColor3 = COLORES.Naranja2
+    iconLbl.TextSize = 14
+    iconLbl.Font = Enum.Font.GothamBold
+    iconLbl.ZIndex = 5
+    iconLbl.Parent = boton
 
-    local _0x37cfac = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-    _0x37cfac.Size = UDim2.new(1, -34, 1, 0)
-    _0x37cfac.Position = UDim2.new(0, 30, 0, 0)
-    _0x37cfac.BackgroundTransparency = 1
-    _0x37cfac.Text = _0xb600ca
-    _0x37cfac.TextColor3 = _0xa12647.Texto
-    _0x37cfac.Font = Enum.Font.GothamMedium
-    _0x37cfac.TextSize = 11
-    _0x37cfac.TextXAlignment = Enum.TextXAlignment.Left
-    _0x37cfac.ZIndex = 5
-    _0x37cfac.Parent = _0xde4744
+    local texto = Instance.new("TextLabel")
+    texto.Size = UDim2.new(1, -34, 1, 0)
+    texto.Position = UDim2.new(0, 30, 0, 0)
+    texto.BackgroundTransparency = 1
+    texto.Text = nombre
+    texto.TextColor3 = COLORES.Texto
+    texto.Font = Enum.Font.GothamMedium
+    texto.TextSize = 11
+    texto.TextXAlignment = Enum.TextXAlignment.Left
+    texto.ZIndex = 5
+    texto.Parent = boton
 
     task.spawn(function()
         while task.wait() do
-            local _0xe9cedc = tick() + _0x44b6e7
-            local _0xda933d = (math.sin(_0xe9cedc * 2) + 1) / 2
-            _0x82a32c.Color = _0xa12647.Naranja3:Lerp(_0xa12647.Morado2, _0xda933d)
-            _0x82a32c.Transparency = 0.6 - _0xda933d * 0.3
+            local t = tick() + orden
+            local a = (math.sin(t * 2) + 1) / 2
+            stroke.Color = COLORES.Naranja3:Lerp(COLORES.Morado2, a)
+            stroke.Transparency = 0.6 - a * 0.3
         end
     end)
 
-    local _0x4f0846 = Instance.new(_0xe1e0d8({83,99,114,111,108,108,105,110,103,70,114,97,109,101}))
-    _0x4f0846.Size = UDim2.new(1, -145, 1, -20)
-    _0x4f0846.Position = UDim2.new(0, 135, 0, 10)
-    _0x4f0846.BackgroundTransparency = 1
-    _0x4f0846.BorderSizePixel = 0
-    _0x4f0846.ScrollBarThickness = 4
-    _0x4f0846.ScrollBarImageColor3 = _0xa12647.Naranja1
-    _0x4f0846.ScrollBarImageTransparency = 0.3
-    _0x4f0846.CanvasSize = UDim2.new(0, 0, 0, 0)
-    _0x4f0846.AutomaticCanvasSize = Enum.AutomaticSize.Y
-    _0x4f0846.ScrollingDirection = Enum.ScrollingDirection.Y
-    _0x4f0846.ScrollingEnabled = true
-    _0x4f0846.Active = true
-    _0x4f0846.ClipsDescendants = true
-    _0x4f0846.ElasticBehavior = Enum.ElasticBehavior.WhenScrollable
-    _0x4f0846.Visible = false
-    _0x4f0846.ZIndex = 2
-    _0x4f0846.Parent = _0x1f67fe
+    local pagina = Instance.new("ScrollingFrame")
+    pagina.Size = UDim2.new(1, -145, 1, -20)
+    pagina.Position = UDim2.new(0, 135, 0, 10)
+    pagina.BackgroundTransparency = 1
+    pagina.BorderSizePixel = 0
+    pagina.ScrollBarThickness = 4
+    pagina.ScrollBarImageColor3 = COLORES.Naranja1
+    pagina.ScrollBarImageTransparency = 0.3
+    pagina.CanvasSize = UDim2.new(0, 0, 0, 0)
+    pagina.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    pagina.ScrollingDirection = Enum.ScrollingDirection.Y
+    pagina.ScrollingEnabled = true
+    pagina.Active = true
+    pagina.ClipsDescendants = true
+    pagina.ElasticBehavior = Enum.ElasticBehavior.WhenScrollable
+    pagina.Visible = false
+    pagina.ZIndex = 2
+    pagina.Parent = Panel
 
-    local _0x21f6bf = Instance.new(_0xe1e0d8({85,73,76,105,115,116,76,97,121,111,117,116}))
-    _0x21f6bf.Padding = UDim.new(0, 6)
-    _0x21f6bf.SortOrder = Enum.SortOrder.LayoutOrder
-    _0x21f6bf.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    _0x21f6bf.Parent = _0x4f0846
+    local layout = Instance.new("UIListLayout")
+    layout.Padding = UDim.new(0, 6)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    layout.Parent = pagina
 
-    local _0x42bd13 = Instance.new(_0xe1e0d8({85,73,80,97,100,100,105,110,103}))
-    _0x42bd13.PaddingTop = UDim.new(0, 8)
-    _0x42bd13.PaddingBottom = UDim.new(0, 40)
-    _0x42bd13.PaddingLeft = UDim.new(0, 8)
-    _0x42bd13.PaddingRight = UDim.new(0, 8)
-    _0x42bd13.Parent = _0x4f0846
+    local padding = Instance.new("UIPadding")
+    padding.PaddingTop = UDim.new(0, 8)
+    padding.PaddingBottom = UDim.new(0, 40)
+    padding.PaddingLeft = UDim.new(0, 8)
+    padding.PaddingRight = UDim.new(0, 8)
+    padding.Parent = pagina
 
-    table.insert(_0xaa4f93, {_0xde4744, _0x4f0846, _0x37cfac, _0x804bca})
+    table.insert(Paginas, {boton, pagina, texto, iconLbl})
 
-    _0xde4744.MouseButton1Click:Connect(function()
-        for _0xec1df4, _0xe24858 in ipairs(_0xaa4f93) do
-            _0xe24858[2].Visible = false
-            _0xe24858[1].BackgroundTransparency = 0.6
+    boton.MouseButton1Click:Connect(function()
+        for _, p in ipairs(Paginas) do
+            p[2].Visible = false
+            p[1].BackgroundTransparency = 0.6
         end
-        _0x4f0846.Visible = true
-        _0xde4744.BackgroundTransparency = 0.3
+        pagina.Visible = true
+        boton.BackgroundTransparency = 0.3
     end)
 
-    return _0x4f0846
+    return pagina
 end
 
-local function _0x1b0491(_0xb9b117, _0x37cfac, _0x619efc, _0x1109be)
-    local _0x1d5e97 = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-    _0x1d5e97.Size = UDim2.new(1, 0, 0, 38)
-    _0x1d5e97.BackgroundColor3 = _0xa12647.Morado3
-    _0x1d5e97.BackgroundTransparency = 0.5
-    _0x1d5e97.BorderSizePixel = 0
-    _0x1d5e97.ZIndex = 2
-    _0x1d5e97.Parent = _0xb9b117
+local function crearToggle(padre, texto, estadoInicial, callback)
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, 0, 0, 38)
+    frame.BackgroundColor3 = COLORES.Morado3
+    frame.BackgroundTransparency = 0.5
+    frame.BorderSizePixel = 0
+    frame.ZIndex = 2
+    frame.Parent = padre
 
-    local _0x29a863 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-    _0x29a863.CornerRadius = UDim.new(0, 9)
-    _0x29a863.Parent = _0x1d5e97
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 9)
+    c.Parent = frame
 
-    local _0x82a32c = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-    _0x82a32c.Color = _0xa12647.Naranja1
-    _0x82a32c.Thickness = 1
-    _0x82a32c.Transparency = 0.4
-    _0x82a32c.Parent = _0x1d5e97
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = COLORES.Naranja1
+    stroke.Thickness = 1
+    stroke.Transparency = 0.4
+    stroke.Parent = frame
 
-    local _0xd256ca = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-    _0xd256ca.Size = UDim2.new(0.7, 0, 1, 0)
-    _0xd256ca.Position = UDim2.new(0, 12, 0, 0)
-    _0xd256ca.BackgroundTransparency = 1
-    _0xd256ca.Text = _0x37cfac
-    _0xd256ca.TextColor3 = _0xa12647.Texto
-    _0xd256ca.Font = Enum.Font.GothamMedium
-    _0xd256ca.TextSize = 11
-    _0xd256ca.TextXAlignment = Enum.TextXAlignment.Left
-    _0xd256ca.ZIndex = 2
-    _0xd256ca.Parent = _0x1d5e97
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(0.7, 0, 1, 0)
+    label.Position = UDim2.new(0, 12, 0, 0)
+    label.BackgroundTransparency = 1
+    label.Text = texto
+    label.TextColor3 = COLORES.Texto
+    label.Font = Enum.Font.GothamMedium
+    label.TextSize = 11
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.ZIndex = 2
+    label.Parent = frame
 
-    local _0x5f19b2 = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-    _0x5f19b2.Size = UDim2.new(0, 42, 0, 20)
-    _0x5f19b2.Position = UDim2.new(1, -54, 0.5, -10)
-    _0x5f19b2.BackgroundColor3 = _0x619efc and _0xa12647.Naranja1 or Color3.fromRGB(50, 40, 60)
-    _0x5f19b2.Text = _0xe1e0d8({})
-    _0x5f19b2.BorderSizePixel = 0
-    _0x5f19b2.ZIndex = 2
-    _0x5f19b2.Parent = _0x1d5e97
+    local switch = Instance.new("TextButton")
+    switch.Size = UDim2.new(0, 42, 0, 20)
+    switch.Position = UDim2.new(1, -54, 0.5, -10)
+    switch.BackgroundColor3 = estadoInicial and COLORES.Naranja1 or Color3.fromRGB(50, 40, 60)
+    switch.Text = ""
+    switch.BorderSizePixel = 0
+    switch.ZIndex = 2
+    switch.Parent = frame
 
-    local _0x163cb0 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-    _0x163cb0.CornerRadius = UDim.new(1, 0)
-    _0x163cb0.Parent = _0x5f19b2
+    local c2 = Instance.new("UICorner")
+    c2.CornerRadius = UDim.new(1, 0)
+    c2.Parent = switch
 
-    local _0x434bec = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-    _0x434bec.Size = UDim2.new(0, 14, 0, 14)
-    _0x434bec.Position = _0x619efc and UDim2.new(1, -16, 0.5, -7) or UDim2.new(0, 2, 0.5, -7)
-    _0x434bec.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    _0x434bec.BorderSizePixel = 0
-    _0x434bec.ZIndex = 3
-    _0x434bec.Parent = _0x5f19b2
+    local circulo = Instance.new("Frame")
+    circulo.Size = UDim2.new(0, 14, 0, 14)
+    circulo.Position = estadoInicial and UDim2.new(1, -16, 0.5, -7) or UDim2.new(0, 2, 0.5, -7)
+    circulo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    circulo.BorderSizePixel = 0
+    circulo.ZIndex = 3
+    circulo.Parent = switch
 
-    local _0x2987dd = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-    _0x2987dd.CornerRadius = UDim.new(1, 0)
-    _0x2987dd.Parent = _0x434bec
+    local c3 = Instance.new("UICorner")
+    c3.CornerRadius = UDim.new(1, 0)
+    c3.Parent = circulo
 
-    local _0x624299 = _0x619efc
+    local estado = estadoInicial
 
-    _0x5f19b2.MouseButton1Click:Connect(function()
-        _0x624299 = not _0x624299
-        _0x5f19b2.BackgroundColor3 = _0x624299 and _0xa12647.Naranja1 or Color3.fromRGB(50, 40, 60)
-        _0x5fb1bf:Create(_0x434bec, TweenInfo.new(0.2), {
-            Position = _0x624299 and UDim2.new(1, -16, 0.5, -7) or UDim2.new(0, 2, 0.5, -7)
+    switch.MouseButton1Click:Connect(function()
+        estado = not estado
+        switch.BackgroundColor3 = estado and COLORES.Naranja1 or Color3.fromRGB(50, 40, 60)
+        TweenService:Create(circulo, TweenInfo.new(0.2), {
+            Position = estado and UDim2.new(1, -16, 0.5, -7) or UDim2.new(0, 2, 0.5, -7)
         }):Play()
-        _0x1109be(_0x624299)
+        callback(estado)
     end)
 end
 
-local function _0x425899(_0xb9b117, _0x37cfac, _0x1109be, _0x50c33f)
-    local _0xde4744 = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-    _0xde4744.Size = UDim2.new(1, 0, 0, 42)
-    _0xde4744.BackgroundColor3 = _0x50c33f or _0xa12647.Morado1
-    _0xde4744.BackgroundTransparency = 0.5
-    _0xde4744.Text = _0x37cfac
-    _0xde4744.TextColor3 = _0xa12647.Texto
-    _0xde4744.Font = Enum.Font.GothamBold
-    _0xde4744.TextSize = 12
-    _0xde4744.BorderSizePixel = 0
-    _0xde4744.ClipsDescendants = true
-    _0xde4744.ZIndex = 2
-    _0xde4744.Parent = _0xb9b117
+local function crearBoton(padre, texto, callback, color)
+    local boton = Instance.new("TextButton")
+    boton.Size = UDim2.new(1, 0, 0, 42)
+    boton.BackgroundColor3 = color or COLORES.Morado1
+    boton.BackgroundTransparency = 0.5
+    boton.Text = texto
+    boton.TextColor3 = COLORES.Texto
+    boton.Font = Enum.Font.GothamBold
+    boton.TextSize = 12
+    boton.BorderSizePixel = 0
+    boton.ClipsDescendants = true
+    boton.ZIndex = 2
+    boton.Parent = padre
 
-    local _0x29a863 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-    _0x29a863.CornerRadius = UDim.new(0, 9)
-    _0x29a863.Parent = _0xde4744
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 9)
+    c.Parent = boton
 
-    local _0x82a32c = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-    _0x82a32c.Color = _0x50c33f or _0xa12647.Naranja1
-    _0x82a32c.Thickness = 1.5
-    _0x82a32c.Transparency = 0.2
-    _0x82a32c.Parent = _0xde4744
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = color or COLORES.Naranja1
+    stroke.Thickness = 1.5
+    stroke.Transparency = 0.2
+    stroke.Parent = boton
 
     task.spawn(function()
         while task.wait() do
-            local _0xe9cedc = tick()
-            local _0xda933d = (math.sin(_0xe9cedc * 1.5) + 1) / 2
-            _0x82a32c.Color = (_0x50c33f or _0xa12647.Naranja3):Lerp(_0xa12647.Morado2, _0xda933d)
-            _0x82a32c.Transparency = 0.4 - _0xda933d * 0.3
+            local t = tick()
+            local a = (math.sin(t * 1.5) + 1) / 2
+            stroke.Color = (color or COLORES.Naranja3):Lerp(COLORES.Morado2, a)
+            stroke.Transparency = 0.4 - a * 0.3
         end
     end)
 
-    _0xcae5a9(_0xde4744)
+    crearRipple(boton)
 
-    _0xde4744.MouseEnter:Connect(function()
-        _0x5fb1bf:Create(_0xde4744, TweenInfo.new(0.2), {
+    boton.MouseEnter:Connect(function()
+        TweenService:Create(boton, TweenInfo.new(0.2), {
             BackgroundTransparency = 0.3,
         }):Play()
     end)
 
-    _0xde4744.MouseLeave:Connect(function()
-        _0x5fb1bf:Create(_0xde4744, TweenInfo.new(0.2), {
+    boton.MouseLeave:Connect(function()
+        TweenService:Create(boton, TweenInfo.new(0.2), {
             BackgroundTransparency = 0.5,
         }):Play()
     end)
 
-    _0xde4744.MouseButton1Click:Connect(_0x1109be)
-    return _0xde4744
+    boton.MouseButton1Click:Connect(callback)
+    return boton
 end
 
-local function _0x3c0aad(_0xb9b117, _0x37cfac, _0xed2bb7, _0x9905ac, _0x225ff1, _0x1109be)
-    local _0x1d5e97 = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-    _0x1d5e97.Size = UDim2.new(1, 0, 0, 50)
-    _0x1d5e97.BackgroundColor3 = _0xa12647.Morado3
-    _0x1d5e97.BackgroundTransparency = 0.5
-    _0x1d5e97.BorderSizePixel = 0
-    _0x1d5e97.ZIndex = 2
-    _0x1d5e97.Parent = _0xb9b117
+local function crearSlider(padre, texto, min, max, inicial, callback)
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, 0, 0, 50)
+    frame.BackgroundColor3 = COLORES.Morado3
+    frame.BackgroundTransparency = 0.5
+    frame.BorderSizePixel = 0
+    frame.ZIndex = 2
+    frame.Parent = padre
 
-    local _0x29a863 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-    _0x29a863.CornerRadius = UDim.new(0, 9)
-    _0x29a863.Parent = _0x1d5e97
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 9)
+    c.Parent = frame
 
-    local _0x82a32c = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-    _0x82a32c.Color = _0xa12647.Naranja1
-    _0x82a32c.Thickness = 1
-    _0x82a32c.Transparency = 0.4
-    _0x82a32c.Parent = _0x1d5e97
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = COLORES.Naranja1
+    stroke.Thickness = 1
+    stroke.Transparency = 0.4
+    stroke.Parent = frame
 
-    local _0xd256ca = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-    _0xd256ca.Size = UDim2.new(1, -20, 0, 18)
-    _0xd256ca.Position = UDim2.new(0, 10, 0, 5)
-    _0xd256ca.BackgroundTransparency = 1
-    _0xd256ca.Text = _0x37cfac .. _0xe1e0d8({58,32}) .. _0x225ff1
-    _0xd256ca.TextColor3 = _0xa12647.Texto
-    _0xd256ca.Font = Enum.Font.GothamMedium
-    _0xd256ca.TextSize = 10
-    _0xd256ca.TextXAlignment = Enum.TextXAlignment.Left
-    _0xd256ca.ZIndex = 2
-    _0xd256ca.Parent = _0x1d5e97
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, -20, 0, 18)
+    label.Position = UDim2.new(0, 10, 0, 5)
+    label.BackgroundTransparency = 1
+    label.Text = texto .. ": " .. inicial
+    label.TextColor3 = COLORES.Texto
+    label.Font = Enum.Font.GothamMedium
+    label.TextSize = 10
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.ZIndex = 2
+    label.Parent = frame
 
-    local _0x210d64 = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-    _0x210d64.Size = UDim2.new(1, -20, 0, 8)
-    _0x210d64.Position = UDim2.new(0, 10, 0, 30)
-    _0x210d64.BackgroundColor3 = Color3.fromRGB(30, 20, 40)
-    _0x210d64.BorderSizePixel = 0
-    _0x210d64.ZIndex = 2
-    _0x210d64.Parent = _0x1d5e97
+    local barra = Instance.new("Frame")
+    barra.Size = UDim2.new(1, -20, 0, 8)
+    barra.Position = UDim2.new(0, 10, 0, 30)
+    barra.BackgroundColor3 = Color3.fromRGB(30, 20, 40)
+    barra.BorderSizePixel = 0
+    barra.ZIndex = 2
+    barra.Parent = frame
 
-    local _0x163cb0 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-    _0x163cb0.CornerRadius = UDim.new(1, 0)
-    _0x163cb0.Parent = _0x210d64
+    local c2 = Instance.new("UICorner")
+    c2.CornerRadius = UDim.new(1, 0)
+    c2.Parent = barra
 
-    local _0xdc3cdd = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-    _0xdc3cdd.Size = UDim2.new((_0x225ff1 - _0xed2bb7) / (_0x9905ac - _0xed2bb7), 0, 1, 0)
-    _0xdc3cdd.BackgroundColor3 = _0xa12647.Naranja1
-    _0xdc3cdd.BorderSizePixel = 0
-    _0xdc3cdd.ZIndex = 3
-    _0xdc3cdd.Parent = _0x210d64
+    local relleno = Instance.new("Frame")
+    relleno.Size = UDim2.new((inicial - min) / (max - min), 0, 1, 0)
+    relleno.BackgroundColor3 = COLORES.Naranja1
+    relleno.BorderSizePixel = 0
+    relleno.ZIndex = 3
+    relleno.Parent = barra
 
-    local _0x2987dd = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-    _0x2987dd.CornerRadius = UDim.new(1, 0)
-    _0x2987dd.Parent = _0xdc3cdd
+    local c3 = Instance.new("UICorner")
+    c3.CornerRadius = UDim.new(1, 0)
+    c3.Parent = relleno
 
-    local _0x662a5b = _0x225ff1
-    local _0xc2a7fa = false
+    local valor = inicial
+    local arrastrando = false
 
-    _0x210d64.InputBegan:Connect(function(_0xa066ad)
-        if _0xa066ad.UserInputType == Enum.UserInputType.MouseButton1 or _0xa066ad.UserInputType == Enum.UserInputType.Touch then
-            _0xc2a7fa = true
-            if _0x1f67fe then _0x1f67fe.Draggable = false end
+    barra.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            arrastrando = true
+            if Panel then Panel.Draggable = false end
         end
     end)
 
-    _0x881c95.InputChanged:Connect(function(_0xa066ad)
-        if _0xc2a7fa and (_0xa066ad.UserInputType == Enum.UserInputType.MouseMovement or _0xa066ad.UserInputType == Enum.UserInputType.Touch) then
-            local _0x452058 = math.clamp((_0xa066ad.Position.X - _0x210d64.AbsolutePosition.X) / _0x210d64.AbsoluteSize.X, 0, 1)
-            _0x662a5b = math.floor(_0xed2bb7 + (_0x9905ac - _0xed2bb7) * _0x452058)
-            _0xdc3cdd.Size = UDim2.new(_0x452058, 0, 1, 0)
-            _0xd256ca.Text = _0x37cfac .. _0xe1e0d8({58,32}) .. _0x662a5b
-            _0x1109be(_0x662a5b)
+    UserInputService.InputChanged:Connect(function(input)
+        if arrastrando and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local posX = math.clamp((input.Position.X - barra.AbsolutePosition.X) / barra.AbsoluteSize.X, 0, 1)
+            valor = math.floor(min + (max - min) * posX)
+            relleno.Size = UDim2.new(posX, 0, 1, 0)
+            label.Text = texto .. ": " .. valor
+            callback(valor)
         end
     end)
 
-    _0x881c95.InputEnded:Connect(function(_0xa066ad)
-        if _0xa066ad.UserInputType == Enum.UserInputType.MouseButton1 or _0xa066ad.UserInputType == Enum.UserInputType.Touch then
-            _0xc2a7fa = false
-            if _0x1f67fe then _0x1f67fe.Draggable = true end
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            arrastrando = false
+            if Panel then Panel.Draggable = true end
         end
     end)
 end
 
-print(_0xe1e0d8({240,159,142,131,32,80,97,114,116,101,32,50,47,49,48,32,99,97,114,103,97,100,97,32,45,32,72,97,108,108,111,119,101,101,110,32,85,73}))
+print("🎃 Parte 2/10 cargada - Halloween UI")
 
-local _0x1e2527 = _0x2a5d08(_0xe1e0d8({86,105,115,117,97,108}), _0xe1e0d8({240,159,142,131}), 1)
-local _0xe74d45 = _0x2a5d08(_0xe1e0d8({67,111,109,98,97,116}), _0xe1e0d8({240,159,145,187}), 2)
-local _0x44889b = _0x2a5d08(_0xe1e0d8({67,114,97,98}), _0xe1e0d8({240,159,146,128}), 3)
-local _0x46d095 = _0x2a5d08(_0xe1e0d8({74,117,103,97,100,111,114}), _0xe1e0d8({240,159,166,135}), 4)
-local _0xf6c6e2 = _0x2a5d08(_0xe1e0d8({70,108,105,110,103}), _0xe1e0d8({240,159,149,183,239,184,143}), 5)
-local _0xecce4f = _0x2a5d08(_0xe1e0d8({65,110,105,109,115}), _0xe1e0d8({240,159,149,184,239,184,143}), 6)
-local _0x633bb3 = _0x2a5d08(_0xe1e0d8({66,111,109,98,32,74,117,109,112}), _0xe1e0d8({240,159,167,159}), 7)
-local _0x210c8b = _0x2a5d08(_0xe1e0d8({70,112,115}), _0xe1e0d8({226,154,176,239,184,143}), 8)
-local _0xfc9ada = _0x2a5d08(_0xe1e0d8({73,110,102,111}), _0xe1e0d8({240,159,141,172}), 9)
-local _0x6557b8 = _0x2a5d08(_0xe1e0d8({85,112,100,97,116,101}), _0xe1e0d8({240,159,147,156}), 10)
-local _0xebcd08 = _0x2a5d08(_0xe1e0d8({65,118,105,115,111,115}), _0xe1e0d8({226,154,160,239,184,143}), 11)
-local _0x0c6516 = _0x2a5d08(_0xe1e0d8({67,114,101,97,100,111,114}), _0xe1e0d8({240,159,145,145}), 12)
+local PaginaVisual = crearPagina("Visual", "🎃", 1)
+local PaginaAim = crearPagina("Combat", "👻", 2)
+local PaginaAura = crearPagina("Crab", "💀", 3)
+local PaginaPlayer = crearPagina("Jugador", "🦇", 4)
+local PaginaFling = crearPagina("Fling", "🕷️", 5)
+local PaginaAnims = crearPagina("Anims", "🕸️", 6)
+local PaginaBomb = crearPagina("Bomb Jump", "🧟", 7)
+local PaginaRend = crearPagina("Fps", "⚰️", 8)
+local PaginaInfo = crearPagina("Info", "🍬", 9)
+local PaginaUpdate = crearPagina("Update", "📜", 10)
+local PaginaAvisos = crearPagina("Avisos", "⚠️", 11)
+local PaginaCreador = crearPagina("Creador", "👑", 12)
 
-_0xaa4f93[1][2].Visible = true
-_0xaa4f93[1][1].BackgroundTransparency = 0.3
+Paginas[1][2].Visible = true
+Paginas[1][1].BackgroundTransparency = 0.3
 
-
-
-
-local _0x5ec0d2 = game:GetService(_0xe1e0d8({82,101,112,108,105,99,97,116,101,100,83,116,111,114,97,103,101}))
-local _0x6b053a = nil
-local _0x6038df = {}
+-- ============================================
+-- 🆕 DETECCIÓN DE ROLES CON GetPlayerData (v3)
+-- ============================================
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local playerDataRemote = nil
+local RoleCache = {}
 
 task.spawn(function()
-    while not _0x6b053a do
-        for _0xec1df4, _0xb55861 in ipairs(_0x5ec0d2:GetDescendants()) do
-            if _0xb55861.Name == _0xe1e0d8({71,101,116,80,108,97,121,101,114,68,97,116,97}) then
-                _0x6b053a = _0xb55861
-                print(_0xe1e0d8({240,159,142,131,32,91,82,79,76,69,83,93,32,82,101,109,111,116,101,32,101,110,99,111,110,116,114,97,100,111,58,32}) .. _0xb55861:GetFullName())
+    while not playerDataRemote do
+        for _, obj in ipairs(ReplicatedStorage:GetDescendants()) do
+            if obj.Name == "GetPlayerData" then
+                playerDataRemote = obj
+                print("🎃 [ROLES] Remote encontrado: " .. obj:GetFullName())
                 break
             end
         end
-        if not _0x6b053a then
+        if not playerDataRemote then
             task.wait(2)
         end
     end
@@ -831,93 +829,93 @@ end)
 
 task.spawn(function()
     while task.wait(0.1) do
-        if _0x6b053a then
-            local _0x9b4527, _0x05ccaa = pcall(function()
-                return _0x6b053a:InvokeServer()
+        if playerDataRemote then
+            local success, data = pcall(function()
+                return playerDataRemote:InvokeServer()
             end)
-            if _0x9b4527 and _0x05ccaa then
-                local _0x3b0353 = {}
-                for _0x41a26c, _0x9f347f in pairs(_0x05ccaa) do
-                    if _0x9f347f.Dead or not _0x9f347f.Role or _0x9f347f.Role == _0xe1e0d8({}) then
-                        _0x3b0353[_0x41a26c] = _0xe1e0d8({76,111,98,98,121})
+            if success and data then
+                local newRoles = {}
+                for plr, plrData in pairs(data) do
+                    if plrData.Dead or not plrData.Role or plrData.Role == "" then
+                        newRoles[plr] = "Lobby"
                     else
-                        _0x3b0353[_0x41a26c] = _0x9f347f.Role
+                        newRoles[plr] = plrData.Role
                     end
                 end
-                _0x6038df = _0x3b0353
+                RoleCache = newRoles
             end
         end
     end
 end)
 
-local function _0x59e892()
-    for _0x012655, _0x748ad3 in pairs(_0x6038df) do
-        if _0x748ad3 == _0xe1e0d8({77,117,114,100,101,114,101,114}) then
-            return _0x73fbe8:FindFirstChild(_0x012655)
+local function detectarMurderer()
+    for plrName, role in pairs(RoleCache) do
+        if role == "Murderer" then
+            return Players:FindFirstChild(plrName)
         end
     end
     return nil
 end
 
-local function _0x561f37()
-    for _0x012655, _0x748ad3 in pairs(_0x6038df) do
-        if _0x748ad3 == _0xe1e0d8({83,104,101,114,105,102,102}) then
-            return _0x73fbe8:FindFirstChild(_0x012655)
+local function detectarSheriff()
+    for plrName, role in pairs(RoleCache) do
+        if role == "Sheriff" then
+            return Players:FindFirstChild(plrName)
         end
     end
     return nil
 end
 
-local function _0xad1cef()
-    for _0x012655, _0x748ad3 in pairs(_0x6038df) do
-        if _0x748ad3 == _0xe1e0d8({72,101,114,111}) then
-            return _0x73fbe8:FindFirstChild(_0x012655)
+local function detectarHero()
+    for plrName, role in pairs(RoleCache) do
+        if role == "Hero" then
+            return Players:FindFirstChild(plrName)
         end
     end
     return nil
 end
 
-local function _0x0407ad(_0x65135e)
-    
-    if _0x6038df and _0x6038df[_0x65135e.Name] then
-        local _0xfea164 = _0x6038df[_0x65135e.Name]
-        if _0xfea164 == _0xe1e0d8({}) then _0xfea164 = _0xe1e0d8({76,111,98,98,121}) end
-        return _0xfea164
+local function detectarRol(jugador)
+    -- Usa RoleCache (detecta antes del contador)
+    if RoleCache and RoleCache[jugador.Name] then
+        local rol = RoleCache[jugador.Name]
+        if rol == "" then rol = "Lobby" end
+        return rol
     end
-    return _0xe1e0d8({76,111,98,98,121})
+    return "Lobby"
 end
 
-local function _0x96babc()
-    local _0xd95f0a = _0xe3a36b.Character
-    if not _0xd95f0a then return false end
-    for _0xec1df4, _0x73c84a in ipairs(_0xd95f0a:GetChildren()) do
-        if _0x73c84a:IsA(_0xe1e0d8({84,111,111,108})) and (_0x73c84a.Name == _0xe1e0d8({75,110,105,102,101}) or _0x73c84a.Name:lower():find(_0xe1e0d8({107,110,105,102,101}))) then return true end
+local function soyMurderer()
+    local char = LocalPlayer.Character
+    if not char then return false end
+    for _, tool in ipairs(char:GetChildren()) do
+        if tool:IsA("Tool") and (tool.Name == "Knife" or tool.Name:lower():find("knife")) then return true end
     end
-    local _0x6f05e8 = _0xe3a36b:FindFirstChild(_0xe1e0d8({66,97,99,107,112,97,99,107}))
-    if _0x6f05e8 and _0x6f05e8:FindFirstChild(_0xe1e0d8({75,110,105,102,101})) then return true end
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    if backpack and backpack:FindFirstChild("Knife") then return true end
     return false
 end
 
-local function _0xbcb778()
-    local _0xd95f0a = _0xe3a36b.Character
-    if not _0xd95f0a then return false end
-    for _0xec1df4, _0x73c84a in ipairs(_0xd95f0a:GetChildren()) do
-        if _0x73c84a:IsA(_0xe1e0d8({84,111,111,108})) and (_0x73c84a.Name == _0xe1e0d8({71,117,110}) or _0x73c84a.Name == _0xe1e0d8({82,101,118,111,108,118,101,114})) then return true end
+local function tengoGun()
+    local char = LocalPlayer.Character
+    if not char then return false end
+    for _, tool in ipairs(char:GetChildren()) do
+        if tool:IsA("Tool") and (tool.Name == "Gun" or tool.Name == "Revolver") then return true end
     end
-    local _0x6f05e8 = _0xe3a36b:FindFirstChild(_0xe1e0d8({66,97,99,107,112,97,99,107}))
-    if _0x6f05e8 and (_0x6f05e8:FindFirstChild(_0xe1e0d8({71,117,110})) or _0x6f05e8:FindFirstChild(_0xe1e0d8({82,101,118,111,108,118,101,114}))) then return true end
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    if backpack and (backpack:FindFirstChild("Gun") or backpack:FindFirstChild("Revolver")) then return true end
     return false
 end
 
-local function _0x513691()
-    local _0xd95f0a = _0xe3a36b.Character
-    if not _0xd95f0a then return true end
-    local _0x140dd0 = _0xd95f0a:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
-    if not _0x140dd0 then return true end
-    return _0x140dd0.Position.Y < -50000
+local function enLobby()
+    local char = LocalPlayer.Character
+    if not char then return true end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return true end
+    return hrp.Position.Y < -50000
 end
 
-local _0x0844a4 = {
+local COLORES_ESP = {
     Murderer = Color3.fromRGB(255, 30, 30),
     Sheriff  = Color3.fromRGB(30, 140, 255),
     Innocent = Color3.fromRGB(30, 255, 120),
@@ -925,40 +923,40 @@ local _0x0844a4 = {
     Lobby    = Color3.fromRGB(150, 150, 150),
 }
 
-local function _0x1dbdba(_0x65135e)
-    if _0x65135e == _0xe3a36b then return end
-    if not _0x65135e.Character then return end
+local function aplicarESP(jugador)
+    if jugador == LocalPlayer then return end
+    if not jugador.Character then return end
     
-    local _0xfea164 = _0xe1e0d8({76,111,98,98,121})
-    if _0x6038df and _0x6038df[_0x65135e.Name] then
-        _0xfea164 = _0x6038df[_0x65135e.Name]
-        if _0xfea164 == _0xe1e0d8({}) then _0xfea164 = _0xe1e0d8({76,111,98,98,121}) end
+    local rol = "Lobby"
+    if RoleCache and RoleCache[jugador.Name] then
+        rol = RoleCache[jugador.Name]
+        if rol == "" then rol = "Lobby" end
     end
     
-    local _0x50c33f = _0x0844a4[_0xfea164] or _0x0844a4.Lobby
+    local color = COLORES_ESP[rol] or COLORES_ESP.Lobby
     
-    local _0xc83742 = _0x65135e.Character:FindFirstChild(_0xe1e0d8({69,83,80,95,72,105,103,104,108,105,103,104,116}))
-    if _0xc83742 then _0xc83742:Destroy() end
+    local anterior = jugador.Character:FindFirstChild("ESP_Highlight")
+    if anterior then anterior:Destroy() end
     
-    local _0xe73d71 = Instance.new(_0xe1e0d8({72,105,103,104,108,105,103,104,116}))
-    _0xe73d71.Name = _0xe1e0d8({69,83,80,95,72,105,103,104,108,105,103,104,116})
-    _0xe73d71.Parent = _0x65135e.Character
-    _0xe73d71.Adornee = _0x65135e.Character
-    _0xe73d71.FillColor = _0x50c33f
-    _0xe73d71.FillTransparency = 0.35
-    _0xe73d71.OutlineColor = _0x50c33f
-    _0xe73d71.OutlineTransparency = 0
-    _0xe73d71.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    local hl = Instance.new("Highlight")
+    hl.Name = "ESP_Highlight"
+    hl.Parent = jugador.Character
+    hl.Adornee = jugador.Character
+    hl.FillColor = color
+    hl.FillTransparency = 0.35
+    hl.OutlineColor = color
+    hl.OutlineTransparency = 0
+    hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
 end
 
 task.spawn(function()
     while task.wait(0.3) do
-        if _0x4ad7fb then
-            for _0xec1df4, _0x65135e in ipairs(_0x73fbe8:GetPlayers()) do
-                if _0x65135e ~= _0xe3a36b and _0x65135e.Character then
-                    local _0x99c0c4 = _0x65135e.Character:FindFirstChildOfClass(_0xe1e0d8({72,117,109,97,110,111,105,100}))
-                    if _0x99c0c4 and _0x99c0c4.Health > 0 then
-                        _0x1dbdba(_0x65135e)
+        if ESP_ACTIVO then
+            for _, jugador in ipairs(Players:GetPlayers()) do
+                if jugador ~= LocalPlayer and jugador.Character then
+                    local hum = jugador.Character:FindFirstChildOfClass("Humanoid")
+                    if hum and hum.Health > 0 then
+                        aplicarESP(jugador)
                     end
                 end
             end
@@ -966,291 +964,291 @@ task.spawn(function()
     end
 end) 
 
-local _0x64cb71 = {}
+local highlights = {}
 
-local function _0xca224c()
-    for _0xec1df4, _0x2a2423 in pairs(_0x73fbe8:GetPlayers()) do
-        local _0x6f05e8 = _0x2a2423:FindFirstChild(_0xe1e0d8({66,97,99,107,112,97,99,107}))
-        local _0x77af90 = _0x2a2423.Character
-        if _0x6f05e8 and (_0x6f05e8:FindFirstChild(_0xe1e0d8({71,117,110})) or _0x6f05e8:FindFirstChild(_0xe1e0d8({82,101,118,111,108,118,101,114}))) then return _0x2a2423, _0xe1e0d8({101,113,117,105,112,97,100,97}) end
-        if _0x77af90 and (_0x77af90:FindFirstChild(_0xe1e0d8({71,117,110})) or _0x77af90:FindFirstChild(_0xe1e0d8({82,101,118,111,108,118,101,114}))) then return _0x2a2423, _0xe1e0d8({101,113,117,105,112,97,100,97}) end
+local function whoHasGun()
+    for _, player in pairs(Players:GetPlayers()) do
+        local backpack = player:FindFirstChild("Backpack")
+        local character = player.Character
+        if backpack and (backpack:FindFirstChild("Gun") or backpack:FindFirstChild("Revolver")) then return player, "equipada" end
+        if character and (character:FindFirstChild("Gun") or character:FindFirstChild("Revolver")) then return player, "equipada" end
     end
     return nil, nil
 end
 
-local function _0x2e64b9()
-    local _0x483795 = workspace:FindFirstChild(_0xe1e0d8({71,117,110,68,114,111,112}), true)
-    if _0x483795 then return _0x483795 end
-    for _0xec1df4, _0xb55861 in ipairs(workspace:GetDescendants()) do
-        if _0xb55861.Name == _0xe1e0d8({71,117,110,68,114,111,112}) then return _0xb55861 end
+local function findDroppedGun()
+    local gun = workspace:FindFirstChild("GunDrop", true)
+    if gun then return gun end
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if obj.Name == "GunDrop" then return obj end
     end
     return nil
 end
 
-local function _0xeb15c7(_0xb55861, _0x6a77a8)
-    if not _0xb55861 then return end
-    if _0xb55861:FindFirstChild(_0xe1e0d8({71,117,110,69,83,80,95,72,105,103,104,108,105,103,104,116})) then return end
-    local _0xe73d71 = Instance.new(_0xe1e0d8({72,105,103,104,108,105,103,104,116}))
-    _0xe73d71.Name = _0xe1e0d8({71,117,110,69,83,80,95,72,105,103,104,108,105,103,104,116})
-    _0xe73d71.Parent = _0xb55861
-    _0xe73d71.Adornee = _0xb55861
-    _0xe73d71.FillColor = Color3.fromRGB(30, 140, 255)
-    _0xe73d71.FillTransparency = 0.4
-    _0xe73d71.OutlineColor = Color3.fromRGB(255, 255, 255)
-    _0xe73d71.OutlineTransparency = 0
-    _0xe73d71.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-    table.insert(_0x64cb71, _0xe73d71)
-    if not _0xb55861:FindFirstChild(_0xe1e0d8({71,117,110,69,83,80,95,66,105,108,108,98,111,97,114,100})) then
-        local _0x12bb29 = Instance.new(_0xe1e0d8({66,105,108,108,98,111,97,114,100,71,117,105}))
-        _0x12bb29.Name = _0xe1e0d8({71,117,110,69,83,80,95,66,105,108,108,98,111,97,114,100})
-        _0x12bb29.Size = UDim2.new(0, 100, 0, 30)
-        _0x12bb29.StudsOffset = Vector3.new(0, 2, 0)
-        _0x12bb29.AlwaysOnTop = true
-        _0x12bb29.Parent = _0xb55861
-        local _0x37cfac = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-        _0x37cfac.Name = _0xe1e0d8({68,105,115,116,97,110,99,105,97,76,97,98,101,108})
-        _0x37cfac.Size = UDim2.new(1, 0, 1, 0)
-        _0x37cfac.BackgroundTransparency = 1
-        _0x37cfac.Text = _0x6a77a8 and _0xe1e0d8({68,114,111,112,112,101,100,32,71,117,110,33}) or _0xe1e0d8({71,117,110})
-        _0x37cfac.TextColor3 = _0x6a77a8 and Color3.fromRGB(255, 225, 0) or Color3.fromRGB(30, 140, 255)
-        _0x37cfac.TextStrokeTransparency = 0
-        _0x37cfac.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-        _0x37cfac.Font = Enum.Font.GothamBold
-        _0x37cfac.TextSize = 14
-        _0x37cfac.Parent = _0x12bb29
+local function aplicarGunESP(obj, esTirada)
+    if not obj then return end
+    if obj:FindFirstChild("GunESP_Highlight") then return end
+    local hl = Instance.new("Highlight")
+    hl.Name = "GunESP_Highlight"
+    hl.Parent = obj
+    hl.Adornee = obj
+    hl.FillColor = Color3.fromRGB(30, 140, 255)
+    hl.FillTransparency = 0.4
+    hl.OutlineColor = Color3.fromRGB(255, 255, 255)
+    hl.OutlineTransparency = 0
+    hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    table.insert(highlights, hl)
+    if not obj:FindFirstChild("GunESP_Billboard") then
+        local billboard = Instance.new("BillboardGui")
+        billboard.Name = "GunESP_Billboard"
+        billboard.Size = UDim2.new(0, 100, 0, 30)
+        billboard.StudsOffset = Vector3.new(0, 2, 0)
+        billboard.AlwaysOnTop = true
+        billboard.Parent = obj
+        local texto = Instance.new("TextLabel")
+        texto.Name = "DistanciaLabel"
+        texto.Size = UDim2.new(1, 0, 1, 0)
+        texto.BackgroundTransparency = 1
+        texto.Text = esTirada and "Dropped Gun!" or "Gun"
+        texto.TextColor3 = esTirada and Color3.fromRGB(255, 225, 0) or Color3.fromRGB(30, 140, 255)
+        texto.TextStrokeTransparency = 0
+        texto.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+        texto.Font = Enum.Font.GothamBold
+        texto.TextSize = 14
+        texto.Parent = billboard
     end
 end
 
-local function _0xed0f9e()
-    for _0xec1df4, _0xe73d71 in ipairs(_0x64cb71) do
-        if _0xe73d71 and _0xe73d71.Parent then _0xe73d71:Destroy() end
+local function limpiarGunESP()
+    for _, hl in ipairs(highlights) do
+        if hl and hl.Parent then hl:Destroy() end
     end
-    _0x64cb71 = {}
-    for _0xec1df4, _0xb55861 in ipairs(workspace:GetDescendants()) do
-        local _0xf19c1d = _0xb55861:FindFirstChild(_0xe1e0d8({71,117,110,69,83,80,95,66,105,108,108,98,111,97,114,100}))
-        if _0xf19c1d then _0xf19c1d:Destroy() end
+    highlights = {}
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        local bb = obj:FindFirstChild("GunESP_Billboard")
+        if bb then bb:Destroy() end
     end
 end
 
 task.spawn(function()
     while task.wait(0.3) do
-        if not _0x5a1745 then
-            _0xed0f9e()
+        if not GUN_ESP_ACTIVO then
+            limpiarGunESP()
             continue
         end
-        local _0x8dc758, _0x624299 = _0xca224c()
-        if _0x8dc758 and _0x8dc758.Character then
-            local _0x5560d7 = _0x8dc758.Character:FindFirstChild(_0xe1e0d8({71,117,110})) or _0x8dc758.Character:FindFirstChild(_0xe1e0d8({82,101,118,111,108,118,101,114}))
-            if _0x5560d7 then _0xeb15c7(_0x5560d7, false) end
+        local sheriff, estado = whoHasGun()
+        if sheriff and sheriff.Character then
+            local gunTool = sheriff.Character:FindFirstChild("Gun") or sheriff.Character:FindFirstChild("Revolver")
+            if gunTool then aplicarGunESP(gunTool, false) end
         end
-        local _0x7eedf5 = _0x2e64b9()
-        if _0x7eedf5 then _0xeb15c7(_0x7eedf5, true) end
+        local gunTirada = findDroppedGun()
+        if gunTirada then aplicarGunESP(gunTirada, true) end
     end
 end)
 
-local _0x5be40b = 60
-local _0xdbe465 = 60
-local _0x8ffd70 = 0
-local _0x173a92 = _0xe1e0d8({70,97,108,108,98,97,99,107})
-local _0x524435 = -math.huge
-local _0xb738f3 = -math.huge
-local _0xc1528c = 0.4
-local _0x40b1b4 = 5
+local rawPing = 60
+local smoothedPing = 60
+local jitter = 0
+local pingSource = "Fallback"
+local lastAttempt = -math.huge
+local lastGoodSample = -math.huge
+local SAMPLE_INTERVAL = 0.4
+local STALE_INTERVAL = 5
 
-local function _0x2a29c1(_0xc1b4e1)
-    return type(_0xc1b4e1) == _0xe1e0d8({110,117,109,98,101,114}) and _0xc1b4e1 == _0xc1b4e1
-        and _0xc1b4e1 > -math.huge and _0xc1b4e1 < math.huge
+local function IsFinite(value)
+    return type(value) == "number" and value == value
+        and value > -math.huge and value < math.huge
 end
 
-local function _0x4897cb()
-    local _0x349180 = _0x9758ec:FindFirstChild(_0xe1e0d8({78,101,116,119,111,114,107}))
-    local _0x070af4 = _0x349180 and _0x349180:FindFirstChild(_0xe1e0d8({83,101,114,118,101,114,83,116,97,116,115,73,116,101,109}))
-    local _0x43065b = _0x070af4 and _0x070af4:FindFirstChild(_0xe1e0d8({68,97,116,97,32,80,105,110,103}))
-    return _0x43065b and _0x43065b:GetValue()
+local function ReadDataPing()
+    local network = Stats:FindFirstChild("Network")
+    local serverStats = network and network:FindFirstChild("ServerStatsItem")
+    local item = serverStats and serverStats:FindFirstChild("Data Ping")
+    return item and item:GetValue()
 end
 
-local function _0x4b01f0()
-    local _0x376ab0 = _0x9758ec:FindFirstChild(_0xe1e0d8({80,101,114,102,111,114,109,97,110,99,101,83,116,97,116,115}))
-    local _0x43065b = _0x376ab0 and _0x376ab0:FindFirstChild(_0xe1e0d8({80,105,110,103}))
-    return _0x43065b and _0x43065b:GetValue()
+local function ReadPerformancePing()
+    local performance = Stats:FindFirstChild("PerformanceStats")
+    local item = performance and performance:FindFirstChild("Ping")
+    return item and item:GetValue()
 end
 
-local function _0xfb6c90()
-    local _0xc1b4e1 = _0xe3a36b:GetNetworkPing()
-    if _0x2a29c1(_0xc1b4e1) then return _0xc1b4e1 * 1000 end
+local function ReadNetworkPing()
+    local value = LocalPlayer:GetNetworkPing()
+    if IsFinite(value) then return value * 1000 end
 end
 
-local _0xe6373b = {
-    { _0x4897cb, _0xe1e0d8({68,97,116,97,32,80,105,110,103}) },
-    { _0x4b01f0, _0xe1e0d8({80,101,114,102,111,114,109,97,110,99,101}) },
-    { _0xfb6c90, _0xe1e0d8({78,101,116,119,111,114,107}) },
+local pingReaders = {
+    { ReadDataPing, "Data Ping" },
+    { ReadPerformancePing, "Performance" },
+    { ReadNetworkPing, "Network" },
 }
 
-local function _0x69816d()
+local function SamplePing()
     pcall(function()
-        local _0x00fadc = os.clock()
-        if _0x00fadc - _0x524435 < _0xc1528c then return end
-        _0x524435 = _0x00fadc
-        local _0xc1b4e1
-        for _0xec1df4, _0x54c27a in ipairs(_0xe6373b) do
-            local _0x1de1af, _0x42ca7b = pcall(_0x54c27a[1])
-            if _0x1de1af and _0x2a29c1(_0x42ca7b) and _0x42ca7b > 0 then
-                _0xc1b4e1 = _0x42ca7b
-                _0x173a92 = _0x54c27a[2]
+        local now = os.clock()
+        if now - lastAttempt < SAMPLE_INTERVAL then return end
+        lastAttempt = now
+        local value
+        for _, reader in ipairs(pingReaders) do
+            local ok2, candidate = pcall(reader[1])
+            if ok2 and IsFinite(candidate) and candidate > 0 then
+                value = candidate
+                pingSource = reader[2]
                 break
             end
         end
-        if not _0xc1b4e1 then return end
-        local _0x24e4f8 = _0x00fadc - _0xb738f3
-        local _0x151e35 = math.clamp(math.floor(_0xc1b4e1 + 0.5), 5, 1200)
-        if _0x24e4f8 > _0x40b1b4 then
-            _0xdbe465 = _0x151e35
-            _0x8ffd70 = 0
+        if not value then return end
+        local elapsed = now - lastGoodSample
+        local nextRaw = math.clamp(math.floor(value + 0.5), 5, 1200)
+        if elapsed > STALE_INTERVAL then
+            smoothedPing = nextRaw
+            jitter = 0
         else
-            local _0xb41fa4 = _0x24e4f8 / _0xc1528c
-            _0x8ffd70 = _0x8ffd70 + (math.abs(_0x151e35 - _0x5be40b) - _0x8ffd70) * (1 - 0.75 ^ _0xb41fa4)
-            local _0xaeea70 = math.abs(_0x151e35 - _0xdbe465) > 40 and 0.6 or 0.25
-            _0xaeea70 = 1 - (1 - _0xaeea70) ^ _0xb41fa4
-            _0xdbe465 = _0xdbe465 + (_0x151e35 - _0xdbe465) * _0xaeea70
+            local weight = elapsed / SAMPLE_INTERVAL
+            jitter = jitter + (math.abs(nextRaw - rawPing) - jitter) * (1 - 0.75 ^ weight)
+            local alpha = math.abs(nextRaw - smoothedPing) > 40 and 0.6 or 0.25
+            alpha = 1 - (1 - alpha) ^ weight
+            smoothedPing = smoothedPing + (nextRaw - smoothedPing) * alpha
         end
-        _0x5be40b = _0x151e35
-        _0xb738f3 = _0x00fadc
+        rawPing = nextRaw
+        lastGoodSample = now
     end)
 end
 
-local function _0x16281e()
-    return math.floor(_0xdbe465 + 0.5)
+local function GetPing()
+    return math.floor(smoothedPing + 0.5)
 end
 
-print(_0xe1e0d8({240,159,142,131,32,80,97,114,116,101,32,51,47,49,48,32,99,97,114,103,97,100,97,32,45,32,82,111,108,101,115,32,43,32,69,83,80,32,43,32,80,105,110,103}))
+print("🎃 Parte 3/10 cargada - Roles + ESP + Ping")
 
-local _0x70c106 = {
-    [_0xe1e0d8({68,101,102,97,117,108,116})] = nil,
-    [_0xe1e0d8({86,97,109,112,105,114,101})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,52,52,53,56,53,53}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,52,53,48,49,54,54}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,52,55,51,57,51,48}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,52,54,50,48,55,55}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,52,53,53,51,53,50}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,52,51,57,50,51,56}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,52,52,51,53,56,55}), swim=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,52,56,48,54,50,54}), swimidle=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,52,55,55,50,48,56}), death=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,52,52,53,52,57,56})},
-    [_0xe1e0d8({72,101,114,111})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,49,49,50,57,53}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,49,51,53,51,54}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,50,50,50,56,55}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,49,55,48,55,54}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,49,53,53,51,51}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,48,52,55,48,54}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,48,56,48,48,49}), swim=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,49,57,51,57,49}), swimidle=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,49,48,56,50,55}), death=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,48,57,52,53,57})},
-    [_0xe1e0d8({90,111,109,98,105,101})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,53,56,57,50,57}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,54,48,54,51,54}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,54,56,48,51,50}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,54,51,54,56,50}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,54,49,57,57,55}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,53,54,49,49,57}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,53,55,52,55,54}), swim=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,54,53,52,54,50}), swimidle=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,53,57,48,54,56}), death=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,49,54,49,54,50,53,57,51})},
-    [_0xe1e0d8({78,105,110,106,97})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,53,54,49,49,55,52,48,48}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,53,54,49,49,56,51,52,49}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,53,54,49,50,49,55,54,54}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,53,54,49,49,56,56,53,50}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,53,54,49,49,55,56,55,56}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,53,54,49,49,52,51,53,57}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,53,54,49,49,53,54,48,54}), swim=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,53,54,49,50,48,50,52,57}), swimidle=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,53,54,49,49,55,53,48,54}), death=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,54,53,54,49,49,52,57,53,52})},
-    [_0xe1e0d8({65,115,116,114,111,110,97,117,116})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,57,49,54,50,49,51,54,54}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,57,49,54,51,51,50,51,55}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,57,49,54,54,55,49,51,56}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,57,49,54,51,54,51,57,51}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,57,49,54,50,55,53,50,50}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,57,49,54,48,57,51,53,51}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,57,49,54,49,55,57,54,49}), swim=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,57,49,54,54,49,53,50,57}), swimidle=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,57,49,54,50,48,50,55,50}), death=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,57,49,54,49,53,56,49,55})},
-    [_0xe1e0d8({67,97,114,116,111,111,110})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,52,50,54,51,55,53,52,52}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,52,50,54,51,56,52,52,53}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,52,50,54,52,48,48,50,54}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,52,50,54,51,56,56,52,50}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,52,50,54,51,55,57,52,50}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,52,50,54,51,54,56,56,57}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,52,50,54,51,55,49,53,49}), swim=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,52,50,54,51,57,55,48,50}), swimidle=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,52,50,54,51,55,54,48,49}), death=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,52,50,54,51,55,56,48,54})},
-    [_0xe1e0d8({80,105,114,97,116,101})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,53,48,55,56,49,56,55,52}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,53,48,55,56,50,55,55,48}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,53,48,55,56,53,54,57,51}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,53,48,55,56,51,55,51,56}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,53,48,55,56,50,50,51,48}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,53,48,55,55,57,56,57,57}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,53,48,55,56,48,50,52,50}), swim=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,53,48,55,56,52,53,48,53}), swimidle=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,53,48,55,56,49,52,49,53}), death=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,53,48,55,56,48,50,52,50})},
-    [_0xe1e0d8({87,101,114,101,119,111,108,102})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,49,57,53,53,49,55}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,50,49,52,55,49,55}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,49,55,56,51,51,57}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,50,49,54,54,57,48}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,50,49,56,55,57,50}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,49,56,50,48,48,48}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,49,56,57,48,49,57}), swim=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,50,48,51,55,54,51}), swimidle=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,49,57,48,48,48,54}), death=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,51,49,56,51,50,55,54})},
-    [_0xe1e0d8({79,71,32,82,117,110})] = {run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,56,48,49,56,49,52,52,54,50})},
-    [_0xe1e0d8({74,111,108,108,121})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,54,49,52,53,55,50,55,56,55,56,55,48,57}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,54,49,52,53,55,50,55,56,55,56,55,48,57}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,51,50,55,55,49,51,54,48,55,56,52,52,52}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,52,52,49,57,56,48,52,50,57,56,51,49,48}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,50,49,49,53,56,49,54,50,50,48,56,52,50}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,55,49,57,48,53,55,52,48,57,53,48,51,54}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,53,50,54,51,56,48,50,53,48,51,51,51,49})},
-    [_0xe1e0d8({67,117,116,101,32,75,97,119,97,105,105})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,50,51,49,49,54,56,50,51,51,49,54,51,57}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,50,51,49,49,54,56,50,51,51,49,54,51,57}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,55,50,49,50,56,55,50,52,50,51,53,54,49}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,56,53,56,50,53,49,48,53,52,53,48,55,50}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,50,57,53,50,53,52,56,51,50,49,54,57,53}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,54,51,56,51,52,48,56,52,57,51,55,55,54}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,51,51,48,55,51,51,51,56,48,57,51,50,50})},
-    [_0xe1e0d8({68,111,108,108,32,51,46,48})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,51,48,51,50,49,56,55,50,55,49,51,56,51}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,51,48,51,50,49,56,55,50,55,49,51,56,51}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,56,52,51,52,57,54,48,57,54,54,53,51,55}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,57,55,54,56,51,57,54,54,54,51,56,48,56}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,53,51,54,57,48,53,55,57,57,52,56,50,56}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,50,51,55,49,56,57,50,49,51,51,57,55,48}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,49,48,50,55,52,52,52,48,55,51,51,49,49})},
-    [_0xe1e0d8({86,105,99,116,111,114,105,97,32,77,111,100,101,108})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,50,48,54,57,57,54,53,51,57,54,52,54,53}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,50,48,54,57,57,54,53,51,57,54,52,54,53}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,52,56,49,52,57,49,53,51,55,57,53,55,57}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,52,56,49,52,57,49,53,51,55,57,53,55,57}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,56,49,54,51,50,54,49,53,56,49,49,54,51}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,55,55,55,50,49,51,52,57,48,53,53,48,56}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,48,48,55,51,57,50,52,50,53,51,51,56,56})},
-    [_0xe1e0d8({66,105,107,101,47,66,105,99,121,99,108,105,115,116})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,54,51,57,48,49,50,48,51,57,57,49,55,51}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,54,55,57,49,53,49,55,51,51,54,54,51,51}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,56,55,48,55,56,56,49,54,54,48,53,52,49}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,50,55,55,53,55,51,55,50,49,49,57,49,57}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,57,49,52,52,56,52,55,56,56,49,50,53,56}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,56,50,54,55,48,56,50,51,54,52,53,57,53}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,48,54,56,52,55,56,55,48,56,54,52,57,56})},
-    [_0xe1e0d8({65,110,105,109,97,108})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,56,56,51,56,49,56,51,48,48,56,52,54,54}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,57,54,56,57,55,55,54,48,57,57,57,55,48}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,50,50,51,56,48,54,52,52,52,57,49,51,51}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,55,52,49,50,55,51,49,52,52,50,49,54,55}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,51,53,54,53,54,54,53,50,55,52,52,51,57}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,53,48,56,53,56,51,54,53,51,53,54,53,52}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,52,55,48,53,56,51,49,57,56,50,50,53,57})},
-    [_0xe1e0d8({73,116,45,71,105,114,108,32,69,115,115,101,110,116,105,97,108,32,77,111,100,101,108})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,50,50,51,50,48,55,57,50,54,48,49,50,53}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,50,52,52,48,55,56,57,55,57,54,50,49,53}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,54,53,55,57,54,54,54,54,54,49,50,49,53}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,51,51,51,54,51,52,57,57,51,48,49,52,51}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,51,51,56,50,49,53,54,53,51,57,49,48,54}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,55,51,56,53,56,49,53,57,53,52,48,52,54}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,55,50,54,50,54,52,56,50,48,56,52,48,57})},
-    [_0xe1e0d8({79,108,100,115,99,104,111,111,108})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,57,50,49,50,51,48,55,52,52}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,57,50,49,50,51,50,48,57,51}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,57,50,49,50,52,52,56,57,49}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,57,50,49,50,52,48,50,49,56}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,57,50,49,50,52,50,48,49,51}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,57,50,49,50,50,57,56,54,54}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,57,50,49,50,52,49,50,52,52})},
-    [_0xe1e0d8({83,112,105,100,101,114})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,50,51,49,54,56,49,52,51,55,55,56,49,52}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,51,52,51,57,48,49,56,53,53,50,49,52,53}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,57,57,55,54,52,51,57,50,55,55,56,55,57}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,57,57,56,53,56,51,50,53,57,51,51,52,55}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,55,57,55,57,50,51,51,52,54,50,57,48,54}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,57,50,55,56,51,52,50,50,53,49,57,57,53}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,49,49,49,50,50,51,56,53,55,48,55,55,55})},
-    [_0xe1e0d8({74,111,121})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,57,57,53,55,52,55,53,50,53,48,50,52,50}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,49,50,48,48,52,55,55,51,51,57,49,54,57}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,50,53,57,55,53,55,50,49,53,48,57,54,51}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,54,53,50,49,54,53,57,56,49,49,55,52,51}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,50,53,48,48,51,53,55,53,50,48,55,51,54}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,48,48,54,49,55,49,54,56,55,51,56,51,48}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,50,48,57,53,49,51,57,48,57,48,51,53,55})},
-    [_0xe1e0d8({70,108,121,105,110,103,32,65,117,114,97})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,50,52,50,54,56,52,52,53,56,52,53,48,53}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,50,52,50,54,56,52,52,53,56,52,53,48,53}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,51,48,55,55,50,53,52,50,52,54,54,50,50}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,55,48,53,51,50,53,49,48,54,50,57,48,56}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,53,52,50,50,48,49,56,50,52,52,51,48,49}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,53,57,55,51,57,54,53,57,52,56,52,55,54}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,57,55,57,48,49,57,53,57,52,55,56,52,56})},
-    [_0xe1e0d8({70,72,65,32,86,50})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,55,51,50,48,56,52,48,48,48,53,52,56,49}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,55,51,50,48,56,52,48,48,48,53,52,56,49}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,52,52,57,51,50,53,49,52,52,53,52,55,57}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,50,50,49,52,53,51,51,52,48,49,57,51,50}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,48,48,55,56,49,54,53,52,57,51,56,49,54}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,52,53,54,50,57,57,52,55,50,52,54,52,55}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,56,51,56,51,50,54,53,56,54,52,52,51,54})},
-    [_0xe1e0d8({83,105,108,101,110,116,32,78,117,114,115,101})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,49,48,52,55,50,52,52,56,54,50,56,52,52}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,49,48,52,55,50,52,52,56,54,50,56,52,52}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,52,49,57,54,51,56,50,49,53,50,57,48,49}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,52,49,57,54,51,56,50,49,53,50,57,48,49}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,54,48,57,56,48,53,55,50,51,53,57,56,48}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,56,57,56,53,51,55,53,54,48,57,55,48,53}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,49,53,55,57,54,48,57,51,51,52,55,53,53})},
-    [_0xe1e0d8({83,117,112,101,114,109,111,100,101,108})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,49,57,49,55,55,51,48,55,50,54,49,49,48}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,49,57,49,55,55,51,48,55,50,54,49,49,48}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,48,51,50,48,49,51,50,57,55,48,50,49,51}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,50,48,53,49,50,53,56,49,55,57,50,53,53}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,49,57,51,49,52,48,51,51,54,51,56,54,48}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,50,55,50,56,48,50,57,51,48,54,48,54,57}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,57,49,55,51,52,54,54,50,50,56,50,57,57})},
-    [_0xe1e0d8({69,110,99,104,97,110,116,101,100,32,70,97,105,114,121})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,51,54,53,48,49,55,56,50,51,51,48,57,53}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,51,54,53,48,49,55,56,50,51,51,48,57,53}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,52,53,52,55,49,57,53,54,54,51,55,54,51}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,54,57,48,57,53,56,52,51,51,55,57,52,51}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,48,53,51,51,55,49,50,56,48,51,54,54,55}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,52,48,54,54,51,52,48,54,52,56,53,49,56,48}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,48,57,52,55,57,55,49,55,53,54,51,52,56})},
-    [_0xe1e0d8({70,117,114,114,121})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,49,56,50,49,50,57,50,48,52,52,55,48,53}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,49,56,50,49,50,57,50,48,52,52,55,48,53}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,52,48,49,49,52,52,49,56,53,50,52,53,57}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,55,55,55,48,48,54,48,51,49,55,56,54,50}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,50,54,51,53,53,56,50,55,50,50,48,52,49}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,54,54,54,48,53,51,48,49,54,52,52,57,55}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,55,48,55,57,57,56,53,53,52,55,53,57,50})},
-    [_0xe1e0d8({86,108,97,100,97,32,77,111,100,101,108})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,48,49,51,57,49,49,54,52,51,51,53,51,48}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,48,48,49,51,57,49,49,54,52,51,51,53,51,48}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,55,57,56,51,55,53,55,50,50,53,52,52,52}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,49,54,55,49,55,56,52,56,50,52,52,57,51,48}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,50,48,55,53,49,48,53,53,49,55,50,53,54,55}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,48,57,54,54,54,49,54,48,55,55,55,55,56}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,54,49,49,56,53,49,56,50,53,53,55,55,55})},
-    [_0xe1e0d8({82,54,32,67,111,110,118,101,114,116,101,114})] = {idle1=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,48,48,52,48,50,52,48,54,50,55,56,53,52}), idle2=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,48,48,52,48,50,52,48,54,50,55,56,53,52}), walk=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,57,50,49,52,57,56,53,50,55,48,56,52,50,56}), run=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,55,50,50,53,57,51,56,51,48,57,50,57,53,57}), jump=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,48,53,49,57,57,56,48,53,50,49,53,49,49}), climb=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,56,48,51,54,57,49,55,49,55,48,54,51,56,51}), fall=_0xe1e0d8({104,116,116,112,58,47,47,119,119,119,46,114,111,98,108,111,120,46,99,111,109,47,97,115,115,101,116,47,63,105,100,61,49,51,48,48,49,49,55,57,50,49,57,51,51,48,48})},
+local animPresets = {
+    ["Default"] = nil,
+    ["Vampire"] = {idle1="http://www.roblox.com/asset/?id=1083445855", idle2="http://www.roblox.com/asset/?id=1083450166", walk="http://www.roblox.com/asset/?id=1083473930", run="http://www.roblox.com/asset/?id=1083462077", jump="http://www.roblox.com/asset/?id=1083455352", climb="http://www.roblox.com/asset/?id=1083439238", fall="http://www.roblox.com/asset/?id=1083443587", swim="http://www.roblox.com/asset/?id=1083480626", swimidle="http://www.roblox.com/asset/?id=1083477208", death="http://www.roblox.com/asset/?id=1083445498"},
+    ["Hero"] = {idle1="http://www.roblox.com/asset/?id=616111295", idle2="http://www.roblox.com/asset/?id=616113536", walk="http://www.roblox.com/asset/?id=616122287", run="http://www.roblox.com/asset/?id=616117076", jump="http://www.roblox.com/asset/?id=616115533", climb="http://www.roblox.com/asset/?id=616104706", fall="http://www.roblox.com/asset/?id=616108001", swim="http://www.roblox.com/asset/?id=616119391", swimidle="http://www.roblox.com/asset/?id=616110827", death="http://www.roblox.com/asset/?id=616109459"},
+    ["Zombie"] = {idle1="http://www.roblox.com/asset/?id=616158929", idle2="http://www.roblox.com/asset/?id=616160636", walk="http://www.roblox.com/asset/?id=616168032", run="http://www.roblox.com/asset/?id=616163682", jump="http://www.roblox.com/asset/?id=616161997", climb="http://www.roblox.com/asset/?id=616156119", fall="http://www.roblox.com/asset/?id=616157476", swim="http://www.roblox.com/asset/?id=616165462", swimidle="http://www.roblox.com/asset/?id=616159068", death="http://www.roblox.com/asset/?id=616162593"},
+    ["Ninja"] = {idle1="http://www.roblox.com/asset/?id=656117400", idle2="http://www.roblox.com/asset/?id=656118341", walk="http://www.roblox.com/asset/?id=656121766", run="http://www.roblox.com/asset/?id=656118852", jump="http://www.roblox.com/asset/?id=656117878", climb="http://www.roblox.com/asset/?id=656114359", fall="http://www.roblox.com/asset/?id=656115606", swim="http://www.roblox.com/asset/?id=656120249", swimidle="http://www.roblox.com/asset/?id=656117506", death="http://www.roblox.com/asset/?id=656114954"},
+    ["Astronaut"] = {idle1="http://www.roblox.com/asset/?id=891621366", idle2="http://www.roblox.com/asset/?id=891633237", walk="http://www.roblox.com/asset/?id=891667138", run="http://www.roblox.com/asset/?id=891636393", jump="http://www.roblox.com/asset/?id=891627522", climb="http://www.roblox.com/asset/?id=891609353", fall="http://www.roblox.com/asset/?id=891617961", swim="http://www.roblox.com/asset/?id=891661529", swimidle="http://www.roblox.com/asset/?id=891620272", death="http://www.roblox.com/asset/?id=891615817"},
+    ["Cartoon"] = {idle1="http://www.roblox.com/asset/?id=742637544", idle2="http://www.roblox.com/asset/?id=742638445", walk="http://www.roblox.com/asset/?id=742640026", run="http://www.roblox.com/asset/?id=742638842", jump="http://www.roblox.com/asset/?id=742637942", climb="http://www.roblox.com/asset/?id=742636889", fall="http://www.roblox.com/asset/?id=742637151", swim="http://www.roblox.com/asset/?id=742639702", swimidle="http://www.roblox.com/asset/?id=742637601", death="http://www.roblox.com/asset/?id=742637806"},
+    ["Pirate"] = {idle1="http://www.roblox.com/asset/?id=750781874", idle2="http://www.roblox.com/asset/?id=750782770", walk="http://www.roblox.com/asset/?id=750785693", run="http://www.roblox.com/asset/?id=750783738", jump="http://www.roblox.com/asset/?id=750782230", climb="http://www.roblox.com/asset/?id=750779899", fall="http://www.roblox.com/asset/?id=750780242", swim="http://www.roblox.com/asset/?id=750784505", swimidle="http://www.roblox.com/asset/?id=750781415", death="http://www.roblox.com/asset/?id=750780242"},
+    ["Werewolf"] = {idle1="http://www.roblox.com/asset/?id=1083195517", idle2="http://www.roblox.com/asset/?id=1083214717", walk="http://www.roblox.com/asset/?id=1083178339", run="http://www.roblox.com/asset/?id=1083216690", jump="http://www.roblox.com/asset/?id=1083218792", climb="http://www.roblox.com/asset/?id=1083182000", fall="http://www.roblox.com/asset/?id=1083189019", swim="http://www.roblox.com/asset/?id=1083203763", swimidle="http://www.roblox.com/asset/?id=1083190006", death="http://www.roblox.com/asset/?id=1083183276"},
+    ["OG Run"] = {run="http://www.roblox.com/asset/?id=9801814462"},
+    ["Jolly"] = {idle1="http://www.roblox.com/asset/?id=136145727878709", idle2="http://www.roblox.com/asset/?id=136145727878709", walk="http://www.roblox.com/asset/?id=83277136078444", run="http://www.roblox.com/asset/?id=124419804298310", jump="http://www.roblox.com/asset/?id=122115816220842", climb="http://www.roblox.com/asset/?id=107190574095036", fall="http://www.roblox.com/asset/?id=85263802503331"},
+    ["Cute Kawaii"] = {idle1="http://www.roblox.com/asset/?id=72311682331639", idle2="http://www.roblox.com/asset/?id=72311682331639", walk="http://www.roblox.com/asset/?id=107212872423561", run="http://www.roblox.com/asset/?id=118582510545072", jump="http://www.roblox.com/asset/?id=112952548321695", climb="http://www.roblox.com/asset/?id=126383408493776", fall="http://www.roblox.com/asset/?id=83307333809322"},
+    ["Doll 3.0"] = {idle1="http://www.roblox.com/asset/?id=83032187271383", idle2="http://www.roblox.com/asset/?id=83032187271383", walk="http://www.roblox.com/asset/?id=78434960966537", run="http://www.roblox.com/asset/?id=129768396663808", jump="http://www.roblox.com/asset/?id=75369057994828", climb="http://www.roblox.com/asset/?id=112371892133970", fall="http://www.roblox.com/asset/?id=81027444073311"},
+    ["Victoria Model"] = {idle1="http://www.roblox.com/asset/?id=132069965396465", idle2="http://www.roblox.com/asset/?id=132069965396465", walk="http://www.roblox.com/asset/?id=84814915379579", run="http://www.roblox.com/asset/?id=84814915379579", jump="http://www.roblox.com/asset/?id=78163261581163", climb="http://www.roblox.com/asset/?id=87772134905508", fall="http://www.roblox.com/asset/?id=110073924253388"},
+    ["Bike/Bicyclist"] = {idle1="http://www.roblox.com/asset/?id=126390120399173", idle2="http://www.roblox.com/asset/?id=136791517336633", walk="http://www.roblox.com/asset/?id=98707881660541", run="http://www.roblox.com/asset/?id=102775737211919", jump="http://www.roblox.com/asset/?id=129144847881258", climb="http://www.roblox.com/asset/?id=88267082364595", fall="http://www.roblox.com/asset/?id=110684787086498"},
+    ["Animal"] = {idle1="http://www.roblox.com/asset/?id=128838183008466", idle2="http://www.roblox.com/asset/?id=99689776099970", walk="http://www.roblox.com/asset/?id=112238064449133", run="http://www.roblox.com/asset/?id=97412731442167", jump="http://www.roblox.com/asset/?id=123565665274439", climb="http://www.roblox.com/asset/?id=75085836535654", fall="http://www.roblox.com/asset/?id=124705831982259"},
+    ["It-Girl Essential Model"] = {idle1="http://www.roblox.com/asset/?id=132232079260125", idle2="http://www.roblox.com/asset/?id=102440789796215", walk="http://www.roblox.com/asset/?id=86579666661215", run="http://www.roblox.com/asset/?id=83336349930143", jump="http://www.roblox.com/asset/?id=103382156539106", climb="http://www.roblox.com/asset/?id=77385815954046", fall="http://www.roblox.com/asset/?id=127262648208409"},
+    ["Oldschool"] = {idle1="http://www.roblox.com/asset/?id=10921230744", idle2="http://www.roblox.com/asset/?id=10921232093", walk="http://www.roblox.com/asset/?id=10921244891", run="http://www.roblox.com/asset/?id=10921240218", jump="http://www.roblox.com/asset/?id=10921242013", climb="http://www.roblox.com/asset/?id=10921229866", fall="http://www.roblox.com/asset/?id=10921241244"},
+    ["Spider"] = {idle1="http://www.roblox.com/asset/?id=112316814377814", idle2="http://www.roblox.com/asset/?id=103439018552145", walk="http://www.roblox.com/asset/?id=109976439277879", run="http://www.roblox.com/asset/?id=119985832593347", jump="http://www.roblox.com/asset/?id=87979233462906", climb="http://www.roblox.com/asset/?id=119278342251995", fall="http://www.roblox.com/asset/?id=71112238570777"},
+    ["Joy"] = {idle1="http://www.roblox.com/asset/?id=119957475250242", idle2="http://www.roblox.com/asset/?id=101200477339169", walk="http://www.roblox.com/asset/?id=112597572150963", run="http://www.roblox.com/asset/?id=96521659811743", jump="http://www.roblox.com/asset/?id=82500357520736", climb="http://www.roblox.com/asset/?id=110061716873830", fall="http://www.roblox.com/asset/?id=132095139090357"},
+    ["Flying Aura"] = {idle1="http://www.roblox.com/asset/?id=122426844584505", idle2="http://www.roblox.com/asset/?id=122426844584505", walk="http://www.roblox.com/asset/?id=83077254246622", run="http://www.roblox.com/asset/?id=77053251062908", jump="http://www.roblox.com/asset/?id=125422018244301", climb="http://www.roblox.com/asset/?id=95973965948476", fall="http://www.roblox.com/asset/?id=109790195947848"},
+    ["FHA V2"] = {idle1="http://www.roblox.com/asset/?id=77320840005481", idle2="http://www.roblox.com/asset/?id=77320840005481", walk="http://www.roblox.com/asset/?id=134493251445479", run="http://www.roblox.com/asset/?id=122214533401932", jump="http://www.roblox.com/asset/?id=80078165493816", climb="http://www.roblox.com/asset/?id=114562994724647", fall="http://www.roblox.com/asset/?id=98383265864436"},
+    ["Silent Nurse"] = {idle1="http://www.roblox.com/asset/?id=111047244862844", idle2="http://www.roblox.com/asset/?id=111047244862844", walk="http://www.roblox.com/asset/?id=94196382152901", run="http://www.roblox.com/asset/?id=94196382152901", jump="http://www.roblox.com/asset/?id=106098057235980", climb="http://www.roblox.com/asset/?id=108985375609705", fall="http://www.roblox.com/asset/?id=131579609334755"},
+    ["Supermodel"] = {idle1="http://www.roblox.com/asset/?id=91917730726110", idle2="http://www.roblox.com/asset/?id=91917730726110", walk="http://www.roblox.com/asset/?id=90320132970213", run="http://www.roblox.com/asset/?id=112051258179255", jump="http://www.roblox.com/asset/?id=91931403363860", climb="http://www.roblox.com/asset/?id=82728029306069", fall="http://www.roblox.com/asset/?id=119173466228299"},
+    ["Enchanted Fairy"] = {idle1="http://www.roblox.com/asset/?id=73650178233095", idle2="http://www.roblox.com/asset/?id=73650178233095", walk="http://www.roblox.com/asset/?id=94547195663763", run="http://www.roblox.com/asset/?id=76909584337943", jump="http://www.roblox.com/asset/?id=120533712803667", climb="http://www.roblox.com/asset/?id=140663406485180", fall="http://www.roblox.com/asset/?id=100947971756348"},
+    ["Furry"] = {idle1="http://www.roblox.com/asset/?id=111821292044705", idle2="http://www.roblox.com/asset/?id=111821292044705", walk="http://www.roblox.com/asset/?id=104011441852459", run="http://www.roblox.com/asset/?id=87770060317862", jump="http://www.roblox.com/asset/?id=102635582722041", climb="http://www.roblox.com/asset/?id=76660530164497", fall="http://www.roblox.com/asset/?id=137079985547592"},
+    ["Vlada Model"] = {idle1="http://www.roblox.com/asset/?id=100139116433530", idle2="http://www.roblox.com/asset/?id=100139116433530", walk="http://www.roblox.com/asset/?id=77983757225444", run="http://www.roblox.com/asset/?id=116717848244930", jump="http://www.roblox.com/asset/?id=120751055172567", climb="http://www.roblox.com/asset/?id=70966616077778", fall="http://www.roblox.com/asset/?id=136118518255777"},
+    ["R6 Converter"] = {idle1="http://www.roblox.com/asset/?id=90040240627854", idle2="http://www.roblox.com/asset/?id=90040240627854", walk="http://www.roblox.com/asset/?id=92149852708428", run="http://www.roblox.com/asset/?id=72259383092959", jump="http://www.roblox.com/asset/?id=130519980521511", climb="http://www.roblox.com/asset/?id=80369171706383", fall="http://www.roblox.com/asset/?id=130011792193300"},
 }
 
-local _0xdcb6af = {
-    _0xe1e0d8({68,101,102,97,117,108,116}), _0xe1e0d8({86,97,109,112,105,114,101}), _0xe1e0d8({72,101,114,111}), _0xe1e0d8({90,111,109,98,105,101}), _0xe1e0d8({78,105,110,106,97}), _0xe1e0d8({65,115,116,114,111,110,97,117,116}), _0xe1e0d8({67,97,114,116,111,111,110}), _0xe1e0d8({80,105,114,97,116,101}), _0xe1e0d8({87,101,114,101,119,111,108,102}),
-    _0xe1e0d8({79,71,32,82,117,110}), _0xe1e0d8({74,111,108,108,121}), _0xe1e0d8({67,117,116,101,32,75,97,119,97,105,105}), _0xe1e0d8({68,111,108,108,32,51,46,48}), _0xe1e0d8({86,105,99,116,111,114,105,97,32,77,111,100,101,108}), _0xe1e0d8({66,105,107,101,47,66,105,99,121,99,108,105,115,116}), _0xe1e0d8({65,110,105,109,97,108}),
-    _0xe1e0d8({73,116,45,71,105,114,108,32,69,115,115,101,110,116,105,97,108,32,77,111,100,101,108}), _0xe1e0d8({79,108,100,115,99,104,111,111,108}), _0xe1e0d8({83,112,105,100,101,114}), _0xe1e0d8({74,111,121}), _0xe1e0d8({70,108,121,105,110,103,32,65,117,114,97}), _0xe1e0d8({70,72,65,32,86,50}),
-    _0xe1e0d8({83,105,108,101,110,116,32,78,117,114,115,101}), _0xe1e0d8({83,117,112,101,114,109,111,100,101,108}), _0xe1e0d8({69,110,99,104,97,110,116,101,100,32,70,97,105,114,121}), _0xe1e0d8({70,117,114,114,121}), _0xe1e0d8({86,108,97,100,97,32,77,111,100,101,108}), _0xe1e0d8({82,54,32,67,111,110,118,101,114,116,101,114})
+local allOptions = {
+    "Default", "Vampire", "Hero", "Zombie", "Ninja", "Astronaut", "Cartoon", "Pirate", "Werewolf",
+    "OG Run", "Jolly", "Cute Kawaii", "Doll 3.0", "Victoria Model", "Bike/Bicyclist", "Animal",
+    "It-Girl Essential Model", "Oldschool", "Spider", "Joy", "Flying Aura", "FHA V2",
+    "Silent Nurse", "Supermodel", "Enchanted Fairy", "Furry", "Vlada Model", "R6 Converter"
 }
 
-local _0x9c4954 = {all=_0xe1e0d8({68,101,102,97,117,108,116}), idle=_0xe1e0d8({68,101,102,97,117,108,116}), walk=_0xe1e0d8({68,101,102,97,117,108,116}), run=_0xe1e0d8({68,101,102,97,117,108,116}), jump=_0xe1e0d8({68,101,102,97,117,108,116}), climb=_0xe1e0d8({68,101,102,97,117,108,116}), fall=_0xe1e0d8({68,101,102,97,117,108,116}), swim=_0xe1e0d8({68,101,102,97,117,108,116}), swimidle=_0xe1e0d8({68,101,102,97,117,108,116}), death=_0xe1e0d8({68,101,102,97,117,108,116})}
-local _0xd8fb2f = {}
+local animState = {all="Default", idle="Default", walk="Default", run="Default", jump="Default", climb="Default", fall="Default", swim="Default", swimidle="Default", death="Default"}
+local originalAnims = {}
 
-local _0x5c9846 = {
-    idle     = { folder = _0xe1e0d8({105,100,108,101}),     slots = { {child=_0xe1e0d8({65,110,105,109,97,116,105,111,110,49}),origKey=_0xe1e0d8({105,100,108,101,49})}, {child=_0xe1e0d8({65,110,105,109,97,116,105,111,110,50}),origKey=_0xe1e0d8({105,100,108,101,50})} } },
-    walk     = { folder = _0xe1e0d8({119,97,108,107}),     slots = { {child=_0xe1e0d8({87,97,108,107,65,110,105,109}),  origKey=_0xe1e0d8({119,97,108,107})}  } },
-    run      = { folder = _0xe1e0d8({114,117,110}),      slots = { {child=_0xe1e0d8({82,117,110,65,110,105,109}),   origKey=_0xe1e0d8({114,117,110})}   } },
-    jump     = { folder = _0xe1e0d8({106,117,109,112}),     slots = { {child=_0xe1e0d8({74,117,109,112,65,110,105,109}),  origKey=_0xe1e0d8({106,117,109,112})}  } },
-    climb    = { folder = _0xe1e0d8({99,108,105,109,98}),    slots = { {child=_0xe1e0d8({67,108,105,109,98,65,110,105,109}), origKey=_0xe1e0d8({99,108,105,109,98})} } },
-    fall     = { folder = _0xe1e0d8({102,97,108,108}),     slots = { {child=_0xe1e0d8({70,97,108,108,65,110,105,109}),  origKey=_0xe1e0d8({102,97,108,108})}  } },
-    swim     = { folder = _0xe1e0d8({115,119,105,109}),     slots = { {child=_0xe1e0d8({83,119,105,109}),      origKey=_0xe1e0d8({115,119,105,109})}  } },
-    swimidle = { folder = _0xe1e0d8({115,119,105,109,105,100,108,101}), slots = { {child=_0xe1e0d8({83,119,105,109,73,100,108,101}),  origKey=_0xe1e0d8({115,119,105,109,105,100,108,101})} } },
-    death    = { folder = _0xe1e0d8({100,101,97,116,104}),    slots = { {child=_0xe1e0d8({68,101,97,116,104,65,110,105,109}), origKey=_0xe1e0d8({100,101,97,116,104})} } },
+local animMap = {
+    idle     = { folder = "idle",     slots = { {child="Animation1",origKey="idle1"}, {child="Animation2",origKey="idle2"} } },
+    walk     = { folder = "walk",     slots = { {child="WalkAnim",  origKey="walk"}  } },
+    run      = { folder = "run",      slots = { {child="RunAnim",   origKey="run"}   } },
+    jump     = { folder = "jump",     slots = { {child="JumpAnim",  origKey="jump"}  } },
+    climb    = { folder = "climb",    slots = { {child="ClimbAnim", origKey="climb"} } },
+    fall     = { folder = "fall",     slots = { {child="FallAnim",  origKey="fall"}  } },
+    swim     = { folder = "swim",     slots = { {child="Swim",      origKey="swim"}  } },
+    swimidle = { folder = "swimidle", slots = { {child="SwimIdle",  origKey="swimidle"} } },
+    death    = { folder = "death",    slots = { {child="DeathAnim", origKey="death"} } },
 }
 
-local function _0xec10c9()
-    local _0xd95f0a = _0xe3a36b.Character
-    if not _0xd95f0a then return end
-    local _0x39bb37 = _0xd95f0a:FindFirstChild(_0xe1e0d8({65,110,105,109,97,116,101}))
-    if not _0x39bb37 then return end
-    for _0xec1df4, _0x20dda1 in pairs(_0x5c9846) do
-        local _0x04bc9f = _0x39bb37:FindFirstChild(_0x20dda1.folder)
-        if _0x04bc9f then
-            for _0xec1df4, _0x689443 in ipairs(_0x20dda1.slots) do
-                local _0x2bb1e7 = _0x04bc9f:FindFirstChild(_0x689443.child)
-                if _0x2bb1e7 and _0x2bb1e7.AnimationId and _0x2bb1e7.AnimationId ~= _0xe1e0d8({}) then
-                    _0xd8fb2f[_0x689443.origKey] = _0x2bb1e7.AnimationId
+local function saveOriginalAnims()
+    local char = LocalPlayer.Character
+    if not char then return end
+    local Animate = char:FindFirstChild("Animate")
+    if not Animate then return end
+    for _, info in pairs(animMap) do
+        local folder = Animate:FindFirstChild(info.folder)
+        if folder then
+            for _, slot in ipairs(info.slots) do
+                local anim = folder:FindFirstChild(slot.child)
+                if anim and anim.AnimationId and anim.AnimationId ~= "" then
+                    originalAnims[slot.origKey] = anim.AnimationId
                 end
             end
         end
     end
 end
 
-local function _0xbf61cf()
-    if not _0x31f725 then return end
-    local _0xd95f0a = _0xe3a36b.Character
-    if not _0xd95f0a then return end
-    local _0x39bb37 = _0xd95f0a:FindFirstChild(_0xe1e0d8({65,110,105,109,97,116,101}))
-    if not _0x39bb37 then return end
-    local _0x99c0c4 = _0xd95f0a:FindFirstChildOfClass(_0xe1e0d8({72,117,109,97,110,111,105,100}))
-    if _0x99c0c4 then
-        for _0xec1df4, _0x1f822b in pairs(_0x99c0c4:GetPlayingAnimationTracks()) do _0x1f822b:Stop(0) end
+local function applyAnimations()
+    if not ANIMS_ACTIVO then return end
+    local char = LocalPlayer.Character
+    if not char then return end
+    local Animate = char:FindFirstChild("Animate")
+    if not Animate then return end
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    if hum then
+        for _, track in pairs(hum:GetPlayingAnimationTracks()) do track:Stop(0) end
     end
-    _0x39bb37.Disabled = true
+    Animate.Disabled = true
     task.wait(0.1)
-    for _0x87e542, _0x20dda1 in pairs(_0x5c9846) do
-        local _0x9b9d45 = _0xe1e0d8({68,101,102,97,117,108,116})
-        if _0x9c4954[_0x87e542] ~= _0xe1e0d8({68,101,102,97,117,108,116}) then
-            _0x9b9d45 = _0x9c4954[_0x87e542]
-        elseif _0x9c4954.all ~= _0xe1e0d8({68,101,102,97,117,108,116}) then
-            _0x9b9d45 = _0x9c4954.all
+    for animType, info in pairs(animMap) do
+        local presetName = "Default"
+        if animState[animType] ~= "Default" then
+            presetName = animState[animType]
+        elseif animState.all ~= "Default" then
+            presetName = animState.all
         end
-        local _0x31c774 = _0x70c106[_0x9b9d45]
-        local _0x04bc9f = _0x39bb37:FindFirstChild(_0x20dda1.folder)
-        if _0x04bc9f then
-            for _0xec1df4, _0x689443 in ipairs(_0x20dda1.slots) do
-                local _0x2bb1e7 = _0x04bc9f:FindFirstChild(_0x689443.child)
-                if _0x2bb1e7 then
-                    local _0x8b61ed
-                    if _0x9b9d45 == _0xe1e0d8({68,101,102,97,117,108,116}) then
-                        _0x8b61ed = _0xd8fb2f[_0x689443.origKey]
-                    elseif _0x31c774 and _0x31c774[_0x689443.origKey] then
-                        _0x8b61ed = _0x31c774[_0x689443.origKey]
+        local preset = animPresets[presetName]
+        local folder = Animate:FindFirstChild(info.folder)
+        if folder then
+            for _, slot in ipairs(info.slots) do
+                local anim = folder:FindFirstChild(slot.child)
+                if anim then
+                    local newId
+                    if presetName == "Default" then
+                        newId = originalAnims[slot.origKey]
+                    elseif preset and preset[slot.origKey] then
+                        newId = preset[slot.origKey]
                     end
-                    if _0x8b61ed then _0x2bb1e7.AnimationId = _0x8b61ed end
+                    if newId then anim.AnimationId = newId end
                 end
             end
         end
     end
-    _0x39bb37.Disabled = false
+    Animate.Disabled = false
 end
 
-_0xe3a36b.CharacterAdded:Connect(function(_0xd95f0a)
+LocalPlayer.CharacterAdded:Connect(function(char)
     task.wait(1)
-    _0xec10c9()
-    if _0x31f725 then _0xbf61cf() end
+    saveOriginalAnims()
+    if ANIMS_ACTIVO then applyAnimations() end
 end)
 
 task.spawn(function()
     while task.wait(0.2) do
         pcall(function()
-            local _0xd95f0a = _0xe3a36b.Character
-            if _0xd95f0a then
-                local _0x99c0c4 = _0xd95f0a:FindFirstChildOfClass(_0xe1e0d8({72,117,109,97,110,111,105,100}))
-                if _0x99c0c4 then
-                    if _0x99c0c4.WalkSpeed ~= _0xed8245 then _0x99c0c4.WalkSpeed = _0xed8245 end
-                    if _0xbf1b35 then
-                        for _0xec1df4, _0x7ce7f0 in ipairs(_0xd95f0a:GetDescendants()) do
-                            if _0x7ce7f0:IsA(_0xe1e0d8({66,97,115,101,80,97,114,116})) and _0x7ce7f0.CanCollide then _0x7ce7f0.CanCollide = false end
+            local char = LocalPlayer.Character
+            if char then
+                local hum = char:FindFirstChildOfClass("Humanoid")
+                if hum then
+                    if hum.WalkSpeed ~= WALKSPEED_VALOR then hum.WalkSpeed = WALKSPEED_VALOR end
+                    if NOCLIP_ACTIVO then
+                        for _, part in ipairs(char:GetDescendants()) do
+                            if part:IsA("BasePart") and part.CanCollide then part.CanCollide = false end
                         end
                     end
                 end
@@ -1261,13 +1259,13 @@ end)
 
 task.spawn(function()
     while task.wait(0.05) do
-        if _0xfdb4be then
+        if SPINBOT_ACTIVO then
             pcall(function()
-                local _0xd95f0a = _0xe3a36b.Character
-                if _0xd95f0a then
-                    local _0x140dd0 = _0xd95f0a:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
-                    if _0x140dd0 then
-                        _0x140dd0.CFrame = CFrame.new(_0x140dd0.Position) * CFrame.Angles(0, math.rad(_0x140dd0.Orientation.Y + 90), 0)
+                local char = LocalPlayer.Character
+                if char then
+                    local hrp = char:FindFirstChild("HumanoidRootPart")
+                    if hrp then
+                        hrp.CFrame = CFrame.new(hrp.Position) * CFrame.Angles(0, math.rad(hrp.Orientation.Y + 90), 0)
                     end
                 end
             end)
@@ -1275,640 +1273,640 @@ task.spawn(function()
     end
 end)
 
-local function _0x6ea3cc(_0xfb432a, _0xd2910a)
-    local _0xc345b4 = _0x59e892()
-    if not _0xc345b4 or not _0xc345b4.Character then return false end
-    local _0x140dd0 = _0xc345b4.Character:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
-    if not _0x140dd0 then return false end
-    return (_0x140dd0.Position - _0xfb432a).Magnitude <= _0xd2910a
+local function hayMurdererCerca(posicion, rango)
+    local murderer = detectarMurderer()
+    if not murderer or not murderer.Character then return false end
+    local hrp = murderer.Character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return false end
+    return (hrp.Position - posicion).Magnitude <= rango
 end
 
-local function _0xb441ad()
-    local _0x483795 = workspace:FindFirstChild(_0xe1e0d8({71,117,110,68,114,111,112}), true)
-    if _0x483795 then return _0x483795 end
-    for _0xec1df4, _0xb55861 in ipairs(workspace:GetDescendants()) do
-        if _0xb55861.Name == _0xe1e0d8({71,117,110,68,114,111,112}) then return _0xb55861 end
+local function buscarGunDrop()
+    local gun = workspace:FindFirstChild("GunDrop", true)
+    if gun then return gun end
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if obj.Name == "GunDrop" then return obj end
     end
     return nil
 end
 
-local function _0x7c19fb()
-    if _0x96babc() then print(_0xe1e0d8({240,159,148,170,32,83,111,121,32,77,117,114,100,101,114,101,114})) return end
-    if _0xbcb778() then print(_0xe1e0d8({226,156,133,32,89,97,32,116,101,110,103,111,32,108,97,32,71,117,110})) return end
-    if _0x513691() then print(_0xe1e0d8({240,159,143,160,32,69,115,116,111,121,32,101,110,32,101,108,32,108,111,98,98,121})) return end
+local function grabarGun()
+    if soyMurderer() then print("🔪 Soy Murderer") return end
+    if tengoGun() then print("✅ Ya tengo la Gun") return end
+    if enLobby() then print("🏠 Estoy en el lobby") return end
 
-    local _0x76669d = _0xb441ad()
-    if not _0x76669d then print(_0xe1e0d8({226,157,140,32,78,111,32,104,97,121,32,71,117,110,68,114,111,112})) return end
+    local gunDrop = buscarGunDrop()
+    if not gunDrop then print("❌ No hay GunDrop") return end
 
-    local _0xd95f0a = _0xe3a36b.Character
-    if not _0xd95f0a then return end
-    local _0x140dd0 = _0xd95f0a:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
-    if not _0x140dd0 then return end
+    local char = LocalPlayer.Character
+    if not char then return end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
 
-    local _0x41fecb
-    if _0x76669d:IsA(_0xe1e0d8({66,97,115,101,80,97,114,116})) then
-        _0x41fecb = _0x76669d.Position
-    elseif _0x76669d:FindFirstChild(_0xe1e0d8({72,97,110,100,108,101})) then
-        _0x41fecb = _0x76669d.Handle.Position
+    local posGun
+    if gunDrop:IsA("BasePart") then
+        posGun = gunDrop.Position
+    elseif gunDrop:FindFirstChild("Handle") then
+        posGun = gunDrop.Handle.Position
     else
-        local _0x04fef1, _0x95b134 = pcall(function() return _0x76669d:GetPivot().Position end)
-        if _0x04fef1 and _0x95b134 then _0x41fecb = _0x95b134 else return end
+        local ok, pivot = pcall(function() return gunDrop:GetPivot().Position end)
+        if ok and pivot then posGun = pivot else return end
     end
 
-    if _0x8704f8 and _0x6ea3cc(_0x41fecb, _0x7e7805) then
-        print(_0xe1e0d8({226,154,160,239,184,143,32,77,117,114,100,101,114,101,114,32,99,101,114,99,97}))
+    if GRAB_ANTI_MURDERER and hayMurdererCerca(posGun, GRAB_MURDERER_RANGO) then
+        print("⚠️ Murderer cerca")
         return
     end
 
     pcall(function()
-        _0x76669d.CanCollide = false
-        _0x76669d.CFrame = _0x140dd0.CFrame
-        _0x76669d.Velocity = Vector3.new(0, 0, 0)
-        _0x76669d.RotVelocity = Vector3.new(0, 0, 0)
+        gunDrop.CanCollide = false
+        gunDrop.CFrame = hrp.CFrame
+        gunDrop.Velocity = Vector3.new(0, 0, 0)
+        gunDrop.RotVelocity = Vector3.new(0, 0, 0)
     end)
 
-    print(_0xe1e0d8({240,159,141,172,32,71,117,110,32,97,116,114,97,195,173,100,97,32,97,32,116,117,115,32,112,105,101,115}))
+    print("🍬 Gun atraída a tus pies")
 
     task.wait(0.15)
 
-    local _0x6f05e8 = _0xe3a36b:FindFirstChild(_0xe1e0d8({66,97,99,107,112,97,99,107}))
-    local _0x5560d7 = (_0x6f05e8 and (_0x6f05e8:FindFirstChild(_0xe1e0d8({71,117,110})) or _0x6f05e8:FindFirstChild(_0xe1e0d8({82,101,118,111,108,118,101,114}))))
-        or _0xd95f0a:FindFirstChild(_0xe1e0d8({71,117,110}))
-        or _0xd95f0a:FindFirstChild(_0xe1e0d8({82,101,118,111,108,118,101,114}))
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    local gunTool = (backpack and (backpack:FindFirstChild("Gun") or backpack:FindFirstChild("Revolver")))
+        or char:FindFirstChild("Gun")
+        or char:FindFirstChild("Revolver")
 
-    if _0x5560d7 then
-        local _0x99c0c4 = _0xd95f0a:FindFirstChildOfClass(_0xe1e0d8({72,117,109,97,110,111,105,100}))
-        if _0x99c0c4 then
-            _0x99c0c4:EquipTool(_0x5560d7)
-            print(_0xe1e0d8({226,156,133,32,71,117,110,32,101,113,117,105,112,97,100,97}))
+    if gunTool then
+        local hum = char:FindFirstChildOfClass("Humanoid")
+        if hum then
+            hum:EquipTool(gunTool)
+            print("✅ Gun equipada")
         end
     end
 end
 
-local _0xa73491 = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-_0xa73491.Name = _0xe1e0d8({85,122,105,118,101,114,116,71,114,97,98,71,117,110})
-_0xa73491.Size = UDim2.new(0, 140, 0, 45)
-_0xa73491.Position = UDim2.new(0, 30, 0.5, 40)
-_0xa73491.BackgroundColor3 = _0xa12647.Morado3
-_0xa73491.BackgroundTransparency = 0.5
-_0xa73491.Text = _0xe1e0d8({240,159,141,172,32,71,82,65,66,32,71,85,78})
-_0xa73491.TextColor3 = _0xa12647.Texto
-_0xa73491.Font = Enum.Font.GothamBold
-_0xa73491.TextSize = 14
-_0xa73491.BorderSizePixel = 0
-_0xa73491.Active = true
-_0xa73491.Draggable = true
-_0xa73491.Visible = false
-_0xa73491.ZIndex = 998
-_0xa73491.ClipsDescendants = true
-_0xa73491.Parent = _0x4ebb04
+local BotonGrab = Instance.new("TextButton")
+BotonGrab.Name = "UzivertGrabGun"
+BotonGrab.Size = UDim2.new(0, 140, 0, 45)
+BotonGrab.Position = UDim2.new(0, 30, 0.5, 40)
+BotonGrab.BackgroundColor3 = COLORES.Morado3
+BotonGrab.BackgroundTransparency = 0.5
+BotonGrab.Text = "🍬 GRAB GUN"
+BotonGrab.TextColor3 = COLORES.Texto
+BotonGrab.Font = Enum.Font.GothamBold
+BotonGrab.TextSize = 14
+BotonGrab.BorderSizePixel = 0
+BotonGrab.Active = true
+BotonGrab.Draggable = true
+BotonGrab.Visible = false
+BotonGrab.ZIndex = 998
+BotonGrab.ClipsDescendants = true
+BotonGrab.Parent = ScreenGui
 
-local _0xabb05d = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0xabb05d.CornerRadius = UDim.new(0, 10)
-_0xabb05d.Parent = _0xa73491
+local cBG = Instance.new("UICorner")
+cBG.CornerRadius = UDim.new(0, 10)
+cBG.Parent = BotonGrab
 
-local _0x25d247 = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-_0x25d247.Color = _0xa12647.Naranja1
-_0x25d247.Thickness = 2
-_0x25d247.Transparency = 0.2
-_0x25d247.Parent = _0xa73491
+local sBG = Instance.new("UIStroke")
+sBG.Color = COLORES.Naranja1
+sBG.Thickness = 2
+sBG.Transparency = 0.2
+sBG.Parent = BotonGrab
 
 task.spawn(function()
     while task.wait() do
-        local _0xe9cedc = tick()
-        local _0xda933d = (math.sin(_0xe9cedc * 1.5) + 1) / 2
-        _0x25d247.Color = _0xa12647.Naranja3:Lerp(_0xa12647.Morado2, _0xda933d)
-        _0x25d247.Transparency = 0.4 - _0xda933d * 0.3
+        local t = tick()
+        local a = (math.sin(t * 1.5) + 1) / 2
+        sBG.Color = COLORES.Naranja3:Lerp(COLORES.Morado2, a)
+        sBG.Transparency = 0.4 - a * 0.3
     end
 end)
 
-local _0xd98666 = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-_0xd98666.Name = _0xe1e0d8({85,122,105,118,101,114,116,71,114,97,98,76,111,99,107})
-_0xd98666.Size = UDim2.new(0, 22, 0, 22)
-_0xd98666.Position = UDim2.new(1, -24, 0, 2)
-_0xd98666.BackgroundColor3 = _0xa12647.Morado3
-_0xd98666.BackgroundTransparency = 0.3
-_0xd98666.Text = _0xe1e0d8({240,159,148,147})
-_0xd98666.TextColor3 = _0xa12647.Texto
-_0xd98666.Font = Enum.Font.GothamBold
-_0xd98666.TextSize = 12
-_0xd98666.BorderSizePixel = 0
-_0xd98666.ZIndex = 999
-_0xd98666.Parent = _0xa73491
+local BotonCandado = Instance.new("TextButton")
+BotonCandado.Name = "UzivertGrabLock"
+BotonCandado.Size = UDim2.new(0, 22, 0, 22)
+BotonCandado.Position = UDim2.new(1, -24, 0, 2)
+BotonCandado.BackgroundColor3 = COLORES.Morado3
+BotonCandado.BackgroundTransparency = 0.3
+BotonCandado.Text = "🔓"
+BotonCandado.TextColor3 = COLORES.Texto
+BotonCandado.Font = Enum.Font.GothamBold
+BotonCandado.TextSize = 12
+BotonCandado.BorderSizePixel = 0
+BotonCandado.ZIndex = 999
+BotonCandado.Parent = BotonGrab
 
-local _0xd5b361 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0xd5b361.CornerRadius = UDim.new(1, 0)
-_0xd5b361.Parent = _0xd98666
+local cLock = Instance.new("UICorner")
+cLock.CornerRadius = UDim.new(1, 0)
+cLock.Parent = BotonCandado
 
-local _0xad8146 = _0x2c86f3.AutoGrabLock or false
+local BLOQUEADO = CONFIG.AutoGrabLock or false
 
-local function _0xd01d23()
-    if _0xad8146 then
-        _0xa73491.Draggable = false
-        _0xd98666.Text = _0xe1e0d8({240,159,148,146})
-        _0xd98666.BackgroundColor3 = _0xa12647.Rojo
-        _0xd98666.BackgroundTransparency = 0.3
+local function actualizarCandado()
+    if BLOQUEADO then
+        BotonGrab.Draggable = false
+        BotonCandado.Text = "🔒"
+        BotonCandado.BackgroundColor3 = COLORES.Rojo
+        BotonCandado.BackgroundTransparency = 0.3
     else
-        _0xa73491.Draggable = true
-        _0xd98666.Text = _0xe1e0d8({240,159,148,147})
-        _0xd98666.BackgroundColor3 = _0xa12647.Morado3
-        _0xd98666.BackgroundTransparency = 0.3
+        BotonGrab.Draggable = true
+        BotonCandado.Text = "🔓"
+        BotonCandado.BackgroundColor3 = COLORES.Morado3
+        BotonCandado.BackgroundTransparency = 0.3
     end
 end
 
-_0xd01d23()
+actualizarCandado()
 
-_0xd98666.MouseButton1Click:Connect(function()
-    _0xad8146 = not _0xad8146
-    _0x2c86f3.AutoGrabLock = _0xad8146
-    _0xd01d23()
-    _0x4cda06()
+BotonCandado.MouseButton1Click:Connect(function()
+    BLOQUEADO = not BLOQUEADO
+    CONFIG.AutoGrabLock = BLOQUEADO
+    actualizarCandado()
+    guardarConfig()
 end)
 
-if _0x2c86f3.AutoGrabPos then
-    local _0xe24858 = _0x2c86f3.AutoGrabPos
-    pcall(function() _0xa73491.Position = UDim2.new(_0xe24858[1], _0xe24858[2], _0xe24858[3], _0xe24858[4]) end)
+if CONFIG.AutoGrabPos then
+    local p = CONFIG.AutoGrabPos
+    pcall(function() BotonGrab.Position = UDim2.new(p[1], p[2], p[3], p[4]) end)
 end
 
 task.spawn(function()
     while task.wait(2) do
-        if not _0xad8146 then
+        if not BLOQUEADO then
             pcall(function()
-                _0x2c86f3.AutoGrabPos = {_0xa73491.Position.X.Scale, _0xa73491.Position.X.Offset, _0xa73491.Position.Y.Scale, _0xa73491.Position.Y.Offset}
-                _0x4cda06()
+                CONFIG.AutoGrabPos = {BotonGrab.Position.X.Scale, BotonGrab.Position.X.Offset, BotonGrab.Position.Y.Scale, BotonGrab.Position.Y.Offset}
+                guardarConfig()
             end)
         end
     end
 end)
 
-_0xa73491.MouseButton1Click:Connect(_0x7c19fb)
+BotonGrab.MouseButton1Click:Connect(grabarGun)
 
 task.spawn(function()
     while task.wait(0.3) do
-        if _0x2c86f3.AutoGrabMostrar == false then
-            if _0xa73491.Visible then _0xa73491.Visible = false end
+        if CONFIG.AutoGrabMostrar == false then
+            if BotonGrab.Visible then BotonGrab.Visible = false end
             continue
         end
-        local _0x76669d = _0xb441ad()
-        local _0xfa4036 = _0xbcb778()
-        local _0x60a3f9 = _0x96babc()
-        local _0xff880d = _0x513691()
-        if _0x76669d and not _0xfa4036 and not _0x60a3f9 and not _0xff880d then
-            if not _0xa73491.Visible then _0xa73491.Visible = true end
-            local _0x41fecb = _0x76669d:IsA(_0xe1e0d8({66,97,115,101,80,97,114,116})) and _0x76669d.Position or _0x76669d:GetPivot().Position
-            if _0x8704f8 and _0x6ea3cc(_0x41fecb, _0x7e7805) then
-                _0xa73491.Text = _0xe1e0d8({226,154,160,239,184,143,32,77,85,82,68,69,82,69,82,32,67,69,82,67,65})
+        local gunDrop = buscarGunDrop()
+        local tieneGun = tengoGun()
+        local soyMurder = soyMurderer()
+        local lobby = enLobby()
+        if gunDrop and not tieneGun and not soyMurder and not lobby then
+            if not BotonGrab.Visible then BotonGrab.Visible = true end
+            local posGun = gunDrop:IsA("BasePart") and gunDrop.Position or gunDrop:GetPivot().Position
+            if GRAB_ANTI_MURDERER and hayMurdererCerca(posGun, GRAB_MURDERER_RANGO) then
+                BotonGrab.Text = "⚠️ MURDERER CERCA"
             else
-                _0xa73491.Text = _0xe1e0d8({240,159,141,172,32,71,82,65,66,32,71,85,78})
+                BotonGrab.Text = "🍬 GRAB GUN"
             end
         else
-            if _0xa73491.Visible then _0xa73491.Visible = false end
+            if BotonGrab.Visible then BotonGrab.Visible = false end
         end
     end
 end)
 
+-- ============================================
+-- 🌀 FLING NEXUS (con HERO)
+-- ============================================
+local FLING_TIMEOUT = 2.5
+local FLING_ACTIVO = false
+local FLING_ALL_ACTIVO = false
+local FLING_TARGET = nil
+local FLING_THREAD = nil
+local FLING_IN_PROGRESS = false
 
+local function FlingPlayer(targetPlayer)
+    FLING_IN_PROGRESS = true
+    local myChar = LocalPlayer.Character
+    if not myChar then FLING_IN_PROGRESS = false return end
+    local myHum = myChar:FindFirstChildOfClass("Humanoid")
+    local myRoot = myChar:FindFirstChild("HumanoidRootPart")
+    if not (myHum and myRoot) then FLING_IN_PROGRESS = false return end
 
+    local targetChar = targetPlayer.Character
+    if not targetChar then FLING_IN_PROGRESS = false return end
+    local targetHum = targetChar:FindFirstChildOfClass("Humanoid")
+    local targetRoot = targetHum and targetHum.RootPart
+    local targetHead = targetChar:FindFirstChild("Head")
+    local accessory = targetChar:FindFirstChildOfClass("Accessory")
+    local handle = accessory and accessory:FindFirstChild("Handle")
 
-local _0xa97311 = 2.5
-local _0x67cb2c = false
-local _0xdf1651 = false
-local _0x088091 = nil
-local _0xbd52c2 = nil
-local _0x74b6d3 = false
-
-local function _0x7cc873(_0x4a5d97)
-    _0x74b6d3 = true
-    local _0x2c2c80 = _0xe3a36b.Character
-    if not _0x2c2c80 then _0x74b6d3 = false return end
-    local _0xa66b2c = _0x2c2c80:FindFirstChildOfClass(_0xe1e0d8({72,117,109,97,110,111,105,100}))
-    local _0x0bc94b = _0x2c2c80:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
-    if not (_0xa66b2c and _0x0bc94b) then _0x74b6d3 = false return end
-
-    local _0x00f0ed = _0x4a5d97.Character
-    if not _0x00f0ed then _0x74b6d3 = false return end
-    local _0x2bf69f = _0x00f0ed:FindFirstChildOfClass(_0xe1e0d8({72,117,109,97,110,111,105,100}))
-    local _0x697644 = _0x2bf69f and _0x2bf69f.RootPart
-    local _0x00506c = _0x00f0ed:FindFirstChild(_0xe1e0d8({72,101,97,100}))
-    local _0x0b2e43 = _0x00f0ed:FindFirstChildOfClass(_0xe1e0d8({65,99,99,101,115,115,111,114,121}))
-    local _0x52570f = _0x0b2e43 and _0x0b2e43:FindFirstChild(_0xe1e0d8({72,97,110,100,108,101}))
-
-    local _0x5c66aa = _0x0bc94b.CFrame
+    local oldPos = myRoot.CFrame
 
     repeat
         task.wait()
-        workspace.CurrentCamera.CameraSubject = _0x00506c or _0x52570f or _0x2bf69f
-    until workspace.CurrentCamera.CameraSubject == (_0x00506c or _0x52570f or _0x2bf69f)
+        workspace.CurrentCamera.CameraSubject = targetHead or handle or targetHum
+    until workspace.CurrentCamera.CameraSubject == (targetHead or handle or targetHum)
 
-    local function _0xd59fa4(_0xc70705, _0x3c987a, _0x6fe081)
-        local _0xec3265 = CFrame.new(_0xc70705.Position) * _0x3c987a * _0x6fe081
-        _0x0bc94b.CFrame = _0xec3265
-        _0x2c2c80:SetPrimaryPartCFrame(_0xec3265)
-        _0x0bc94b.Velocity = Vector3.new(9e7, 9e8, 9e7)
-        _0x0bc94b.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+    local function forcePosition(basePart, offset, angle)
+        local targetCF = CFrame.new(basePart.Position) * offset * angle
+        myRoot.CFrame = targetCF
+        myChar:SetPrimaryPartCFrame(targetCF)
+        myRoot.Velocity = Vector3.new(9e7, 9e8, 9e7)
+        myRoot.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
     end
 
-    local function _0xc6271c(_0xc70705)
-        local _0x9c8d45 = tick()
-        local _0xdf7942 = 0
+    local function flingBasePart(basePart)
+        local start = tick()
+        local ang = 0
         repeat
-            if _0x0bc94b and _0x2bf69f then
-                _0xdf7942 = _0xdf7942 + 100
-                for _0xec1df4, _0x3bc02b in ipairs{
+            if myRoot and targetHum then
+                ang = ang + 100
+                for _, off in ipairs{
                     CFrame.new(0, 1.5, 0),
                     CFrame.new(0, -1.5, 0),
                     CFrame.new(2.25, 1.5, -2.25),
                     CFrame.new(-2.25, -1.5, 2.25)
                 } do
-                    _0xd59fa4(_0xc70705, _0x3bc02b + _0x2bf69f.MoveDirection, CFrame.Angles(math.rad(_0xdf7942), 0, 0))
+                    forcePosition(basePart, off + targetHum.MoveDirection, CFrame.Angles(math.rad(ang), 0, 0))
                     task.wait()
                 end
             end
-        until _0xc70705.Velocity.Magnitude > 500 or tick() - _0x9c8d45 > _0xa97311
+        until basePart.Velocity.Magnitude > 500 or tick() - start > FLING_TIMEOUT
     end
 
-    local _0xe2158e = Instance.new(_0xe1e0d8({66,111,100,121,86,101,108,111,99,105,116,121}))
-    _0xe2158e.Name = _0xe1e0d8({70,108,105,110,103,86,101,108,111,99,105,116,121})
-    _0xe2158e.Velocity = Vector3.new(9e8, 9e8, 9e8)
-    _0xe2158e.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-    _0xe2158e.Parent = _0x0bc94b
-    _0xa66b2c:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+    local bv = Instance.new("BodyVelocity")
+    bv.Name = "FlingVelocity"
+    bv.Velocity = Vector3.new(9e8, 9e8, 9e8)
+    bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+    bv.Parent = myRoot
+    myHum:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
 
-    local _0x515eed = _0x697644 or _0x00506c or _0x52570f
-    if _0x515eed then _0xc6271c(_0x515eed) end
+    local targetPart = targetRoot or targetHead or handle
+    if targetPart then flingBasePart(targetPart) end
 
-    _0xe2158e:Destroy()
-    _0xa66b2c:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+    bv:Destroy()
+    myHum:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
 
     repeat
         task.wait()
-        workspace.CurrentCamera.CameraSubject = _0xa66b2c
-    until workspace.CurrentCamera.CameraSubject == _0xa66b2c
+        workspace.CurrentCamera.CameraSubject = myHum
+    until workspace.CurrentCamera.CameraSubject == myHum
 
     repeat
-        local _0xb81a8e = _0x5c66aa * CFrame.new(0, 0.5, 0)
-        _0x0bc94b.CFrame = _0xb81a8e
-        _0x2c2c80:SetPrimaryPartCFrame(_0xb81a8e)
-        _0xa66b2c:ChangeState(Enum.HumanoidStateType.GettingUp)
-        for _0xec1df4, _0x7ce7f0 in ipairs(_0x2c2c80:GetChildren()) do
-            if _0x7ce7f0:IsA(_0xe1e0d8({66,97,115,101,80,97,114,116})) then
-                _0x7ce7f0.Velocity = Vector3.zero
-                _0x7ce7f0.RotVelocity = Vector3.zero
+        local cf = oldPos * CFrame.new(0, 0.5, 0)
+        myRoot.CFrame = cf
+        myChar:SetPrimaryPartCFrame(cf)
+        myHum:ChangeState(Enum.HumanoidStateType.GettingUp)
+        for _, part in ipairs(myChar:GetChildren()) do
+            if part:IsA("BasePart") then
+                part.Velocity = Vector3.zero
+                part.RotVelocity = Vector3.zero
             end
         end
         task.wait()
-    until (_0x0bc94b.Position - _0x5c66aa.p).Magnitude < 25
+    until (myRoot.Position - oldPos.p).Magnitude < 25
 
-    _0x74b6d3 = false
+    FLING_IN_PROGRESS = false
 end
 
-local function _0x37f134()
-    _0x74b6d3 = true
-    local _0x68588a = {}
-    for _0xec1df4, _0x41a26c in ipairs(_0x73fbe8:GetPlayers()) do
-        if _0x41a26c ~= _0xe3a36b then
-            table.insert(_0x68588a, _0x41a26c)
+local function FlingAllLoop()
+    FLING_IN_PROGRESS = true
+    local players = {}
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer then
+            table.insert(players, plr)
         end
     end
-    if #_0x68588a == 0 then _0x74b6d3 = false return end
+    if #players == 0 then FLING_IN_PROGRESS = false return end
 
-    local _0x728037 = 1
-    while _0xdf1651 do
-        local _0x14c86a = _0x68588a[_0x728037]
-        if _0x14c86a and _0x14c86a.Character and _0x14c86a.Character:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100})) 
-           and _0x14c86a.Character.Humanoid.Health > 0 then
-            _0x67cb2c = true
-            _0x088091 = _0x14c86a
-            _0x7cc873(_0x14c86a)
-            _0x67cb2c = false
+    local index = 1
+    while FLING_ALL_ACTIVO do
+        local target = players[index]
+        if target and target.Character and target.Character:FindFirstChild("Humanoid") 
+           and target.Character.Humanoid.Health > 0 then
+            FLING_ACTIVO = true
+            FLING_TARGET = target
+            FlingPlayer(target)
+            FLING_ACTIVO = false
         end
-        _0x728037 = _0x728037 % #_0x68588a + 1
+        index = index % #players + 1
         task.wait(0.5)
     end
-    _0x74b6d3 = false
+    FLING_IN_PROGRESS = false
 end
 
-local function _0xdce78e()
-    _0x67cb2c = false
-    _0xdf1651 = false
-    if _0xbd52c2 then
-        task.cancel(_0xbd52c2)
-        _0xbd52c2 = nil
+local function StopFling()
+    FLING_ACTIVO = false
+    FLING_ALL_ACTIVO = false
+    if FLING_THREAD then
+        task.cancel(FLING_THREAD)
+        FLING_THREAD = nil
     end
-    _0x74b6d3 = false
+    FLING_IN_PROGRESS = false
 end
 
-local function _0x3adf46(_0x14c86a)
-    if _0x74b6d3 then print(_0xe1e0d8({226,154,160,239,184,143,32,70,108,105,110,103,32,101,110,32,112,114,111,103,114,101,115,111})) return end
-    _0xdce78e()
-    if _0x14c86a == _0xe1e0d8({97,108,108}) then
-        _0xdf1651 = true
-        _0xbd52c2 = task.spawn(_0x37f134)
-    elseif _0x14c86a == _0xe1e0d8({77,117,114,100,101,114,101,114}) then
-        local _0xb77764 = _0x59e892()
-        if _0xb77764 then
-            _0x67cb2c = true
-            _0x088091 = _0xb77764
-            _0xbd52c2 = task.spawn(_0x7cc873, _0xb77764)
+local function IniciarFling(target)
+    if FLING_IN_PROGRESS then print("⚠️ Fling en progreso") return end
+    StopFling()
+    if target == "all" then
+        FLING_ALL_ACTIVO = true
+        FLING_THREAD = task.spawn(FlingAllLoop)
+    elseif target == "Murderer" then
+        local m = detectarMurderer()
+        if m then
+            FLING_ACTIVO = true
+            FLING_TARGET = m
+            FLING_THREAD = task.spawn(FlingPlayer, m)
         end
-    elseif _0x14c86a == _0xe1e0d8({83,104,101,114,105,102,102}) then
-        local _0x9b36d2 = _0x561f37()
-        if not _0x9b36d2 then _0x9b36d2 = _0xad1cef() end
-        if _0x9b36d2 then
-            _0x67cb2c = true
-            _0x088091 = _0x9b36d2
-            _0xbd52c2 = task.spawn(_0x7cc873, _0x9b36d2)
+    elseif target == "Sheriff" then
+        local s = detectarSheriff()
+        if not s then s = detectarHero() end
+        if s then
+            FLING_ACTIVO = true
+            FLING_TARGET = s
+            FLING_THREAD = task.spawn(FlingPlayer, s)
         end
     end
 end
 
-print(_0xe1e0d8({240,159,142,131,32,80,97,114,116,101,32,52,47,49,48,32,99,97,114,103,97,100,97,32,45,32,65,110,105,109,115,32,43,32,71,114,97,98,32,43,32,70,108,105,110,103,32,78,101,120,117,115}))
+print("🎃 Parte 4/10 cargada - Anims + Grab + Fling Nexus")
 
-local function _0x54b709()
-    local _0xd95f0a = _0xe3a36b.Character
-    if not _0xd95f0a then return nil end
-    local _0x483795 = _0xd95f0a:FindFirstChild(_0xe1e0d8({71,117,110})) or _0xd95f0a:FindFirstChild(_0xe1e0d8({82,101,118,111,108,118,101,114}))
-    if _0x483795 then return _0x483795 end
-    local _0x6f05e8 = _0xe3a36b:FindFirstChild(_0xe1e0d8({66,97,99,107,112,97,99,107}))
-    if _0x6f05e8 then
-        _0x483795 = _0x6f05e8:FindFirstChild(_0xe1e0d8({71,117,110})) or _0x6f05e8:FindFirstChild(_0xe1e0d8({82,101,118,111,108,118,101,114}))
-        if _0x483795 then
-            local _0x99c0c4 = _0xd95f0a:FindFirstChildOfClass(_0xe1e0d8({72,117,109,97,110,111,105,100}))
-            if _0x99c0c4 then _0x99c0c4:EquipTool(_0x483795) end
-            return _0x483795
+local function obtenerGun()
+    local char = LocalPlayer.Character
+    if not char then return nil end
+    local gun = char:FindFirstChild("Gun") or char:FindFirstChild("Revolver")
+    if gun then return gun end
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    if backpack then
+        gun = backpack:FindFirstChild("Gun") or backpack:FindFirstChild("Revolver")
+        if gun then
+            local hum = char:FindFirstChildOfClass("Humanoid")
+            if hum then hum:EquipTool(gun) end
+            return gun
         end
     end
     return nil
 end
 
-local function _0xa3d5fd(_0x483795)
-    if not _0x483795 then return nil end
-    return _0x483795:FindFirstChild(_0xe1e0d8({83,104,111,111,116}), true)
+local function obtenerShootRemote(gun)
+    if not gun then return nil end
+    return gun:FindFirstChild("Shoot", true)
 end
 
-local function _0xbce6a7(_0x483795)
-    if not _0x483795 then return _0x9e40ad.CFrame end
-    local _0x52570f = _0x483795:FindFirstChild(_0xe1e0d8({72,97,110,100,108,101}))
-    if _0x52570f then return _0x52570f.CFrame end
-    return _0x9e40ad.CFrame
+local function obtenerOriginArma(gun)
+    if not gun then return Camera.CFrame end
+    local handle = gun:FindFirstChild("Handle")
+    if handle then return handle.CFrame end
+    return Camera.CFrame
 end
 
-local function _0x49157d()
-    local _0x483795 = _0x54b709()
-    if not _0x483795 then print(_0xe1e0d8({226,157,140,32,78,111,32,116,105,101,110,101,115,32,71,117,110})) return end
-    local _0xc345b4 = _0x59e892()
-    if not _0xc345b4 or not _0xc345b4.Character then print(_0xe1e0d8({226,157,140,32,78,111,32,104,97,121,32,77,117,114,100,101,114,101,114})) return end
-    local _0xd95f0a = _0xe3a36b.Character
-    local _0x140dd0 = _0xd95f0a and _0xd95f0a:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
-    local _0x4dadcd = _0xc345b4.Character:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
-    local _0x99c0c4 = _0xc345b4.Character:FindFirstChildOfClass(_0xe1e0d8({72,117,109,97,110,111,105,100}))
-    if not _0x140dd0 or not _0x4dadcd or not _0x99c0c4 then return end
-    local _0x9d530a = (_0x140dd0.Position - _0x4dadcd.Position).Magnitude
-    if _0x9d530a > _0x07c00e or _0x9d530a < _0x62cf02 then return end
-    local _0xf36b4f = _0xa3d5fd(_0x483795)
-    if not _0xf36b4f then print(_0xe1e0d8({226,157,140,32,78,111,32,104,97,121,32,114,101,109,111,116,101,32,83,104,111,111,116})) return end
-    local _0xccf05e = _0xbce6a7(_0x483795)
+local function dispararV1()
+    local gun = obtenerGun()
+    if not gun then print("❌ No tienes Gun") return end
+    local murderer = detectarMurderer()
+    if not murderer or not murderer.Character then print("❌ No hay Murderer") return end
+    local char = LocalPlayer.Character
+    local hrp = char and char:FindFirstChild("HumanoidRootPart")
+    local targetHrp = murderer.Character:FindFirstChild("HumanoidRootPart")
+    local hum = murderer.Character:FindFirstChildOfClass("Humanoid")
+    if not hrp or not targetHrp or not hum then return end
+    local dist = (hrp.Position - targetHrp.Position).Magnitude
+    if dist > SHOOT_RANGO_MAX or dist < SHOOT_RANGO_MIN then return end
+    local shoot = obtenerShootRemote(gun)
+    if not shoot then print("❌ No hay remote Shoot") return end
+    local origin = obtenerOriginArma(gun)
     
-    local _0xb379c9 = _0x4dadcd.Position + Vector3.new(0, _0xdb7590, 0)
+    local basePos = targetHrp.Position + Vector3.new(0, SHOOT_ALTURA, 0)
     
-    local _0x31eaff = 0
+    local ping = 0
     pcall(function()
-        _0x31eaff = _0x9758ec.Network.ServerStatsItem[_0xe1e0d8({68,97,116,97,32,80,105,110,103})]:GetValue() / 1000
+        ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
     end)
     
-    local _0x87760d = _0x9d530a / 1000
-    local _0x509cc6 = _0x87760d + _0x31eaff
+    local tiempoVuelo = dist / 1000
+    local tiempoTotal = tiempoVuelo + ping
     
-    local _0x941182 = _0x4dadcd.AssemblyLinearVelocity
-    local _0xdf0bdc = _0x941182.Magnitude
+    local vel = targetHrp.AssemblyLinearVelocity
+    local velMag = vel.Magnitude
     
-    local _0x6c8fe6 = 1.5
-    if _0xdf0bdc > 30 then
-        _0x6c8fe6 = 1.5 * 1.2
-    elseif _0xdf0bdc < 5 then
-        _0x6c8fe6 = 1.5 * 0.8
+    local predFactorDinamico = 1.5
+    if velMag > 30 then
+        predFactorDinamico = 1.5 * 1.2
+    elseif velMag < 5 then
+        predFactorDinamico = 1.5 * 0.8
     end
     
-    if _0xdf0bdc > 1 then
-        _0xb379c9 = _0xb379c9 + (_0x941182 * _0x509cc6 * _0x6c8fe6)
-    elseif _0x99c0c4.MoveDirection.Magnitude > 0 then
-        _0xb379c9 = _0xb379c9 + (_0x99c0c4.MoveDirection * _0x99c0c4.WalkSpeed * _0x509cc6 * _0x6c8fe6)
+    if velMag > 1 then
+        basePos = basePos + (vel * tiempoTotal * predFactorDinamico)
+    elseif hum.MoveDirection.Magnitude > 0 then
+        basePos = basePos + (hum.MoveDirection * hum.WalkSpeed * tiempoTotal * predFactorDinamico)
     end
     
-    local _0x624299 = _0x99c0c4:GetState()
-    if _0x624299 == Enum.HumanoidStateType.Jumping or _0x624299 == Enum.HumanoidStateType.Freefall then
-        local _0xb2a241 = workspace.Gravity
-        local _0xe13953 = _0x941182.Y * _0x509cc6 + 0.5 * (-_0xb2a241) * _0x509cc6 * _0x509cc6
-        _0xb379c9 = _0xb379c9 + Vector3.new(0, _0xe13953, 0)
+    local estado = hum:GetState()
+    if estado == Enum.HumanoidStateType.Jumping or estado == Enum.HumanoidStateType.Freefall then
+        local g = workspace.Gravity
+        local yExtra = vel.Y * tiempoTotal + 0.5 * (-g) * tiempoTotal * tiempoTotal
+        basePos = basePos + Vector3.new(0, yExtra, 0)
     end
     
-    local _0xfc8986 = {
-        _0xb379c9,
-        _0xb379c9 + Vector3.new(0, 0.6, 0),
-        _0xb379c9 + Vector3.new(0, -0.3, 0),
-        _0xb379c9 + Vector3.new(1.0, 0, 0),
-        _0xb379c9 + Vector3.new(-1.0, 0, 0),
+    local puntos = {
+        basePos,
+        basePos + Vector3.new(0, 0.6, 0),
+        basePos + Vector3.new(0, -0.3, 0),
+        basePos + Vector3.new(1.0, 0, 0),
+        basePos + Vector3.new(-1.0, 0, 0),
     }
     
-    for _0x96fb93, _0x2eb4c1 in ipairs(_0xfc8986) do
-        pcall(function() _0xf36b4f:FireServer(_0xccf05e, CFrame.new(_0x2eb4c1)) end)
+    for i, punto in ipairs(puntos) do
+        pcall(function() shoot:FireServer(origin, CFrame.new(punto)) end)
         task.wait(0.025)
     end
     
-    print(_0xe1e0d8({240,159,142,175,32,83,104,111,111,116,32,226,134,146,32}) .. _0xc345b4.Name .. _0xe1e0d8({32,124,32,53,32,116,105,114,111,115,32,124,32,68,105,115,116,58,32}) .. math.floor(_0x9d530a))
+    print("🎯 Shoot → " .. murderer.Name .. " | 5 tiros | Dist: " .. math.floor(dist))
 end
 
 
-local function _0x795314()
-    local _0x483795 = _0x54b709()
-    if not _0x483795 then print(_0xe1e0d8({226,157,140,32,78,111,32,116,105,101,110,101,115,32,71,117,110})) return end
-    local _0xc345b4 = _0x59e892()
-    if not _0xc345b4 or not _0xc345b4.Character then print(_0xe1e0d8({226,157,140,32,78,111,32,104,97,121,32,77,117,114,100,101,114,101,114})) return end
-    local _0xd95f0a = _0xe3a36b.Character
-    local _0x140dd0 = _0xd95f0a and _0xd95f0a:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
-    local _0x4dadcd = _0xc345b4.Character:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
-    local _0x99c0c4 = _0xc345b4.Character:FindFirstChildOfClass(_0xe1e0d8({72,117,109,97,110,111,105,100}))
-    if not _0x140dd0 or not _0x4dadcd or not _0x99c0c4 then return end
-    local _0x9d530a = (_0x140dd0.Position - _0x4dadcd.Position).Magnitude
-    if _0x9d530a > _0x07c00e or _0x9d530a < _0x62cf02 then return end
-    local _0xf36b4f = _0xa3d5fd(_0x483795)
-    if not _0xf36b4f then print(_0xe1e0d8({226,157,140,32,78,111,32,104,97,121,32,114,101,109,111,116,101,32,83,104,111,111,116})) return end
-    local _0xccf05e = _0xbce6a7(_0x483795)
+local function dispararV2()
+    local gun = obtenerGun()
+    if not gun then print("❌ No tienes Gun") return end
+    local murderer = detectarMurderer()
+    if not murderer or not murderer.Character then print("❌ No hay Murderer") return end
+    local char = LocalPlayer.Character
+    local hrp = char and char:FindFirstChild("HumanoidRootPart")
+    local targetHrp = murderer.Character:FindFirstChild("HumanoidRootPart")
+    local hum = murderer.Character:FindFirstChildOfClass("Humanoid")
+    if not hrp or not targetHrp or not hum then return end
+    local dist = (hrp.Position - targetHrp.Position).Magnitude
+    if dist > SHOOT_RANGO_MAX or dist < SHOOT_RANGO_MIN then return end
+    local shoot = obtenerShootRemote(gun)
+    if not shoot then print("❌ No hay remote Shoot") return end
+    local origin = obtenerOriginArma(gun)
     
-    local _0xb379c9 = _0x4dadcd.Position + Vector3.new(0, _0xdb7590, 0)
+    local basePos = targetHrp.Position + Vector3.new(0, SHOOT_ALTURA, 0)
     
-    local _0x31eaff = 0
+    local ping = 0
     pcall(function()
-        _0x31eaff = _0x9758ec.Network.ServerStatsItem[_0xe1e0d8({68,97,116,97,32,80,105,110,103})]:GetValue() / 1000
+        ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
     end)
     
-    local _0x87760d = _0x9d530a / 1000
-    local _0x509cc6 = _0x87760d + _0x31eaff
+    local tiempoVuelo = dist / 1000
+    local tiempoTotal = tiempoVuelo + ping
     
-    local _0x941182 = _0x4dadcd.AssemblyLinearVelocity
-    local _0xdf0bdc = _0x941182.Magnitude
+    local vel = targetHrp.AssemblyLinearVelocity
+    local velMag = vel.Magnitude
     
-    local _0x6c8fe6 = 1.5
-    if _0xdf0bdc > 30 then
-        _0x6c8fe6 = 1.5 * 1.2
-    elseif _0xdf0bdc < 5 then
-        _0x6c8fe6 = 1.5 * 0.8
+    local predFactorDinamico = 1.5
+    if velMag > 30 then
+        predFactorDinamico = 1.5 * 1.2
+    elseif velMag < 5 then
+        predFactorDinamico = 1.5 * 0.8
     end
     
-    if _0xdf0bdc > 1 then
-        _0xb379c9 = _0xb379c9 + (_0x941182 * _0x509cc6 * _0x6c8fe6)
-    elseif _0x99c0c4.MoveDirection.Magnitude > 0 then
-        _0xb379c9 = _0xb379c9 + (_0x99c0c4.MoveDirection * _0x99c0c4.WalkSpeed * _0x509cc6 * _0x6c8fe6)
+    if velMag > 1 then
+        basePos = basePos + (vel * tiempoTotal * predFactorDinamico)
+    elseif hum.MoveDirection.Magnitude > 0 then
+        basePos = basePos + (hum.MoveDirection * hum.WalkSpeed * tiempoTotal * predFactorDinamico)
     end
     
-    local _0x624299 = _0x99c0c4:GetState()
-    if _0x624299 == Enum.HumanoidStateType.Jumping or _0x624299 == Enum.HumanoidStateType.Freefall then
-        local _0xb2a241 = workspace.Gravity
-        local _0xe13953 = _0x941182.Y * _0x509cc6 + 0.5 * (-_0xb2a241) * _0x509cc6 * _0x509cc6
-        _0xb379c9 = _0xb379c9 + Vector3.new(0, _0xe13953, 0)
+    local estado = hum:GetState()
+    if estado == Enum.HumanoidStateType.Jumping or estado == Enum.HumanoidStateType.Freefall then
+        local g = workspace.Gravity
+        local yExtra = vel.Y * tiempoTotal + 0.5 * (-g) * tiempoTotal * tiempoTotal
+        basePos = basePos + Vector3.new(0, yExtra, 0)
     end
     
-    local _0x0eed0a
-    if _0xdf0bdc > 1 then
-        _0x0eed0a = _0x941182.Unit
+    local dirMov
+    if velMag > 1 then
+        dirMov = vel.Unit
     else
-        _0x0eed0a = _0x99c0c4.MoveDirection.Unit
+        dirMov = hum.MoveDirection.Unit
     end
     
-    local _0xfc8986 = {
-        _0xb379c9,
-        _0xb379c9 + Vector3.new(0, 1.0, 0),
-        _0xb379c9 + Vector3.new(0, -0.5, 0),
-        _0xb379c9 + (_0x0eed0a * 1.5),
-        _0xb379c9 - (_0x0eed0a * 1.5),
-        _0xb379c9 + Vector3.new(1.5, 0, 0),
-        _0xb379c9 + Vector3.new(-1.5, 0, 0),
+    local puntos = {
+        basePos,
+        basePos + Vector3.new(0, 1.0, 0),
+        basePos + Vector3.new(0, -0.5, 0),
+        basePos + (dirMov * 1.5),
+        basePos - (dirMov * 1.5),
+        basePos + Vector3.new(1.5, 0, 0),
+        basePos + Vector3.new(-1.5, 0, 0),
     }
     
-    for _0x96fb93, _0x2eb4c1 in ipairs(_0xfc8986) do
-        pcall(function() _0xf36b4f:FireServer(_0xccf05e, CFrame.new(_0x2eb4c1)) end)
+    for i, punto in ipairs(puntos) do
+        pcall(function() shoot:FireServer(origin, CFrame.new(punto)) end)
         task.wait(0.025)
     end
     
-    print(_0xe1e0d8({240,159,142,175,32,83,104,111,111,116,32,65,118,122,32,226,134,146,32}) .. _0xc345b4.Name .. _0xe1e0d8({32,124,32,55,32,116,105,114,111,115,32,124,32,68,105,115,116,58,32}) .. math.floor(_0x9d530a))
+    print("🎯 Shoot Avz → " .. murderer.Name .. " | 7 tiros | Dist: " .. math.floor(dist))
 end
 
 
 task.spawn(function()
     while task.wait(0.15) do
-        if _0xeea8b9 then pcall(_0x795314) end
+        if SHOOT_AUTO then pcall(dispararV2) end
     end
 end)
 
-
-
-
-local function _0x67dcd6()
-    if not _0x96babc() then
-        print(_0xe1e0d8({226,157,140,32,75,105,108,108,32,65,108,108,58,32,78,111,32,115,111,115,32,77,117,114,100,101,114,101,114}))
+-- ============================================
+-- 💥 KILL ALL (Murderer only)
+-- ============================================
+local function KillAll()
+    if not soyMurderer() then
+        print("❌ Kill All: No sos Murderer")
         return false
     end
 
-    local _0xd95f0a = _0xe3a36b.Character
-    if not _0xd95f0a then return false end
+    local char = LocalPlayer.Character
+    if not char then return false end
 
-    local _0x393b83 = _0xd95f0a:FindFirstChild(_0xe1e0d8({75,110,105,102,101}))
-    if not _0x393b83 then
-        local _0x6f05e8 = _0xe3a36b:FindFirstChild(_0xe1e0d8({66,97,99,107,112,97,99,107}))
-        if _0x6f05e8 then
-            _0x393b83 = _0x6f05e8:FindFirstChild(_0xe1e0d8({75,110,105,102,101}))
+    local knife = char:FindFirstChild("Knife")
+    if not knife then
+        local backpack = LocalPlayer:FindFirstChild("Backpack")
+        if backpack then
+            knife = backpack:FindFirstChild("Knife")
         end
     end
 
-    if not _0x393b83 then
-        print(_0xe1e0d8({226,157,140,32,75,105,108,108,32,65,108,108,58,32,78,111,32,116,101,110,195,169,115,32,75,110,105,102,101}))
+    if not knife then
+        print("❌ Kill All: No tenés Knife")
         return false
     end
 
-    local _0xa200f9 = _0x393b83:FindFirstChild(_0xe1e0d8({72,97,110,100,108,101,84,111,117,99,104,101,100}), true)
-    if not _0xa200f9 then
-        for _0xec1df4, _0xb55861 in ipairs(_0x393b83:GetDescendants()) do
-            if _0xb55861:IsA(_0xe1e0d8({82,101,109,111,116,101,69,118,101,110,116})) then
-                _0xa200f9 = _0xb55861
+    local knifeRemote = knife:FindFirstChild("HandleTouched", true)
+    if not knifeRemote then
+        for _, obj in ipairs(knife:GetDescendants()) do
+            if obj:IsA("RemoteEvent") then
+                knifeRemote = obj
                 break
             end
         end
     end
 
-    local _0x4e85d6 = 0
-    for _0xec1df4, _0xd17fe9 in ipairs(_0x73fbe8:GetPlayers()) do
-        if _0xd17fe9 ~= _0xe3a36b and _0xd17fe9.Character then
-            local _0xe71d0d = _0xd17fe9.Character:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
-            local _0x30f2b4 = _0xd17fe9.Character:FindFirstChildOfClass(_0xe1e0d8({72,117,109,97,110,111,105,100}))
-            if _0xe71d0d and _0x30f2b4 and _0x30f2b4.Health > 0 then
+    local killed = 0
+    for _, enemy in ipairs(Players:GetPlayers()) do
+        if enemy ~= LocalPlayer and enemy.Character then
+            local eRoot = enemy.Character:FindFirstChild("HumanoidRootPart")
+            local eHum = enemy.Character:FindFirstChildOfClass("Humanoid")
+            if eRoot and eHum and eHum.Health > 0 then
                 pcall(function()
-                    _0xe71d0d.CFrame = _0x393b83.Handle.CFrame
-                    _0xe71d0d.Velocity = Vector3.new(0, 0, 0)
-                    _0xe71d0d.RotVelocity = Vector3.new(0, 0, 0)
+                    eRoot.CFrame = knife.Handle.CFrame
+                    eRoot.Velocity = Vector3.new(0, 0, 0)
+                    eRoot.RotVelocity = Vector3.new(0, 0, 0)
                 end)
 
-                if _0xa200f9 then
+                if knifeRemote then
                     pcall(function()
-                        _0xa200f9:FireServer(_0xe71d0d)
+                        knifeRemote:FireServer(eRoot)
                     end)
                 end
 
-                _0x4e85d6 = _0x4e85d6 + 1
+                killed = killed + 1
                 task.wait(0.05)
             end
         end
     end
 
-    print(_0xe1e0d8({240,159,146,165,32,75,105,108,108,32,65,108,108,32,226,134,146,32}) .. _0x4e85d6 .. _0xe1e0d8({32,111,98,106,101,116,105,118,111,115}))
+    print("💥 Kill All → " .. killed .. " objetivos")
     return true
 end
 
 task.spawn(function()
     while task.wait(1) do
-        if _0xea3256 and _0x96babc() then
-            pcall(_0x67dcd6)
+        if KILL_ALL_ACTIVO and soyMurderer() then
+            pcall(KillAll)
         end
     end
 end)
 
-
-
-
-local function _0x8dbf9c()
-    local _0xd95f0a = _0xe3a36b.Character
-    if not _0xd95f0a then return nil end
-    local _0x393b83 = _0xd95f0a:FindFirstChild(_0xe1e0d8({75,110,105,102,101}))
-    if not _0x393b83 then
-        local _0x6f05e8 = _0xe3a36b:FindFirstChild(_0xe1e0d8({66,97,99,107,112,97,99,107}))
-        if _0x6f05e8 then _0x393b83 = _0x6f05e8:FindFirstChild(_0xe1e0d8({75,110,105,102,101})) end
+-- ============================================
+-- 🔪 KNIFE AURA
+-- ============================================
+local function getKnifeRemoteV47()
+    local char = LocalPlayer.Character
+    if not char then return nil end
+    local knife = char:FindFirstChild("Knife")
+    if not knife then
+        local backpack = LocalPlayer:FindFirstChild("Backpack")
+        if backpack then knife = backpack:FindFirstChild("Knife") end
     end
-    if not _0x393b83 then return nil end
-    local _0x510284 = _0x393b83:FindFirstChild(_0xe1e0d8({69,118,101,110,116,115}))
-    if _0x510284 then
-        local _0x6c2599 = _0x510284:FindFirstChild(_0xe1e0d8({75,110,105,102,101,84,104,114,111,119,110}))
-        if _0x6c2599 then return _0x6c2599 end
+    if not knife then return nil end
+    local events = knife:FindFirstChild("Events")
+    if events then
+        local thrown = events:FindFirstChild("KnifeThrown")
+        if thrown then return thrown end
     end
-    return _0x393b83:FindFirstChild(_0xe1e0d8({72,97,110,100,108,101,84,111,117,99,104,101,100}), true)
+    return knife:FindFirstChild("HandleTouched", true)
 end
 
 task.spawn(function()
     while task.wait(0.1) do
-        if _0x2c86f3.KnifeAura and _0x96babc() then
-            local _0xd95f0a = _0xe3a36b.Character
-            local _0x393b83 = _0xd95f0a and _0xd95f0a:FindFirstChild(_0xe1e0d8({75,110,105,102,101}))
-            if _0x393b83 and _0x393b83:FindFirstChild(_0xe1e0d8({72,97,110,100,108,101})) then
-                for _0xec1df4, _0xd17fe9 in ipairs(_0x73fbe8:GetPlayers()) do
-                    if _0xd17fe9 ~= _0xe3a36b and _0xd17fe9.Character then
-                        local _0xe71d0d = _0xd17fe9.Character:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
-                        local _0x30f2b4 = _0xd17fe9.Character:FindFirstChildOfClass(_0xe1e0d8({72,117,109,97,110,111,105,100}))
-                        if _0xe71d0d and _0x30f2b4 and _0x30f2b4.Health > 0 then
-                            local _0x9d530a = (_0xe71d0d.Position - _0xd95f0a.HumanoidRootPart.Position).Magnitude
-                            if _0x9d530a <= (_0x2c86f3.KnifeAuraDist or 15) then
-                                _0xe71d0d.CFrame = _0x393b83.Handle.CFrame
-                                _0xe71d0d.Velocity = Vector3.new(0,0,0)
-                                _0xe71d0d.RotVelocity = Vector3.new(0,0,0)
-                                local _0x8a0b03 = _0x8dbf9c()
-                                if _0x8a0b03 then pcall(function() _0x8a0b03:FireServer(_0xe71d0d) end) end
+        if CONFIG.KnifeAura and soyMurderer() then
+            local char = LocalPlayer.Character
+            local knife = char and char:FindFirstChild("Knife")
+            if knife and knife:FindFirstChild("Handle") then
+                for _, enemy in ipairs(Players:GetPlayers()) do
+                    if enemy ~= LocalPlayer and enemy.Character then
+                        local eRoot = enemy.Character:FindFirstChild("HumanoidRootPart")
+                        local eHum = enemy.Character:FindFirstChildOfClass("Humanoid")
+                        if eRoot and eHum and eHum.Health > 0 then
+                            local dist = (eRoot.Position - char.HumanoidRootPart.Position).Magnitude
+                            if dist <= (CONFIG.KnifeAuraDist or 15) then
+                                eRoot.CFrame = knife.Handle.CFrame
+                                eRoot.Velocity = Vector3.new(0,0,0)
+                                eRoot.RotVelocity = Vector3.new(0,0,0)
+                                local remote = getKnifeRemoteV47()
+                                if remote then pcall(function() remote:FireServer(eRoot) end) end
                             end
                         end
                     end
@@ -1918,584 +1916,584 @@ task.spawn(function()
     end
 end)
 
-print(_0xe1e0d8({240,159,148,170,32,75,110,105,102,101,32,65,117,114,97,32,108,111,111,112,32,105,110,105,99,105,97,100,111}))
+print("🔪 Knife Aura loop iniciado")
 
-print(_0xe1e0d8({240,159,142,131,32,80,97,114,116,101,32,53,47,49,48,32,99,97,114,103,97,100,97,32,45,32,83,104,111,111,116,32,43,32,75,105,108,108,32,65,108,108}))
+print("🎃 Parte 5/10 cargada - Shoot + Kill All")
 
+-- ============================================
+-- 🎯 BOTÓN SHOOT MURDERER (RGB)
+-- ============================================
+local BotonShoot = Instance.new("TextButton")
+BotonShoot.Name = "UzivertShootMurder"
+BotonShoot.Size = UDim2.new(0, 160, 0, 50)
+BotonShoot.Position = UDim2.new(0, 30, 0.5, 100)
+BotonShoot.BackgroundColor3 = COLORES.Fondo
+BotonShoot.BackgroundTransparency = 0.3
+BotonShoot.Text = "SHOOT MURDERER"
+BotonShoot.TextColor3 = COLORES.Texto
+BotonShoot.Font = Enum.Font.GothamBold
+BotonShoot.TextSize = 13
+BotonShoot.BorderSizePixel = 0
+BotonShoot.Active = true
+BotonShoot.Draggable = true
+BotonShoot.Visible = SHOOT_MOSTRAR
+BotonShoot.ZIndex = 998
+BotonShoot.ClipsDescendants = true
+BotonShoot.Parent = ScreenGui
 
+local cBS = Instance.new("UICorner")
+cBS.CornerRadius = UDim.new(0, 10)
+cBS.Parent = BotonShoot
 
-
-local _0x417393 = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-_0x417393.Name = _0xe1e0d8({85,122,105,118,101,114,116,83,104,111,111,116,77,117,114,100,101,114})
-_0x417393.Size = UDim2.new(0, 160, 0, 50)
-_0x417393.Position = UDim2.new(0, 30, 0.5, 100)
-_0x417393.BackgroundColor3 = _0xa12647.Fondo
-_0x417393.BackgroundTransparency = 0.3
-_0x417393.Text = _0xe1e0d8({83,72,79,79,84,32,77,85,82,68,69,82,69,82})
-_0x417393.TextColor3 = _0xa12647.Texto
-_0x417393.Font = Enum.Font.GothamBold
-_0x417393.TextSize = 13
-_0x417393.BorderSizePixel = 0
-_0x417393.Active = true
-_0x417393.Draggable = true
-_0x417393.Visible = _0x30abb0
-_0x417393.ZIndex = 998
-_0x417393.ClipsDescendants = true
-_0x417393.Parent = _0x4ebb04
-
-local _0xb4cf9e = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0xb4cf9e.CornerRadius = UDim.new(0, 10)
-_0xb4cf9e.Parent = _0x417393
-
-local _0x74ac82 = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-_0x74ac82.Color = _0xa12647.Naranja1
-_0x74ac82.Thickness = 2
-_0x74ac82.Transparency = 0.2
-_0x74ac82.Parent = _0x417393
+local sBS = Instance.new("UIStroke")
+sBS.Color = COLORES.Naranja1
+sBS.Thickness = 2
+sBS.Transparency = 0.2
+sBS.Parent = BotonShoot
 
 task.spawn(function()
-    while _0x417393.Parent do
-        local _0xe9cedc = tick()
-        local _0xda933d = (math.sin(_0xe9cedc * 1.5) + 1) / 2
-        _0x74ac82.Color = _0xa12647.Naranja1:Lerp(_0xa12647.Morado2, _0xda933d)
-        _0x74ac82.Transparency = 0.4 - _0xda933d * 0.3
+    while BotonShoot.Parent do
+        local t = tick()
+        local a = (math.sin(t * 1.5) + 1) / 2
+        sBS.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
+        sBS.Transparency = 0.4 - a * 0.3
         task.wait(0.05)
     end
 end)
 
-local _0x14977e = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-_0x14977e.Size = UDim2.new(0, 22, 0, 22)
-_0x14977e.Position = UDim2.new(1, -24, 0, 2)
-_0x14977e.BackgroundColor3 = _0xa12647.Morado3
-_0x14977e.BackgroundTransparency = 0.3
-_0x14977e.Text = _0xe1e0d8({240,159,148,147})
-_0x14977e.TextColor3 = _0xa12647.Texto
-_0x14977e.Font = Enum.Font.GothamBold
-_0x14977e.TextSize = 12
-_0x14977e.BorderSizePixel = 0
-_0x14977e.ZIndex = 999
-_0x14977e.Parent = _0x417393
+local BotonCandadoShoot = Instance.new("TextButton")
+BotonCandadoShoot.Size = UDim2.new(0, 22, 0, 22)
+BotonCandadoShoot.Position = UDim2.new(1, -24, 0, 2)
+BotonCandadoShoot.BackgroundColor3 = COLORES.Morado3
+BotonCandadoShoot.BackgroundTransparency = 0.3
+BotonCandadoShoot.Text = "🔓"
+BotonCandadoShoot.TextColor3 = COLORES.Texto
+BotonCandadoShoot.Font = Enum.Font.GothamBold
+BotonCandadoShoot.TextSize = 12
+BotonCandadoShoot.BorderSizePixel = 0
+BotonCandadoShoot.ZIndex = 999
+BotonCandadoShoot.Parent = BotonShoot
 
-local _0xc7907c = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0xc7907c.CornerRadius = UDim.new(1, 0)
-_0xc7907c.Parent = _0x14977e
+local cLockShoot = Instance.new("UICorner")
+cLockShoot.CornerRadius = UDim.new(1, 0)
+cLockShoot.Parent = BotonCandadoShoot
 
-local _0x5be149 = _0x2c86f3.ShootLock or false
+local BLOQUEADO_SHOOT = CONFIG.ShootLock or false
 
-local function _0xb867c1()
-    if _0x5be149 then
-        _0x417393.Draggable = false
-        _0x14977e.Text = _0xe1e0d8({240,159,148,146})
-        _0x14977e.BackgroundColor3 = _0xa12647.Rojo
-        _0x14977e.BackgroundTransparency = 0.3
+local function actualizarCandadoShoot()
+    if BLOQUEADO_SHOOT then
+        BotonShoot.Draggable = false
+        BotonCandadoShoot.Text = "🔒"
+        BotonCandadoShoot.BackgroundColor3 = COLORES.Rojo
+        BotonCandadoShoot.BackgroundTransparency = 0.3
     else
-        _0x417393.Draggable = true
-        _0x14977e.Text = _0xe1e0d8({240,159,148,147})
-        _0x14977e.BackgroundColor3 = _0xa12647.Morado3
-        _0x14977e.BackgroundTransparency = 0.3
+        BotonShoot.Draggable = true
+        BotonCandadoShoot.Text = "🔓"
+        BotonCandadoShoot.BackgroundColor3 = COLORES.Morado3
+        BotonCandadoShoot.BackgroundTransparency = 0.3
     end
 end
 
-_0xb867c1()
+actualizarCandadoShoot()
 
-_0x14977e.MouseButton1Click:Connect(function()
-    _0x5be149 = not _0x5be149
-    _0x2c86f3.ShootLock = _0x5be149
-    _0xb867c1()
-    _0x4cda06()
+BotonCandadoShoot.MouseButton1Click:Connect(function()
+    BLOQUEADO_SHOOT = not BLOQUEADO_SHOOT
+    CONFIG.ShootLock = BLOQUEADO_SHOOT
+    actualizarCandadoShoot()
+    guardarConfig()
 end)
 
-if _0x2c86f3.ShootPos then
-    local _0xe24858 = _0x2c86f3.ShootPos
-    pcall(function() _0x417393.Position = UDim2.new(_0xe24858[1], _0xe24858[2], _0xe24858[3], _0xe24858[4]) end)
+if CONFIG.ShootPos then
+    local p = CONFIG.ShootPos
+    pcall(function() BotonShoot.Position = UDim2.new(p[1], p[2], p[3], p[4]) end)
 end
 
 task.spawn(function()
     while task.wait(2) do
-        if not _0x5be149 then
+        if not BLOQUEADO_SHOOT then
             pcall(function()
-                _0x2c86f3.ShootPos = {_0x417393.Position.X.Scale, _0x417393.Position.X.Offset, _0x417393.Position.Y.Scale, _0x417393.Position.Y.Offset}
-                _0x4cda06()
+                CONFIG.ShootPos = {BotonShoot.Position.X.Scale, BotonShoot.Position.X.Offset, BotonShoot.Position.Y.Scale, BotonShoot.Position.Y.Offset}
+                guardarConfig()
             end)
         end
     end
 end)
 
-_0x417393.MouseButton1Click:Connect(function()
-    _0x49157d()
-    _0x417393.Text = _0xe1e0d8({70,73,82,69,33})
-    task.delay(0.5, function() _0x417393.Text = _0xe1e0d8({83,72,79,79,84,32,77,85,82,68,69,82,69,82}) end)
+BotonShoot.MouseButton1Click:Connect(function()
+    dispararV1()
+    BotonShoot.Text = "FIRE!"
+    task.delay(0.5, function() BotonShoot.Text = "SHOOT MURDERER" end)
 end)
 
+-- ============================================
+-- 👻 BOTÓN SHOOT AVANZADO (RGB)
+-- ============================================
+local BotonAvz = Instance.new("TextButton")
+BotonAvz.Name = "UzivertShootAvz"
+BotonAvz.Size = UDim2.new(0, 160, 0, 50)
+BotonAvz.Position = UDim2.new(0, 30, 0.5, 170)
+BotonAvz.BackgroundColor3 = COLORES.Fondo
+BotonAvz.BackgroundTransparency = 0.3
+BotonAvz.Text = "SHOOT AVANZADO"
+BotonAvz.TextColor3 = COLORES.Texto
+BotonAvz.Font = Enum.Font.GothamBold
+BotonAvz.TextSize = 13
+BotonAvz.BorderSizePixel = 0
+BotonAvz.Active = true
+BotonAvz.Draggable = true
+BotonAvz.Visible = false
+BotonAvz.ZIndex = 998
+BotonAvz.ClipsDescendants = true
+BotonAvz.Parent = ScreenGui
 
+local cAvz = Instance.new("UICorner")
+cAvz.CornerRadius = UDim.new(0, 10)
+cAvz.Parent = BotonAvz
 
-
-local _0xad0914 = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-_0xad0914.Name = _0xe1e0d8({85,122,105,118,101,114,116,83,104,111,111,116,65,118,122})
-_0xad0914.Size = UDim2.new(0, 160, 0, 50)
-_0xad0914.Position = UDim2.new(0, 30, 0.5, 170)
-_0xad0914.BackgroundColor3 = _0xa12647.Fondo
-_0xad0914.BackgroundTransparency = 0.3
-_0xad0914.Text = _0xe1e0d8({83,72,79,79,84,32,65,86,65,78,90,65,68,79})
-_0xad0914.TextColor3 = _0xa12647.Texto
-_0xad0914.Font = Enum.Font.GothamBold
-_0xad0914.TextSize = 13
-_0xad0914.BorderSizePixel = 0
-_0xad0914.Active = true
-_0xad0914.Draggable = true
-_0xad0914.Visible = false
-_0xad0914.ZIndex = 998
-_0xad0914.ClipsDescendants = true
-_0xad0914.Parent = _0x4ebb04
-
-local _0xab6162 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0xab6162.CornerRadius = UDim.new(0, 10)
-_0xab6162.Parent = _0xad0914
-
-local _0xdd8d85 = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-_0xdd8d85.Color = _0xa12647.Naranja1
-_0xdd8d85.Thickness = 2
-_0xdd8d85.Transparency = 0.2
-_0xdd8d85.Parent = _0xad0914
+local sAvz = Instance.new("UIStroke")
+sAvz.Color = COLORES.Naranja1
+sAvz.Thickness = 2
+sAvz.Transparency = 0.2
+sAvz.Parent = BotonAvz
 
 task.spawn(function()
-    while _0xad0914.Parent do
-        local _0xe9cedc = tick()
-        local _0xda933d = (math.sin(_0xe9cedc * 1.5) + 1) / 2
-        _0xdd8d85.Color = _0xa12647.Naranja1:Lerp(_0xa12647.Morado2, _0xda933d)
-        _0xdd8d85.Transparency = 0.4 - _0xda933d * 0.3
+    while BotonAvz.Parent do
+        local t = tick()
+        local a = (math.sin(t * 1.5) + 1) / 2
+        sAvz.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
+        sAvz.Transparency = 0.4 - a * 0.3
         task.wait(0.05)
     end
 end)
 
-local _0xf252bc = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-_0xf252bc.Size = UDim2.new(0, 22, 0, 22)
-_0xf252bc.Position = UDim2.new(1, -24, 0, 2)
-_0xf252bc.BackgroundColor3 = _0xa12647.Morado3
-_0xf252bc.BackgroundTransparency = 0.3
-_0xf252bc.Text = _0xe1e0d8({240,159,148,147})
-_0xf252bc.TextColor3 = _0xa12647.Texto
-_0xf252bc.Font = Enum.Font.GothamBold
-_0xf252bc.TextSize = 12
-_0xf252bc.BorderSizePixel = 0
-_0xf252bc.ZIndex = 999
-_0xf252bc.Parent = _0xad0914
+local BotonCandadoAvz = Instance.new("TextButton")
+BotonCandadoAvz.Size = UDim2.new(0, 22, 0, 22)
+BotonCandadoAvz.Position = UDim2.new(1, -24, 0, 2)
+BotonCandadoAvz.BackgroundColor3 = COLORES.Morado3
+BotonCandadoAvz.BackgroundTransparency = 0.3
+BotonCandadoAvz.Text = "🔓"
+BotonCandadoAvz.TextColor3 = COLORES.Texto
+BotonCandadoAvz.Font = Enum.Font.GothamBold
+BotonCandadoAvz.TextSize = 12
+BotonCandadoAvz.BorderSizePixel = 0
+BotonCandadoAvz.ZIndex = 999
+BotonCandadoAvz.Parent = BotonAvz
 
-local _0xd3b3a2 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0xd3b3a2.CornerRadius = UDim.new(1, 0)
-_0xd3b3a2.Parent = _0xf252bc
+local cLockAvz = Instance.new("UICorner")
+cLockAvz.CornerRadius = UDim.new(1, 0)
+cLockAvz.Parent = BotonCandadoAvz
 
-local _0x7cc1e6 = _0x2c86f3.ShootAvzLock or false
+local BLOQUEADO_AVZ = CONFIG.ShootAvzLock or false
 
-local function _0xe380e9()
-    if _0x7cc1e6 then
-        _0xad0914.Draggable = false
-        _0xf252bc.Text = _0xe1e0d8({240,159,148,146})
-        _0xf252bc.BackgroundColor3 = _0xa12647.Rojo
-        _0xf252bc.BackgroundTransparency = 0.3
+local function actualizarCandadoAvz()
+    if BLOQUEADO_AVZ then
+        BotonAvz.Draggable = false
+        BotonCandadoAvz.Text = "🔒"
+        BotonCandadoAvz.BackgroundColor3 = COLORES.Rojo
+        BotonCandadoAvz.BackgroundTransparency = 0.3
     else
-        _0xad0914.Draggable = true
-        _0xf252bc.Text = _0xe1e0d8({240,159,148,147})
-        _0xf252bc.BackgroundColor3 = _0xa12647.Morado3
-        _0xf252bc.BackgroundTransparency = 0.3
+        BotonAvz.Draggable = true
+        BotonCandadoAvz.Text = "🔓"
+        BotonCandadoAvz.BackgroundColor3 = COLORES.Morado3
+        BotonCandadoAvz.BackgroundTransparency = 0.3
     end
 end
 
-_0xe380e9()
+actualizarCandadoAvz()
 
-_0xf252bc.MouseButton1Click:Connect(function()
-    _0x7cc1e6 = not _0x7cc1e6
-    _0x2c86f3.ShootAvzLock = _0x7cc1e6
-    _0xe380e9()
-    _0x4cda06()
+BotonCandadoAvz.MouseButton1Click:Connect(function()
+    BLOQUEADO_AVZ = not BLOQUEADO_AVZ
+    CONFIG.ShootAvzLock = BLOQUEADO_AVZ
+    actualizarCandadoAvz()
+    guardarConfig()
 end)
 
-if _0x2c86f3.ShootAvzPos then
-    local _0xe24858 = _0x2c86f3.ShootAvzPos
-    pcall(function() _0xad0914.Position = UDim2.new(_0xe24858[1], _0xe24858[2], _0xe24858[3], _0xe24858[4]) end)
+if CONFIG.ShootAvzPos then
+    local p = CONFIG.ShootAvzPos
+    pcall(function() BotonAvz.Position = UDim2.new(p[1], p[2], p[3], p[4]) end)
 end
 
 task.spawn(function()
     while task.wait(2) do
-        if not _0x7cc1e6 then
+        if not BLOQUEADO_AVZ then
             pcall(function()
-                _0x2c86f3.ShootAvzPos = {_0xad0914.Position.X.Scale, _0xad0914.Position.X.Offset, _0xad0914.Position.Y.Scale, _0xad0914.Position.Y.Offset}
-                _0x4cda06()
+                CONFIG.ShootAvzPos = {BotonAvz.Position.X.Scale, BotonAvz.Position.X.Offset, BotonAvz.Position.Y.Scale, BotonAvz.Position.Y.Offset}
+                guardarConfig()
             end)
         end
     end
 end)
 
-_0xad0914.MouseButton1Click:Connect(function()
-    _0x795314()
-    _0xad0914.Text = _0xe1e0d8({70,73,82,69,33})
-    task.delay(0.5, function() _0xad0914.Text = _0xe1e0d8({83,72,79,79,84,32,65,86,65,78,90,65,68,79}) end)
+BotonAvz.MouseButton1Click:Connect(function()
+    dispararV2()
+    BotonAvz.Text = "FIRE!"
+    task.delay(0.5, function() BotonAvz.Text = "SHOOT AVANZADO" end)
 end)
 
-local _0xd0de2e = nil
-local _0xca7fc0 = nil
-local _0xd98a72 = 0
-local _0x04135b = 0
-local function _0xc5ca32()
-    if _0xca7fc0 then _0xca7fc0:Disconnect() _0xca7fc0 = nil end
-    if _0xd0de2e then _0xd0de2e:Destroy() _0xd0de2e = nil end
+local monitorGui = nil
+local monitorConexion = nil
+local monitorFrames = 0
+local monitorElapsed = 0
+local function destruirMonitor()
+    if monitorConexion then monitorConexion:Disconnect() monitorConexion = nil end
+    if monitorGui then monitorGui:Destroy() monitorGui = nil end
 end
-local function _0x041f06()
-    _0xc5ca32()
-    local _0xa777c8 = Instance.new(_0xe1e0d8({83,99,114,101,101,110,71,117,105}))
-    _0xa777c8.Name = _0xe1e0d8({85,122,105,118,101,114,116,77,111,110,105,116,111,114})
-    _0xa777c8.ResetOnSpawn = false
-    _0xa777c8.DisplayOrder = 998
-    _0xa777c8.Parent = _0xeba3c3
-    _0xd0de2e = _0xa777c8
-    local function _0x8bf230(_0x0b0cd6)
-        local _0x792bd7 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-        _0x792bd7.AnchorPoint = Vector2.new(1, 0)
-        _0x792bd7.Size = UDim2.new(1, -24, 0, 19)
-        _0x792bd7.Position = UDim2.new(1, -12, 0, _0x0b0cd6)
-        _0x792bd7.BackgroundTransparency = 1
-        _0x792bd7.Font = Enum.Font.Code
-        _0x792bd7.TextXAlignment = Enum.TextXAlignment.Right
-        _0x792bd7.TextSize = 14
-        _0x792bd7.TextColor3 = Color3.fromRGB(240, 240, 240)
-        _0x792bd7.TextStrokeTransparency = 0.4
-        _0x792bd7.Text = _0xe1e0d8({})
-        _0x792bd7.Parent = _0xa777c8
-        return _0x792bd7
+local function crearMonitor()
+    destruirMonitor()
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "UzivertMonitor"
+    gui.ResetOnSpawn = false
+    gui.DisplayOrder = 998
+    gui.Parent = PlayerGui
+    monitorGui = gui
+    local function makeLabel(y)
+        local lbl = Instance.new("TextLabel")
+        lbl.AnchorPoint = Vector2.new(1, 0)
+        lbl.Size = UDim2.new(1, -24, 0, 19)
+        lbl.Position = UDim2.new(1, -12, 0, y)
+        lbl.BackgroundTransparency = 1
+        lbl.Font = Enum.Font.Code
+        lbl.TextXAlignment = Enum.TextXAlignment.Right
+        lbl.TextSize = 14
+        lbl.TextColor3 = Color3.fromRGB(240, 240, 240)
+        lbl.TextStrokeTransparency = 0.4
+        lbl.Text = ""
+        lbl.Parent = gui
+        return lbl
     end
-    local _0x138bfb = _0x8bf230(40)
-    local _0x848ba6 = _0x8bf230(59)
-    local _0xd4b835 = _0x8bf230(78)
-    _0xca7fc0 = _0x258f47.RenderStepped:Connect(function(_0xaf57eb)
-        if not _0x94592c then return end
-        if _0xaf57eb > 0 then
-            _0xd98a72 = _0xd98a72 + 1
-            _0x04135b = _0x04135b + _0xaf57eb
-            if _0x04135b >= 0.25 then
-                local _0xdca9df = math.floor(_0xd98a72 / _0x04135b + 0.5)
-                _0x138bfb.Text = _0xe1e0d8({80,105,110,103,58,32}) .. _0x16281e() .. _0xe1e0d8({32,109,115})
-                _0x848ba6.Text = _0xe1e0d8({70,80,83,58,32}) .. _0xdca9df
-                _0xd4b835.Text = _0xe1e0d8({74,105,116,116,101,114,58,32}) .. math.floor(_0x8ffd70 + 0.5) .. _0xe1e0d8({32,109,115,32,124,32}) .. _0x173a92
-                _0xd98a72 = 0
-                _0x04135b = 0
+    local pingLabel = makeLabel(40)
+    local fpsLabel = makeLabel(59)
+    local jitterLabel = makeLabel(78)
+    monitorConexion = RunService.RenderStepped:Connect(function(dt)
+        if not MONITOR_ACTIVO then return end
+        if dt > 0 then
+            monitorFrames = monitorFrames + 1
+            monitorElapsed = monitorElapsed + dt
+            if monitorElapsed >= 0.25 then
+                local fps = math.floor(monitorFrames / monitorElapsed + 0.5)
+                pingLabel.Text = "Ping: " .. GetPing() .. " ms"
+                fpsLabel.Text = "FPS: " .. fps
+                jitterLabel.Text = "Jitter: " .. math.floor(jitter + 0.5) .. " ms | " .. pingSource
+                monitorFrames = 0
+                monitorElapsed = 0
             end
         end
     end)
 end
 
-local _0x1b3751 = {}
-local function _0xd8f83b()
-    for _0x96fb93 = #_0x1b3751, 1, -1 do
-        local _0xc5fe6d = _0x1b3751[_0x96fb93]
-        pcall(function() _0xc5fe6d.object[_0xc5fe6d.property] = _0xc5fe6d.value end)
-        table.remove(_0x1b3751, _0x96fb93)
+local fpsBoostSnapshot = {}
+local function restaurarGraficos()
+    for i = #fpsBoostSnapshot, 1, -1 do
+        local saved = fpsBoostSnapshot[i]
+        pcall(function() saved.object[saved.property] = saved.value end)
+        table.remove(fpsBoostSnapshot, i)
     end
 end
-local function _0x597047(_0xe4e3b2, _0x875a63, _0xc1b4e1)
-    local _0x04fef1, _0xc5ace5 = pcall(function() return _0xe4e3b2[_0x875a63] end)
-    if _0x04fef1 then
-        table.insert(_0x1b3751, {object = _0xe4e3b2, property = _0x875a63, value = _0xc5ace5})
-        pcall(function() _0xe4e3b2[_0x875a63] = _0xc1b4e1 end)
+local function guardarYSetear(object, property, value)
+    local ok, original = pcall(function() return object[property] end)
+    if ok then
+        table.insert(fpsBoostSnapshot, {object = object, property = property, value = original})
+        pcall(function() object[property] = value end)
     end
 end
 
-print(_0xe1e0d8({240,159,142,131,32,80,97,114,116,101,32,54,47,49,48,32,99,97,114,103,97,100,97,32,45,32,66,111,116,111,110,101,115,32,83,104,111,111,116,32,43,32,70,108,105,110,103}))
+print("🎃 Parte 6/10 cargada - Botones Shoot + Fling")
 
-_0x1b0491(_0x1e2527, _0xe1e0d8({240,159,142,131,32,69,83,80,32,74,117,103,97,100,111,114,101,115}), _0x2c86f3.ESP, function(_0x18ec1c)
-    _0x4ad7fb = _0x18ec1c
-    _0x2c86f3.ESP = _0x18ec1c
-    _0x4cda06()
+crearToggle(PaginaVisual, "🎃 ESP Jugadores", CONFIG.ESP, function(e)
+    ESP_ACTIVO = e
+    CONFIG.ESP = e
+    guardarConfig()
 end)
-_0x1b0491(_0x1e2527, _0xe1e0d8({240,159,148,171,32,71,117,110,32,69,83,80,32,40,101,113,117,105,112,97,100,97,32,43,32,116,105,114,97,100,97,41}), _0x2c86f3.GunESP, function(_0x18ec1c)
-    _0x5a1745 = _0x18ec1c
-    _0x2c86f3.GunESP = _0x18ec1c
-    _0x4cda06()
-    if not _0x18ec1c then _0xed0f9e() end
-end)
-
-local _0x48af72 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-_0x48af72.Size = UDim2.new(1, 0, 0, 60)
-_0x48af72.BackgroundColor3 = _0xa12647.Morado3
-_0x48af72.BackgroundTransparency = 0.5
-_0x48af72.Text = _0xe1e0d8({240,159,142,131,32,82,111,106,111,32,61,32,77,117,114,100,101,114,101,114,10,240,159,145,187,32,65,122,117,108,32,61,32,83,104,101,114,105,102,102,10,240,159,146,128,32,86,101,114,100,101,32,61,32,73,110,111,99,101,110,116,101,10,240,159,166,135,32,65,122,117,108,32,98,114,105,108,108,97,110,116,101,32,61,32,71,117,110,10,240,159,141,172,32,65,109,97,114,105,108,108,111,32,61,32,68,114,111,112,112,101,100,32,71,117,110})
-_0x48af72.TextColor3 = _0xa12647.Texto
-_0x48af72.Font = Enum.Font.GothamMedium
-_0x48af72.TextSize = 10
-_0x48af72.BorderSizePixel = 0
-_0x48af72.ZIndex = 2
-_0x48af72.Parent = _0x1e2527
-
-local _0x82a1d1 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0x82a1d1.CornerRadius = UDim.new(0, 9)
-_0x82a1d1.Parent = _0x48af72
-
-local _0xadff92 = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-_0xadff92.Color = _0xa12647.Naranja1
-_0xadff92.Thickness = 1
-_0xadff92.Transparency = 0.4
-_0xadff92.Parent = _0x48af72
-
-_0x1b0491(_0xe74d45, _0xe1e0d8({240,159,145,187,32,65,117,116,111,32,83,104,111,111,116,32,40,108,111,103,105,99,97,32,97,118,97,110,122,97,100,97,41}), _0x2c86f3.ShootAuto, function(_0x18ec1c)
-    _0xeea8b9 = _0x18ec1c
-    _0x2c86f3.ShootAuto = _0x18ec1c
-    _0x4cda06()
+crearToggle(PaginaVisual, "🔫 Gun ESP (equipada + tirada)", CONFIG.GunESP, function(e)
+    GUN_ESP_ACTIVO = e
+    CONFIG.GunESP = e
+    guardarConfig()
+    if not e then limpiarGunESP() end
 end)
 
-_0x1b0491(_0xe74d45, _0xe1e0d8({240,159,142,175,32,77,111,115,116,114,97,114,32,98,111,116,111,110,32,83,72,79,79,84,32,77,85,82,68,69,82,69,82}), _0x2c86f3.ShootMostrar ~= false, function(_0x18ec1c)
-    _0x30abb0 = _0x18ec1c
-    _0x2c86f3.ShootMostrar = _0x18ec1c
-    _0x4cda06()
-    if _0x417393 then _0x417393.Visible = _0x18ec1c end
+local leyenda = Instance.new("TextLabel")
+leyenda.Size = UDim2.new(1, 0, 0, 60)
+leyenda.BackgroundColor3 = COLORES.Morado3
+leyenda.BackgroundTransparency = 0.5
+leyenda.Text = "🎃 Rojo = Murderer\n👻 Azul = Sheriff\n💀 Verde = Inocente\n🦇 Azul brillante = Gun\n🍬 Amarillo = Dropped Gun"
+leyenda.TextColor3 = COLORES.Texto
+leyenda.Font = Enum.Font.GothamMedium
+leyenda.TextSize = 10
+leyenda.BorderSizePixel = 0
+leyenda.ZIndex = 2
+leyenda.Parent = PaginaVisual
+
+local cLey = Instance.new("UICorner")
+cLey.CornerRadius = UDim.new(0, 9)
+cLey.Parent = leyenda
+
+local sLey = Instance.new("UIStroke")
+sLey.Color = COLORES.Naranja1
+sLey.Thickness = 1
+sLey.Transparency = 0.4
+sLey.Parent = leyenda
+
+crearToggle(PaginaAim, "👻 Auto Shoot (logica avanzada)", CONFIG.ShootAuto, function(e)
+    SHOOT_AUTO = e
+    CONFIG.ShootAuto = e
+    guardarConfig()
 end)
 
-_0x1b0491(_0xe74d45, _0xe1e0d8({240,159,145,187,32,77,111,115,116,114,97,114,32,98,111,116,111,110,32,83,72,79,79,84,32,65,86,65,78,90,65,68,79}), _0x2c86f3.ShootAvzMostrar or false, function(_0x18ec1c)
-    _0x2c86f3.ShootAvzMostrar = _0x18ec1c
-    _0x4cda06()
-    if _0xad0914 then _0xad0914.Visible = _0x18ec1c end
+crearToggle(PaginaAim, "🎯 Mostrar boton SHOOT MURDERER", CONFIG.ShootMostrar ~= false, function(e)
+    SHOOT_MOSTRAR = e
+    CONFIG.ShootMostrar = e
+    guardarConfig()
+    if BotonShoot then BotonShoot.Visible = e end
 end)
 
-_0x1b0491(_0xe74d45, _0xe1e0d8({240,159,146,165,32,65,99,116,105,118,97,114,32,75,73,76,76,32,65,76,76,32,40,77,117,114,100,101,114,101,114,41}), _0x2c86f3.KillAllActivo or false, function(_0x18ec1c)
-    _0xea3256 = _0x18ec1c
-    _0x2c86f3.KillAllActivo = _0x18ec1c
-    _0x4cda06()
-    print(_0x18ec1c and _0xe1e0d8({240,159,146,165,32,75,105,108,108,32,65,108,108,32,65,67,84,73,86,65,68,79}) or _0xe1e0d8({226,157,140,32,75,105,108,108,32,65,108,108,32,68,69,83,65,67,84,73,86,65,68,79}))
+crearToggle(PaginaAim, "👻 Mostrar boton SHOOT AVANZADO", CONFIG.ShootAvzMostrar or false, function(e)
+    CONFIG.ShootAvzMostrar = e
+    guardarConfig()
+    if BotonAvz then BotonAvz.Visible = e end
 end)
 
-_0x3c0aad(_0xe74d45, _0xe1e0d8({65,108,116,117,114,97,32,66,97,115,101,32,120,49,48,48}), 100, 250, math.floor(_0xdb7590 * 100), function(_0x9b9a04)
-    _0xdb7590 = _0x9b9a04 / 100
-    _0x2c86f3.ShootAltura = _0xdb7590
-    _0x4cda06()
+crearToggle(PaginaAim, "💥 Activar KILL ALL (Murderer)", CONFIG.KillAllActivo or false, function(e)
+    KILL_ALL_ACTIVO = e
+    CONFIG.KillAllActivo = e
+    guardarConfig()
+    print(e and "💥 Kill All ACTIVADO" or "❌ Kill All DESACTIVADO")
 end)
 
-_0x3c0aad(_0xe74d45, _0xe1e0d8({80,114,101,100,105,99,99,105,111,110,32,86,101,108,111,99,105,100,97,100,32,120,49,48,48}), 5, 25, math.floor(_0xd48fce * 100), function(_0x9b9a04)
-    _0xd48fce = _0x9b9a04 / 100
-    _0x2c86f3.ShootPredVel = _0xd48fce
-    _0x4cda06()
+crearSlider(PaginaAim, "Altura Base x100", 100, 250, math.floor(SHOOT_ALTURA * 100), function(v)
+    SHOOT_ALTURA = v / 100
+    CONFIG.ShootAltura = SHOOT_ALTURA
+    guardarConfig()
 end)
 
-_0x3c0aad(_0xe74d45, _0xe1e0d8({80,114,101,100,105,99,99,105,111,110,32,77,111,118,101,68,105,114,32,120,49,48,48}), 5, 25, math.floor(_0x727831 * 100), function(_0x9b9a04)
-    _0x727831 = _0x9b9a04 / 100
-    _0x2c86f3.ShootPredMov = _0x727831
-    _0x4cda06()
+crearSlider(PaginaAim, "Prediccion Velocidad x100", 5, 25, math.floor(SHOOT_PRED_VEL * 100), function(v)
+    SHOOT_PRED_VEL = v / 100
+    CONFIG.ShootPredVel = SHOOT_PRED_VEL
+    guardarConfig()
 end)
 
-_0x3c0aad(_0xe74d45, _0xe1e0d8({66,117,114,115,116,32,84,105,114,111,115}), 1, 10, _0xe36e6a, function(_0x9b9a04)
-    _0xe36e6a = _0x9b9a04
-    _0x2c86f3.ShootBurst = _0x9b9a04
-    _0x4cda06()
+crearSlider(PaginaAim, "Prediccion MoveDir x100", 5, 25, math.floor(SHOOT_PRED_MOV * 100), function(v)
+    SHOOT_PRED_MOV = v / 100
+    CONFIG.ShootPredMov = SHOOT_PRED_MOV
+    guardarConfig()
 end)
 
-_0x3c0aad(_0xe74d45, _0xe1e0d8({66,117,114,115,116,32,68,101,108,97,121,32,120,49,48,48,48}), 10, 200, math.floor(_0x22159c * 1000), function(_0x9b9a04)
-    _0x22159c = _0x9b9a04 / 1000
-    _0x2c86f3.ShootBurstDelay = _0x22159c
-    _0x4cda06()
+crearSlider(PaginaAim, "Burst Tiros", 1, 10, SHOOT_BURST, function(v)
+    SHOOT_BURST = v
+    CONFIG.ShootBurst = v
+    guardarConfig()
 end)
 
-_0x3c0aad(_0xe74d45, _0xe1e0d8({82,97,110,103,111,32,77,97,120,105,109,111}), 50, 1000, _0x07c00e, function(_0x9b9a04)
-    _0x07c00e = _0x9b9a04
-    _0x2c86f3.ShootRangoMax = _0x9b9a04
-    _0x4cda06()
+crearSlider(PaginaAim, "Burst Delay x1000", 10, 200, math.floor(SHOOT_BURST_DELAY * 1000), function(v)
+    SHOOT_BURST_DELAY = v / 1000
+    CONFIG.ShootBurstDelay = SHOOT_BURST_DELAY
+    guardarConfig()
 end)
 
-_0x3c0aad(_0xe74d45, _0xe1e0d8({82,97,110,103,111,32,77,105,110,105,109,111}), 0, 50, _0x62cf02, function(_0x9b9a04)
-    _0x62cf02 = _0x9b9a04
-    _0x2c86f3.ShootRangoMin = _0x9b9a04
-    _0x4cda06()
+crearSlider(PaginaAim, "Rango Maximo", 50, 1000, SHOOT_RANGO_MAX, function(v)
+    SHOOT_RANGO_MAX = v
+    CONFIG.ShootRangoMax = v
+    guardarConfig()
 end)
 
-_0x1b0491(_0x44889b, _0xe1e0d8({240,159,146,128,32,65,110,116,105,45,77,117,114,100,101,114,101,114}), _0x2c86f3.AutoGrabAntiM, function(_0x18ec1c)
-    _0x8704f8 = _0x18ec1c
-    _0x2c86f3.AutoGrabAntiM = _0x18ec1c
-    _0x4cda06()
-end)
-_0x3c0aad(_0x44889b, _0xe1e0d8({82,97,110,103,111,32,77,117,114,100,101,114,101,114,32,40,115,116,117,100,115,41}), 10, 50, _0x2c86f3.AutoGrabDistMurder, function(_0x9b9a04)
-    _0x7e7805 = _0x9b9a04
-    _0x2c86f3.AutoGrabDistMurder = _0x9b9a04
-    _0x4cda06()
-end)
-_0x1b0491(_0x44889b, _0xe1e0d8({240,159,148,132,32,82,101,103,114,101,115,97,114,32,97,32,112,111,115,105,99,105,111,110,32,111,114,105,103,105,110,97,108}), _0x2c86f3.AutoGrabRegresar, function(_0x18ec1c)
-    _0xb00e9d = _0x18ec1c
-    _0x2c86f3.AutoGrabRegresar = _0x18ec1c
-    _0x4cda06()
-end)
-_0x1b0491(_0x44889b, _0xe1e0d8({240,159,141,172,32,77,111,115,116,114,97,114,32,98,111,116,111,110,32,71,82,65,66,32,71,85,78}), _0x2c86f3.AutoGrabMostrar ~= false, function(_0x18ec1c)
-    _0x2c86f3.AutoGrabMostrar = _0x18ec1c
-    _0x4cda06()
-end)
-_0x1b0491(_0x44889b, _0xe1e0d8({240,159,148,170,32,75,110,105,102,101,32,65,117,114,97}), _0x2c86f3.KnifeAura or false, function(_0x18ec1c)
-    _0x2c86f3.KnifeAura = _0x18ec1c
-    _0x4cda06()
-    print(_0x18ec1c and _0xe1e0d8({240,159,148,170,32,75,110,105,102,101,32,65,117,114,97,32,65,67,84,73,86,65,68,79}) or _0xe1e0d8({240,159,148,170,32,75,110,105,102,101,32,65,117,114,97,32,68,69,83,65,67,84,73,86,65,68,79}))
-end)
-_0x3c0aad(_0x44889b, _0xe1e0d8({68,105,115,116,97,110,99,105,97,32,75,110,105,102,101,32,65,117,114,97}), 5, 50, _0x2c86f3.KnifeAuraDist or 15, function(_0x9b9a04)
-    _0x2c86f3.KnifeAuraDist = _0x9b9a04
-    _0x4cda06()
+crearSlider(PaginaAim, "Rango Minimo", 0, 50, SHOOT_RANGO_MIN, function(v)
+    SHOOT_RANGO_MIN = v
+    CONFIG.ShootRangoMin = v
+    guardarConfig()
 end)
 
-_0x1b0491(_0x46d095, _0xe1e0d8({240,159,155,161,32,65,110,116,105,45,70,108,105,110,103}), _0x2c86f3.AntiFling, function(_0x18ec1c)
-    _0x0bbaf8 = _0x18ec1c
-    _0x2c86f3.AntiFling = _0x18ec1c
-    _0x4cda06()
-    if _0x18ec1c then
+crearToggle(PaginaAura, "💀 Anti-Murderer", CONFIG.AutoGrabAntiM, function(e)
+    GRAB_ANTI_MURDERER = e
+    CONFIG.AutoGrabAntiM = e
+    guardarConfig()
+end)
+crearSlider(PaginaAura, "Rango Murderer (studs)", 10, 50, CONFIG.AutoGrabDistMurder, function(v)
+    GRAB_MURDERER_RANGO = v
+    CONFIG.AutoGrabDistMurder = v
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "🔄 Regresar a posicion original", CONFIG.AutoGrabRegresar, function(e)
+    GRAB_REGRESAR = e
+    CONFIG.AutoGrabRegresar = e
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "🍬 Mostrar boton GRAB GUN", CONFIG.AutoGrabMostrar ~= false, function(e)
+    CONFIG.AutoGrabMostrar = e
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "🔪 Knife Aura", CONFIG.KnifeAura or false, function(e)
+    CONFIG.KnifeAura = e
+    guardarConfig()
+    print(e and "🔪 Knife Aura ACTIVADO" or "🔪 Knife Aura DESACTIVADO")
+end)
+crearSlider(PaginaAura, "Distancia Knife Aura", 5, 50, CONFIG.KnifeAuraDist or 15, function(v)
+    CONFIG.KnifeAuraDist = v
+    guardarConfig()
+end)
+
+crearToggle(PaginaPlayer, "🛡 Anti-Fling", CONFIG.AntiFling, function(e)
+    ANTI_FLING_ACTIVO = e
+    CONFIG.AntiFling = e
+    guardarConfig()
+    if e then
         pcall(function()
-            loadstring(game:HttpGet(_0xe1e0d8({104,116,116,112,115,58,47,47,114,97,119,115,99,114,105,112,116,115,46,110,101,116,47,114,97,119,47,85,110,105,118,101,114,115,97,108,45,83,99,114,105,112,116,45,65,110,116,105,45,102,108,105,110,103,45,55,51,50,48,53})))()
+            loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Anti-fling-73205"))()
         end)
     end
 end)
-_0x1b0491(_0x46d095, _0xe1e0d8({240,159,145,187,32,78,111,99,108,105,112}), _0x2c86f3.Noclip, function(_0x18ec1c)
-    _0xbf1b35 = _0x18ec1c
-    _0x2c86f3.Noclip = _0x18ec1c
-    _0x4cda06()
+crearToggle(PaginaPlayer, "👻 Noclip", CONFIG.Noclip, function(e)
+    NOCLIP_ACTIVO = e
+    CONFIG.Noclip = e
+    guardarConfig()
 end)
-_0x3c0aad(_0x46d095, _0xe1e0d8({87,97,108,107,115,112,101,101,100}), 16, 200, _0x2c86f3.Walkspeed, function(_0x9b9a04)
-    _0xed8245 = _0x9b9a04
-    _0x2c86f3.Walkspeed = _0x9b9a04
-    _0x4cda06()
+crearSlider(PaginaPlayer, "Walkspeed", 16, 200, CONFIG.Walkspeed, function(v)
+    WALKSPEED_VALOR = v
+    CONFIG.Walkspeed = v
+    guardarConfig()
 end)
-_0x1b0491(_0x46d095, _0xe1e0d8({240,159,140,128,32,83,112,105,110,98,111,116,32,40,65,110,116,105,45,65,105,109,41}), _0x2c86f3.Spinbot, function(_0x18ec1c)
-    _0xfdb4be = _0x18ec1c
-    _0x2c86f3.Spinbot = _0x18ec1c
-    _0x4cda06()
+crearToggle(PaginaPlayer, "🌀 Spinbot (Anti-Aim)", CONFIG.Spinbot, function(e)
+    SPINBOT_ACTIVO = e
+    CONFIG.Spinbot = e
+    guardarConfig()
 end)
-_0x1b0491(_0x46d095, _0xe1e0d8({240,159,145,187,32,65,99,116,105,118,97,114,32,66,111,116,111,110,32,100,101,32,73,110,118,105,115,105,98,105,108,105,100,97,100}), false, function(_0x18ec1c)
-    if _0x18ec1c then
+crearToggle(PaginaPlayer, "👻 Activar Boton de Invisibilidad", false, function(e)
+    if e then
         pcall(function()
-            loadstring(game:HttpGet(_0xe1e0d8({104,116,116,112,115,58,47,47,114,97,119,115,99,114,105,112,116,115,46,110,101,116,47,114,97,119,47,85,110,105,118,101,114,115,97,108,45,83,99,114,105,112,116,45,73,110,118,105,115,105,98,108,101,45,70,69,45,49,57,49,53,51})))()
+            loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-FE-19153"))()
         end)
     end
 end)
 
-_0x425899(_0xf6c6e2, _0xe1e0d8({240,159,140,128,32,70,76,73,78,71,32,77,85,82,68,69,82,69,82}), function()
-    _0x3adf46(_0xe1e0d8({77,117,114,100,101,114,101,114}))
+crearBoton(PaginaFling, "🌀 FLING MURDERER", function()
+    IniciarFling("Murderer")
 end, Color3.fromRGB(200, 60, 100))
 
-_0x425899(_0xf6c6e2, _0xe1e0d8({240,159,140,128,32,70,76,73,78,71,32,83,72,69,82,73,70,70}), function()
-    _0x3adf46(_0xe1e0d8({83,104,101,114,105,102,102}))
+crearBoton(PaginaFling, "🌀 FLING SHERIFF", function()
+    IniciarFling("Sheriff")
 end, Color3.fromRGB(80, 130, 220))
 
-_0x425899(_0xf6c6e2, _0xe1e0d8({240,159,140,128,32,70,76,73,78,71,32,65,76,76}), function()
-    _0x3adf46(_0xe1e0d8({97,108,108}))
+crearBoton(PaginaFling, "🌀 FLING ALL", function()
+    IniciarFling("all")
 end, Color3.fromRGB(200, 50, 200))
 
-_0x425899(_0xf6c6e2, _0xe1e0d8({226,155,148,32,68,69,84,69,78,69,82,32,70,76,73,78,71}), function()
-    _0xdce78e()
+crearBoton(PaginaFling, "⛔ DETENER FLING", function()
+    StopFling()
 end, Color3.fromRGB(100, 80, 180))
 
-print(_0xe1e0d8({240,159,142,131,32,80,97,114,116,101,32,55,47,49,48,32,99,97,114,103,97,100,97,32,45,32,80,195,161,103,105,110,97,115,32,65,105,109,47,65,117,114,97,47,80,108,97,121,101,114,47,70,108,105,110,103}))
+print("🎃 Parte 7/10 cargada - Páginas Aim/Aura/Player/Fling")
 
-local function _0x2e70cc(_0xb9b117, _0x7158c2, _0xc6c29c, _0x1109be)
-    local _0x2ae265 = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-    _0x2ae265.Size = UDim2.new(1, 0, 0, 30)
-    _0x2ae265.BackgroundColor3 = _0xa12647.Morado3
-    _0x2ae265.BackgroundTransparency = 0.5
-    _0x2ae265.BorderSizePixel = 0
-    _0x2ae265.Active = true
-    _0x2ae265.ZIndex = 2
-    _0x2ae265.Parent = _0xb9b117
+local function crearSelector(padre, titulo, opciones, callback)
+    local labelFrame = Instance.new("Frame")
+    labelFrame.Size = UDim2.new(1, 0, 0, 30)
+    labelFrame.BackgroundColor3 = COLORES.Morado3
+    labelFrame.BackgroundTransparency = 0.5
+    labelFrame.BorderSizePixel = 0
+    labelFrame.Active = true
+    labelFrame.ZIndex = 2
+    labelFrame.Parent = padre
 
-    local _0x341176 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-    _0x341176.CornerRadius = UDim.new(0, 8)
-    _0x341176.Parent = _0x2ae265
+    local cLF = Instance.new("UICorner")
+    cLF.CornerRadius = UDim.new(0, 8)
+    cLF.Parent = labelFrame
 
-    local _0xbd8561 = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-    _0xbd8561.Color = _0xa12647.Naranja1
-    _0xbd8561.Thickness = 1
-    _0xbd8561.Transparency = 0.4
-    _0xbd8561.Parent = _0x2ae265
+    local sLF = Instance.new("UIStroke")
+    sLF.Color = COLORES.Naranja1
+    sLF.Thickness = 1
+    sLF.Transparency = 0.4
+    sLF.Parent = labelFrame
 
-    local _0x792bd7 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-    _0x792bd7.Size = UDim2.new(1, -10, 1, 0)
-    _0x792bd7.Position = UDim2.new(0, 10, 0, 0)
-    _0x792bd7.BackgroundTransparency = 1
-    _0x792bd7.Text = _0x7158c2 .. _0xe1e0d8({32,226,150,188})
-    _0x792bd7.TextColor3 = _0xa12647.Texto
-    _0x792bd7.Font = Enum.Font.GothamBold
-    _0x792bd7.TextSize = 11
-    _0x792bd7.TextXAlignment = Enum.TextXAlignment.Left
-    _0x792bd7.ZIndex = 3
-    _0x792bd7.Parent = _0x2ae265
+    local lbl = Instance.new("TextLabel")
+    lbl.Size = UDim2.new(1, -10, 1, 0)
+    lbl.Position = UDim2.new(0, 10, 0, 0)
+    lbl.BackgroundTransparency = 1
+    lbl.Text = titulo .. " ▼"
+    lbl.TextColor3 = COLORES.Texto
+    lbl.Font = Enum.Font.GothamBold
+    lbl.TextSize = 11
+    lbl.TextXAlignment = Enum.TextXAlignment.Left
+    lbl.ZIndex = 3
+    lbl.Parent = labelFrame
 
-    local _0x12de3a = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-    _0x12de3a.Size = UDim2.new(1, 0, 1, 0)
-    _0x12de3a.BackgroundTransparency = 1
-    _0x12de3a.Text = _0xe1e0d8({})
-    _0x12de3a.ZIndex = 4
-    _0x12de3a.Parent = _0x2ae265
+    local botonToggle = Instance.new("TextButton")
+    botonToggle.Size = UDim2.new(1, 0, 1, 0)
+    botonToggle.BackgroundTransparency = 1
+    botonToggle.Text = ""
+    botonToggle.ZIndex = 4
+    botonToggle.Parent = labelFrame
 
-    local _0xfc42ce = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-    _0xfc42ce.Size = UDim2.new(1, 0, 0, #_0xc6c29c * 28 + 8)
-    _0xfc42ce.BackgroundColor3 = _0xa12647.Morado3
-    _0xfc42ce.BackgroundTransparency = 0.5
-    _0xfc42ce.BorderSizePixel = 0
-    _0xfc42ce.Visible = false
-    _0xfc42ce.ZIndex = 2
-    _0xfc42ce.Parent = _0xb9b117
+    local contenedor = Instance.new("Frame")
+    contenedor.Size = UDim2.new(1, 0, 0, #opciones * 28 + 8)
+    contenedor.BackgroundColor3 = COLORES.Morado3
+    contenedor.BackgroundTransparency = 0.5
+    contenedor.BorderSizePixel = 0
+    contenedor.Visible = false
+    contenedor.ZIndex = 2
+    contenedor.Parent = padre
 
-    local _0xb7e69a = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-    _0xb7e69a.CornerRadius = UDim.new(0, 8)
-    _0xb7e69a.Parent = _0xfc42ce
+    local cCont = Instance.new("UICorner")
+    cCont.CornerRadius = UDim.new(0, 8)
+    cCont.Parent = contenedor
 
-    local _0x828b89 = Instance.new(_0xe1e0d8({85,73,76,105,115,116,76,97,121,111,117,116}))
-    _0x828b89.Padding = UDim.new(0, 3)
-    _0x828b89.Parent = _0xfc42ce
+    local layoutCont = Instance.new("UIListLayout")
+    layoutCont.Padding = UDim.new(0, 3)
+    layoutCont.Parent = contenedor
 
-    local _0x03b541 = Instance.new(_0xe1e0d8({85,73,80,97,100,100,105,110,103}))
-    _0x03b541.PaddingTop = UDim.new(0, 4)
-    _0x03b541.PaddingBottom = UDim.new(0, 4)
-    _0x03b541.PaddingLeft = UDim.new(0, 4)
-    _0x03b541.PaddingRight = UDim.new(0, 4)
-    _0x03b541.Parent = _0xfc42ce
+    local paddingCont = Instance.new("UIPadding")
+    paddingCont.PaddingTop = UDim.new(0, 4)
+    paddingCont.PaddingBottom = UDim.new(0, 4)
+    paddingCont.PaddingLeft = UDim.new(0, 4)
+    paddingCont.PaddingRight = UDim.new(0, 4)
+    paddingCont.Parent = contenedor
 
-    _0x12de3a.MouseButton1Click:Connect(function()
-        _0xfc42ce.Visible = not _0xfc42ce.Visible
-        if _0xfc42ce.Visible then _0x792bd7.Text = _0x7158c2 .. _0xe1e0d8({32,226,150,178})
-        else _0x792bd7.Text = _0x7158c2 .. _0xe1e0d8({32,226,150,188}) end
+    botonToggle.MouseButton1Click:Connect(function()
+        contenedor.Visible = not contenedor.Visible
+        if contenedor.Visible then lbl.Text = titulo .. " ▲"
+        else lbl.Text = titulo .. " ▼" end
     end)
 
-    for _0xec1df4, _0x70c20a in ipairs(_0xc6c29c) do
-        local _0xde4744 = Instance.new(_0xe1e0d8({84,101,120,116,66,117,116,116,111,110}))
-        _0xde4744.Size = UDim2.new(1, 0, 0, 25)
-        _0xde4744.BackgroundColor3 = _0xa12647.Morado3
-        _0xde4744.BackgroundTransparency = 0.4
-        _0xde4744.Text = _0x70c20a
-        _0xde4744.TextColor3 = _0xa12647.Texto
-        _0xde4744.Font = Enum.Font.GothamBold
-        _0xde4744.TextSize = 10
-        _0xde4744.BorderSizePixel = 0
-        _0xde4744.ZIndex = 3
-        _0xde4744.Parent = _0xfc42ce
+    for _, opcion in ipairs(opciones) do
+        local boton = Instance.new("TextButton")
+        boton.Size = UDim2.new(1, 0, 0, 25)
+        boton.BackgroundColor3 = COLORES.Morado3
+        boton.BackgroundTransparency = 0.4
+        boton.Text = opcion
+        boton.TextColor3 = COLORES.Texto
+        boton.Font = Enum.Font.GothamBold
+        boton.TextSize = 10
+        boton.BorderSizePixel = 0
+        boton.ZIndex = 3
+        boton.Parent = contenedor
 
-        local _0xb6e932 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-        _0xb6e932.CornerRadius = UDim.new(0, 5)
-        _0xb6e932.Parent = _0xde4744
+        local cB = Instance.new("UICorner")
+        cB.CornerRadius = UDim.new(0, 5)
+        cB.Parent = boton
 
-        _0xde4744.MouseButton1Click:Connect(function()
-            _0x1109be(_0x70c20a)
-            _0xfc42ce.Visible = false
-            _0x792bd7.Text = _0x7158c2 .. _0xe1e0d8({58,32}) .. _0x70c20a .. _0xe1e0d8({32,226,150,188})
+        boton.MouseButton1Click:Connect(function()
+            callback(opcion)
+            contenedor.Visible = false
+            lbl.Text = titulo .. ": " .. opcion .. " ▼"
         end)
     end
 end
 
-_0x1b0491(_0xecce4f, _0xe1e0d8({240,159,142,172,32,65,99,116,105,118,97,114,32,65,110,105,109,97,99,105,111,110,101,115}), _0x2c86f3.Anims, function(_0x18ec1c)
-    _0x31f725 = _0x18ec1c
-    _0x2c86f3.Anims = _0x18ec1c
-    _0x4cda06()
-    if _0x18ec1c then
-        _0xec10c9()
-        _0xbf61cf()
+crearToggle(PaginaAnims, "🎬 Activar Animaciones", CONFIG.Anims, function(e)
+    ANIMS_ACTIVO = e
+    CONFIG.Anims = e
+    guardarConfig()
+    if e then
+        saveOriginalAnims()
+        applyAnimations()
     else
-        local _0xd95f0a = _0xe3a36b.Character
-        if _0xd95f0a then
-            local _0x39bb37 = _0xd95f0a:FindFirstChild(_0xe1e0d8({65,110,105,109,97,116,101}))
-            if _0x39bb37 then
-                for _0x87e542, _0x20dda1 in pairs(_0x5c9846) do
-                    local _0x04bc9f = _0x39bb37:FindFirstChild(_0x20dda1.folder)
-                    if _0x04bc9f then
-                        for _0xec1df4, _0x689443 in ipairs(_0x20dda1.slots) do
-                            local _0x2bb1e7 = _0x04bc9f:FindFirstChild(_0x689443.child)
-                            if _0x2bb1e7 and _0xd8fb2f[_0x689443.origKey] then
-                                _0x2bb1e7.AnimationId = _0xd8fb2f[_0x689443.origKey]
+        local char = LocalPlayer.Character
+        if char then
+            local Animate = char:FindFirstChild("Animate")
+            if Animate then
+                for animType, info in pairs(animMap) do
+                    local folder = Animate:FindFirstChild(info.folder)
+                    if folder then
+                        for _, slot in ipairs(info.slots) do
+                            local anim = folder:FindFirstChild(slot.child)
+                            if anim and originalAnims[slot.origKey] then
+                                anim.AnimationId = originalAnims[slot.origKey]
                             end
                         end
                     end
@@ -2505,48 +2503,48 @@ _0x1b0491(_0xecce4f, _0xe1e0d8({240,159,142,172,32,65,99,116,105,118,97,114,32,6
     end
 end)
 
-_0x2e70cc(_0xecce4f, _0xe1e0d8({65,110,105,109,97,99,105,111,110,32,71,101,110,101,114,97,108}), _0xdcb6af, function(_0x99fd5b) _0x9c4954.all = _0x99fd5b _0xbf61cf() end)
-_0x2e70cc(_0xecce4f, _0xe1e0d8({73,100,108,101}), _0xdcb6af, function(_0x99fd5b) _0x9c4954.idle = _0x99fd5b _0xbf61cf() end)
-_0x2e70cc(_0xecce4f, _0xe1e0d8({87,97,108,107}), _0xdcb6af, function(_0x99fd5b) _0x9c4954.walk = _0x99fd5b _0xbf61cf() end)
-_0x2e70cc(_0xecce4f, _0xe1e0d8({82,117,110}), _0xdcb6af, function(_0x99fd5b) _0x9c4954.run = _0x99fd5b _0xbf61cf() end)
-_0x2e70cc(_0xecce4f, _0xe1e0d8({74,117,109,112}), _0xdcb6af, function(_0x99fd5b) _0x9c4954.jump = _0x99fd5b _0xbf61cf() end)
-_0x2e70cc(_0xecce4f, _0xe1e0d8({70,97,108,108}), _0xdcb6af, function(_0x99fd5b) _0x9c4954.fall = _0x99fd5b _0xbf61cf() end)
-_0x2e70cc(_0xecce4f, _0xe1e0d8({67,108,105,109,98}), _0xdcb6af, function(_0x99fd5b) _0x9c4954.climb = _0x99fd5b _0xbf61cf() end)
-_0x2e70cc(_0xecce4f, _0xe1e0d8({83,119,105,109}), _0xdcb6af, function(_0x99fd5b) _0x9c4954.swim = _0x99fd5b _0xbf61cf() end)
-_0x2e70cc(_0xecce4f, _0xe1e0d8({83,119,105,109,73,100,108,101}), _0xdcb6af, function(_0x99fd5b) _0x9c4954.swimidle = _0x99fd5b _0xbf61cf() end)
-_0x2e70cc(_0xecce4f, _0xe1e0d8({68,101,97,116,104}), _0xdcb6af, function(_0x99fd5b) _0x9c4954.death = _0x99fd5b _0xbf61cf() end)
+crearSelector(PaginaAnims, "Animacion General", allOptions, function(sel) animState.all = sel applyAnimations() end)
+crearSelector(PaginaAnims, "Idle", allOptions, function(sel) animState.idle = sel applyAnimations() end)
+crearSelector(PaginaAnims, "Walk", allOptions, function(sel) animState.walk = sel applyAnimations() end)
+crearSelector(PaginaAnims, "Run", allOptions, function(sel) animState.run = sel applyAnimations() end)
+crearSelector(PaginaAnims, "Jump", allOptions, function(sel) animState.jump = sel applyAnimations() end)
+crearSelector(PaginaAnims, "Fall", allOptions, function(sel) animState.fall = sel applyAnimations() end)
+crearSelector(PaginaAnims, "Climb", allOptions, function(sel) animState.climb = sel applyAnimations() end)
+crearSelector(PaginaAnims, "Swim", allOptions, function(sel) animState.swim = sel applyAnimations() end)
+crearSelector(PaginaAnims, "SwimIdle", allOptions, function(sel) animState.swimidle = sel applyAnimations() end)
+crearSelector(PaginaAnims, "Death", allOptions, function(sel) animState.death = sel applyAnimations() end)
 
-
-
-
-local function _0x1c4936(_0xd8839f)
-    if _0xd8839f then
-        if _0xf8dc01 then
-            _0xf8dc01:Disconnect()
+-- ============================================
+-- 🎁 AUTO PRANK BOMB (función + UI)
+-- ============================================
+local function ApplyAutoPrankBomb(state)
+    if state then
+        if prankBombConnection then
+            prankBombConnection:Disconnect()
         end
-        _0xf8dc01 = workspace.ChildAdded:Connect(function(_0xb55861)
-            if _0xb55861.Name == _0xe1e0d8({72,97,110,100,108,101}) then
+        prankBombConnection = workspace.ChildAdded:Connect(function(obj)
+            if obj.Name == "Handle" then
                 task.spawn(function()
-                    local _0x83fbd5 = _0xb55861:WaitForChild(_0xe1e0d8({99,114,101,97,116,111,114}), 0.5)
-                    if _0x83fbd5 then
-                        local _0x389711 = false
-                        if _0x83fbd5:IsA(_0xe1e0d8({79,98,106,101,99,116,86,97,108,117,101})) and _0x83fbd5.Value == _0xe3a36b then
-                            _0x389711 = true
-                        elseif _0x83fbd5:IsA(_0xe1e0d8({83,116,114,105,110,103,86,97,108,117,101})) and _0x83fbd5.Value == _0xe3a36b.Name then
-                            _0x389711 = true
-                        elseif _0x83fbd5.Value == _0xe3a36b.Name then
-                            _0x389711 = true
+                    local creator = obj:WaitForChild("creator", 0.5)
+                    if creator then
+                        local donoDaBomba = false
+                        if creator:IsA("ObjectValue") and creator.Value == LocalPlayer then
+                            donoDaBomba = true
+                        elseif creator:IsA("StringValue") and creator.Value == LocalPlayer.Name then
+                            donoDaBomba = true
+                        elseif creator.Value == LocalPlayer.Name then
+                            donoDaBomba = true
                         end
 
-                        if _0x389711 then
-                            local _0x77af90 = _0xe3a36b.Character
-                            if _0x77af90 then
-                                local _0xa6d65d = _0x77af90:FindFirstChild(_0xe1e0d8({72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116}))
-                                local _0xfef491 = _0x77af90:FindFirstChildOfClass(_0xe1e0d8({72,117,109,97,110,111,105,100}))
-                                if _0xa6d65d and _0xfef491 and _0xb55861:IsA(_0xe1e0d8({66,97,115,101,80,97,114,116})) then
-                                    _0xb55861.CFrame = _0xa6d65d.CFrame * CFrame.new(0, -3, 0)
-                                    _0xfef491:ChangeState(Enum.HumanoidStateType.Jumping)
-                                    print(_0xe1e0d8({240,159,142,129,32,65,117,116,111,32,80,114,97,110,107,32,66,111,109,98,32,226,134,146,32,194,161,68,111,98,108,101,32,115,97,108,116,111,33}))
+                        if donoDaBomba then
+                            local character = LocalPlayer.Character
+                            if character then
+                                local rootPart = character:FindFirstChild("HumanoidRootPart")
+                                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                                if rootPart and humanoid and obj:IsA("BasePart") then
+                                    obj.CFrame = rootPart.CFrame * CFrame.new(0, -3, 0)
+                                    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                                    print("🎁 Auto Prank Bomb → ¡Doble salto!")
                                 end
                             end
                         end
@@ -2554,358 +2552,358 @@ local function _0x1c4936(_0xd8839f)
                 end)
             end
         end)
-        print(_0xe1e0d8({240,159,142,129,32,65,117,116,111,32,80,114,97,110,107,32,66,111,109,98,32,65,67,84,73,86,65,68,79}))
+        print("🎁 Auto Prank Bomb ACTIVADO")
     else
-        if _0xf8dc01 then
-            _0xf8dc01:Disconnect()
-            _0xf8dc01 = nil
+        if prankBombConnection then
+            prankBombConnection:Disconnect()
+            prankBombConnection = nil
         end
-        print(_0xe1e0d8({226,157,140,32,65,117,116,111,32,80,114,97,110,107,32,66,111,109,98,32,68,69,83,65,67,84,73,86,65,68,79}))
+        print("❌ Auto Prank Bomb DESACTIVADO")
     end
 end
 
-local _0x687330 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-_0x687330.Size = UDim2.new(1, 0, 0, 100)
-_0x687330.BackgroundColor3 = _0xa12647.Morado3
-_0x687330.BackgroundTransparency = 0.5
-_0x687330.Text = _0xe1e0d8({240,159,142,129,32,65,85,84,79,32,80,82,65,78,75,32,66,79,77,66,32,40,66,79,77,66,32,74,85,77,80,41,32,240,159,142,129,10,10,49,46,32,65,99,116,105,118,195,161,32,101,108,32,116,111,103,103,108,101,32,100,101,32,97,98,97,106,111,10,50,46,32,69,113,117,105,112,195,161,32,108,97,32,70,97,107,101,66,111,109,98,10,51,46,32,84,105,114,97,108,97,32,226,134,146,32,99,97,101,32,97,98,97,106,111,32,116,117,121,111,32,43,32,115,97,108,116,195,161,115,32,115,111,108,111,10,10,240,159,146,161,32,78,101,99,101,115,105,116,195,161,115,32,108,97,32,80,114,97,110,107,32,66,111,109,98,32,99,111,109,112,114,97,100,97,32,40,52,44,56,48,48,32,99,111,105,110,115,41})
-_0x687330.TextColor3 = _0xa12647.Texto
-_0x687330.Font = Enum.Font.GothamMedium
-_0x687330.TextSize = 11
-_0x687330.TextWrapped = true
-_0x687330.BorderSizePixel = 0
-_0x687330.ZIndex = 2
-_0x687330.Parent = _0x633bb3
+local infoBomb = Instance.new("TextLabel")
+infoBomb.Size = UDim2.new(1, 0, 0, 100)
+infoBomb.BackgroundColor3 = COLORES.Morado3
+infoBomb.BackgroundTransparency = 0.5
+infoBomb.Text = "🎁 AUTO PRANK BOMB (BOMB JUMP) 🎁\n\n1. Activá el toggle de abajo\n2. Equipá la FakeBomb\n3. Tirala → cae abajo tuyo + saltás solo\n\n💡 Necesitás la Prank Bomb comprada (4,800 coins)"
+infoBomb.TextColor3 = COLORES.Texto
+infoBomb.Font = Enum.Font.GothamMedium
+infoBomb.TextSize = 11
+infoBomb.TextWrapped = true
+infoBomb.BorderSizePixel = 0
+infoBomb.ZIndex = 2
+infoBomb.Parent = PaginaBomb
 
-local _0x21bd5f = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0x21bd5f.CornerRadius = UDim.new(0, 9)
-_0x21bd5f.Parent = _0x687330
+local cInfoBomb = Instance.new("UICorner")
+cInfoBomb.CornerRadius = UDim.new(0, 9)
+cInfoBomb.Parent = infoBomb
 
-local _0x2b3920 = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-_0x2b3920.Color = _0xa12647.Naranja1
-_0x2b3920.Thickness = 1
-_0x2b3920.Transparency = 0.4
-_0x2b3920.Parent = _0x687330
+local sInfoBomb = Instance.new("UIStroke")
+sInfoBomb.Color = COLORES.Naranja1
+sInfoBomb.Thickness = 1
+sInfoBomb.Transparency = 0.4
+sInfoBomb.Parent = infoBomb
 
-_0x1b0491(_0x633bb3, _0xe1e0d8({240,159,142,129,32,65,117,116,111,32,80,114,97,110,107,32,66,111,109,98,32,40,66,111,109,98,32,74,117,109,112,41}), _0x2c86f3.AutoPrankBomb or false, function(_0x18ec1c)
-    _0x4f4b4d = _0x18ec1c
-    _0x2c86f3.AutoPrankBomb = _0x18ec1c
-    _0x4cda06()
-    _0x1c4936(_0x18ec1c)
+crearToggle(PaginaBomb, "🎁 Auto Prank Bomb (Bomb Jump)", CONFIG.AutoPrankBomb or false, function(e)
+    AUTO_PRANK_BOMB_ACTIVO = e
+    CONFIG.AutoPrankBomb = e
+    guardarConfig()
+    ApplyAutoPrankBomb(e)
 end)
 
-_0x1b0491(_0x210c8b, _0xe1e0d8({226,154,176,239,184,143,32,77,111,110,105,116,111,114,32,72,85,68}), _0x2c86f3.Monitor, function(_0x18ec1c)
-    _0x94592c = _0x18ec1c
-    _0x2c86f3.Monitor = _0x18ec1c
-    _0x4cda06()
-    if _0x18ec1c then
-        _0x69816d()
-        _0x041f06()
+crearToggle(PaginaRend, "⚰️ Monitor HUD", CONFIG.Monitor, function(e)
+    MONITOR_ACTIVO = e
+    CONFIG.Monitor = e
+    guardarConfig()
+    if e then
+        SamplePing()
+        crearMonitor()
     else
-        _0xc5ca32()
+        destruirMonitor()
     end
 end)
-_0x1b0491(_0x210c8b, _0xe1e0d8({226,154,161,32,70,80,83,32,66,111,111,115,116}), _0x2c86f3.FPSBoost, function(_0x18ec1c)
-    _0x18a16e = _0x18ec1c
-    _0x2c86f3.FPSBoost = _0x18ec1c
-    _0x4cda06()
-    if _0x18ec1c then
-        _0xd8f83b()
-        _0x597047(_0xb0b784, _0xe1e0d8({71,108,111,98,97,108,83,104,97,100,111,119,115}), false)
-        _0x597047(_0xb0b784, _0xe1e0d8({79,117,116,100,111,111,114,65,109,98,105,101,110,116}), Color3.fromRGB(128, 128, 128))
-        local _0xec29ec = workspace:FindFirstChildOfClass(_0xe1e0d8({84,101,114,114,97,105,110}))
-        if _0xec29ec then
-            _0x597047(_0xec29ec, _0xe1e0d8({87,97,116,101,114,87,97,118,101,83,105,122,101}), 0)
-            _0x597047(_0xec29ec, _0xe1e0d8({87,97,116,101,114,87,97,118,101,83,112,101,101,100}), 0)
-            _0x597047(_0xec29ec, _0xe1e0d8({87,97,116,101,114,82,101,102,108,101,99,116,97,110,99,101}), 0)
-            _0x597047(_0xec29ec, _0xe1e0d8({87,97,116,101,114,84,114,97,110,115,112,97,114,101,110,99,121}), 0)
+crearToggle(PaginaRend, "⚡ FPS Boost", CONFIG.FPSBoost, function(e)
+    FPS_BOOST_ACTIVO = e
+    CONFIG.FPSBoost = e
+    guardarConfig()
+    if e then
+        restaurarGraficos()
+        guardarYSetear(Lighting, "GlobalShadows", false)
+        guardarYSetear(Lighting, "OutdoorAmbient", Color3.fromRGB(128, 128, 128))
+        local terrain = workspace:FindFirstChildOfClass("Terrain")
+        if terrain then
+            guardarYSetear(terrain, "WaterWaveSize", 0)
+            guardarYSetear(terrain, "WaterWaveSpeed", 0)
+            guardarYSetear(terrain, "WaterReflectance", 0)
+            guardarYSetear(terrain, "WaterTransparency", 0)
         end
     else
-        _0xd8f83b()
+        restaurarGraficos()
     end
 end)
 
-print(_0xe1e0d8({240,159,142,131,32,80,97,114,116,101,32,56,47,49,48,32,99,97,114,103,97,100,97,32,45,32,83,101,108,101,99,116,111,114,32,43,32,65,110,105,109,115,32,43,32,66,111,109,98,32,74,117,109,112,32,43,32,82,101,110,100}))
+print("🎃 Parte 8/10 cargada - Selector + Anims + Bomb Jump + Rend")
 
-local _0x9b0791 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-_0x9b0791.Size = UDim2.new(1, 0, 0, 50)
-_0x9b0791.BackgroundColor3 = _0xa12647.Morado3
-_0x9b0791.BackgroundTransparency = 0.4
-_0x9b0791.Text = _0xe1e0d8({240,159,142,131,32,85,122,105,118,101,114,116,32,72,117,98,32}) .. _0x85df87 .. _0xe1e0d8({32,240,159,142,131,10,80,114,111,121,101,99,116,111,32,105,110,105,99,105,97,108,32,112,111,114,32,85,122,105,118,101,114,116,10,67,111,110,32,97,121,117,100,97,32,101,120,112,108,105,99,97,116,105,118,97,32,100,101,32,78,101,120,118,121,114})
-_0x9b0791.TextColor3 = _0xa12647.Texto
-_0x9b0791.Font = Enum.Font.GothamBold
-_0x9b0791.TextSize = 10
-_0x9b0791.TextWrapped = true
-_0x9b0791.BorderSizePixel = 0
-_0x9b0791.ZIndex = 2
-_0x9b0791.Parent = _0xfc9ada
+local infoTitulo = Instance.new("TextLabel")
+infoTitulo.Size = UDim2.new(1, 0, 0, 50)
+infoTitulo.BackgroundColor3 = COLORES.Morado3
+infoTitulo.BackgroundTransparency = 0.4
+infoTitulo.Text = "🎃 Uzivert Hub " .. VERSION .. " 🎃\nProyecto inicial por Uzivert\nCon ayuda explicativa de Nexvyr"
+infoTitulo.TextColor3 = COLORES.Texto
+infoTitulo.Font = Enum.Font.GothamBold
+infoTitulo.TextSize = 10
+infoTitulo.TextWrapped = true
+infoTitulo.BorderSizePixel = 0
+infoTitulo.ZIndex = 2
+infoTitulo.Parent = PaginaInfo
 
-local _0xe292fe = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0xe292fe.CornerRadius = UDim.new(0, 9)
-_0xe292fe.Parent = _0x9b0791
+local cIT = Instance.new("UICorner")
+cIT.CornerRadius = UDim.new(0, 9)
+cIT.Parent = infoTitulo
 
-local _0x4d31de = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-_0x4d31de.Color = _0xa12647.Naranja1
-_0x4d31de.Thickness = 1
-_0x4d31de.Transparency = 0.3
-_0x4d31de.Parent = _0x9b0791
+local sIT = Instance.new("UIStroke")
+sIT.Color = COLORES.Naranja1
+sIT.Thickness = 1
+sIT.Transparency = 0.3
+sIT.Parent = infoTitulo
 
-local _0xfd0b50 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-_0xfd0b50.Size = UDim2.new(1, 0, 0, 70)
-_0xfd0b50.BackgroundColor3 = Color3.fromRGB(60, 30, 20)
-_0xfd0b50.BackgroundTransparency = 0.4
-_0xfd0b50.Text = _0xe1e0d8({240,159,167,159,32,69,78,32,77,65,78,84,69,78,73,77,73,69,78,84,79,10,10,45,32,83,73,76,69,78,84,32,65,73,77,32,40,65,105,109,32,114,101,97,108,41,10,45,32,66,79,77,66,32,74,85,77,80,32,40,102,105,120,32,109,111,98,105,108,101,41})
-_0xfd0b50.TextColor3 = _0xa12647.Mantenimiento
-_0xfd0b50.Font = Enum.Font.GothamMedium
-_0xfd0b50.TextSize = 10
-_0xfd0b50.TextWrapped = true
-_0xfd0b50.TextXAlignment = Enum.TextXAlignment.Left
-_0xfd0b50.TextYAlignment = Enum.TextYAlignment.Top
-_0xfd0b50.BorderSizePixel = 0
-_0xfd0b50.ZIndex = 2
-_0xfd0b50.Parent = _0xfc9ada
+local mantInfo = Instance.new("TextLabel")
+mantInfo.Size = UDim2.new(1, 0, 0, 70)
+mantInfo.BackgroundColor3 = Color3.fromRGB(60, 30, 20)
+mantInfo.BackgroundTransparency = 0.4
+mantInfo.Text = "🧟 EN MANTENIMIENTO\n\n- SILENT AIM (Aim real)\n- BOMB JUMP (fix mobile)"
+mantInfo.TextColor3 = COLORES.Mantenimiento
+mantInfo.Font = Enum.Font.GothamMedium
+mantInfo.TextSize = 10
+mantInfo.TextWrapped = true
+mantInfo.TextXAlignment = Enum.TextXAlignment.Left
+mantInfo.TextYAlignment = Enum.TextYAlignment.Top
+mantInfo.BorderSizePixel = 0
+mantInfo.ZIndex = 2
+mantInfo.Parent = PaginaInfo
 
-local _0x05482d = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0x05482d.CornerRadius = UDim.new(0, 9)
-_0x05482d.Parent = _0xfd0b50
+local cMI = Instance.new("UICorner")
+cMI.CornerRadius = UDim.new(0, 9)
+cMI.Parent = mantInfo
 
-local _0x1d1c92 = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-_0x1d1c92.Color = _0xa12647.Mantenimiento
-_0x1d1c92.Thickness = 1
-_0x1d1c92.Transparency = 0.4
-_0x1d1c92.Parent = _0xfd0b50
+local sMI = Instance.new("UIStroke")
+sMI.Color = COLORES.Mantenimiento
+sMI.Thickness = 1
+sMI.Transparency = 0.4
+sMI.Parent = mantInfo
 
-_0x425899(_0xfc9ada, _0xe1e0d8({240,159,144,155,32,82,101,112,111,114,116,97,114,32,66,117,103}), function()
-    local _0x37cfac = _0xe1e0d8({82,69,80,79,82,84,69,32,68,69,32,66,85,71,32,45,32,85,90,73,86,69,82,84,32,72,85,66,32,118,52,46,54,10,74,117,103,97,100,111,114,58,32}) .. _0xe3a36b.Name .. _0xe1e0d8({10,70,101,99,104,97,58,32}) .. os.date(_0xe1e0d8({37,100,47,37,109,47,37,89,32,37,72,58,37,77})) .. _0xe1e0d8({10,86,101,114,115,105,111,110,58,32}) .. _0x85df87
+crearBoton(PaginaInfo, "🐛 Reportar Bug", function()
+    local texto = "REPORTE DE BUG - UZIVERT HUB v4.6\nJugador: " .. LocalPlayer.Name .. "\nFecha: " .. os.date("%d/%m/%Y %H:%M") .. "\nVersion: " .. VERSION
     pcall(function()
-        if setclipboard then setclipboard(_0x37cfac) end
+        if setclipboard then setclipboard(texto) end
     end)
-    print(_0xe1e0d8({82,101,112,111,114,116,101,32,99,111,112,105,97,100,111,46}))
+    print("Reporte copiado.")
 end, Color3.fromRGB(200, 100, 60))
 
-_0x425899(_0xfc9ada, _0xe1e0d8({240,159,146,172,32,67,111,112,105,97,114,32,68,105,115,99,111,114,100}), function()
+crearBoton(PaginaInfo, "💬 Copiar Discord", function()
     pcall(function()
-        if setclipboard then setclipboard(_0xe1e0d8({104,116,116,112,115,58,47,47,100,105,115,99,111,114,100,46,103,103,47,118,72,104,69,82,87,99,98,88,101})) end
+        if setclipboard then setclipboard("https://discord.gg/vHhERWcbXe") end
     end)
-    print(_0xe1e0d8({68,105,115,99,111,114,100,32,99,111,112,105,97,100,111,46}))
+    print("Discord copiado.")
 end, Color3.fromRGB(80, 100, 200))
 
-local function _0xd5cd08(_0xb9b117, _0x7158c2, _0x0eb0a3, _0x8368d6)
-    local _0x1d5e97 = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-    _0x1d5e97.Size = UDim2.new(1, 0, 0, 0)
-    _0x1d5e97.AutomaticSize = Enum.AutomaticSize.Y
-    _0x1d5e97.BackgroundColor3 = Color3.fromRGB(30, 15, 40)
-    _0x1d5e97.BackgroundTransparency = 0.35
-    _0x1d5e97.BorderSizePixel = 0
-    _0x1d5e97.ZIndex = 2
-    _0x1d5e97.Parent = _0xb9b117
+local function crearTarjeta(padre, titulo, contenido, colorBorde)
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, 0, 0, 0)
+    frame.AutomaticSize = Enum.AutomaticSize.Y
+    frame.BackgroundColor3 = Color3.fromRGB(30, 15, 40)
+    frame.BackgroundTransparency = 0.35
+    frame.BorderSizePixel = 0
+    frame.ZIndex = 2
+    frame.Parent = padre
 
-    local _0x29a863 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-    _0x29a863.CornerRadius = UDim.new(0, 10)
-    _0x29a863.Parent = _0x1d5e97
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 10)
+    c.Parent = frame
 
-    local _0x9b36d2 = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-    _0x9b36d2.Color = _0x8368d6 or _0xa12647.Naranja1
-    _0x9b36d2.Thickness = 1.5
-    _0x9b36d2.Transparency = 0.3
-    _0x9b36d2.Parent = _0x1d5e97
+    local s = Instance.new("UIStroke")
+    s.Color = colorBorde or COLORES.Naranja1
+    s.Thickness = 1.5
+    s.Transparency = 0.3
+    s.Parent = frame
 
-    local _0x21f6bf = Instance.new(_0xe1e0d8({85,73,76,105,115,116,76,97,121,111,117,116}))
-    _0x21f6bf.Padding = UDim.new(0, 4)
-    _0x21f6bf.SortOrder = Enum.SortOrder.LayoutOrder
-    _0x21f6bf.Parent = _0x1d5e97
+    local layout = Instance.new("UIListLayout")
+    layout.Padding = UDim.new(0, 4)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Parent = frame
 
-    local _0x42bd13 = Instance.new(_0xe1e0d8({85,73,80,97,100,100,105,110,103}))
-    _0x42bd13.PaddingTop = UDim.new(0, 10)
-    _0x42bd13.PaddingBottom = UDim.new(0, 10)
-    _0x42bd13.PaddingLeft = UDim.new(0, 12)
-    _0x42bd13.PaddingRight = UDim.new(0, 12)
-    _0x42bd13.Parent = _0x1d5e97
+    local padding = Instance.new("UIPadding")
+    padding.PaddingTop = UDim.new(0, 10)
+    padding.PaddingBottom = UDim.new(0, 10)
+    padding.PaddingLeft = UDim.new(0, 12)
+    padding.PaddingRight = UDim.new(0, 12)
+    padding.Parent = frame
 
-    if _0x7158c2 and _0x7158c2 ~= _0xe1e0d8({}) then
-        local _0xf244c5 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-        _0xf244c5.Size = UDim2.new(1, 0, 0, 20)
-        _0xf244c5.BackgroundTransparency = 1
-        _0xf244c5.Text = _0x7158c2
-        _0xf244c5.TextColor3 = _0x8368d6 or _0xa12647.Naranja2
-        _0xf244c5.Font = Enum.Font.GothamBold
-        _0xf244c5.TextSize = 12
-        _0xf244c5.TextXAlignment = Enum.TextXAlignment.Left
-        _0xf244c5.LayoutOrder = 1
-        _0xf244c5.Parent = _0x1d5e97
+    if titulo and titulo ~= "" then
+        local tituloLbl = Instance.new("TextLabel")
+        tituloLbl.Size = UDim2.new(1, 0, 0, 20)
+        tituloLbl.BackgroundTransparency = 1
+        tituloLbl.Text = titulo
+        tituloLbl.TextColor3 = colorBorde or COLORES.Naranja2
+        tituloLbl.Font = Enum.Font.GothamBold
+        tituloLbl.TextSize = 12
+        tituloLbl.TextXAlignment = Enum.TextXAlignment.Left
+        tituloLbl.LayoutOrder = 1
+        tituloLbl.Parent = frame
     end
 
-    local _0x90da62 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-    _0x90da62.Size = UDim2.new(1, 0, 0, 0)
-    _0x90da62.AutomaticSize = Enum.AutomaticSize.Y
-    _0x90da62.BackgroundTransparency = 1
-    _0x90da62.Text = _0x0eb0a3
-    _0x90da62.TextColor3 = _0xa12647.Texto
-    _0x90da62.Font = Enum.Font.GothamMedium
-    _0x90da62.TextSize = 11
-    _0x90da62.TextWrapped = true
-    _0x90da62.TextXAlignment = Enum.TextXAlignment.Left
-    _0x90da62.TextYAlignment = Enum.TextYAlignment.Top
-    _0x90da62.LayoutOrder = 2
-    _0x90da62.Parent = _0x1d5e97
+    local contenidoLbl = Instance.new("TextLabel")
+    contenidoLbl.Size = UDim2.new(1, 0, 0, 0)
+    contenidoLbl.AutomaticSize = Enum.AutomaticSize.Y
+    contenidoLbl.BackgroundTransparency = 1
+    contenidoLbl.Text = contenido
+    contenidoLbl.TextColor3 = COLORES.Texto
+    contenidoLbl.Font = Enum.Font.GothamMedium
+    contenidoLbl.TextSize = 11
+    contenidoLbl.TextWrapped = true
+    contenidoLbl.TextXAlignment = Enum.TextXAlignment.Left
+    contenidoLbl.TextYAlignment = Enum.TextYAlignment.Top
+    contenidoLbl.LayoutOrder = 2
+    contenidoLbl.Parent = frame
 
-    return _0x1d5e97
+    return frame
 end
 
-_0xd5cd08(_0x6557b8, _0xe1e0d8({240,159,147,133,32,195,154,108,116,105,109,97,32,97,99,116,117,97,108,105,122,97,99,105,195,179,110,58,32,48,55,47,49,48,47,50,48,50,54}), _0xe1e0d8({85,122,105,118,101,114,116,32,72,117,98,32}) .. _0x85df87, _0xa12647.Naranja2)
+crearTarjeta(PaginaUpdate, "📅 Última actualización: 07/10/2026", "Uzivert Hub " .. VERSION, COLORES.Naranja2)
 
-_0xd5cd08(_0x6557b8, _0xe1e0d8({240,159,159,162,32,78,117,101,118,111,32,101,110,32,118,52,46,54,46,52}),
-    _0xe1e0d8({43,32,240,159,142,175,32,83,104,111,111,116,32,77,117,114,100,101,114,101,114,32,109,195,161,115,32,112,114,101,99,105,115,111,10}) ..
-    _0xe1e0d8({43,32,240,159,166,184,32,70,108,105,110,103,32,100,101,116,101,99,116,97,32,97,108,32,72,101,114,111,10}) ..
-    _0xe1e0d8({43,32,226,154,161,32,83,105,115,116,101,109,97,32,100,101,32,114,111,108,101,115,32,111,112,116,105,109,105,122,97,100,111}),
-    _0xa12647.Verde)
+crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.6.4",
+    "+ 🎯 Shoot Murderer más preciso\n" ..
+    "+ 🦸 Fling detecta al Hero\n" ..
+    "+ ⚡ Sistema de roles optimizado",
+    COLORES.Verde)
 
-_0xd5cd08(_0x6557b8, _0xe1e0d8({240,159,159,162,32,78,117,101,118,111,32,101,110,32,118,52,46,54,46,51}),
-    _0xe1e0d8({43,32,240,159,140,144,32,82,101,100,101,115,32,115,111,99,105,97,108,101,115,32,100,101,108,32,99,114,101,97,100,111,114,10}) ..
-    _0xe1e0d8({43,32,240,159,142,168,32,84,97,114,106,101,116,97,32,100,101,32,114,101,100,101,115,32,101,110,32,67,114,101,97,100,111,114,10}) ..
-    _0xe1e0d8({43,32,226,154,161,32,79,112,116,105,109,105,122,97,99,105,195,179,110,32,103,101,110,101,114,97,108}),
-    _0xa12647.Verde)
+crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.6.3",
+    "+ 🌐 Redes sociales del creador\n" ..
+    "+ 🎨 Tarjeta de redes en Creador\n" ..
+    "+ ⚡ Optimización general",
+    COLORES.Verde)
 
-_0xd5cd08(_0x6557b8, _0xe1e0d8({240,159,159,162,32,78,117,101,118,111,32,101,110,32,118,52,46,54,46,50}),
-    _0xe1e0d8({43,32,240,159,148,170,32,75,110,105,102,101,32,65,117,114,97,32,40,109,97,116,97,32,101,110,32,114,97,110,103,111,41,10}) ..
-    _0xe1e0d8({43,32,240,159,142,154,239,184,143,32,83,108,105,100,101,114,32,100,101,32,100,105,115,116,97,110,99,105,97,32,75,110,105,102,101,32,65,117,114,97,10}) ..
-    _0xe1e0d8({43,32,240,159,142,175,32,68,101,116,101,99,99,105,195,179,110,32,100,101,32,114,111,108,101,115,32,65,78,84,69,83,32,100,101,108,32,99,111,110,116,97,100,111,114,10}) ..
-    _0xe1e0d8({43,32,240,159,142,168,32,69,83,80,32,97,100,97,112,116,97,100,111,32,97,32,82,111,108,101,67,97,99,104,101}),
-    _0xa12647.Verde)
+crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.6.2",
+    "+ 🔪 Knife Aura (mata en rango)\n" ..
+    "+ 🎚️ Slider de distancia Knife Aura\n" ..
+    "+ 🎯 Detección de roles ANTES del contador\n" ..
+    "+ 🎨 ESP adaptado a RoleCache",
+    COLORES.Verde)
 
-_0xd5cd08(_0x6557b8, _0xe1e0d8({240,159,159,161,32,82,101,99,111,114,100,97,116,111,114,105,111,32,118,52,46,54,46,49}),
-    _0xe1e0d8({126,32,83,104,111,111,116,32,77,117,114,100,101,114,101,114,32,109,101,106,111,114,97,100,111,32,40,53,32,116,105,114,111,115,32,97,108,32,116,111,114,115,111,41,10}) ..
-    _0xe1e0d8({126,32,83,104,111,111,116,32,65,118,97,110,122,97,100,111,32,109,101,106,111,114,97,100,111,32,40,55,32,116,105,114,111,115,32,99,111,110,32,115,112,114,101,97,100,41,10}) ..
-    _0xe1e0d8({126,32,66,111,116,111,110,101,115,32,82,71,66,32,97,110,105,109,97,100,111,115,10}) ..
-    _0xe1e0d8({126,32,80,114,101,100,105,99,99,105,195,179,110,32,112,111,114,32,112,105,110,103,32,114,101,97,108}),
-    _0xa12647.Amarillo)
+crearTarjeta(PaginaUpdate, "🟡 Recordatorio v4.6.1",
+    "~ Shoot Murderer mejorado (5 tiros al torso)\n" ..
+    "~ Shoot Avanzado mejorado (7 tiros con spread)\n" ..
+    "~ Botones RGB animados\n" ..
+    "~ Predicción por ping real",
+    COLORES.Amarillo)
 
-_0xd5cd08(_0x6557b8, _0xe1e0d8({240,159,144,155,32,66,85,71,83,32,65,82,82,69,71,76,65,68,79,83}),
-    _0xe1e0d8({226,156,147,32,39,65,110,116,105,32,102,108,105,110,103,39,32,99,111,110,32,101,115,112,97,99,105,111,32,101,110,32,67,79,78,70,73,71,10}) ..
-    _0xe1e0d8({32,32,40,114,111,109,112,195,173,97,32,101,108,32,115,99,114,105,112,116,41,10}) ..
-    _0xe1e0d8({226,156,147,32,84,111,103,103,108,101,32,69,83,80,32,110,111,32,98,111,114,114,97,98,97,32,104,105,103,104,108,105,103,104,116,115,10}) ..
-    _0xe1e0d8({226,156,147,32,70,108,105,110,103,32,110,111,32,100,101,116,101,99,116,97,98,97,32,97,108,32,72,101,114,111,10}) ..
-    _0xe1e0d8({226,156,147,32,83,104,111,111,116,32,100,105,115,112,97,114,97,98,97,32,97,108,32,112,105,115,111,47,99,105,101,108,111,32,99,117,97,110,100,111,10}) ..
-    _0xe1e0d8({32,32,101,108,32,77,117,114,100,101,114,101,114,32,115,97,108,116,97,98,97,32,109,117,99,104,111}),
-    _0xa12647.Verde)
+crearTarjeta(PaginaUpdate, "🐛 BUGS ARREGLADOS",
+    "✓ 'Anti fling' con espacio en CONFIG\n" ..
+    "  (rompía el script)\n" ..
+    "✓ Toggle ESP no borraba highlights\n" ..
+    "✓ Fling no detectaba al Hero\n" ..
+    "✓ Shoot disparaba al piso/cielo cuando\n" ..
+    "  el Murderer saltaba mucho",
+    COLORES.Verde)
 
-_0xd5cd08(_0x6557b8, _0xe1e0d8({240,159,148,180,32,68,101,115,99,97,114,116,97,100,111}),
-    _0xe1e0d8({45,32,78,111,116,105,102,121,10}) ..
-    _0xe1e0d8({45,32,68,105,115,97,98,108,101,32,70,111,111,116,115,116,101,112,10}) ..
-    _0xe1e0d8({45,32,67,111,105,110,115,32,82,101,97,99,104,32,47,32,82,101,109,111,118,101,32,47,32,79,112,116,105,109,105,122,101,114,10}) ..
-    _0xe1e0d8({45,32,82,111,117,110,100,32,84,105,109,101,114}),
-    _0xa12647.Rojo)
+crearTarjeta(PaginaUpdate, "🔴 Descartado",
+    "- Notify\n" ..
+    "- Disable Footstep\n" ..
+    "- Coins Reach / Remove / Optimizer\n" ..
+    "- Round Timer",
+    COLORES.Rojo)
 
-_0xd5cd08(_0xebcd08, _0xe1e0d8({226,154,160,239,184,143,32,65,118,105,115,111,32,73,109,112,111,114,116,97,110,116,101}), _0xe1e0d8({69,108,32,115,99,114,105,112,116,32,101,115,116,195,161,32,101,110,32,102,97,115,101,32,100,101,32,100,101,115,97,114,114,111,108,108,111,46,10,80,117,101,100,101,32,99,111,110,116,101,110,101,114,32,98,117,103,115,32,121,32,101,114,114,111,114,101,115,46}), _0xa12647.Amarillo)
-_0xd5cd08(_0xebcd08, _0xe1e0d8({240,159,142,129,32,65,117,116,111,32,80,114,97,110,107,32,66,111,109,98}), _0xe1e0d8({80,97,114,97,32,117,115,97,114,32,101,108,32,66,111,109,98,32,74,117,109,112,58,10,49,46,32,65,99,116,105,118,195,161,32,101,108,32,116,111,103,103,108,101,32,101,110,32,66,111,109,98,32,74,117,109,112,10,50,46,32,69,113,117,105,112,195,161,32,108,97,32,70,97,107,101,66,111,109,98,10,51,46,32,84,105,114,97,108,97,32,226,134,146,32,99,97,101,32,97,98,97,106,111,32,116,117,121,111,32,43,32,115,97,108,116,195,161,115,32,115,111,108,111}), _0xa12647.Amarillo)
-_0xd5cd08(_0xebcd08, _0xe1e0d8({240,159,146,165,32,75,105,108,108,32,65,108,108}), _0xe1e0d8({83,111,108,111,32,102,117,110,99,105,111,110,97,32,115,105,32,115,111,115,32,77,117,114,100,101,114,101,114,46,10,80,117,101,100,101,32,115,101,114,32,100,101,116,101,99,116,97,100,111,32,112,111,114,32,97,110,116,105,45,99,104,101,97,116,46,10,85,115,97,108,111,32,99,111,110,32,99,117,105,100,97,100,111,46}), _0xa12647.Amarillo)
-_0xd5cd08(_0xebcd08, _0xe1e0d8({240,159,154,171,32,82,101,115,112,111,110,115,97,98,105,108,105,100,97,100}), _0xe1e0d8({69,108,32,101,113,117,105,112,111,32,100,101,32,85,122,105,118,101,114,116,32,72,117,98,32,110,111,32,115,101,32,104,97,99,101,32,114,101,115,112,111,110,115,97,98,108,101,32,115,105,32,114,101,115,117,108,116,195,161,115,32,98,97,110,101,97,100,111,32,100,101,108,32,106,117,101,103,111,46,10,85,115,97,108,111,32,98,97,106,111,32,116,117,32,112,114,111,112,105,97,32,114,101,115,112,111,110,115,97,98,105,108,105,100,97,100,46}), _0xa12647.Rojo)
+crearTarjeta(PaginaAvisos, "⚠️ Aviso Importante", "El script está en fase de desarrollo.\nPuede contener bugs y errores.", COLORES.Amarillo)
+crearTarjeta(PaginaAvisos, "🎁 Auto Prank Bomb", "Para usar el Bomb Jump:\n1. Activá el toggle en Bomb Jump\n2. Equipá la FakeBomb\n3. Tirala → cae abajo tuyo + saltás solo", COLORES.Amarillo)
+crearTarjeta(PaginaAvisos, "💥 Kill All", "Solo funciona si sos Murderer.\nPuede ser detectado por anti-cheat.\nUsalo con cuidado.", COLORES.Amarillo)
+crearTarjeta(PaginaAvisos, "🚫 Responsabilidad", "El equipo de Uzivert Hub no se hace responsable si resultás baneado del juego.\nUsalo bajo tu propia responsabilidad.", COLORES.Rojo)
 
-local _0x076abd = Instance.new(_0xe1e0d8({70,114,97,109,101}))
-_0x076abd.Size = UDim2.new(1, 0, 0, 90)
-_0x076abd.BackgroundColor3 = Color3.fromRGB(30, 15, 40)
-_0x076abd.BackgroundTransparency = 0.35
-_0x076abd.BorderSizePixel = 0
-_0x076abd.Parent = _0x0c6516
+local tarjetaCreador = Instance.new("Frame")
+tarjetaCreador.Size = UDim2.new(1, 0, 0, 90)
+tarjetaCreador.BackgroundColor3 = Color3.fromRGB(30, 15, 40)
+tarjetaCreador.BackgroundTransparency = 0.35
+tarjetaCreador.BorderSizePixel = 0
+tarjetaCreador.Parent = PaginaCreador
 
-local _0x1e35c9 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0x1e35c9.CornerRadius = UDim.new(0, 10)
-_0x1e35c9.Parent = _0x076abd
+local cTC = Instance.new("UICorner")
+cTC.CornerRadius = UDim.new(0, 10)
+cTC.Parent = tarjetaCreador
 
-local _0x5d2e10 = Instance.new(_0xe1e0d8({85,73,83,116,114,111,107,101}))
-_0x5d2e10.Color = _0xa12647.Morado2
-_0x5d2e10.Thickness = 1.5
-_0x5d2e10.Transparency = 0.3
-_0x5d2e10.Parent = _0x076abd
+local sTC = Instance.new("UIStroke")
+sTC.Color = COLORES.Morado2
+sTC.Thickness = 1.5
+sTC.Transparency = 0.3
+sTC.Parent = tarjetaCreador
 
-local _0x1cfb11 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-_0x1cfb11.Size = UDim2.new(0, 60, 0, 60)
-_0x1cfb11.Position = UDim2.new(0, 12, 0, 15)
-_0x1cfb11.BackgroundColor3 = Color3.fromRGB(50, 25, 65)
-_0x1cfb11.BackgroundTransparency = 0.3
-_0x1cfb11.Text = _0xe1e0d8({240,159,142,131})
-_0x1cfb11.TextSize = 32
-_0x1cfb11.BorderSizePixel = 0
-_0x1cfb11.Parent = _0x076abd
+local avatar = Instance.new("TextLabel")
+avatar.Size = UDim2.new(0, 60, 0, 60)
+avatar.Position = UDim2.new(0, 12, 0, 15)
+avatar.BackgroundColor3 = Color3.fromRGB(50, 25, 65)
+avatar.BackgroundTransparency = 0.3
+avatar.Text = "🎃"
+avatar.TextSize = 32
+avatar.BorderSizePixel = 0
+avatar.Parent = tarjetaCreador
 
-local _0x466996 = Instance.new(_0xe1e0d8({85,73,67,111,114,110,101,114}))
-_0x466996.CornerRadius = UDim.new(0, 10)
-_0x466996.Parent = _0x1cfb11
+local cA = Instance.new("UICorner")
+cA.CornerRadius = UDim.new(0, 10)
+cA.Parent = avatar
 
-local _0xb600ca = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-_0xb600ca.Size = UDim2.new(1, -90, 0, 20)
-_0xb600ca.Position = UDim2.new(0, 82, 0, 15)
-_0xb600ca.BackgroundTransparency = 1
-_0xb600ca.Text = _0xe1e0d8({85,90,73,86,69,82,84})
-_0xb600ca.TextColor3 = _0xa12647.Texto
-_0xb600ca.Font = Enum.Font.GothamBold
-_0xb600ca.TextSize = 15
-_0xb600ca.TextXAlignment = Enum.TextXAlignment.Left
-_0xb600ca.Parent = _0x076abd
+local nombre = Instance.new("TextLabel")
+nombre.Size = UDim2.new(1, -90, 0, 20)
+nombre.Position = UDim2.new(0, 82, 0, 15)
+nombre.BackgroundTransparency = 1
+nombre.Text = "UZIVERT"
+nombre.TextColor3 = COLORES.Texto
+nombre.Font = Enum.Font.GothamBold
+nombre.TextSize = 15
+nombre.TextXAlignment = Enum.TextXAlignment.Left
+nombre.Parent = tarjetaCreador
 
-local _0xfea164 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-_0xfea164.Size = UDim2.new(1, -90, 0, 16)
-_0xfea164.Position = UDim2.new(0, 82, 0, 36)
-_0xfea164.BackgroundTransparency = 1
-_0xfea164.Text = _0xe1e0d8({240,159,145,145,32,70,117,110,100,97,100,111,114,32,121,32,99,114,101,97,100,111,114,32,100,101,108,32,112,114,111,121,101,99,116,111})
-_0xfea164.TextColor3 = _0xa12647.Naranja2
-_0xfea164.Font = Enum.Font.GothamBold
-_0xfea164.TextSize = 11
-_0xfea164.TextXAlignment = Enum.TextXAlignment.Left
-_0xfea164.Parent = _0x076abd
+local rol = Instance.new("TextLabel")
+rol.Size = UDim2.new(1, -90, 0, 16)
+rol.Position = UDim2.new(0, 82, 0, 36)
+rol.BackgroundTransparency = 1
+rol.Text = "👑 Fundador y creador del proyecto"
+rol.TextColor3 = COLORES.Naranja2
+rol.Font = Enum.Font.GothamBold
+rol.TextSize = 11
+rol.TextXAlignment = Enum.TextXAlignment.Left
+rol.Parent = tarjetaCreador
 
-local _0x147419 = Instance.new(_0xe1e0d8({84,101,120,116,76,97,98,101,108}))
-_0x147419.Size = UDim2.new(1, -90, 0, 16)
-_0x147419.Position = UDim2.new(0, 82, 0, 55)
-_0x147419.BackgroundTransparency = 1
-_0x147419.Text = _0xe1e0d8({85,122,105,118,101,114,116,32,72,117,98,32,226,128,148,32,79,112,101,110,32,72,117,98})
-_0x147419.TextColor3 = _0xa12647.Sub
-_0x147419.Font = Enum.Font.GothamMedium
-_0x147419.TextSize = 10
-_0x147419.TextXAlignment = Enum.TextXAlignment.Left
-_0x147419.Parent = _0x076abd
+local tag = Instance.new("TextLabel")
+tag.Size = UDim2.new(1, -90, 0, 16)
+tag.Position = UDim2.new(0, 82, 0, 55)
+tag.BackgroundTransparency = 1
+tag.Text = "Uzivert Hub — Open Hub"
+tag.TextColor3 = COLORES.Sub
+tag.Font = Enum.Font.GothamMedium
+tag.TextSize = 10
+tag.TextXAlignment = Enum.TextXAlignment.Left
+tag.Parent = tarjetaCreador
 
-_0xd5cd08(_0x0c6516, _0xe1e0d8({240,159,146,172,32,77,101,110,115,97,106,101,32,100,101,108,32,67,114,101,97,100,111,114}),
-    _0xe1e0d8({194,161,72,111,108,97,33,32,83,111,121,32,85,122,105,118,101,114,116,44,32,99,114,101,97,100,111,114,32,100,101,108,32,85,122,105,118,101,114,116,32,72,117,98,46,10,10}) ..
-    _0xe1e0d8({69,115,116,101,32,112,114,111,121,101,99,116,111,32,101,109,112,101,122,195,179,32,99,111,109,111,32,97,108,103,111,32,112,101,113,117,101,195,177,111,32,112,101,114,111,32,99,111,110,32,101,115,102,117,101,114,122,111,32,121,32,100,101,100,105,99,97,99,105,195,179,110,32,108,111,32,102,117,105,109,111,115,32,109,101,106,111,114,97,110,100,111,32,118,101,114,115,105,195,179,110,32,116,114,97,115,32,118,101,114,115,105,195,179,110,46,10,10}) ..
-    _0xe1e0d8({65,99,116,117,97,108,109,101,110,116,101,32,115,111,121,32,121,111,32,115,111,108,111,32,113,117,105,101,110,32,101,115,116,195,161,32,100,101,116,114,195,161,115,32,100,101,108,32,100,101,115,97,114,114,111,108,108,111,44,32,112,101,114,111,32,97,195,186,110,32,97,115,195,173,32,110,111,32,109,101,32,100,101,116,101,110,103,111,46,10,10}) ..
-    _0xe1e0d8({71,114,97,99,105,97,115,32,112,111,114,32,117,115,97,114,32,85,122,105,118,101,114,116,32,72,117,98,44,32,115,117,32,97,112,111,121,111,32,109,101,32,109,111,116,105,118,97,32,97,32,115,101,103,117,105,114,32,109,101,106,111,114,97,110,100,111,46,32,240,159,142,131,10,10}) ..
-    _0xe1e0d8({84,105,107,116,111,107,58,32,64,85,122,105,118,101,114,116,53,53,48,32,10,10}) ..
-    _0xe1e0d8({73,110,115,116,97,103,114,97,109,58,32,64,104,120,117,110,116,101,100,108,117,118,55,55,32,10,10}) ..
-    _0xe1e0d8({83,105,103,97,110,109,101,32,106,101,106,101,32,10,10}) ..
-    _0xe1e0d8({226,128,148,32,85,122,105,118,101,114,116}),
-    _0xa12647.Morado2)
+crearTarjeta(PaginaCreador, "💬 Mensaje del Creador",
+    "¡Hola! Soy Uzivert, creador del Uzivert Hub.\n\n" ..
+    "Este proyecto empezó como algo pequeño pero con esfuerzo y dedicación lo fuimos mejorando versión tras versión.\n\n" ..
+    "Actualmente soy yo solo quien está detrás del desarrollo, pero aún así no me detengo.\n\n" ..
+    "Gracias por usar Uzivert Hub, su apoyo me motiva a seguir mejorando. 🎃\n\n" ..
+    "Tiktok: @Uzivert550 \n\n" ..
+    "Instagram: @hxuntedluv77 \n\n" ..
+    "Siganme jeje \n\n" ..
+    "— Uzivert",
+    COLORES.Morado2)
 
-print(_0xe1e0d8({240,159,142,131,32,80,97,114,116,101,32,57,47,49,48,32,99,97,114,103,97,100,97,32,45,32,73,110,102,111,32,43,32,85,112,100,97,116,101,32,43,32,65,118,105,115,111,115,32,43,32,67,114,101,97,100,111,114}))
+print("🎃 Parte 9/10 cargada - Info + Update + Avisos + Creador")
 
-if _0x31f725 then
+if ANIMS_ACTIVO then
     task.wait(0.5)
-    _0xec10c9()
-    _0xbf61cf()
+    saveOriginalAnims()
+    applyAnimations()
 end
 
-if _0x4f4b4d then
+if AUTO_PRANK_BOMB_ACTIVO then
     task.wait(0.5)
-    _0x1c4936(true)
+    ApplyAutoPrankBomb(true)
 end
 
-print(_0xe1e0d8({61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61}))
-print(_0xe1e0d8({240,159,142,131,32,85,122,105,118,101,114,116,32,72,117,98,32}) .. _0x85df87 .. _0xe1e0d8({32,99,97,114,103,97,100,111,32,240,159,142,131}))
-print(_0xe1e0d8({80,114,111,121,101,99,116,111,32,105,110,105,99,105,97,108,32,112,111,114,32,85,122,105,118,101,114,116}))
-print(_0xe1e0d8({67,111,110,32,97,121,117,100,97,32,101,120,112,108,105,99,97,116,105,118,97,32,100,101,32,78,101,120,118,121,114}))
-print(_0xe1e0d8({61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61}))
-print(_0xe1e0d8({240,159,166,135,32,77,117,114,99,105,195,169,108,97,103,111,115,32,118,111,108,97,110,100,111}))
-print(_0xe1e0d8({240,159,149,184,239,184,143,32,84,101,108,97,114,97,195,177,97,115,32,101,110,32,101,115,113,117,105,110,97,115}))
-print(_0xe1e0d8({240,159,145,187,32,78,105,101,98,108,97,32,97,110,105,109,97,100,97}))
-print(_0xe1e0d8({240,159,142,131,32,73,99,111,110,111,115,32,116,101,109,195,161,116,105,99,111,115}))
-print(_0xe1e0d8({240,159,146,128,32,67,111,108,111,114,101,115,32,100,101,32,72,97,108,108,111,119,101,101,110}))
-print(_0xe1e0d8({61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61}))
-print(_0xe1e0d8({78,117,101,118,111,32,101,110,32,118,52,46,54,58}))
-print(_0xe1e0d8({32,32,240,159,142,129,32,65,117,116,111,32,80,114,97,110,107,32,66,111,109,98,32,40,66,111,109,98,32,74,117,109,112,41}))
-print(_0xe1e0d8({32,32,240,159,141,172,32,65,117,116,111,32,71,114,97,98,32,71,117,110,32,78,101,120,117,115,32,83,116,121,108,101}))
-print(_0xe1e0d8({32,32,240,159,140,128,32,70,108,105,110,103,32,78,101,120,117,115,32,83,116,121,108,101}))
-print(_0xe1e0d8({32,32,240,159,146,165,32,75,105,108,108,32,65,108,108,32,40,77,117,114,100,101,114,101,114,32,111,110,108,121,41}))
-print(_0xe1e0d8({32,32,50,56,32,112,114,101,115,101,116,115,32,100,101,32,97,110,105,109,97,99,105,111,110,101,115}))
-print(_0xe1e0d8({61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61,61}))
+print("====================================")
+print("🎃 Uzivert Hub " .. VERSION .. " cargado 🎃")
+print("Proyecto inicial por Uzivert")
+print("Con ayuda explicativa de Nexvyr")
+print("====================================")
+print("🦇 Murciélagos volando")
+print("🕸️ Telarañas en esquinas")
+print("👻 Niebla animada")
+print("🎃 Iconos temáticos")
+print("💀 Colores de Halloween")
+print("====================================")
+print("Nuevo en v4.6:")
+print("  🎁 Auto Prank Bomb (Bomb Jump)")
+print("  🍬 Auto Grab Gun Nexus Style")
+print("  🌀 Fling Nexus Style")
+print("  💥 Kill All (Murderer only)")
+print("  28 presets de animaciones")
+print("====================================")
 
-print(_0xe1e0d8({240,159,142,131,32,80,97,114,116,101,32,49,48,47,49,48,32,99,97,114,103,97,100,97,32,45,32,83,67,82,73,80,84,32,67,79,77,80,76,69,84,79,32,118,52,46,54,46,52}))
+print("🎃 Parte 10/10 cargada - SCRIPT COMPLETO v4.6.4")
