@@ -3,7 +3,7 @@
 -- ============================================
 print("🎃 Cargando Uzivert Hub...")
 
-local BASE_URL = "https://raw.githubusercontent.com/dasilvabrayhan-blip/Uzivert-Hub-v4/main/"
+local BASE_URL = "https://raw.githubusercontent.com/dasilvabrayhan-blip/Uzivert-Hub-v4/refs/heads/main/Uzivert-Hub.lua"
 local SCRIPT_URL = BASE_URL .. "Uzivert-Hub.lua"
 local MANTENIMIENTO_URL = BASE_URL .. "mantenimiento.txt"
 local DISCORD_URL = "https://discord.gg/vHhERWcbXe"
