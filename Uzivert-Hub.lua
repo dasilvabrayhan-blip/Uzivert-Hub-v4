@@ -3422,8 +3422,31 @@ _G.UZIVERT_ABRIR_LISTA = function(framePadre, botonDropdown)
     end
 end
 
--- Restaurar estado guardado
+-- 🎯 Restaurar estados guardados
+task.wait(0.5)
+
 if CONFIG.RoundTimer then
-    task.wait(0.5)
     _G.UZIVERT_TIMER_START()
+end
+
+if CONFIG.AutoGetGun then
+    _G.UZIVERT_AUTO_GET_GUN_ON = true
+end
+
+if CONFIG.ModoNoche then
+    _G.UZIVERT_MODO_NOCHE(true)
+end
+
+if CONFIG.AutoStab then
+    _G.UZIVERT_AUTO_STAB_ON = true
+end
+
+if CONFIG.AimLock then
+    _G.AIM_ON = true
+end
+
+if CONFIG.AntiFling then
+    pcall(function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Anti-fling-73205"))()
+    end)
 end
