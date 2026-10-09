@@ -1,5 +1,5 @@
 -- ============================================
--- UZIVERT HUB | v4.6.4 HALLOWEEN 🎃
+-- UZIVERT HUB | v4.7.0 HALLOWEEN 🎃
 -- Proyecto inicial por Uzivert
 -- Con ayuda explicativa de Nexvyr
 -- ============================================
@@ -15,7 +15,7 @@ local Lighting = game:GetService("Lighting")
 local HttpService = game:GetService("HttpService")
 local Debris = game:GetService("Debris")
 
-local VERSION = "v4.6.4 HALLOWEEN"
+local VERSION = "v4.7.0 HALLOWEEN"
 
 local COLORES = {
     Fondo = Color3.fromRGB(10, 5, 15),
@@ -43,7 +43,7 @@ COLORES.TextoSecundario = COLORES.Sub
 COLORES.AzulOscuro = COLORES.Morado3
 COLORES.AzulOscuroBorde = COLORES.Naranja1
 
-local ARCHIVO_CONFIG = "UzivertHub_Config_v464.json"
+local ARCHIVO_CONFIG = "UzivertHub_Config_v470.json"
 
 local CONFIG_DEFAULT = {
     ESP = true, GunESP = false, AntiFling = false, Noclip = false,
@@ -71,8 +71,13 @@ local CONFIG_DEFAULT = {
     KillAllActivo = false,
     KnifeAura = false,
     KnifeAuraDist = 15,
+    AimLock = false,
+    AutoStab = false,
+    AutoStabRango = 6,
+    ModoNoche = false,
+    AutoGetGun = false,
+    RoundTimer = false,
 }
-
 
 local CONFIG = {}
 
@@ -83,12 +88,12 @@ local function cargarConfig()
         end)
         if ok and data then
             CONFIG = data
-            print("🎃 Configuración v4.6.4 cargada")
+            print("🎃 Configuración v4.7.0 cargada")
             return true
         end
     end
     CONFIG = CONFIG_DEFAULT
-    print("📝 Configuración v4.6.4 por defecto")
+    print("📝 Configuración v4.7.0 por defecto")
     return false
 end
 
@@ -131,7 +136,7 @@ local AUTO_PRANK_BOMB_ACTIVO = CONFIG.AutoPrankBomb or false
 local prankBombConnection = nil
 local KILL_ALL_ACTIVO = CONFIG.KillAllActivo or false
 
-print("🎃 Parte 1/10 cargada - v4.6.4 HALLOWEEN")
+print("🎃 Parte 1/10 cargada - v4.7.0 HALLOWEEN")
 
 -- 🎃 Ping a la API (cada 2 min)
 task.spawn(function()
@@ -885,6 +890,131 @@ local function detectarRol(jugador)
     return "Lobby"
 end
 
+_G.AIM_ON = false
+
+_G.UZIVERT_aim_loop = function()
+    if not _G.AIM_ON then return end
+    local char = LocalPlayer.Character
+    if not char then return end
+    local gun = char:FindFirstChild("Gun") or char:FindFirstChild("Revolver")
+    if not gun then return end
+    local murderer = detectarMurderer()
+    if not murderer or not murderer.Character then return end
+    local targetHrp = murderer.Character:FindFirstChild("HumanoidRootPart")
+    if not targetHrp then return end
+    local cam = workspace.CurrentCamera
+    if not cam then return end
+    cam.CFrame = CFrame.new(cam.CFrame.Position, targetHrp.Position)
+end
+
+_G.UZIVERT_aim_con = RunService.RenderStepped:Connect(function()
+    if not _G.AIM_ON then return end
+    _G.UZIVERT_aim_loop()
+end)
+
+-- ============================================
+-- 🗡️ AUTO STAB
+-- ============================================
+_G.UZIVERT_AUTO_STAB_ON = false
+_G.UZIVERT_STAB_RANGO = 6
+
+_G.UZIVERT_AUTO_STAB_LOOP = RunService.Heartbeat:Connect(function()
+    if not _G.UZIVERT_AUTO_STAB_ON then return end
+    if not soyMurderer() then return end
+    
+    local char = LocalPlayer.Character
+    if not char then return end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+    
+    local knife = char:FindFirstChild("Knife") or (LocalPlayer:FindFirstChild("Backpack") and LocalPlayer.Backpack:FindFirstChild("Knife"))
+    if not knife then return end
+    
+    for _, enemy in ipairs(Players:GetPlayers()) do
+        if enemy ~= LocalPlayer and enemy.Character then
+            local eRoot = enemy.Character:FindFirstChild("HumanoidRootPart")
+            local eHum = enemy.Character:FindFirstChildOfClass("Humanoid")
+            if eRoot and eHum and eHum.Health > 0 then
+                local dist = (hrp.Position - eRoot.Position).Magnitude
+                if dist <= _G.UZIVERT_STAB_RANGO then
+                    if knife.Parent == LocalPlayer.Backpack then
+                        local hum = char:FindFirstChildOfClass("Humanoid")
+                        if hum then hum:EquipTool(knife) end
+                        task.wait(0.05)
+                    end
+                    pcall(function()
+                        knife.Events.KnifeStabbed:FireServer()
+                        knife.Events.HandleTouched:FireServer(eRoot)
+                    end)
+                end
+            end
+        end
+    end
+end)
+
+-- ============================================
+-- 🌙 MODO NOCHE
+-- ============================================
+_G.UZIVERT_MODO_NOCHE_ON = false
+_G.UZIVERT_NOCHE_SNAP = {}
+
+_G.UZIVERT_MODO_NOCHE = function(state)
+    _G.UZIVERT_MODO_NOCHE_ON = state
+    
+    if state then
+        _G.UZIVERT_NOCHE_SNAP.GlobalShadows = Lighting.GlobalShadows
+        _G.UZIVERT_NOCHE_SNAP.Brightness = Lighting.Brightness
+        _G.UZIVERT_NOCHE_SNAP.ClockTime = Lighting.ClockTime
+        _G.UZIVERT_NOCHE_SNAP.OutdoorAmbient = Lighting.OutdoorAmbient
+        _G.UZIVERT_NOCHE_SNAP.Ambient = Lighting.Ambient
+        _G.UZIVERT_NOCHE_SNAP.FogColor = Lighting.FogColor
+        _G.UZIVERT_NOCHE_SNAP.FogEnd = Lighting.FogEnd
+        _G.UZIVERT_NOCHE_SNAP.ColorShift_Top = Lighting.ColorShift_Top
+        _G.UZIVERT_NOCHE_SNAP.ColorShift_Bottom = Lighting.ColorShift_Bottom
+        
+        Lighting.GlobalShadows = true
+        Lighting.Brightness = 2
+        Lighting.ClockTime = 0
+        Lighting.OutdoorAmbient = Color3.fromRGB(40, 50, 70)
+        Lighting.Ambient = Color3.fromRGB(20, 25, 35)
+        Lighting.FogColor = Color3.fromRGB(15, 20, 30)
+        Lighting.FogEnd = 2000
+        Lighting.ColorShift_Top = Color3.fromRGB(160, 180, 240)
+        Lighting.ColorShift_Bottom = Color3.fromRGB(25, 40, 60)
+        
+        local bloom = Instance.new("BloomEffect")
+        bloom.Name = "UzivertNocheBloom"
+        bloom.Intensity = 0.6
+        bloom.Size = 40
+        bloom.Threshold = 0.2
+        bloom.Parent = Lighting
+        
+        local blur = Instance.new("BlurEffect")
+        blur.Name = "UzivertNocheBlur"
+        blur.Size = 2
+        blur.Parent = Lighting
+        
+        print("🌙 Modo Noche ON")
+    else
+        if _G.UZIVERT_NOCHE_SNAP.GlobalShadows ~= nil then Lighting.GlobalShadows = _G.UZIVERT_NOCHE_SNAP.GlobalShadows end
+        if _G.UZIVERT_NOCHE_SNAP.Brightness then Lighting.Brightness = _G.UZIVERT_NOCHE_SNAP.Brightness end
+        if _G.UZIVERT_NOCHE_SNAP.ClockTime then Lighting.ClockTime = _G.UZIVERT_NOCHE_SNAP.ClockTime end
+        if _G.UZIVERT_NOCHE_SNAP.OutdoorAmbient then Lighting.OutdoorAmbient = _G.UZIVERT_NOCHE_SNAP.OutdoorAmbient end
+        if _G.UZIVERT_NOCHE_SNAP.Ambient then Lighting.Ambient = _G.UZIVERT_NOCHE_SNAP.Ambient end
+        if _G.UZIVERT_NOCHE_SNAP.FogColor then Lighting.FogColor = _G.UZIVERT_NOCHE_SNAP.FogColor end
+        if _G.UZIVERT_NOCHE_SNAP.FogEnd then Lighting.FogEnd = _G.UZIVERT_NOCHE_SNAP.FogEnd end
+        if _G.UZIVERT_NOCHE_SNAP.ColorShift_Top then Lighting.ColorShift_Top = _G.UZIVERT_NOCHE_SNAP.ColorShift_Top end
+        if _G.UZIVERT_NOCHE_SNAP.ColorShift_Bottom then Lighting.ColorShift_Bottom = _G.UZIVERT_NOCHE_SNAP.ColorShift_Bottom end
+        
+        local bloom = Lighting:FindFirstChild("UzivertNocheBloom")
+        if bloom then bloom:Destroy() end
+        local blur = Lighting:FindFirstChild("UzivertNocheBlur")
+        if blur then blur:Destroy() end
+        
+        print("☀️ Modo Noche OFF")
+    end
+end
+
 local function soyMurderer()
     local char = LocalPlayer.Character
     if not char then return false end
@@ -905,6 +1035,47 @@ local function tengoGun()
     local backpack = LocalPlayer:FindFirstChild("Backpack")
     if backpack and (backpack:FindFirstChild("Gun") or backpack:FindFirstChild("Revolver")) then return true end
     return false
+end
+
+-- ============================================
+-- 💀 MATAR SHERIFF
+-- ============================================
+_G.UZIVERT_MATAR_SHERIFF = function()
+    if not soyMurderer() then
+        print("❌ No sos Murderer")
+        return
+    end
+    
+    local char = LocalPlayer.Character
+    if not char then return end
+    
+    local knife = char:FindFirstChild("Knife") 
+                or (LocalPlayer:FindFirstChild("Backpack") and LocalPlayer.Backpack:FindFirstChild("Knife"))
+    if not knife then
+        print("❌ No tenés Knife")
+        return
+    end
+    
+    local sheriff = detectarSheriff()
+    if not sheriff or not sheriff.Character then
+        print("❌ No hay Sheriff")
+        return
+    end
+    
+    if knife.Parent == LocalPlayer.Backpack then
+        local hum = char:FindFirstChildOfClass("Humanoid")
+        if hum then hum:EquipTool(knife) end
+        task.wait(0.1)
+    end
+    
+    local sRoot = sheriff.Character:FindFirstChild("HumanoidRootPart")
+    if sRoot then
+        pcall(function()
+            knife.Events.KnifeStabbed:FireServer()
+            knife.Events.HandleTouched:FireServer(sRoot)
+        end)
+        print("💀 Sheriff muerto: " .. sheriff.Name)
+    end
 end
 
 local function enLobby()
@@ -984,6 +1155,36 @@ local function findDroppedGun()
     end
     return nil
 end
+
+-- ============================================
+-- 🔫 AUTO GET GUN
+-- ============================================
+_G.UZIVERT_AUTO_GET_GUN_ON = false
+
+_G.UZIVERT_AGARRAR_GUN = function()
+    pcall(function()
+        local char = LocalPlayer.Character
+        if not char then return end
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
+        
+        if soyMurderer() then return end
+        if tengoGun() then return end
+        
+        local gunDrop = findDroppedGun()
+        if not gunDrop then return end
+        
+        firetouchinterest(hrp, gunDrop, 0)
+        task.wait()
+        firetouchinterest(hrp, gunDrop, 1)
+    end)
+end
+
+_G.UZIVERT_AUTO_GET_GUN_LOOP = RunService.Heartbeat:Connect(function()
+    if not _G.UZIVERT_AUTO_GET_GUN_ON then return end
+    _G.UZIVERT_AGARRAR_GUN()
+    task.wait(0.5)
+end)
 
 local function aplicarGunESP(obj, esTirada)
     if not obj then return end
@@ -1653,52 +1854,60 @@ end
 
 local function dispararV1()
     local gun = obtenerGun()
-    if not gun then print("❌ No tienes Gun") return end
+    if not gun then print("❌ No tenés Gun") return end
+    
     local murderer = detectarMurderer()
     if not murderer or not murderer.Character then print("❌ No hay Murderer") return end
+    
     local char = LocalPlayer.Character
     local hrp = char and char:FindFirstChild("HumanoidRootPart")
-    local targetHrp = murderer.Character:FindFirstChild("HumanoidRootPart")
-    local hum = murderer.Character:FindFirstChildOfClass("Humanoid")
+    local targetChar = murderer.Character
+    local targetHrp = targetChar:FindFirstChild("HumanoidRootPart")
+    local hum = targetChar:FindFirstChildOfClass("Humanoid")
     if not hrp or not targetHrp or not hum then return end
+    
     local dist = (hrp.Position - targetHrp.Position).Magnitude
     if dist > SHOOT_RANGO_MAX or dist < SHOOT_RANGO_MIN then return end
+    
     local shoot = obtenerShootRemote(gun)
     if not shoot then print("❌ No hay remote Shoot") return end
-    local origin = obtenerOriginArma(gun)
     
-    local basePos = targetHrp.Position + Vector3.new(0, SHOOT_ALTURA, 0)
+    local origin = obtenerOriginArma(gun)
     
     local ping = 0
     pcall(function()
         ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
     end)
     
-    local tiempoVuelo = dist / 1000
+    local VELOCIDAD_BALA = 600
+    local tiempoVuelo = dist / VELOCIDAD_BALA
     local tiempoTotal = tiempoVuelo + ping
+    
+    local torsoPart = targetChar:FindFirstChild("UpperTorso") 
+                   or targetChar:FindFirstChild("Torso") 
+                   or targetHrp
+    local basePos = torsoPart.Position
     
     local vel = targetHrp.AssemblyLinearVelocity
     local velMag = vel.Magnitude
     
-    local predFactorDinamico = 1.5
+    local factor = 1.5
     if velMag > 30 then
-        predFactorDinamico = 1.5 * 1.2
+        factor = factor * 1.2
     elseif velMag < 5 then
-        predFactorDinamico = 1.5 * 0.8
+        factor = factor * 0.8
     end
     
     if velMag > 1 then
-        basePos = basePos + (vel * tiempoTotal * predFactorDinamico)
+        local prediccion = vel * tiempoTotal * factor
+        basePos = basePos + Vector3.new(prediccion.X, 0, prediccion.Z)
     elseif hum.MoveDirection.Magnitude > 0 then
-        basePos = basePos + (hum.MoveDirection * hum.WalkSpeed * tiempoTotal * predFactorDinamico)
+        local prediccion = hum.MoveDirection * hum.WalkSpeed * tiempoTotal * factor
+        basePos = basePos + Vector3.new(prediccion.X, 0, prediccion.Z)
     end
     
-    local estado = hum:GetState()
-    if estado == Enum.HumanoidStateType.Jumping or estado == Enum.HumanoidStateType.Freefall then
-        local g = workspace.Gravity
-        local yExtra = vel.Y * tiempoTotal + 0.5 * (-g) * tiempoTotal * tiempoTotal
-        basePos = basePos + Vector3.new(0, yExtra, 0)
-    end
+    if basePos.X ~= basePos.X then return end
+    if (basePos - torsoPart.Position).Magnitude > 100 then return end
     
     local puntos = {
         basePos,
@@ -1709,13 +1918,19 @@ local function dispararV1()
     }
     
     for i, punto in ipairs(puntos) do
-        pcall(function() shoot:FireServer(origin, CFrame.new(punto)) end)
+        pcall(function()
+            shoot:FireServer(origin, CFrame.new(punto))
+        end)
         task.wait(0.025)
     end
     
-    print("🎯 Shoot → " .. murderer.Name .. " | 5 tiros | Dist: " .. math.floor(dist))
+    print(string.format("🎯 Shoot → %s | Dist: %d | Vel: %d | Torso: %s",
+        murderer.Name,
+        math.floor(dist),
+        math.floor(velMag),
+        torsoPart.Name
+    ))
 end
-
 
 local function dispararV2()
     local gun = obtenerGun()
@@ -2246,6 +2461,12 @@ crearToggle(PaginaAim, "🎯 Mostrar boton SHOOT MURDERER", CONFIG.ShootMostrar 
     if BotonShoot then BotonShoot.Visible = e end
 end)
 
+crearToggle(PaginaAim, "🎯 Aim Lock (Shiftlock + Gun)", CONFIG.AimLock or false, function(e)
+    _G.AIM_ON = e
+    CONFIG.AimLock = e
+    guardarConfig()
+end)
+
 crearToggle(PaginaAim, "👻 Mostrar boton SHOOT AVANZADO", CONFIG.ShootAvzMostrar or false, function(e)
     CONFIG.ShootAvzMostrar = e
     guardarConfig()
@@ -2257,24 +2478,6 @@ crearToggle(PaginaAim, "💥 Activar KILL ALL (Murderer)", CONFIG.KillAllActivo 
     CONFIG.KillAllActivo = e
     guardarConfig()
     print(e and "💥 Kill All ACTIVADO" or "❌ Kill All DESACTIVADO")
-end)
-
-crearSlider(PaginaAim, "Altura Base x100", 100, 250, math.floor(SHOOT_ALTURA * 100), function(v)
-    SHOOT_ALTURA = v / 100
-    CONFIG.ShootAltura = SHOOT_ALTURA
-    guardarConfig()
-end)
-
-crearSlider(PaginaAim, "Prediccion Velocidad x100", 5, 25, math.floor(SHOOT_PRED_VEL * 100), function(v)
-    SHOOT_PRED_VEL = v / 100
-    CONFIG.ShootPredVel = SHOOT_PRED_VEL
-    guardarConfig()
-end)
-
-crearSlider(PaginaAim, "Prediccion MoveDir x100", 5, 25, math.floor(SHOOT_PRED_MOV * 100), function(v)
-    SHOOT_PRED_MOV = v / 100
-    CONFIG.ShootPredMov = SHOOT_PRED_MOV
-    guardarConfig()
 end)
 
 crearSlider(PaginaAim, "Burst Tiros", 1, 10, SHOOT_BURST, function(v)
@@ -2301,6 +2504,10 @@ crearSlider(PaginaAim, "Rango Minimo", 0, 50, SHOOT_RANGO_MIN, function(v)
     guardarConfig()
 end)
 
+crearBoton(PaginaAim, "Matar Sheriff", function()
+    _G.UZIVERT_MATAR_SHERIFF()
+end, COLORES.Naranja1)
+
 crearToggle(PaginaAura, "💀 Anti-Murderer", CONFIG.AutoGrabAntiM, function(e)
     GRAB_ANTI_MURDERER = e
     CONFIG.AutoGrabAntiM = e
@@ -2320,6 +2527,17 @@ crearToggle(PaginaAura, "🍬 Mostrar boton GRAB GUN", CONFIG.AutoGrabMostrar ~=
     CONFIG.AutoGrabMostrar = e
     guardarConfig()
 end)
+
+crearToggle(PaginaAura, "🔫 Auto Get Gun (lejano)", CONFIG.AutoGetGun or false, function(e)
+    _G.UZIVERT_AUTO_GET_GUN_ON = e
+    CONFIG.AutoGetGun = e
+    guardarConfig()
+end)
+
+crearBoton(PaginaAura, "Agarrar Gun Ahora", function()
+    _G.UZIVERT_AGARRAR_GUN()
+end, COLORES.Naranja1)
+
 crearToggle(PaginaAura, "🔪 Knife Aura", CONFIG.KnifeAura or false, function(e)
     CONFIG.KnifeAura = e
     guardarConfig()
@@ -2327,6 +2545,18 @@ crearToggle(PaginaAura, "🔪 Knife Aura", CONFIG.KnifeAura or false, function(e
 end)
 crearSlider(PaginaAura, "Distancia Knife Aura", 5, 50, CONFIG.KnifeAuraDist or 15, function(v)
     CONFIG.KnifeAuraDist = v
+    guardarConfig()
+end)
+
+crearToggle(PaginaAura, "🗡️ Auto Stab (Murderer)", CONFIG.AutoStab or false, function(e)
+    _G.UZIVERT_AUTO_STAB_ON = e
+    CONFIG.AutoStab = e
+    guardarConfig()
+end)
+
+crearSlider(PaginaAura, "Rango Auto Stab", 5, 25, CONFIG.AutoStabRango or 6, function(v)
+    _G.UZIVERT_STAB_RANGO = v
+    CONFIG.AutoStabRango = v
     guardarConfig()
 end)
 
@@ -2378,6 +2608,79 @@ end, Color3.fromRGB(200, 50, 200))
 crearBoton(PaginaFling, "⛔ DETENER FLING", function()
     StopFling()
 end, Color3.fromRGB(100, 80, 180))
+
+_G.UZIVERT_FLING_DD_BTN = Instance.new("TextButton")
+_G.UZIVERT_FLING_DD_BTN.Size = UDim2.new(1, 0, 0, 42)
+_G.UZIVERT_FLING_DD_BTN.BackgroundColor3 = COLORES.Morado1
+_G.UZIVERT_FLING_DD_BTN.BackgroundTransparency = 0.5
+_G.UZIVERT_FLING_DD_BTN.Text = "Elegir jugador ▼"
+_G.UZIVERT_FLING_DD_BTN.TextColor3 = COLORES.Texto
+_G.UZIVERT_FLING_DD_BTN.Font = Enum.Font.GothamBold
+_G.UZIVERT_FLING_DD_BTN.TextSize = 12
+_G.UZIVERT_FLING_DD_BTN.BorderSizePixel = 0
+_G.UZIVERT_FLING_DD_BTN.ClipsDescendants = true
+_G.UZIVERT_FLING_DD_BTN.ZIndex = 2
+_G.UZIVERT_FLING_DD_BTN.Parent = PaginaFling
+
+_G.UZIVERT_FLING_DD_C = Instance.new("UICorner")
+_G.UZIVERT_FLING_DD_C.CornerRadius = UDim.new(0, 9)
+_G.UZIVERT_FLING_DD_C.Parent = _G.UZIVERT_FLING_DD_BTN
+
+_G.UZIVERT_FLING_DD_S = Instance.new("UIStroke")
+_G.UZIVERT_FLING_DD_S.Color = COLORES.Naranja1
+_G.UZIVERT_FLING_DD_S.Thickness = 1.5
+_G.UZIVERT_FLING_DD_S.Transparency = 0.2
+_G.UZIVERT_FLING_DD_S.Parent = _G.UZIVERT_FLING_DD_BTN
+
+_G.UZIVERT_FLING_DD_LIST = Instance.new("Frame")
+_G.UZIVERT_FLING_DD_LIST.Size = UDim2.new(1, 0, 0, 0)
+_G.UZIVERT_FLING_DD_LIST.AutomaticSize = Enum.AutomaticSize.Y
+_G.UZIVERT_FLING_DD_LIST.BackgroundColor3 = COLORES.Morado3
+_G.UZIVERT_FLING_DD_LIST.BackgroundTransparency = 0.3
+_G.UZIVERT_FLING_DD_LIST.BorderSizePixel = 0
+_G.UZIVERT_FLING_DD_LIST.Visible = false
+_G.UZIVERT_FLING_DD_LIST.ZIndex = 2
+_G.UZIVERT_FLING_DD_LIST.Parent = PaginaFling
+
+_G.UZIVERT_FLING_DD_LC = Instance.new("UICorner")
+_G.UZIVERT_FLING_DD_LC.CornerRadius = UDim.new(0, 9)
+_G.UZIVERT_FLING_DD_LC.Parent = _G.UZIVERT_FLING_DD_LIST
+
+_G.UZIVERT_FLING_DD_LS = Instance.new("UIStroke")
+_G.UZIVERT_FLING_DD_LS.Color = COLORES.Naranja1
+_G.UZIVERT_FLING_DD_LS.Thickness = 1.5
+_G.UZIVERT_FLING_DD_LS.Transparency = 0.2
+_G.UZIVERT_FLING_DD_LS.Parent = _G.UZIVERT_FLING_DD_LIST
+
+_G.UZIVERT_FLING_DD_LL = Instance.new("UIListLayout")
+_G.UZIVERT_FLING_DD_LL.Padding = UDim.new(0, 3)
+_G.UZIVERT_FLING_DD_LL.Parent = _G.UZIVERT_FLING_DD_LIST
+
+_G.UZIVERT_FLING_DD_LP = Instance.new("UIPadding")
+_G.UZIVERT_FLING_DD_LP.PaddingTop = UDim.new(0, 5)
+_G.UZIVERT_FLING_DD_LP.PaddingBottom = UDim.new(0, 5)
+_G.UZIVERT_FLING_DD_LP.PaddingLeft = UDim.new(0, 5)
+_G.UZIVERT_FLING_DD_LP.PaddingRight = UDim.new(0, 5)
+_G.UZIVERT_FLING_DD_LP.Parent = _G.UZIVERT_FLING_DD_LIST
+
+_G.UZIVERT_FLING_DD_BTN.MouseButton1Click:Connect(function()
+    _G.UZIVERT_FLING_DD_LIST.Visible = not _G.UZIVERT_FLING_DD_LIST.Visible
+    if _G.UZIVERT_FLING_DD_LIST.Visible then
+        _G.UZIVERT_ABRIR_LISTA(_G.UZIVERT_FLING_DD_LIST, _G.UZIVERT_FLING_DD_BTN)
+    end
+end)
+
+crearBoton(PaginaFling, "🌀 FLINGEAR TARGET", function()
+    if not _G.UZIVERT_FLING_TARGET then
+        print("❌ Elegí un jugador primero")
+        return
+    end
+    if _G.UZIVERT_FLING_IN_PROGRESS then
+        print("⚠️ Fling en progreso")
+        return
+    end
+    task.spawn(_G.UZIVERT_FLING_FUNC, _G.UZIVERT_FLING_TARGET)
+end, Color3.fromRGB(200, 60, 100))
 
 print("🎃 Parte 7/10 cargada - Páginas Aim/Aura/Player/Fling")
 
@@ -2623,6 +2926,23 @@ crearToggle(PaginaRend, "⚡ FPS Boost", CONFIG.FPSBoost, function(e)
     end
 end)
 
+crearToggle(PaginaRend, "🌙 Modo Noche", CONFIG.ModoNoche or false, function(e)
+    _G.UZIVERT_MODO_NOCHE(e)
+    CONFIG.ModoNoche = e
+    guardarConfig()
+end)
+
+crearToggle(PaginaRend, "⏰ Round Timer", CONFIG.RoundTimer or false, function(e)
+    _G.UZIVERT_TIMER_ON = e
+    CONFIG.RoundTimer = e
+    guardarConfig()
+    if e then
+        _G.UZIVERT_TIMER_START()
+    else
+        _G.UZIVERT_TIMER_STOP()
+    end
+end)
+
 print("🎃 Parte 8/10 cargada - Selector + Anims + Bomb Jump + Rend")
 
 local infoTitulo = Instance.new("TextLabel")
@@ -2650,10 +2970,10 @@ sIT.Parent = infoTitulo
 
 local mantInfo = Instance.new("TextLabel")
 mantInfo.Size = UDim2.new(1, 0, 0, 70)
-mantInfo.BackgroundColor3 = Color3.fromRGB(60, 30, 20)
+mantInfo.BackgroundColor3 = Color3.fromRGB(20, 50, 20)
 mantInfo.BackgroundTransparency = 0.4
-mantInfo.Text = "🧟 EN MANTENIMIENTO\n\n- SILENT AIM (Aim real)\n- BOMB JUMP (fix mobile)"
-mantInfo.TextColor3 = COLORES.Mantenimiento
+mantInfo.Text = "✅ TODO OPERATIVO\n\nTodos los sistemas funcionando.\nReportá cualquier bug en Discord."
+mantInfo.TextColor3 = COLORES.Verde
 mantInfo.Font = Enum.Font.GothamMedium
 mantInfo.TextSize = 10
 mantInfo.TextWrapped = true
@@ -2668,7 +2988,7 @@ cMI.CornerRadius = UDim.new(0, 9)
 cMI.Parent = mantInfo
 
 local sMI = Instance.new("UIStroke")
-sMI.Color = COLORES.Mantenimiento
+sMI.Color = COLORES.Verde
 sMI.Thickness = 1
 sMI.Transparency = 0.4
 sMI.Parent = mantInfo
@@ -2750,7 +3070,17 @@ local function crearTarjeta(padre, titulo, contenido, colorBorde)
     return frame
 end
 
-crearTarjeta(PaginaUpdate, "📅 Última actualización: 07/10/2026", "Uzivert Hub " .. VERSION, COLORES.Naranja2)
+crearTarjeta(PaginaUpdate, "📅 Última actualización: 09/10/2026", "Uzivert Hub v4.7.0", COLORES.Naranja2)
+
+crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.0",
+    "+ 🎯 Aim Lock (Shiftlock + Gun)\n" ..
+    "+ 🗡️ Auto Stab (con slider de rango)\n" ..
+    "+ 💀 Matar Sheriff\n" ..
+    "+ 🌙 Modo Noche\n" ..
+    "+ 🔫 Auto Get Gun (lejano)\n" ..
+    "+ ⏰ Round Timer\n" ..
+    "+ 🌀 Fling Dropdown",
+    COLORES.Verde)
 
 crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.6.4",
     "+ 🎯 Shoot Murderer más preciso\n" ..
@@ -2758,45 +3088,46 @@ crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.6.4",
     "+ ⚡ Sistema de roles optimizado",
     COLORES.Verde)
 
-crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.6.3",
-    "+ 🌐 Redes sociales del creador\n" ..
-    "+ 🎨 Tarjeta de redes en Creador\n" ..
-    "+ ⚡ Optimización general",
-    COLORES.Verde)
-
-crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.6.2",
-    "+ 🔪 Knife Aura (mata en rango)\n" ..
-    "+ 🎚️ Slider de distancia Knife Aura\n" ..
-    "+ 🎯 Detección de roles ANTES del contador\n" ..
-    "+ 🎨 ESP adaptado a RoleCache",
-    COLORES.Verde)
-
-crearTarjeta(PaginaUpdate, "🟡 Recordatorio v4.6.1",
-    "~ Shoot Murderer mejorado (5 tiros al torso)\n" ..
-    "~ Shoot Avanzado mejorado (7 tiros con spread)\n" ..
-    "~ Botones RGB animados\n" ..
-    "~ Predicción por ping real",
-    COLORES.Amarillo)
-
 crearTarjeta(PaginaUpdate, "🐛 BUGS ARREGLADOS",
-    "✓ 'Anti fling' con espacio en CONFIG\n" ..
-    "  (rompía el script)\n" ..
+    "✓ Auto Get Gun (orden de funciones)\n" ..
+    "✓ Matar Sheriff (orden de funciones)\n" ..
+    "✓ Límite de locales (usar _G.)\n" ..
     "✓ Toggle ESP no borraba highlights\n" ..
     "✓ Fling no detectaba al Hero\n" ..
-    "✓ Shoot disparaba al piso/cielo cuando\n" ..
-    "  el Murderer saltaba mucho",
+    "✓ Shoot disparaba al piso/cielo\n" ..
+    "  cuando el Murderer saltaba",
     COLORES.Verde)
 
 crearTarjeta(PaginaUpdate, "🔴 Descartado",
-    "- Notify\n" ..
-    "- Disable Footstep\n" ..
+    "- Silent Aim (cámara trabada)\n" ..
+    "- Knife Throwing TP / Knife Homing\n" ..
+    "- ESP Skeleton (no se ve)\n" ..
+    "- Skin Copier (ApplyDescription)\n" ..
+    "- Anti Silent Aim (muy riesgoso)\n" ..
+    "- Notify / Disable Footstep\n" ..
     "- Coins Reach / Remove / Optimizer\n" ..
-    "- Round Timer",
+    "- Round Timer del Nexvyr\n" ..
+    "- Herobrine",
     COLORES.Rojo)
 
 crearTarjeta(PaginaAvisos, "⚠️ Aviso Importante", "El script está en fase de desarrollo.\nPuede contener bugs y errores.", COLORES.Amarillo)
-crearTarjeta(PaginaAvisos, "🎁 Auto Prank Bomb", "Para usar el Bomb Jump:\n1. Activá el toggle en Bomb Jump\n2. Equipá la FakeBomb\n3. Tirala → cae abajo tuyo + saltás solo", COLORES.Amarillo)
-crearTarjeta(PaginaAvisos, "💥 Kill All", "Solo funciona si sos Murderer.\nPuede ser detectado por anti-cheat.\nUsalo con cuidado.", COLORES.Amarillo)
+crearTarjeta(PaginaAvisos, "🚨 Aviso Oficial — Incidente 08/10/2026",
+    "El día 08/10/2026 el código de Uzivert Hub fue robado por terceros.\n\n" ..
+    "⚠️ Aclaración importante:\n" ..
+    "El Uzivert Hub ORIGINAL y OFICIAL es únicamente el que distribuimos desde nuestro Discord y Gist.\n\n" ..
+    "Si ves el hub publicado en otro lado (canales de YouTube, otros servidores, otros usuarios) → NO es oficial.\n\n" ..
+    "Las copias pueden:\n" ..
+    "• Tener virus\n" ..
+    "• Estar modificadas para robar tu cuenta\n" ..
+    "• Estar desactualizadas sin soporte\n\n" ..
+    "🔒 Protegete:\n" ..
+    "• Descargá solo desde nuestro Discord oficial\n" ..
+    "• No ejecutes versiones de otros usuarios\n" ..
+    "• Reportá copias al staff\n\n" ..
+    "💬 Discord oficial: discord.gg/vHhERWcbXe\n\n" ..
+    "Gracias por el apoyo. Seguimos mejorando el hub para ustedes. 🎃\n\n" ..
+    "— Uzivert",
+    COLORES.Rojo)
 crearTarjeta(PaginaAvisos, "🚫 Responsabilidad", "El equipo de Uzivert Hub no se hace responsable si resultás baneado del juego.\nUsalo bajo tu propia responsabilidad.", COLORES.Rojo)
 
 local tarjetaCreador = Instance.new("Frame")
@@ -2864,13 +3195,17 @@ tag.TextXAlignment = Enum.TextXAlignment.Left
 tag.Parent = tarjetaCreador
 
 crearTarjeta(PaginaCreador, "💬 Mensaje del Creador",
-    "¡Hola! Soy Uzivert, creador del Uzivert Hub.\n\n" ..
-    "Este proyecto empezó como algo pequeño pero con esfuerzo y dedicación lo fuimos mejorando versión tras versión.\n\n" ..
-    "Actualmente soy yo solo quien está detrás del desarrollo, pero aún así no me detengo.\n\n" ..
-    "Gracias por usar Uzivert Hub, su apoyo me motiva a seguir mejorando. 🎃\n\n" ..
-    "Tiktok: @Uzivert550 \n\n" ..
-    "Instagram: @hxuntedluv77 \n\n" ..
-    "Siganme jeje \n\n" ..
+    "¡Hola! Soy Uzivert, fundador y creador del Uzivert Hub. 🎃\n\n" ..
+    "Este proyecto nació como una idea pequeña, sin muchas pretensiones. Pero con esfuerzo, dedicación y muchas horas de prueba y error, lo fuimos mejorando versión tras versión hasta convertirlo en lo que es hoy.\n\n" ..
+    "Agradezco enormemente a Nexvyr, mi colaborador, quien me ayudó con ideas, código y sobre todo con la motivación para no rendirme cuando las cosas se complicaban.\n\n" ..
+    "También a todos los que probaron el hub, reportaron bugs y me bancaron en el proceso. Sin ustedes, esto no tendría sentido.\n\n" ..
+    "Seguimos actualizando, mejorando y agregando funciones nuevas. El objetivo es que tengas la mejor experiencia posible en MM2.\n\n" ..
+    "Si te gusta el hub → compartilo con tus amigos. Si encontrás bugs → reportalos en el Discord. Si tenés ideas → decímelas.\n\n" ..
+    "📱 Redes sociales:\n" ..
+    "• TikTok: @Uzivert550\n" ..
+    "• Instagram: @hxuntedluv77\n\n" ..
+    "💬 Discord oficial: discord.gg/vHhERWcbXe\n\n" ..
+    "¡Gracias por usar Uzivert Hub! 🎃\n\n" ..
     "— Uzivert",
     COLORES.Morado2)
 
@@ -2907,3 +3242,188 @@ print("  28 presets de animaciones")
 print("====================================")
 
 print("🎃 Parte 10/10 cargada - SCRIPT COMPLETO v4.6.4")
+
+-- ============================================
+-- ⏰ ROUND TIMER
+-- ============================================
+_G.UZIVERT_TIMER_ON = false
+_G.UZIVERT_TIMER_LABEL = nil
+_G.UZIVERT_TIMER_CON = nil
+
+_G.UZIVERT_TIMER_START = function()
+    if _G.UZIVERT_TIMER_LABEL then
+        _G.UZIVERT_TIMER_LABEL:Destroy()
+        _G.UZIVERT_TIMER_LABEL = nil
+    end
+    
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(0, 150, 0, 40)
+    label.Position = UDim2.new(0.5, -75, 0.05, 0)
+    label.BackgroundTransparency = 1
+    label.Text = "..."
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.TextStrokeTransparency = 0
+    label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    label.Font = Enum.Font.GothamBlack
+    label.TextSize = 24
+    label.BorderSizePixel = 0
+    label.Active = false
+    label.Draggable = false
+    label.Parent = ScreenGui
+    _G.UZIVERT_TIMER_LABEL = label
+    
+    _G.UZIVERT_TIMER_CON = RunService.Heartbeat:Connect(function()
+        local roundTimerPart = workspace:FindFirstChild("RoundTimerPart", true)
+        if roundTimerPart then
+            local surface = roundTimerPart:FindFirstChild("SurfaceGui", true)
+            if surface then
+                local timerText = surface:FindFirstChild("Timer", true)
+                if timerText and timerText:IsA("TextLabel") then
+                    label.Text = timerText.Text
+                end
+            end
+        end
+    end)
+end
+
+_G.UZIVERT_TIMER_STOP = function()
+    if _G.UZIVERT_TIMER_LABEL then
+        _G.UZIVERT_TIMER_LABEL:Destroy()
+        _G.UZIVERT_TIMER_LABEL = nil
+    end
+    if _G.UZIVERT_TIMER_CON then
+        _G.UZIVERT_TIMER_CON:Disconnect()
+        _G.UZIVERT_TIMER_CON = nil
+    end
+end
+
+-- ============================================
+-- 🌀 FLING DROPDOWN
+-- ============================================
+_G.UZIVERT_FLING_TARGET = nil
+_G.UZIVERT_FLING_IN_PROGRESS = false
+
+_G.UZIVERT_FLING_FUNC = function(targetPlayer)
+    if _G.UZIVERT_FLING_IN_PROGRESS then return end
+    _G.UZIVERT_FLING_IN_PROGRESS = true
+    
+    local myChar = LocalPlayer.Character
+    if not myChar then _G.UZIVERT_FLING_IN_PROGRESS = false return end
+    local myHum = myChar:FindFirstChildOfClass("Humanoid")
+    local myRoot = myChar:FindFirstChild("HumanoidRootPart")
+    if not (myHum and myRoot) then _G.UZIVERT_FLING_IN_PROGRESS = false return end
+
+    local targetChar = targetPlayer.Character
+    if not targetChar then _G.UZIVERT_FLING_IN_PROGRESS = false return end
+    local targetHum = targetChar:FindFirstChildOfClass("Humanoid")
+    local targetRoot = targetHum and targetHum.RootPart
+    local targetHead = targetChar:FindFirstChild("Head")
+    local accessory = targetChar:FindFirstChildOfClass("Accessory")
+    local handle = accessory and accessory:FindFirstChild("Handle")
+
+    local oldPos = myRoot.CFrame
+
+    repeat
+        task.wait()
+        workspace.CurrentCamera.CameraSubject = targetHead or handle or targetHum
+    until workspace.CurrentCamera.CameraSubject == (targetHead or handle or targetHum)
+
+    local function forcePosition(basePart, offset, angle)
+        local targetCF = CFrame.new(basePart.Position) * offset * angle
+        myRoot.CFrame = targetCF
+        myChar:SetPrimaryPartCFrame(targetCF)
+        myRoot.Velocity = Vector3.new(9e7, 9e8, 9e7)
+        myRoot.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+    end
+
+    local function flingBasePart(basePart)
+        local start = tick()
+        local ang = 0
+        repeat
+            if myRoot and targetHum then
+                ang = ang + 100
+                for _, off in ipairs{
+                    CFrame.new(0, 1.5, 0),
+                    CFrame.new(0, -1.5, 0),
+                    CFrame.new(2.25, 1.5, -2.25),
+                    CFrame.new(-2.25, -1.5, 2.25)
+                } do
+                    forcePosition(basePart, off + targetHum.MoveDirection, CFrame.Angles(math.rad(ang), 0, 0))
+                    task.wait()
+                end
+            end
+        until basePart.Velocity.Magnitude > 500 or tick() - start > 2.5
+    end
+
+    local bv = Instance.new("BodyVelocity")
+    bv.Name = "UzivertFlingDropdown"
+    bv.Velocity = Vector3.new(9e8, 9e8, 9e8)
+    bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+    bv.Parent = myRoot
+    myHum:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+
+    local targetPart = targetRoot or targetHead or handle
+    if targetPart then flingBasePart(targetPart) end
+
+    bv:Destroy()
+    myHum:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+
+    repeat
+        task.wait()
+        workspace.CurrentCamera.CameraSubject = myHum
+    until workspace.CurrentCamera.CameraSubject == myHum
+
+    repeat
+        local cf = oldPos * CFrame.new(0, 0.5, 0)
+        myRoot.CFrame = cf
+        myChar:SetPrimaryPartCFrame(cf)
+        myHum:ChangeState(Enum.HumanoidStateType.GettingUp)
+        for _, part in ipairs(myChar:GetChildren()) do
+            if part:IsA("BasePart") then
+                part.Velocity = Vector3.zero
+                part.RotVelocity = Vector3.zero
+            end
+        end
+        task.wait()
+    until (myRoot.Position - oldPos.p).Magnitude < 25
+
+    _G.UZIVERT_FLING_IN_PROGRESS = false
+end
+
+_G.UZIVERT_ABRIR_LISTA = function(framePadre, botonDropdown)
+    -- Limpiar botones viejos
+    for _, child in ipairs(framePadre:GetChildren()) do
+        if child:IsA("TextButton") then child:Destroy() end
+    end
+    
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer then
+            local btn = Instance.new("TextButton")
+            btn.Size = UDim2.new(1, 0, 0, 30)
+            btn.BackgroundColor3 = COLORES.Morado3
+            btn.BackgroundTransparency = 0.4
+            btn.Text = plr.Name
+            btn.TextColor3 = COLORES.Texto
+            btn.Font = Enum.Font.GothamBold
+            btn.TextSize = 11
+            btn.BorderSizePixel = 0
+            btn.Parent = framePadre
+            
+            local cb = Instance.new("UICorner")
+            cb.CornerRadius = UDim.new(0, 5)
+            cb.Parent = btn
+            
+            btn.MouseButton1Click:Connect(function()
+                _G.UZIVERT_FLING_TARGET = plr
+                botonDropdown.Text = "Fling: " .. plr.Name
+                framePadre.Visible = false
+            end)
+        end
+    end
+end
+
+-- Restaurar estado guardado
+if CONFIG.RoundTimer then
+    task.wait(0.5)
+    _G.UZIVERT_TIMER_START()
+end
