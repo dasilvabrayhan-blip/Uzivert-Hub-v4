@@ -1,5 +1,5 @@
 -- ============================================
--- UZIVERT HUB | v4.7.0 HALLOWEEN 🎃
+-- UZIVERT HUB | v4.7.1 HALLOWEEN 🎃
 -- Proyecto inicial por Uzivert
 -- Con ayuda explicativa de Nexvyr
 -- ============================================
@@ -15,7 +15,7 @@ local Lighting = game:GetService("Lighting")
 local HttpService = game:GetService("HttpService")
 local Debris = game:GetService("Debris")
 
-local VERSION = "v4.7.0 HALLOWEEN"
+local VERSION = "v4.7.1 HALLOWEEN"
 
 local COLORES = {
     Fondo = Color3.fromRGB(10, 5, 15),
@@ -77,6 +77,18 @@ local CONFIG_DEFAULT = {
     ModoNoche = false,
     AutoGetGun = false,
     RoundTimer = false,
+    MusicVolumen = 0.5,
+    CancionesCustom = {},
+    GunAura = false,
+    GunAuraRango = 25,
+    SilentAim = false,
+    SilentOffX = -0.04,
+    SilentOffY = -0.06,
+    SilentOffZ = 0,
+    SilentPredH = 1.49,
+    SilentPredV = 1.44,
+    SilentMaxSim = 0.050,
+    SilentPredPing = 0.085,
 }
 
 local CONFIG = {}
@@ -88,12 +100,12 @@ local function cargarConfig()
         end)
         if ok and data then
             CONFIG = data
-            print("🎃 Configuración v4.7.0 cargada")
+            print("🎃 Configuración v4.7.1 cargada")
             return true
         end
     end
     CONFIG = CONFIG_DEFAULT
-    print("📝 Configuración v4.7.0 por defecto")
+    print("📝 Configuración v4.7.1 por defecto")
     return false
 end
 
@@ -116,9 +128,6 @@ local SPINBOT_ACTIVO = CONFIG.Spinbot
 local MONITOR_ACTIVO = CONFIG.Monitor
 local FPS_BOOST_ACTIVO = CONFIG.FPSBoost
 local ANIMS_ACTIVO = CONFIG.Anims
-local GRAB_ANTI_MURDERER = CONFIG.AutoGrabAntiM
-local GRAB_MURDERER_RANGO = CONFIG.AutoGrabDistMurder
-local GRAB_REGRESAR = CONFIG.AutoGrabRegresar
 local SHOOT_MOSTRAR = CONFIG.ShootMostrar ~= false
 local SHOOT_AVZ_MOSTRAR = CONFIG.ShootAvzMostrar or false
 local SHOOT_ALTURA = CONFIG.ShootAltura or 1.55
@@ -136,7 +145,7 @@ local AUTO_PRANK_BOMB_ACTIVO = CONFIG.AutoPrankBomb or false
 local prankBombConnection = nil
 local KILL_ALL_ACTIVO = CONFIG.KillAllActivo or false
 
-print("🎃 Parte 1/10 cargada - v4.7.0 HALLOWEEN")
+print("🎃 Parte 1/10 cargada - v4.7.1 HALLOWEEN")
 
 -- 🎃 Ping a la API (cada 2 min)
 task.spawn(function()
@@ -792,6 +801,38 @@ local function crearSlider(padre, texto, min, max, inicial, callback)
     end)
 end
 
+_G.crearSeccion = function(padre, texto)
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, 0, 0, 30)
+    frame.BackgroundColor3 = COLORES.Naranja1
+    frame.BackgroundTransparency = 0.7
+    frame.BorderSizePixel = 0
+    frame.ZIndex = 2
+    frame.Parent = padre
+
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 7)
+    c.Parent = frame
+
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = COLORES.Naranja1
+    stroke.Thickness = 1.5
+    stroke.Transparency = 0.2
+    stroke.Parent = frame
+
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, -20, 1, 0)
+    label.Position = UDim2.new(0, 10, 0, 0)
+    label.BackgroundTransparency = 1
+    label.Text = texto
+    label.TextColor3 = COLORES.Naranja2
+    label.Font = Enum.Font.GothamBlack
+    label.TextSize = 12
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.ZIndex = 3
+    label.Parent = frame
+end
+
 print("🎃 Parte 2/10 cargada - Halloween UI")
 
 local PaginaVisual = crearPagina("Visual", "🎃", 1)
@@ -920,14 +961,14 @@ _G.UZIVERT_STAB_RANGO = 6
 
 _G.UZIVERT_AUTO_STAB_LOOP = RunService.Heartbeat:Connect(function()
     if not _G.UZIVERT_AUTO_STAB_ON then return end
-    if not soyMurderer() then return end
     
     local char = LocalPlayer.Character
     if not char then return end
     local hrp = char:FindFirstChild("HumanoidRootPart")
     if not hrp then return end
     
-    local knife = char:FindFirstChild("Knife") or (LocalPlayer:FindFirstChild("Backpack") and LocalPlayer.Backpack:FindFirstChild("Knife"))
+    local knife = char:FindFirstChild("Knife") 
+                or (LocalPlayer:FindFirstChild("Backpack") and LocalPlayer.Backpack:FindFirstChild("Knife"))
     if not knife then return end
     
     for _, enemy in ipairs(Players:GetPlayers()) do
@@ -942,10 +983,12 @@ _G.UZIVERT_AUTO_STAB_LOOP = RunService.Heartbeat:Connect(function()
                         if hum then hum:EquipTool(knife) end
                         task.wait(0.05)
                     end
-                    pcall(function()
-                        knife.Events.KnifeStabbed:FireServer()
-                        knife.Events.HandleTouched:FireServer(eRoot)
-                    end)
+                    if knife.Events and knife.Events:FindFirstChild("KnifeStabbed") and knife.Events:FindFirstChild("HandleTouched") then
+                        pcall(function()
+                            knife.Events.KnifeStabbed:FireServer()
+                            knife.Events.HandleTouched:FireServer(eRoot)
+                        end)
+                    end
                 end
             end
         end
@@ -1157,7 +1200,7 @@ local function findDroppedGun()
 end
 
 -- ============================================
--- 🔫 AUTO GET GUN
+-- 🔫 AUTO GET GUN (OPTIMIZADO)
 -- ============================================
 _G.UZIVERT_AUTO_GET_GUN_ON = false
 
@@ -1171,7 +1214,21 @@ _G.UZIVERT_AGARRAR_GUN = function()
         if soyMurderer() then return end
         if tengoGun() then return end
         
-        local gunDrop = findDroppedGun()
+        -- Buscar GunDrop MÁS LIVIANO
+        local gunDrop = workspace:FindFirstChild("GunDrop")
+        if not gunDrop then
+            for _, obj in ipairs(workspace:GetChildren()) do
+                if obj.Name == "GunDrop" then
+                    gunDrop = obj
+                    break
+                end
+                local hijo = obj:FindFirstChild("GunDrop")
+                if hijo then
+                    gunDrop = hijo
+                    break
+                end
+            end
+        end
         if not gunDrop then return end
         
         firetouchinterest(hrp, gunDrop, 0)
@@ -1180,11 +1237,208 @@ _G.UZIVERT_AGARRAR_GUN = function()
     end)
 end
 
-_G.UZIVERT_AUTO_GET_GUN_LOOP = RunService.Heartbeat:Connect(function()
-    if not _G.UZIVERT_AUTO_GET_GUN_ON then return end
-    _G.UZIVERT_AGARRAR_GUN()
-    task.wait(0.5)
+_G.UZIVERT_AUTO_GET_GUN_LOOP = task.spawn(function()
+    while task.wait(1) do  -- ⬅️ antes 0.5, ahora 1 (menos lag)
+        if not _G.UZIVERT_AUTO_GET_GUN_ON then continue end
+        _G.UZIVERT_AGARRAR_GUN()
+    end
 end)
+
+-- ============================================
+-- 🎯 GUN AURA (OPTIMIZADO)
+-- ============================================
+_G.UZIVERT_GUN_AURA_ON = false
+_G.UZIVERT_GUN_AURA_RANGO = CONFIG.GunAuraRango or 25
+
+_G.UZIVERT_GUN_AURA_LOOP = task.spawn(function()
+    while task.wait(0.5) do  -- ⬅️ antes 0.2, ahora 0.5 (menos lag)
+        if not _G.UZIVERT_GUN_AURA_ON then continue end
+        if soyMurderer() or tengoGun() then continue end
+        
+        local char = LocalPlayer.Character
+        if not char then continue end
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+        if not hrp then continue end
+        
+        -- Buscar GunDrop MÁS LIVIANO (sin GetDescendants)
+        local gunDrop = workspace:FindFirstChild("GunDrop")
+        if not gunDrop then
+            -- Fallback: buscar en el primer nivel
+            for _, obj in ipairs(workspace:GetChildren()) do
+                if obj.Name == "GunDrop" then
+                    gunDrop = obj
+                    break
+                end
+                local hijo = obj:FindFirstChild("GunDrop")
+                if hijo then
+                    gunDrop = hijo
+                    break
+                end
+            end
+        end
+        if not gunDrop then continue end
+        
+        local posGun
+        if gunDrop:IsA("BasePart") then
+            posGun = gunDrop.Position
+        elseif gunDrop:FindFirstChild("Handle") then
+            posGun = gunDrop.Handle.Position
+        end
+        if not posGun then continue end
+        
+        local dist = (hrp.Position - posGun).Magnitude
+        if dist <= _G.UZIVERT_GUN_AURA_RANGO then
+            pcall(function()
+                if gunDrop:IsA("BasePart") then
+                    gunDrop.CanCollide = false
+                    gunDrop.CFrame = hrp.CFrame
+                    gunDrop.Velocity = Vector3.new(0, 0, 0)
+                    gunDrop.RotVelocity = Vector3.new(0, 0, 0)
+                elseif gunDrop:FindFirstChild("Handle") then
+                    gunDrop.Handle.CanCollide = false
+                    gunDrop.Handle.CFrame = hrp.CFrame
+                    gunDrop.Handle.Velocity = Vector3.new(0, 0, 0)
+                    gunDrop.Handle.RotVelocity = Vector3.new(0, 0, 0)
+                end
+            end)
+        end
+    end
+end)
+
+-- ============================================
+-- 🎯 SILENT AIM (Offsets Overdrive)
+-- ============================================
+_G.UZIVERT_SILENT_AIM_ON = false
+_G.UZIVERT_SILENT_REMOTE = nil
+_G.UZIVERT_SILENT_TARGET = nil
+_G.UZIVERT_SILENT_ORIGIN = nil
+_G.UZIVERT_SILENT_ULTIMA_ACT = 0
+
+-- Offsets (con valores guardados o Overdrive por defecto)
+_G.UZIVERT_SILENT_OFF_X = CONFIG.SilentOffX or -0.04
+_G.UZIVERT_SILENT_OFF_Y = CONFIG.SilentOffY or -0.06
+_G.UZIVERT_SILENT_OFF_Z = CONFIG.SilentOffZ or 0
+_G.UZIVERT_SILENT_PRED_H = CONFIG.SilentPredH or 1.49
+_G.UZIVERT_SILENT_PRED_V = CONFIG.SilentPredV or 1.44
+_G.UZIVERT_SILENT_MAX_SIM = CONFIG.SilentMaxSim or 0.050
+_G.UZIVERT_SILENT_INTERVAL = 0.063
+_G.UZIVERT_SILENT_PRED_PING = CONFIG.SilentPredPing or 0.085
+
+_G.UZIVERT_GET_SHOOT_REMOTE = function()
+    local char = LocalPlayer.Character
+    if not char then return nil end
+    local gun = char:FindFirstChild("Gun") or char:FindFirstChild("Revolver")
+    if gun then
+        local shoot = gun:FindFirstChild("Shoot", true)
+        if shoot then return shoot end
+    end
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    if backpack then
+        gun = backpack:FindFirstChild("Gun") or backpack:FindFirstChild("Revolver")
+        if gun then
+            local shoot = gun:FindFirstChild("Shoot", true)
+            if shoot then return shoot end
+        end
+    end
+    return nil
+end
+
+_G.UZIVERT_GET_MURDERER = function()
+    for plrName, role in pairs(RoleCache) do
+        if role == "Murderer" then
+            return Players:FindFirstChild(plrName)
+        end
+    end
+    return nil
+end
+
+_G.UZIVERT_SILENT_GET_PING = function()
+    local ping = 0
+    pcall(function()
+        ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
+    end)
+    if ping > 1 then ping = 1 end
+    return ping
+end
+
+_G.UZIVERT_SILENT_LOOP = RunService.RenderStepped:Connect(function()
+    local ahora = tick()
+    if ahora - _G.UZIVERT_SILENT_ULTIMA_ACT < _G.UZIVERT_SILENT_INTERVAL then return end
+    _G.UZIVERT_SILENT_ULTIMA_ACT = ahora
+    
+    _G.UZIVERT_SILENT_REMOTE = _G.UZIVERT_GET_SHOOT_REMOTE()
+    
+    local char = LocalPlayer.Character
+    if char then
+        local miHrp = char:FindFirstChild("HumanoidRootPart")
+        if miHrp then _G.UZIVERT_SILENT_ORIGIN = miHrp.CFrame end
+    end
+    
+    local murderer = _G.UZIVERT_GET_MURDERER()
+    if murderer and murderer.Character then
+        local targetChar = murderer.Character
+        local targetHum = targetChar:FindFirstChildOfClass("Humanoid")
+        local targetHead = targetChar:FindFirstChild("Head")
+        local targetHrp = targetChar:FindFirstChild("HumanoidRootPart")
+        
+        if targetHead and targetHum and targetHrp then
+            local pingReal = _G.UZIVERT_SILENT_GET_PING()
+            local pingTotal = pingReal + _G.UZIVERT_SILENT_PRED_PING
+            if pingTotal > _G.UZIVERT_SILENT_MAX_SIM then pingTotal = _G.UZIVERT_SILENT_MAX_SIM end
+            
+            local vel = targetHrp.AssemblyLinearVelocity
+            local velHoriz = Vector3.new(vel.X, 0, vel.Z)
+            local velY = vel.Y
+            
+            local predHoriz = velHoriz * pingTotal * _G.UZIVERT_SILENT_PRED_H
+            local predVert = 0
+            local estado = targetHum:GetState()
+            if estado == Enum.HumanoidStateType.Jumping or estado == Enum.HumanoidStateType.Freefall then
+                local g = workspace.Gravity
+                predVert = velY * pingTotal * _G.UZIVERT_SILENT_PRED_V + 0.5 * (-g) * pingTotal * pingTotal
+            end
+            
+            local alturaPersonaje = targetHead.Position.Y - targetHrp.Position.Y + 1
+            local offsetX = _G.UZIVERT_SILENT_OFF_X * alturaPersonaje
+            local offsetY = _G.UZIVERT_SILENT_OFF_Y * alturaPersonaje
+            local offsetZ = _G.UZIVERT_SILENT_OFF_Z * alturaPersonaje
+            
+            local posFinal = targetHead.Position + predHoriz + Vector3.new(0, predVert, 0) + Vector3.new(offsetX, offsetY, offsetZ)
+            _G.UZIVERT_SILENT_TARGET = CFrame.new(posFinal)
+        end
+    else
+        _G.UZIVERT_SILENT_TARGET = nil
+    end
+end)
+
+if not _G.UZIVERT_SILENT_HOOK_OK then
+    _G.UZIVERT_SILENT_HOOK_OK = true
+    local ok = pcall(function()
+        local mt = getrawmetatable(game)
+        local old = mt.__namecall
+        setreadonly(mt, false)
+        
+        mt.__namecall = newcclosure(function(self, ...)
+            local method = getnamecallmethod()
+            if _G.UZIVERT_SILENT_AIM_ON 
+                and _G.UZIVERT_SILENT_REMOTE 
+                and self == _G.UZIVERT_SILENT_REMOTE 
+                and method == "FireServer" 
+            then
+                if not _G.UZIVERT_SILENT_TARGET or not _G.UZIVERT_SILENT_ORIGIN then 
+                    return old(self, ...) 
+                end
+                local args = {...}
+                args[1] = _G.UZIVERT_SILENT_ORIGIN
+                args[2] = _G.UZIVERT_SILENT_TARGET
+                return old(self, unpack(args))
+            end
+            return old(self, ...)
+        end)
+        setreadonly(mt, true)
+    end)
+    if ok then print("🎯 [SILENT AIM] Hook activado") end
+end
 
 local function aplicarGunESP(obj, esTirada)
     if not obj then return end
@@ -1474,14 +1728,6 @@ task.spawn(function()
     end
 end)
 
-local function hayMurdererCerca(posicion, rango)
-    local murderer = detectarMurderer()
-    if not murderer or not murderer.Character then return false end
-    local hrp = murderer.Character:FindFirstChild("HumanoidRootPart")
-    if not hrp then return false end
-    return (hrp.Position - posicion).Magnitude <= rango
-end
-
 local function buscarGunDrop()
     local gun = workspace:FindFirstChild("GunDrop", true)
     if gun then return gun end
@@ -1512,11 +1758,6 @@ local function grabarGun()
     else
         local ok, pivot = pcall(function() return gunDrop:GetPivot().Position end)
         if ok and pivot then posGun = pivot else return end
-    end
-
-    if GRAB_ANTI_MURDERER and hayMurdererCerca(posGun, GRAB_MURDERER_RANGO) then
-        print("⚠️ Murderer cerca")
-        return
     end
 
     pcall(function()
@@ -1654,12 +1895,7 @@ task.spawn(function()
         local lobby = enLobby()
         if gunDrop and not tieneGun and not soyMurder and not lobby then
             if not BotonGrab.Visible then BotonGrab.Visible = true end
-            local posGun = gunDrop:IsA("BasePart") and gunDrop.Position or gunDrop:GetPivot().Position
-            if GRAB_ANTI_MURDERER and hayMurdererCerca(posGun, GRAB_MURDERER_RANGO) then
-                BotonGrab.Text = "⚠️ MURDERER CERCA"
-            else
-                BotonGrab.Text = "🍬 GRAB GUN"
-            end
+            BotonGrab.Text = "🍬 GRAB GUN"
         else
             if BotonGrab.Visible then BotonGrab.Visible = false end
         end
@@ -2448,6 +2684,37 @@ sLey.Thickness = 1
 sLey.Transparency = 0.4
 sLey.Parent = leyenda
 
+-- 🎯 SECCIÓN 1: SHOOT MURDERER
+_G.secAim1 = Instance.new("Frame")
+_G.secAim1.Size = UDim2.new(1, 0, 0, 30)
+_G.secAim1.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secAim1.BackgroundTransparency = 0.3
+_G.secAim1.BorderSizePixel = 0
+_G.secAim1.ZIndex = 2
+_G.secAim1.Parent = PaginaAim
+
+_G.cSecAim1 = Instance.new("UICorner")
+_G.cSecAim1.CornerRadius = UDim.new(0, 7)
+_G.cSecAim1.Parent = _G.secAim1
+
+_G.sSecAim1 = Instance.new("UIStroke")
+_G.sSecAim1.Color = COLORES.Morado3
+_G.sSecAim1.Thickness = 1.5
+_G.sSecAim1.Transparency = 0.2
+_G.sSecAim1.Parent = _G.secAim1
+
+_G.lblSecAim1 = Instance.new("TextLabel")
+_G.lblSecAim1.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecAim1.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecAim1.BackgroundTransparency = 1
+_G.lblSecAim1.Text = "🎯 SHOOT MURDERER"
+_G.lblSecAim1.TextColor3 = COLORES.Naranja2
+_G.lblSecAim1.Font = Enum.Font.GothamBlack
+_G.lblSecAim1.TextSize = 12
+_G.lblSecAim1.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecAim1.ZIndex = 3
+_G.lblSecAim1.Parent = _G.secAim1
+
 crearToggle(PaginaAim, "👻 Auto Shoot (logica avanzada)", CONFIG.ShootAuto, function(e)
     SHOOT_AUTO = e
     CONFIG.ShootAuto = e
@@ -2461,17 +2728,179 @@ crearToggle(PaginaAim, "🎯 Mostrar boton SHOOT MURDERER", CONFIG.ShootMostrar 
     if BotonShoot then BotonShoot.Visible = e end
 end)
 
+crearToggle(PaginaAim, "👻 Mostrar boton SHOOT AVANZADO", CONFIG.ShootAvzMostrar or false, function(e)
+    CONFIG.ShootAvzMostrar = e
+    guardarConfig()
+    if BotonAvz then BotonAvz.Visible = e end
+end)
+
+-- 🎯 SECCIÓN 2: AIM LOCK
+_G.secAim2 = Instance.new("Frame")
+_G.secAim2.Size = UDim2.new(1, 0, 0, 30)
+_G.secAim2.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secAim2.BackgroundTransparency = 0.3
+_G.secAim2.BorderSizePixel = 0
+_G.secAim2.ZIndex = 2
+_G.secAim2.Parent = PaginaAim
+
+_G.cSecAim2 = Instance.new("UICorner")
+_G.cSecAim2.CornerRadius = UDim.new(0, 7)
+_G.cSecAim2.Parent = _G.secAim2
+
+_G.sSecAim2 = Instance.new("UIStroke")
+_G.sSecAim2.Color = COLORES.Morado3
+_G.sSecAim2.Thickness = 1.5
+_G.sSecAim2.Transparency = 0.2
+_G.sSecAim2.Parent = _G.secAim2
+
+_G.lblSecAim2 = Instance.new("TextLabel")
+_G.lblSecAim2.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecAim2.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecAim2.BackgroundTransparency = 1
+_G.lblSecAim2.Text = "🎯 AIM LOCK"
+_G.lblSecAim2.TextColor3 = COLORES.Naranja2
+_G.lblSecAim2.Font = Enum.Font.GothamBlack
+_G.lblSecAim2.TextSize = 12
+_G.lblSecAim2.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecAim2.ZIndex = 3
+_G.lblSecAim2.Parent = _G.secAim2
+
 crearToggle(PaginaAim, "🎯 Aim Lock (Shiftlock + Gun)", CONFIG.AimLock or false, function(e)
     _G.AIM_ON = e
     CONFIG.AimLock = e
     guardarConfig()
 end)
 
-crearToggle(PaginaAim, "👻 Mostrar boton SHOOT AVANZADO", CONFIG.ShootAvzMostrar or false, function(e)
-    CONFIG.ShootAvzMostrar = e
+crearToggle(PaginaAim, "🎯 Silent Aim", CONFIG.SilentAim or false, function(e)
+    _G.UZIVERT_SILENT_AIM_ON = e
+    CONFIG.SilentAim = e
     guardarConfig()
-    if BotonAvz then BotonAvz.Visible = e end
 end)
+
+-- ⚙️ Sub-sección de config
+_G.secSilent = Instance.new("Frame")
+_G.secSilent.Size = UDim2.new(1, 0, 0, 30)
+_G.secSilent.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secSilent.BackgroundTransparency = 0.3
+_G.secSilent.BorderSizePixel = 0
+_G.secSilent.ZIndex = 2
+_G.secSilent.Parent = PaginaAim
+
+_G.cSecSilent = Instance.new("UICorner")
+_G.cSecSilent.CornerRadius = UDim.new(0, 7)
+_G.cSecSilent.Parent = _G.secSilent
+
+_G.sSecSilent = Instance.new("UIStroke")
+_G.sSecSilent.Color = COLORES.Morado3
+_G.sSecSilent.Thickness = 1.5
+_G.sSecSilent.Transparency = 0.2
+_G.sSecSilent.Parent = _G.secSilent
+
+_G.lblSecSilent = Instance.new("TextLabel")
+_G.lblSecSilent.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecSilent.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecSilent.BackgroundTransparency = 1
+_G.lblSecSilent.Text = "⚙️ SILENT AIM CONFIG"
+_G.lblSecSilent.TextColor3 = COLORES.Naranja2
+_G.lblSecSilent.Font = Enum.Font.GothamBlack
+_G.lblSecSilent.TextSize = 12
+_G.lblSecSilent.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecSilent.ZIndex = 3
+_G.lblSecSilent.Parent = _G.secSilent
+
+crearSlider(PaginaAim, "X Offset (%)", -50, 50, math.floor((CONFIG.SilentOffX or -0.04) * 100), function(v)
+    _G.UZIVERT_SILENT_OFF_X = v / 100
+    CONFIG.SilentOffX = v / 100
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "Y Offset (%)", -50, 50, math.floor((CONFIG.SilentOffY or -0.06) * 100), function(v)
+    _G.UZIVERT_SILENT_OFF_Y = v / 100
+    CONFIG.SilentOffY = v / 100
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "Z Offset (%)", -50, 50, math.floor((CONFIG.SilentOffZ or 0) * 100), function(v)
+    _G.UZIVERT_SILENT_OFF_Z = v / 100
+    CONFIG.SilentOffZ = v / 100
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "Pred Horizontal (%)", 0, 300, math.floor((CONFIG.SilentPredH or 1.49) * 100), function(v)
+    _G.UZIVERT_SILENT_PRED_H = v / 100
+    CONFIG.SilentPredH = v / 100
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "Pred Vertical (%)", 0, 300, math.floor((CONFIG.SilentPredV or 1.44) * 100), function(v)
+    _G.UZIVERT_SILENT_PRED_V = v / 100
+    CONFIG.SilentPredV = v / 100
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "Max Sim Time (ms)", 10, 200, math.floor((CONFIG.SilentMaxSim or 0.050) * 1000), function(v)
+    _G.UZIVERT_SILENT_MAX_SIM = v / 1000
+    CONFIG.SilentMaxSim = v / 1000
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "Pred Ping (ms)", 0, 200, math.floor((CONFIG.SilentPredPing or 0.085) * 1000), function(v)
+    _G.UZIVERT_SILENT_PRED_PING = v / 1000
+    CONFIG.SilentPredPing = v / 1000
+    guardarConfig()
+end)
+
+crearBoton(PaginaAim, "🔄 Resetear a Overdrive", function()
+    _G.UZIVERT_SILENT_OFF_X = -0.04
+    _G.UZIVERT_SILENT_OFF_Y = -0.06
+    _G.UZIVERT_SILENT_OFF_Z = 0
+    _G.UZIVERT_SILENT_PRED_H = 1.49
+    _G.UZIVERT_SILENT_PRED_V = 1.44
+    _G.UZIVERT_SILENT_MAX_SIM = 0.050
+    _G.UZIVERT_SILENT_PRED_PING = 0.085
+    
+    CONFIG.SilentOffX = -0.04
+    CONFIG.SilentOffY = -0.06
+    CONFIG.SilentOffZ = 0
+    CONFIG.SilentPredH = 1.49
+    CONFIG.SilentPredV = 1.44
+    CONFIG.SilentMaxSim = 0.050
+    CONFIG.SilentPredPing = 0.085
+    guardarConfig()
+    
+    print("🔄 Silent Aim reseteado a valores Overdrive")
+end, COLORES.Naranja1)
+
+-- 🎯 SECCIÓN 3: MATAR
+_G.secAim3 = Instance.new("Frame")
+_G.secAim3.Size = UDim2.new(1, 0, 0, 30)
+_G.secAim3.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secAim3.BackgroundTransparency = 0.3
+_G.secAim3.BorderSizePixel = 0
+_G.secAim3.ZIndex = 2
+_G.secAim3.Parent = PaginaAim
+
+_G.cSecAim3 = Instance.new("UICorner")
+_G.cSecAim3.CornerRadius = UDim.new(0, 7)
+_G.cSecAim3.Parent = _G.secAim3
+
+_G.sSecAim3 = Instance.new("UIStroke")
+_G.sSecAim3.Color = COLORES.Morado3
+_G.sSecAim3.Thickness = 1.5
+_G.sSecAim3.Transparency = 0.2
+_G.sSecAim3.Parent = _G.secAim3
+
+_G.lblSecAim3 = Instance.new("TextLabel")
+_G.lblSecAim3.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecAim3.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecAim3.BackgroundTransparency = 1
+_G.lblSecAim3.Text = "🔪 MATAR"
+_G.lblSecAim3.TextColor3 = COLORES.Naranja2
+_G.lblSecAim3.Font = Enum.Font.GothamBlack
+_G.lblSecAim3.TextSize = 12
+_G.lblSecAim3.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecAim3.ZIndex = 3
+_G.lblSecAim3.Parent = _G.secAim3
 
 crearToggle(PaginaAim, "💥 Activar KILL ALL (Murderer)", CONFIG.KillAllActivo or false, function(e)
     KILL_ALL_ACTIVO = e
@@ -2479,6 +2908,41 @@ crearToggle(PaginaAim, "💥 Activar KILL ALL (Murderer)", CONFIG.KillAllActivo 
     guardarConfig()
     print(e and "💥 Kill All ACTIVADO" or "❌ Kill All DESACTIVADO")
 end)
+
+crearBoton(PaginaAim, "Matar Sheriff", function()
+    _G.UZIVERT_MATAR_SHERIFF()
+end, COLORES.Naranja1)
+
+-- 🎯 SECCIÓN 4: AJUSTES DE SHOOT
+_G.secAim4 = Instance.new("Frame")
+_G.secAim4.Size = UDim2.new(1, 0, 0, 30)
+_G.secAim4.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secAim4.BackgroundTransparency = 0.3
+_G.secAim4.BorderSizePixel = 0
+_G.secAim4.ZIndex = 2
+_G.secAim4.Parent = PaginaAim
+
+_G.cSecAim4 = Instance.new("UICorner")
+_G.cSecAim4.CornerRadius = UDim.new(0, 7)
+_G.cSecAim4.Parent = _G.secAim4
+
+_G.sSecAim4 = Instance.new("UIStroke")
+_G.sSecAim4.Color = COLORES.Morado3
+_G.sSecAim4.Thickness = 1.5
+_G.sSecAim4.Transparency = 0.2
+_G.sSecAim4.Parent = _G.secAim4
+
+_G.lblSecAim4 = Instance.new("TextLabel")
+_G.lblSecAim4.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecAim4.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecAim4.BackgroundTransparency = 1
+_G.lblSecAim4.Text = "⚙️ AJUSTES DE SHOOT"
+_G.lblSecAim4.TextColor3 = COLORES.Naranja2
+_G.lblSecAim4.Font = Enum.Font.GothamBlack
+_G.lblSecAim4.TextSize = 12
+_G.lblSecAim4.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecAim4.ZIndex = 3
+_G.lblSecAim4.Parent = _G.secAim4
 
 crearSlider(PaginaAim, "Burst Tiros", 1, 10, SHOOT_BURST, function(v)
     SHOOT_BURST = v
@@ -2504,45 +2968,42 @@ crearSlider(PaginaAim, "Rango Minimo", 0, 50, SHOOT_RANGO_MIN, function(v)
     guardarConfig()
 end)
 
-crearBoton(PaginaAim, "Matar Sheriff", function()
-    _G.UZIVERT_MATAR_SHERIFF()
-end, COLORES.Naranja1)
+-- 🎯 SECCIÓN 1: KNIFE (Murderer)
+_G.secCrab1 = Instance.new("Frame")
+_G.secCrab1.Size = UDim2.new(1, 0, 0, 30)
+_G.secCrab1.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secCrab1.BackgroundTransparency = 0.3
+_G.secCrab1.BorderSizePixel = 0
+_G.secCrab1.ZIndex = 2
+_G.secCrab1.Parent = PaginaAura
 
-crearToggle(PaginaAura, "💀 Anti-Murderer", CONFIG.AutoGrabAntiM, function(e)
-    GRAB_ANTI_MURDERER = e
-    CONFIG.AutoGrabAntiM = e
-    guardarConfig()
-end)
-crearSlider(PaginaAura, "Rango Murderer (studs)", 10, 50, CONFIG.AutoGrabDistMurder, function(v)
-    GRAB_MURDERER_RANGO = v
-    CONFIG.AutoGrabDistMurder = v
-    guardarConfig()
-end)
-crearToggle(PaginaAura, "🔄 Regresar a posicion original", CONFIG.AutoGrabRegresar, function(e)
-    GRAB_REGRESAR = e
-    CONFIG.AutoGrabRegresar = e
-    guardarConfig()
-end)
-crearToggle(PaginaAura, "🍬 Mostrar boton GRAB GUN", CONFIG.AutoGrabMostrar ~= false, function(e)
-    CONFIG.AutoGrabMostrar = e
-    guardarConfig()
-end)
+_G.cSecCrab1 = Instance.new("UICorner")
+_G.cSecCrab1.CornerRadius = UDim.new(0, 7)
+_G.cSecCrab1.Parent = _G.secCrab1
 
-crearToggle(PaginaAura, "🔫 Auto Get Gun (lejano)", CONFIG.AutoGetGun or false, function(e)
-    _G.UZIVERT_AUTO_GET_GUN_ON = e
-    CONFIG.AutoGetGun = e
-    guardarConfig()
-end)
+_G.sSecCrab1 = Instance.new("UIStroke")
+_G.sSecCrab1.Color = COLORES.Morado3
+_G.sSecCrab1.Thickness = 1.5
+_G.sSecCrab1.Transparency = 0.2
+_G.sSecCrab1.Parent = _G.secCrab1
 
-crearBoton(PaginaAura, "Agarrar Gun Ahora", function()
-    _G.UZIVERT_AGARRAR_GUN()
-end, COLORES.Naranja1)
+_G.lblSecCrab1 = Instance.new("TextLabel")
+_G.lblSecCrab1.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecCrab1.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecCrab1.BackgroundTransparency = 1
+_G.lblSecCrab1.Text = "🔪 KNIFE (Murderer)"
+_G.lblSecCrab1.TextColor3 = COLORES.Naranja2
+_G.lblSecCrab1.Font = Enum.Font.GothamBlack
+_G.lblSecCrab1.TextSize = 12
+_G.lblSecCrab1.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecCrab1.ZIndex = 3
+_G.lblSecCrab1.Parent = _G.secCrab1
 
 crearToggle(PaginaAura, "🔪 Knife Aura", CONFIG.KnifeAura or false, function(e)
     CONFIG.KnifeAura = e
     guardarConfig()
-    print(e and "🔪 Knife Aura ACTIVADO" or "🔪 Knife Aura DESACTIVADO")
 end)
+
 crearSlider(PaginaAura, "Distancia Knife Aura", 5, 50, CONFIG.KnifeAuraDist or 15, function(v)
     CONFIG.KnifeAuraDist = v
     guardarConfig()
@@ -2560,6 +3021,144 @@ crearSlider(PaginaAura, "Rango Auto Stab", 5, 25, CONFIG.AutoStabRango or 6, fun
     guardarConfig()
 end)
 
+-- 🎯 SECCIÓN 2: GUN (Sheriff / Innocent)
+_G.secCrab2 = Instance.new("Frame")
+_G.secCrab2.Size = UDim2.new(1, 0, 0, 30)
+_G.secCrab2.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secCrab2.BackgroundTransparency = 0.3
+_G.secCrab2.BorderSizePixel = 0
+_G.secCrab2.ZIndex = 2
+_G.secCrab2.Parent = PaginaAura
+
+_G.cSecCrab2 = Instance.new("UICorner")
+_G.cSecCrab2.CornerRadius = UDim.new(0, 7)
+_G.cSecCrab2.Parent = _G.secCrab2
+
+_G.sSecCrab2 = Instance.new("UIStroke")
+_G.sSecCrab2.Color = COLORES.Morado3
+_G.sSecCrab2.Thickness = 1.5
+_G.sSecCrab2.Transparency = 0.2
+_G.sSecCrab2.Parent = _G.secCrab2
+
+_G.lblSecCrab2 = Instance.new("TextLabel")
+_G.lblSecCrab2.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecCrab2.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecCrab2.BackgroundTransparency = 1
+_G.lblSecCrab2.Text = "🔫 GUN (Sheriff / Innocent)"
+_G.lblSecCrab2.TextColor3 = COLORES.Naranja2
+_G.lblSecCrab2.Font = Enum.Font.GothamBlack
+_G.lblSecCrab2.TextSize = 12
+_G.lblSecCrab2.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecCrab2.ZIndex = 3
+_G.lblSecCrab2.Parent = _G.secCrab2
+
+crearToggle(PaginaAura, "🍬 Mostrar boton GRAB GUN", CONFIG.AutoGrabMostrar ~= false, function(e)
+    CONFIG.AutoGrabMostrar = e
+    guardarConfig()
+end)
+
+crearToggle(PaginaAura, "🔫 Auto Get Gun (lejano)", CONFIG.AutoGetGun or false, function(e)
+    _G.UZIVERT_AUTO_GET_GUN_ON = e
+    CONFIG.AutoGetGun = e
+    guardarConfig()
+end)
+
+crearToggle(PaginaAura, "🎯 Gun Aura (cerca)", CONFIG.GunAura or false, function(e)
+    _G.UZIVERT_GUN_AURA_ON = e
+    CONFIG.GunAura = e
+    guardarConfig()
+end)
+
+crearSlider(PaginaAura, "Rango Gun Aura", 5, 100, CONFIG.GunAuraRango or 25, function(v)
+    _G.UZIVERT_GUN_AURA_RANGO = v
+    CONFIG.GunAuraRango = v
+    guardarConfig()
+end)
+
+crearBoton(PaginaAura, "Agarrar Gun Ahora", function()
+    _G.UZIVERT_AGARRAR_GUN()
+end, COLORES.Naranja1)
+
+-- 🎯 SECCIÓN 1: MOVIMIENTO
+_G.secJug1 = Instance.new("Frame")
+_G.secJug1.Size = UDim2.new(1, 0, 0, 30)
+_G.secJug1.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secJug1.BackgroundTransparency = 0.3
+_G.secJug1.BorderSizePixel = 0
+_G.secJug1.ZIndex = 2
+_G.secJug1.Parent = PaginaPlayer
+
+_G.cSecJug1 = Instance.new("UICorner")
+_G.cSecJug1.CornerRadius = UDim.new(0, 7)
+_G.cSecJug1.Parent = _G.secJug1
+
+_G.sSecJug1 = Instance.new("UIStroke")
+_G.sSecJug1.Color = COLORES.Morado3
+_G.sSecJug1.Thickness = 1.5
+_G.sSecJug1.Transparency = 0.2
+_G.sSecJug1.Parent = _G.secJug1
+
+_G.lblSecJug1 = Instance.new("TextLabel")
+_G.lblSecJug1.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecJug1.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecJug1.BackgroundTransparency = 1
+_G.lblSecJug1.Text = "🚀 MOVIMIENTO"
+_G.lblSecJug1.TextColor3 = COLORES.Naranja2
+_G.lblSecJug1.Font = Enum.Font.GothamBlack
+_G.lblSecJug1.TextSize = 12
+_G.lblSecJug1.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecJug1.ZIndex = 3
+_G.lblSecJug1.Parent = _G.secJug1
+
+crearSlider(PaginaPlayer, "Walkspeed", 16, 200, CONFIG.Walkspeed, function(v)
+    WALKSPEED_VALOR = v
+    CONFIG.Walkspeed = v
+    guardarConfig()
+end)
+
+crearToggle(PaginaPlayer, "👻 Noclip", CONFIG.Noclip, function(e)
+    NOCLIP_ACTIVO = e
+    CONFIG.Noclip = e
+    guardarConfig()
+end)
+
+crearToggle(PaginaPlayer, "🌀 Spinbot (Anti-Aim)", CONFIG.Spinbot, function(e)
+    SPINBOT_ACTIVO = e
+    CONFIG.Spinbot = e
+    guardarConfig()
+end)
+
+-- 🎯 SECCIÓN 2: DEFENSA
+_G.secJug2 = Instance.new("Frame")
+_G.secJug2.Size = UDim2.new(1, 0, 0, 30)
+_G.secJug2.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secJug2.BackgroundTransparency = 0.3
+_G.secJug2.BorderSizePixel = 0
+_G.secJug2.ZIndex = 2
+_G.secJug2.Parent = PaginaPlayer
+
+_G.cSecJug2 = Instance.new("UICorner")
+_G.cSecJug2.CornerRadius = UDim.new(0, 7)
+_G.cSecJug2.Parent = _G.secJug2
+
+_G.sSecJug2 = Instance.new("UIStroke")
+_G.sSecJug2.Color = COLORES.Morado3
+_G.sSecJug2.Thickness = 1.5
+_G.sSecJug2.Transparency = 0.2
+_G.sSecJug2.Parent = _G.secJug2
+
+_G.lblSecJug2 = Instance.new("TextLabel")
+_G.lblSecJug2.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecJug2.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecJug2.BackgroundTransparency = 1
+_G.lblSecJug2.Text = "🛡️ DEFENSA"
+_G.lblSecJug2.TextColor3 = COLORES.Naranja2
+_G.lblSecJug2.Font = Enum.Font.GothamBlack
+_G.lblSecJug2.TextSize = 12
+_G.lblSecJug2.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecJug2.ZIndex = 3
+_G.lblSecJug2.Parent = _G.secJug2
+
 crearToggle(PaginaPlayer, "🛡 Anti-Fling", CONFIG.AntiFling, function(e)
     ANTI_FLING_ACTIVO = e
     CONFIG.AntiFling = e
@@ -2570,21 +3169,7 @@ crearToggle(PaginaPlayer, "🛡 Anti-Fling", CONFIG.AntiFling, function(e)
         end)
     end
 end)
-crearToggle(PaginaPlayer, "👻 Noclip", CONFIG.Noclip, function(e)
-    NOCLIP_ACTIVO = e
-    CONFIG.Noclip = e
-    guardarConfig()
-end)
-crearSlider(PaginaPlayer, "Walkspeed", 16, 200, CONFIG.Walkspeed, function(v)
-    WALKSPEED_VALOR = v
-    CONFIG.Walkspeed = v
-    guardarConfig()
-end)
-crearToggle(PaginaPlayer, "🌀 Spinbot (Anti-Aim)", CONFIG.Spinbot, function(e)
-    SPINBOT_ACTIVO = e
-    CONFIG.Spinbot = e
-    guardarConfig()
-end)
+
 crearToggle(PaginaPlayer, "👻 Activar Boton de Invisibilidad", false, function(e)
     if e then
         pcall(function()
@@ -2593,25 +3178,577 @@ crearToggle(PaginaPlayer, "👻 Activar Boton de Invisibilidad", false, function
     end
 end)
 
+-- 🎯 SECCIÓN 3: MUSIC PLAYER
+_G.secJug3 = Instance.new("Frame")
+_G.secJug3.Size = UDim2.new(1, 0, 0, 30)
+_G.secJug3.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secJug3.BackgroundTransparency = 0.3
+_G.secJug3.BorderSizePixel = 0
+_G.secJug3.ZIndex = 2
+_G.secJug3.Parent = PaginaPlayer
+
+_G.cSecJug3 = Instance.new("UICorner")
+_G.cSecJug3.CornerRadius = UDim.new(0, 7)
+_G.cSecJug3.Parent = _G.secJug3
+
+_G.sSecJug3 = Instance.new("UIStroke")
+_G.sSecJug3.Color = COLORES.Morado3
+_G.sSecJug3.Thickness = 1.5
+_G.sSecJug3.Transparency = 0.2
+_G.sSecJug3.Parent = _G.secJug3
+
+_G.lblSecJug3 = Instance.new("TextLabel")
+_G.lblSecJug3.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecJug3.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecJug3.BackgroundTransparency = 1
+_G.lblSecJug3.Text = "🎧 MUSIC PLAYER"
+_G.lblSecJug3.TextColor3 = COLORES.Naranja2
+_G.lblSecJug3.Font = Enum.Font.GothamBlack
+_G.lblSecJug3.TextSize = 12
+_G.lblSecJug3.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecJug3.ZIndex = 3
+_G.lblSecJug3.Parent = _G.secJug3
+
+-- ============================================
+-- 🎧 MUSIC PLAYER
+-- ============================================
+_G.UZIVERT_MUSIC_CANCIONES = {
+    {Nombre = "Canción 1", ID = "84944985070181"},
+    {Nombre = "Canción 2", ID = "87570666848900"},
+    {Nombre = "Canción 3", ID = "82746224492420"},
+    {Nombre = "Canción 4", ID = "71393805905055"},
+    {Nombre = "Canción 5", ID = "75688616622595"},
+    {Nombre = "Canción 6", ID = "135609653444873"},
+    {Nombre = "Canción 7", ID = "93699644879957"},
+    {Nombre = "Canción 8", ID = "110398343528156"},
+    {Nombre = "Canción 9", ID = "138863509657081"},
+    {Nombre = "Canción 10", ID = "115440201770223"},
+    {Nombre = "Canción 11", ID = "128048502331483"},
+    {Nombre = "Canción 12", ID = "135321902579514"},
+    {Nombre = "Canción 13", ID = "131465489873214"},
+}
+
+-- Cargar canciones custom del CONFIG
+if CONFIG.CancionesCustom then
+    for _, c in ipairs(CONFIG.CancionesCustom) do
+        table.insert(_G.UZIVERT_MUSIC_CANCIONES, c)
+    end
+end
+
+_G.UZIVERT_MUSIC_INDEX = 1
+_G.UZIVERT_MUSIC_SHUFFLE = false
+_G.UZIVERT_MUSIC_REPEAT = false
+_G.UZIVERT_MUSIC_VOLUMEN = CONFIG.MusicVolumen or 0.5
+
+_G.UZIVERT_MUSIC_SOUND = Instance.new("Sound")
+_G.UZIVERT_MUSIC_SOUND.Name = "UzivertMusicPlayer"
+_G.UZIVERT_MUSIC_SOUND.Looped = false
+_G.UZIVERT_MUSIC_SOUND.Volume = _G.UZIVERT_MUSIC_VOLUMEN
+_G.UZIVERT_MUSIC_SOUND.Parent = game:GetService("SoundService")
+
+_G.UZIVERT_MUSIC_LABEL = nil
+
+_G.UZIVERT_MUSIC_PLAY = function(index)
+    if not _G.UZIVERT_MUSIC_CANCIONES[index] then return end
+    _G.UZIVERT_MUSIC_INDEX = index
+    _G.UZIVERT_MUSIC_SOUND:Stop()
+    _G.UZIVERT_MUSIC_SOUND.SoundId = "rbxassetid://" .. _G.UZIVERT_MUSIC_CANCIONES[index].ID
+    _G.UZIVERT_MUSIC_SOUND:Play()
+    if _G.UZIVERT_MUSIC_LABEL then
+        _G.UZIVERT_MUSIC_LABEL.Text = "🎵 " .. _G.UZIVERT_MUSIC_CANCIONES[index].Nombre
+    end
+end
+
+_G.UZIVERT_MUSIC_SIGUIENTE = function()
+    if _G.UZIVERT_MUSIC_SHUFFLE then
+        local n = _G.UZIVERT_MUSIC_INDEX
+        while n == _G.UZIVERT_MUSIC_INDEX and #_G.UZIVERT_MUSIC_CANCIONES > 1 do
+            n = math.random(1, #_G.UZIVERT_MUSIC_CANCIONES)
+        end
+        _G.UZIVERT_MUSIC_PLAY(n)
+    else
+        local n = _G.UZIVERT_MUSIC_INDEX + 1
+        if n > #_G.UZIVERT_MUSIC_CANCIONES then n = 1 end
+        _G.UZIVERT_MUSIC_PLAY(n)
+    end
+end
+
+_G.UZIVERT_MUSIC_ANTERIOR = function()
+    if _G.UZIVERT_MUSIC_SHUFFLE then
+        local n = _G.UZIVERT_MUSIC_INDEX
+        while n == _G.UZIVERT_MUSIC_INDEX and #_G.UZIVERT_MUSIC_CANCIONES > 1 do
+            n = math.random(1, #_G.UZIVERT_MUSIC_CANCIONES)
+        end
+        _G.UZIVERT_MUSIC_PLAY(n)
+    else
+        local n = _G.UZIVERT_MUSIC_INDEX - 1
+        if n < 1 then n = #_G.UZIVERT_MUSIC_CANCIONES end
+        _G.UZIVERT_MUSIC_PLAY(n)
+    end
+end
+
+_G.UZIVERT_MUSIC_SOUND.Ended:Connect(function()
+    if _G.UZIVERT_MUSIC_REPEAT then
+        _G.UZIVERT_MUSIC_PLAY(_G.UZIVERT_MUSIC_INDEX)
+    else
+        _G.UZIVERT_MUSIC_SIGUIENTE()
+    end
+end)
+
+-- Label "Ahora suena"
+_G.UZIVERT_MUSIC_LABEL = Instance.new("TextLabel")
+_G.UZIVERT_MUSIC_LABEL.Size = UDim2.new(1, 0, 0, 40)
+_G.UZIVERT_MUSIC_LABEL.BackgroundColor3 = Color3.fromRGB(10, 5, 15)
+_G.UZIVERT_MUSIC_LABEL.BackgroundTransparency = 0.3
+_G.UZIVERT_MUSIC_LABEL.Text = "🎵 Sin canción"
+_G.UZIVERT_MUSIC_LABEL.TextColor3 = COLORES.Texto
+_G.UZIVERT_MUSIC_LABEL.Font = Enum.Font.GothamBold
+_G.UZIVERT_MUSIC_LABEL.TextSize = 11
+_G.UZIVERT_MUSIC_LABEL.TextWrapped = true
+_G.UZIVERT_MUSIC_LABEL.ZIndex = 2
+_G.UZIVERT_MUSIC_LABEL.Parent = PaginaPlayer
+
+_G.cMusLabel = Instance.new("UICorner")
+_G.cMusLabel.CornerRadius = UDim.new(0, 8)
+_G.cMusLabel.Parent = _G.UZIVERT_MUSIC_LABEL
+
+-- 🎧 CONTENEDOR PLAY / STOP
+_G.musFilaPlay = Instance.new("Frame")
+_G.musFilaPlay.Size = UDim2.new(1, 0, 0, 38)
+_G.musFilaPlay.BackgroundTransparency = 1
+_G.musFilaPlay.ZIndex = 2
+_G.musFilaPlay.Parent = PaginaPlayer
+
+_G.musLayoutPlay = Instance.new("UIListLayout")
+_G.musLayoutPlay.FillDirection = Enum.FillDirection.Horizontal
+_G.musLayoutPlay.Padding = UDim.new(0, 6)
+_G.musLayoutPlay.SortOrder = Enum.SortOrder.LayoutOrder
+_G.musLayoutPlay.Parent = _G.musFilaPlay
+
+-- Botón Play/Pausa
+_G.UZIVERT_MUSIC_PLAYBTN = Instance.new("TextButton")
+_G.UZIVERT_MUSIC_PLAYBTN.Size = UDim2.new(0.5, -3, 1, 0)
+_G.UZIVERT_MUSIC_PLAYBTN.BackgroundColor3 = Color3.fromRGB(60, 200, 100)
+_G.UZIVERT_MUSIC_PLAYBTN.BackgroundTransparency = 0.3
+_G.UZIVERT_MUSIC_PLAYBTN.Text = "▶ PLAY"
+_G.UZIVERT_MUSIC_PLAYBTN.TextColor3 = COLORES.Texto
+_G.UZIVERT_MUSIC_PLAYBTN.Font = Enum.Font.GothamBold
+_G.UZIVERT_MUSIC_PLAYBTN.TextSize = 12
+_G.UZIVERT_MUSIC_PLAYBTN.BorderSizePixel = 0
+_G.UZIVERT_MUSIC_PLAYBTN.LayoutOrder = 1
+_G.UZIVERT_MUSIC_PLAYBTN.ZIndex = 2
+_G.UZIVERT_MUSIC_PLAYBTN.Parent = _G.musFilaPlay
+
+_G.cMusPlay = Instance.new("UICorner")
+_G.cMusPlay.CornerRadius = UDim.new(0, 9)
+_G.cMusPlay.Parent = _G.UZIVERT_MUSIC_PLAYBTN
+
+_G.UZIVERT_MUSIC_PLAYBTN.MouseButton1Click:Connect(function()
+    if _G.UZIVERT_MUSIC_SOUND.Playing then
+        _G.UZIVERT_MUSIC_SOUND:Pause()
+        _G.UZIVERT_MUSIC_PLAYBTN.Text = "▶ PLAY"
+    else
+        if _G.UZIVERT_MUSIC_SOUND.SoundId == "" then
+            _G.UZIVERT_MUSIC_PLAY(_G.UZIVERT_MUSIC_INDEX)
+        else
+            _G.UZIVERT_MUSIC_SOUND:Resume()
+        end
+        _G.UZIVERT_MUSIC_PLAYBTN.Text = "⏸ PAUSE"
+    end
+end)
+
+-- Botón Stop
+_G.UZIVERT_MUSIC_STOPBTN = Instance.new("TextButton")
+_G.UZIVERT_MUSIC_STOPBTN.Size = UDim2.new(0.5, -3, 1, 0)
+_G.UZIVERT_MUSIC_STOPBTN.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+_G.UZIVERT_MUSIC_STOPBTN.BackgroundTransparency = 0.3
+_G.UZIVERT_MUSIC_STOPBTN.Text = "⏹ STOP"
+_G.UZIVERT_MUSIC_STOPBTN.TextColor3 = COLORES.Texto
+_G.UZIVERT_MUSIC_STOPBTN.Font = Enum.Font.GothamBold
+_G.UZIVERT_MUSIC_STOPBTN.TextSize = 12
+_G.UZIVERT_MUSIC_STOPBTN.BorderSizePixel = 0
+_G.UZIVERT_MUSIC_STOPBTN.LayoutOrder = 2
+_G.UZIVERT_MUSIC_STOPBTN.ZIndex = 2
+_G.UZIVERT_MUSIC_STOPBTN.Parent = _G.musFilaPlay
+
+_G.cMusStop = Instance.new("UICorner")
+_G.cMusStop.CornerRadius = UDim.new(0, 9)
+_G.cMusStop.Parent = _G.UZIVERT_MUSIC_STOPBTN
+
+_G.UZIVERT_MUSIC_STOPBTN.MouseButton1Click:Connect(function()
+    _G.UZIVERT_MUSIC_SOUND:Stop()
+    _G.UZIVERT_MUSIC_SOUND.SoundId = ""
+    _G.UZIVERT_MUSIC_PLAYBTN.Text = "▶ PLAY"
+    _G.UZIVERT_MUSIC_LABEL.Text = "🎵 Sin canción"
+end)
+
+-- 🎧 CONTENEDOR ANTERIOR / SIGUIENTE
+_G.musFilaNav = Instance.new("Frame")
+_G.musFilaNav.Size = UDim2.new(1, 0, 0, 38)
+_G.musFilaNav.BackgroundTransparency = 1
+_G.musFilaNav.ZIndex = 2
+_G.musFilaNav.Parent = PaginaPlayer
+
+_G.musLayoutNav = Instance.new("UIListLayout")
+_G.musLayoutNav.FillDirection = Enum.FillDirection.Horizontal
+_G.musLayoutNav.Padding = UDim.new(0, 6)
+_G.musLayoutNav.SortOrder = Enum.SortOrder.LayoutOrder
+_G.musLayoutNav.Parent = _G.musFilaNav
+
+-- Botón Anterior
+_G.UZIVERT_MUSIC_ANTBTN = Instance.new("TextButton")
+_G.UZIVERT_MUSIC_ANTBTN.Size = UDim2.new(0.5, -3, 1, 0)
+_G.UZIVERT_MUSIC_ANTBTN.BackgroundColor3 = COLORES.Morado1
+_G.UZIVERT_MUSIC_ANTBTN.BackgroundTransparency = 0.3
+_G.UZIVERT_MUSIC_ANTBTN.Text = "◀◀ ANT"
+_G.UZIVERT_MUSIC_ANTBTN.TextColor3 = COLORES.Texto
+_G.UZIVERT_MUSIC_ANTBTN.Font = Enum.Font.GothamBold
+_G.UZIVERT_MUSIC_ANTBTN.TextSize = 12
+_G.UZIVERT_MUSIC_ANTBTN.BorderSizePixel = 0
+_G.UZIVERT_MUSIC_ANTBTN.LayoutOrder = 1
+_G.UZIVERT_MUSIC_ANTBTN.ZIndex = 2
+_G.UZIVERT_MUSIC_ANTBTN.Parent = _G.musFilaNav
+
+_G.cMusAnt = Instance.new("UICorner")
+_G.cMusAnt.CornerRadius = UDim.new(0, 9)
+_G.cMusAnt.Parent = _G.UZIVERT_MUSIC_ANTBTN
+
+_G.UZIVERT_MUSIC_ANTBTN.MouseButton1Click:Connect(function()
+    _G.UZIVERT_MUSIC_ANTERIOR()
+end)
+
+-- Botón Siguiente
+_G.UZIVERT_MUSIC_SIGBTN = Instance.new("TextButton")
+_G.UZIVERT_MUSIC_SIGBTN.Size = UDim2.new(0.5, -3, 1, 0)
+_G.UZIVERT_MUSIC_SIGBTN.BackgroundColor3 = COLORES.Morado1
+_G.UZIVERT_MUSIC_SIGBTN.BackgroundTransparency = 0.3
+_G.UZIVERT_MUSIC_SIGBTN.Text = "SIG ▶▶"
+_G.UZIVERT_MUSIC_SIGBTN.TextColor3 = COLORES.Texto
+_G.UZIVERT_MUSIC_SIGBTN.Font = Enum.Font.GothamBold
+_G.UZIVERT_MUSIC_SIGBTN.TextSize = 12
+_G.UZIVERT_MUSIC_SIGBTN.BorderSizePixel = 0
+_G.UZIVERT_MUSIC_SIGBTN.LayoutOrder = 2
+_G.UZIVERT_MUSIC_SIGBTN.ZIndex = 2
+_G.UZIVERT_MUSIC_SIGBTN.Parent = _G.musFilaNav
+
+_G.cMusSig = Instance.new("UICorner")
+_G.cMusSig.CornerRadius = UDim.new(0, 9)
+_G.cMusSig.Parent = _G.UZIVERT_MUSIC_SIGBTN
+
+_G.UZIVERT_MUSIC_SIGBTN.MouseButton1Click:Connect(function()
+    _G.UZIVERT_MUSIC_SIGUIENTE()
+end)
+
+-- Toggle Shuffle
+crearToggle(PaginaPlayer, "🔀 Shuffle (aleatorio)", false, function(e)
+    _G.UZIVERT_MUSIC_SHUFFLE = e
+end)
+
+-- Toggle Repeat
+crearToggle(PaginaPlayer, "🔁 Repeat (repetir)", false, function(e)
+    _G.UZIVERT_MUSIC_REPEAT = e
+    _G.UZIVERT_MUSIC_SOUND.Looped = e
+end)
+
+-- Slider Volumen
+crearSlider(PaginaPlayer, "🔊 Volumen", 0, 100, math.floor(_G.UZIVERT_MUSIC_VOLUMEN * 100), function(v)
+    _G.UZIVERT_MUSIC_VOLUMEN = v / 100
+    _G.UZIVERT_MUSIC_SOUND.Volume = _G.UZIVERT_MUSIC_VOLUMEN
+    CONFIG.MusicVolumen = _G.UZIVERT_MUSIC_VOLUMEN
+    guardarConfig()
+end)
+
+-- Botón Elegir Canción
+crearBoton(PaginaPlayer, "📋 Elegir Canción", function()
+    _G.UZIVERT_MUSIC_LISTA.Visible = not _G.UZIVERT_MUSIC_LISTA.Visible
+end, COLORES.Morado1)
+
+-- Lista de canciones
+_G.UZIVERT_MUSIC_LISTA = Instance.new("Frame")
+_G.UZIVERT_MUSIC_LISTA.Size = UDim2.new(1, 0, 0, 200)
+_G.UZIVERT_MUSIC_LISTA.BackgroundColor3 = Color3.fromRGB(15, 10, 20)
+_G.UZIVERT_MUSIC_LISTA.BackgroundTransparency = 0.1
+_G.UZIVERT_MUSIC_LISTA.BorderSizePixel = 0
+_G.UZIVERT_MUSIC_LISTA.Visible = false
+_G.UZIVERT_MUSIC_LISTA.ZIndex = 10
+_G.UZIVERT_MUSIC_LISTA.Parent = PaginaPlayer
+
+_G.cMusListaF = Instance.new("UICorner")
+_G.cMusListaF.CornerRadius = UDim.new(0, 9)
+_G.cMusListaF.Parent = _G.UZIVERT_MUSIC_LISTA
+
+_G.UZIVERT_MUSIC_LISTA_SCROLL = Instance.new("ScrollingFrame")
+_G.UZIVERT_MUSIC_LISTA_SCROLL.Size = UDim2.new(1, 0, 1, 0)
+_G.UZIVERT_MUSIC_LISTA_SCROLL.BackgroundTransparency = 1
+_G.UZIVERT_MUSIC_LISTA_SCROLL.BorderSizePixel = 0
+_G.UZIVERT_MUSIC_LISTA_SCROLL.ScrollBarThickness = 3
+_G.UZIVERT_MUSIC_LISTA_SCROLL.CanvasSize = UDim2.new(0, 0, 0, 0)
+_G.UZIVERT_MUSIC_LISTA_SCROLL.AutomaticCanvasSize = Enum.AutomaticSize.Y
+_G.UZIVERT_MUSIC_LISTA_SCROLL.ZIndex = 11
+_G.UZIVERT_MUSIC_LISTA_SCROLL.Parent = _G.UZIVERT_MUSIC_LISTA
+
+_G.UZIVERT_MUSIC_LISTA_LAYOUT = Instance.new("UIListLayout")
+_G.UZIVERT_MUSIC_LISTA_LAYOUT.Padding = UDim.new(0, 3)
+_G.UZIVERT_MUSIC_LISTA_LAYOUT.Parent = _G.UZIVERT_MUSIC_LISTA_SCROLL
+
+_G.UZIVERT_MUSIC_RECARGAR_LISTA = function()
+    for _, child in ipairs(_G.UZIVERT_MUSIC_LISTA_SCROLL:GetChildren()) do
+        if child:IsA("TextButton") then child:Destroy() end
+    end
+    for i, c in ipairs(_G.UZIVERT_MUSIC_CANCIONES) do
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(1, -8, 0, 30)
+        btn.BackgroundColor3 = Color3.fromRGB(40, 20, 50)
+        btn.BackgroundTransparency = 0.4
+        btn.Text = "🎵 " .. c.Nombre
+        btn.TextColor3 = COLORES.Texto
+        btn.Font = Enum.Font.GothamBold
+        btn.TextSize = 10
+        btn.TextXAlignment = Enum.TextXAlignment.Left
+        btn.BorderSizePixel = 0
+        btn.ZIndex = 12
+        btn.Parent = _G.UZIVERT_MUSIC_LISTA_SCROLL
+        local cBtn = Instance.new("UICorner")
+        cBtn.CornerRadius = UDim.new(0, 5)
+        cBtn.Parent = btn
+        btn.MouseButton1Click:Connect(function()
+            _G.UZIVERT_MUSIC_PLAY(i)
+            _G.UZIVERT_MUSIC_LISTA.Visible = false
+            _G.UZIVERT_MUSIC_PLAYBTN.Text = "⏸ PAUSE"
+        end)
+    end
+end
+
+_G.UZIVERT_MUSIC_RECARGAR_LISTA()
+
+-- Inputs para agregar canción custom
+_G.UZIVERT_MUSIC_NOMBRE = ""
+_G.UZIVERT_MUSIC_ID = ""
+
+_G.secMusAdd = Instance.new("Frame")
+_G.secMusAdd.Size = UDim2.new(1, 0, 0, 30)
+_G.secMusAdd.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secMusAdd.BackgroundTransparency = 0.3
+_G.secMusAdd.BorderSizePixel = 0
+_G.secMusAdd.ZIndex = 2
+_G.secMusAdd.Parent = PaginaPlayer
+
+_G.cSecMusAdd = Instance.new("UICorner")
+_G.cSecMusAdd.CornerRadius = UDim.new(0, 7)
+_G.cSecMusAdd.Parent = _G.secMusAdd
+
+_G.sSecMusAdd = Instance.new("UIStroke")
+_G.sSecMusAdd.Color = COLORES.Morado3
+_G.sSecMusAdd.Thickness = 1.5
+_G.sSecMusAdd.Transparency = 0.2
+_G.sSecMusAdd.Parent = _G.secMusAdd
+
+_G.lblSecMusAdd = Instance.new("TextLabel")
+_G.lblSecMusAdd.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecMusAdd.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecMusAdd.BackgroundTransparency = 1
+_G.lblSecMusAdd.Text = "➕ AGREGAR CANCIÓN"
+_G.lblSecMusAdd.TextColor3 = COLORES.Naranja2
+_G.lblSecMusAdd.Font = Enum.Font.GothamBlack
+_G.lblSecMusAdd.TextSize = 12
+_G.lblSecMusAdd.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecMusAdd.ZIndex = 3
+_G.lblSecMusAdd.Parent = _G.secMusAdd
+
+-- Input Nombre
+_G.UZIVERT_MUSIC_INP_NOMBRE = Instance.new("TextBox")
+_G.UZIVERT_MUSIC_INP_NOMBRE.Size = UDim2.new(1, 0, 0, 38)
+_G.UZIVERT_MUSIC_INP_NOMBRE.BackgroundColor3 = COLORES.Morado3
+_G.UZIVERT_MUSIC_INP_NOMBRE.BackgroundTransparency = 0.5
+_G.UZIVERT_MUSIC_INP_NOMBRE.PlaceholderText = "Nombre de la canción"
+_G.UZIVERT_MUSIC_INP_NOMBRE.Text = ""
+_G.UZIVERT_MUSIC_INP_NOMBRE.TextColor3 = COLORES.Texto
+_G.UZIVERT_MUSIC_INP_NOMBRE.PlaceholderColor3 = COLORES.Sub
+_G.UZIVERT_MUSIC_INP_NOMBRE.Font = Enum.Font.GothamBold
+_G.UZIVERT_MUSIC_INP_NOMBRE.TextSize = 11
+_G.UZIVERT_MUSIC_INP_NOMBRE.BorderSizePixel = 0
+_G.UZIVERT_MUSIC_INP_NOMBRE.ZIndex = 2
+_G.UZIVERT_MUSIC_INP_NOMBRE.Parent = PaginaPlayer
+
+_G.cMusInpNom = Instance.new("UICorner")
+_G.cMusInpNom.CornerRadius = UDim.new(0, 9)
+_G.cMusInpNom.Parent = _G.UZIVERT_MUSIC_INP_NOMBRE
+
+_G.sMusInpNom = Instance.new("UIStroke")
+_G.sMusInpNom.Color = COLORES.Naranja1
+_G.sMusInpNom.Thickness = 1
+_G.sMusInpNom.Transparency = 0.4
+_G.sMusInpNom.Parent = _G.UZIVERT_MUSIC_INP_NOMBRE
+
+_G.UZIVERT_MUSIC_INP_NOMBRE.FocusLost:Connect(function()
+    _G.UZIVERT_MUSIC_NOMBRE = _G.UZIVERT_MUSIC_INP_NOMBRE.Text
+end)
+
+-- Input ID
+_G.UZIVERT_MUSIC_INP_ID = Instance.new("TextBox")
+_G.UZIVERT_MUSIC_INP_ID.Size = UDim2.new(1, 0, 0, 38)
+_G.UZIVERT_MUSIC_INP_ID.BackgroundColor3 = COLORES.Morado3
+_G.UZIVERT_MUSIC_INP_ID.BackgroundTransparency = 0.5
+_G.UZIVERT_MUSIC_INP_ID.PlaceholderText = "Roblox ID (ej: 1234567890)"
+_G.UZIVERT_MUSIC_INP_ID.Text = ""
+_G.UZIVERT_MUSIC_INP_ID.TextColor3 = COLORES.Texto
+_G.UZIVERT_MUSIC_INP_ID.PlaceholderColor3 = COLORES.Sub
+_G.UZIVERT_MUSIC_INP_ID.Font = Enum.Font.GothamBold
+_G.UZIVERT_MUSIC_INP_ID.TextSize = 11
+_G.UZIVERT_MUSIC_INP_ID.BorderSizePixel = 0
+_G.UZIVERT_MUSIC_INP_ID.ZIndex = 2
+_G.UZIVERT_MUSIC_INP_ID.Parent = PaginaPlayer
+
+_G.cMusInpID = Instance.new("UICorner")
+_G.cMusInpID.CornerRadius = UDim.new(0, 9)
+_G.cMusInpID.Parent = _G.UZIVERT_MUSIC_INP_ID
+
+_G.sMusInpID = Instance.new("UIStroke")
+_G.sMusInpID.Color = COLORES.Naranja1
+_G.sMusInpID.Thickness = 1
+_G.sMusInpID.Transparency = 0.4
+_G.sMusInpID.Parent = _G.UZIVERT_MUSIC_INP_ID
+
+_G.UZIVERT_MUSIC_INP_ID.FocusLost:Connect(function()
+    _G.UZIVERT_MUSIC_ID = _G.UZIVERT_MUSIC_INP_ID.Text
+end)
+
+-- Botón Añadir
+crearBoton(PaginaPlayer, "➕ Añadir Canción", function()
+    if _G.UZIVERT_MUSIC_NOMBRE == "" or _G.UZIVERT_MUSIC_ID == "" then
+        print("❌ Completá nombre e ID")
+        return
+    end
+    
+    -- Contar custom actuales
+    local customCount = #_G.UZIVERT_MUSIC_CANCIONES - 13
+    if customCount >= 25 then
+        print("❌ Lista llena (máximo 25 custom)")
+        return
+    end
+    
+    -- Verificar que no exista
+    for _, c in ipairs(_G.UZIVERT_MUSIC_CANCIONES) do
+        if tostring(c.ID) == tostring(_G.UZIVERT_MUSIC_ID) then
+            print("❌ Esa canción ya existe")
+            return
+        end
+    end
+    
+    -- Agregar
+    local nueva = {Nombre = _G.UZIVERT_MUSIC_NOMBRE, ID = _G.UZIVERT_MUSIC_ID}
+    table.insert(_G.UZIVERT_MUSIC_CANCIONES, nueva)
+    
+    -- Guardar en CONFIG
+    if not CONFIG.CancionesCustom then CONFIG.CancionesCustom = {} end
+    table.insert(CONFIG.CancionesCustom, nueva)
+    guardarConfig()
+    
+    -- Recargar lista
+    _G.UZIVERT_MUSIC_RECARGAR_LISTA()
+    
+    -- Limpiar inputs
+    _G.UZIVERT_MUSIC_INP_NOMBRE.Text = ""
+    _G.UZIVERT_MUSIC_INP_ID.Text = ""
+    _G.UZIVERT_MUSIC_NOMBRE = ""
+    _G.UZIVERT_MUSIC_ID = ""
+    
+    print("✅ Canción agregada: " .. nueva.Nombre)
+end, COLORES.Verde)
+
+-- Botón Vaciar Lista Custom
+crearBoton(PaginaPlayer, "🗑️ Vaciar Lista Custom", function()
+    -- Dejar solo las 13 fijas
+    while #_G.UZIVERT_MUSIC_CANCIONES > 13 do
+        table.remove(_G.UZIVERT_MUSIC_CANCIONES)
+    end
+    CONFIG.CancionesCustom = {}
+    guardarConfig()
+    _G.UZIVERT_MUSIC_RECARGAR_LISTA()
+    print("✅ Lista custom vaciada")
+end, COLORES.Rojo)
+
+-- 🎯 SECCIÓN 1: FLING ROLES
+_G.secFling1 = Instance.new("Frame")
+_G.secFling1.Size = UDim2.new(1, 0, 0, 30)
+_G.secFling1.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secFling1.BackgroundTransparency = 0.3
+_G.secFling1.BorderSizePixel = 0
+_G.secFling1.ZIndex = 2
+_G.secFling1.Parent = PaginaFling
+
+_G.cSecFling1 = Instance.new("UICorner")
+_G.cSecFling1.CornerRadius = UDim.new(0, 7)
+_G.cSecFling1.Parent = _G.secFling1
+
+_G.sSecFling1 = Instance.new("UIStroke")
+_G.sSecFling1.Color = COLORES.Morado3
+_G.sSecFling1.Thickness = 1.5
+_G.sSecFling1.Transparency = 0.2
+_G.sSecFling1.Parent = _G.secFling1
+
+_G.lblSecFling1 = Instance.new("TextLabel")
+_G.lblSecFling1.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecFling1.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecFling1.BackgroundTransparency = 1
+_G.lblSecFling1.Text = "🎯 FLING ROLES"
+_G.lblSecFling1.TextColor3 = COLORES.Naranja2
+_G.lblSecFling1.Font = Enum.Font.GothamBlack
+_G.lblSecFling1.TextSize = 12
+_G.lblSecFling1.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecFling1.ZIndex = 3
+_G.lblSecFling1.Parent = _G.secFling1
+
 crearBoton(PaginaFling, "🌀 FLING MURDERER", function()
     IniciarFling("Murderer")
-end, Color3.fromRGB(200, 60, 100))
+end, Color3.fromRGB(20, 15, 25))
 
 crearBoton(PaginaFling, "🌀 FLING SHERIFF", function()
     IniciarFling("Sheriff")
-end, Color3.fromRGB(80, 130, 220))
+end, Color3.fromRGB(20, 15, 25))
 
 crearBoton(PaginaFling, "🌀 FLING ALL", function()
     IniciarFling("all")
-end, Color3.fromRGB(200, 50, 200))
+end, Color3.fromRGB(20, 15, 25))
 
 crearBoton(PaginaFling, "⛔ DETENER FLING", function()
     StopFling()
-end, Color3.fromRGB(100, 80, 180))
+end, Color3.fromRGB(20, 15, 25))
+
+-- 🎯 SECCIÓN 2: FLING PLAYER
+_G.secFling2 = Instance.new("Frame")
+_G.secFling2.Size = UDim2.new(1, 0, 0, 30)
+_G.secFling2.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secFling2.BackgroundTransparency = 0.3
+_G.secFling2.BorderSizePixel = 0
+_G.secFling2.ZIndex = 2
+_G.secFling2.Parent = PaginaFling
+
+_G.cSecFling2 = Instance.new("UICorner")
+_G.cSecFling2.CornerRadius = UDim.new(0, 7)
+_G.cSecFling2.Parent = _G.secFling2
+
+_G.sSecFling2 = Instance.new("UIStroke")
+_G.sSecFling2.Color = COLORES.Morado3
+_G.sSecFling2.Thickness = 1.5
+_G.sSecFling2.Transparency = 0.2
+_G.sSecFling2.Parent = _G.secFling2
+
+_G.lblSecFling2 = Instance.new("TextLabel")
+_G.lblSecFling2.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecFling2.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecFling2.BackgroundTransparency = 1
+_G.lblSecFling2.Text = "🌀 FLING PLAYER"
+_G.lblSecFling2.TextColor3 = COLORES.Naranja2
+_G.lblSecFling2.Font = Enum.Font.GothamBlack
+_G.lblSecFling2.TextSize = 12
+_G.lblSecFling2.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecFling2.ZIndex = 3
+_G.lblSecFling2.Parent = _G.secFling2
 
 _G.UZIVERT_FLING_DD_BTN = Instance.new("TextButton")
 _G.UZIVERT_FLING_DD_BTN.Size = UDim2.new(1, 0, 0, 42)
-_G.UZIVERT_FLING_DD_BTN.BackgroundColor3 = COLORES.Morado1
+_G.UZIVERT_FLING_DD_BTN.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
 _G.UZIVERT_FLING_DD_BTN.BackgroundTransparency = 0.5
 _G.UZIVERT_FLING_DD_BTN.Text = "Elegir jugador ▼"
 _G.UZIVERT_FLING_DD_BTN.TextColor3 = COLORES.Texto
@@ -2627,7 +3764,7 @@ _G.UZIVERT_FLING_DD_C.CornerRadius = UDim.new(0, 9)
 _G.UZIVERT_FLING_DD_C.Parent = _G.UZIVERT_FLING_DD_BTN
 
 _G.UZIVERT_FLING_DD_S = Instance.new("UIStroke")
-_G.UZIVERT_FLING_DD_S.Color = COLORES.Naranja1
+_G.UZIVERT_FLING_DD_S.Color = COLORES.Morado3
 _G.UZIVERT_FLING_DD_S.Thickness = 1.5
 _G.UZIVERT_FLING_DD_S.Transparency = 0.2
 _G.UZIVERT_FLING_DD_S.Parent = _G.UZIVERT_FLING_DD_BTN
@@ -2647,7 +3784,7 @@ _G.UZIVERT_FLING_DD_LC.CornerRadius = UDim.new(0, 9)
 _G.UZIVERT_FLING_DD_LC.Parent = _G.UZIVERT_FLING_DD_LIST
 
 _G.UZIVERT_FLING_DD_LS = Instance.new("UIStroke")
-_G.UZIVERT_FLING_DD_LS.Color = COLORES.Naranja1
+_G.UZIVERT_FLING_DD_LS.Color = COLORES.Morado3
 _G.UZIVERT_FLING_DD_LS.Thickness = 1.5
 _G.UZIVERT_FLING_DD_LS.Transparency = 0.2
 _G.UZIVERT_FLING_DD_LS.Parent = _G.UZIVERT_FLING_DD_LIST
@@ -2680,7 +3817,7 @@ crearBoton(PaginaFling, "🌀 FLINGEAR TARGET", function()
         return
     end
     task.spawn(_G.UZIVERT_FLING_FUNC, _G.UZIVERT_FLING_TARGET)
-end, Color3.fromRGB(200, 60, 100))
+end, Color3.fromRGB(20, 15, 25))
 
 print("🎃 Parte 7/10 cargada - Páginas Aim/Aura/Player/Fling")
 
@@ -2865,35 +4002,214 @@ local function ApplyAutoPrankBomb(state)
     end
 end
 
-local infoBomb = Instance.new("TextLabel")
-infoBomb.Size = UDim2.new(1, 0, 0, 100)
-infoBomb.BackgroundColor3 = COLORES.Morado3
-infoBomb.BackgroundTransparency = 0.5
-infoBomb.Text = "🎁 AUTO PRANK BOMB (BOMB JUMP) 🎁\n\n1. Activá el toggle de abajo\n2. Equipá la FakeBomb\n3. Tirala → cae abajo tuyo + saltás solo\n\n💡 Necesitás la Prank Bomb comprada (4,800 coins)"
-infoBomb.TextColor3 = COLORES.Texto
-infoBomb.Font = Enum.Font.GothamMedium
-infoBomb.TextSize = 11
-infoBomb.TextWrapped = true
-infoBomb.BorderSizePixel = 0
-infoBomb.ZIndex = 2
-infoBomb.Parent = PaginaBomb
+-- 🎯 SECCIÓN: BOMB JUMP
+_G.secBomb = Instance.new("Frame")
+_G.secBomb.Size = UDim2.new(1, 0, 0, 30)
+_G.secBomb.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secBomb.BackgroundTransparency = 0.3
+_G.secBomb.BorderSizePixel = 0
+_G.secBomb.ZIndex = 2
+_G.secBomb.Parent = PaginaBomb
 
-local cInfoBomb = Instance.new("UICorner")
-cInfoBomb.CornerRadius = UDim.new(0, 9)
-cInfoBomb.Parent = infoBomb
+_G.cSecBomb = Instance.new("UICorner")
+_G.cSecBomb.CornerRadius = UDim.new(0, 7)
+_G.cSecBomb.Parent = _G.secBomb
 
-local sInfoBomb = Instance.new("UIStroke")
-sInfoBomb.Color = COLORES.Naranja1
-sInfoBomb.Thickness = 1
-sInfoBomb.Transparency = 0.4
-sInfoBomb.Parent = infoBomb
+_G.sSecBomb = Instance.new("UIStroke")
+_G.sSecBomb.Color = COLORES.Morado3
+_G.sSecBomb.Thickness = 1.5
+_G.sSecBomb.Transparency = 0.2
+_G.sSecBomb.Parent = _G.secBomb
 
-crearToggle(PaginaBomb, "🎁 Auto Prank Bomb (Bomb Jump)", CONFIG.AutoPrankBomb or false, function(e)
+_G.lblSecBomb = Instance.new("TextLabel")
+_G.lblSecBomb.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecBomb.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecBomb.BackgroundTransparency = 1
+_G.lblSecBomb.Text = "AUTO BOMB JUMP"
+_G.lblSecBomb.TextColor3 = COLORES.Naranja2
+_G.lblSecBomb.Font = Enum.Font.GothamBlack
+_G.lblSecBomb.TextSize = 12
+_G.lblSecBomb.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecBomb.ZIndex = 3
+_G.lblSecBomb.Parent = _G.secBomb
+
+crearToggle(PaginaBomb, "Auto Bomb Jump", CONFIG.AutoPrankBomb or false, function(e)
     AUTO_PRANK_BOMB_ACTIVO = e
     CONFIG.AutoPrankBomb = e
     guardarConfig()
     ApplyAutoPrankBomb(e)
 end)
+
+-- 🎯 SECCIÓN 1: SHADERS
+_G.secAp1 = Instance.new("Frame")
+_G.secAp1.Size = UDim2.new(1, 0, 0, 30)
+_G.secAp1.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secAp1.BackgroundTransparency = 0.3
+_G.secAp1.BorderSizePixel = 0
+_G.secAp1.ZIndex = 2
+_G.secAp1.Parent = PaginaRend
+
+_G.cSecAp1 = Instance.new("UICorner")
+_G.cSecAp1.CornerRadius = UDim.new(0, 7)
+_G.cSecAp1.Parent = _G.secAp1
+
+_G.sSecAp1 = Instance.new("UIStroke")
+_G.sSecAp1.Color = COLORES.Morado3
+_G.sSecAp1.Thickness = 1.5
+_G.sSecAp1.Transparency = 0.2
+_G.sSecAp1.Parent = _G.secAp1
+
+_G.lblSecAp1 = Instance.new("TextLabel")
+_G.lblSecAp1.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecAp1.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecAp1.BackgroundTransparency = 1
+_G.lblSecAp1.Text = "🎨 SHADERS"
+_G.lblSecAp1.TextColor3 = COLORES.Naranja2
+_G.lblSecAp1.Font = Enum.Font.GothamBlack
+_G.lblSecAp1.TextSize = 12
+_G.lblSecAp1.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecAp1.ZIndex = 3
+_G.lblSecAp1.Parent = _G.secAp1
+
+crearToggle(PaginaRend, "🎨 Shaders Tokyowami", false, function(e)
+    _G.UZIVERT_SHADER_TOKYO = e
+    local Lighting = game:GetService("Lighting")
+    if not _G.UZIVERT_SHADER_TOKYO_EFFECTS then
+        _G.UZIVERT_SHADER_TOKYO_EFFECTS = {}
+    end
+    if e then
+        for _, v in ipairs(_G.UZIVERT_SHADER_TOKYO_EFFECTS) do pcall(function() v:Destroy() end) end
+        _G.UZIVERT_SHADER_TOKYO_EFFECTS = {}
+        local bloom = Instance.new("BloomEffect") bloom.Intensity = 0.1 bloom.Threshold = 0 bloom.Size = 100 bloom.Parent = Lighting table.insert(_G.UZIVERT_SHADER_TOKYO_EFFECTS, bloom)
+        local blur = Instance.new("BlurEffect") blur.Size = 2 blur.Parent = Lighting table.insert(_G.UZIVERT_SHADER_TOKYO_EFFECTS, blur)
+        local cc = Instance.new("ColorCorrectionEffect") cc.Saturation = 0.05 cc.TintColor = Color3.fromRGB(255, 224, 219) cc.Parent = Lighting table.insert(_G.UZIVERT_SHADER_TOKYO_EFFECTS, cc)
+        local sky = Instance.new("Sky") sky.Name = "UzivertTokyowami" sky.SkyboxUp = "rbxassetid://323493360" sky.SkyboxLf = "rbxassetid://323494252" sky.SkyboxBk = "rbxassetid://323494035" sky.SkyboxFt = "rbxassetid://323494130" sky.SkyboxDn = "rbxassetid://323494368" sky.SkyboxRt = "rbxassetid://323494067" sky.Parent = Lighting table.insert(_G.UZIVERT_SHADER_TOKYO_EFFECTS, sky)
+        Lighting.Brightness = 2.14
+        Lighting.ColorShift_Bottom = Color3.fromRGB(11, 0, 20)
+        Lighting.ColorShift_Top = Color3.fromRGB(240, 127, 14)
+        Lighting.OutdoorAmbient = Color3.fromRGB(34, 0, 49)
+        Lighting.ClockTime = 6.7
+        Lighting.FogColor = Color3.fromRGB(94, 76, 106)
+        Lighting.FogEnd = 1000
+        Lighting.ExposureCompensation = 0.24
+        Lighting.Ambient = Color3.fromRGB(59, 33, 27)
+    else
+        for _, v in ipairs(_G.UZIVERT_SHADER_TOKYO_EFFECTS) do pcall(function() v:Destroy() end) end
+        _G.UZIVERT_SHADER_TOKYO_EFFECTS = {}
+        Lighting.Brightness = 2
+        Lighting.ClockTime = 14
+        Lighting.FogEnd = 100000
+        Lighting.ExposureCompensation = 0
+    end
+end)
+
+crearToggle(PaginaRend, "🌸 Pink Hour", false, function(e)
+    _G.UZIVERT_PINK_HOUR = e
+    local Lighting = game:GetService("Lighting")
+    if not _G.UZIVERT_PINK_EFFECTS then
+        _G.UZIVERT_PINK_EFFECTS = {}
+    end
+    if e then
+        for _, v in ipairs(_G.UZIVERT_PINK_EFFECTS) do pcall(function() v:Destroy() end) end
+        _G.UZIVERT_PINK_EFFECTS = {}
+        local cc = Instance.new("ColorCorrectionEffect") cc.TintColor = Color3.fromRGB(255, 100, 200) cc.Saturation = 0.4 cc.Parent = Lighting table.insert(_G.UZIVERT_PINK_EFFECTS, cc)
+        local bloom = Instance.new("BloomEffect") bloom.Intensity = 0.3 bloom.Size = 25 bloom.Threshold = 0.85 bloom.Parent = Lighting table.insert(_G.UZIVERT_PINK_EFFECTS, bloom)
+        local blur = Instance.new("BlurEffect") blur.Size = 2 blur.Parent = Lighting table.insert(_G.UZIVERT_PINK_EFFECTS, blur)
+        Lighting.Brightness = 2
+        Lighting.ClockTime = 6.7
+        Lighting.FogColor = Color3.fromRGB(120, 20, 150)
+        Lighting.FogEnd = 1200
+        Lighting.ColorShift_Top = Color3.fromRGB(255, 100, 220)
+        Lighting.ColorShift_Bottom = Color3.fromRGB(100, 0, 150)
+    else
+        for _, v in ipairs(_G.UZIVERT_PINK_EFFECTS) do pcall(function() v:Destroy() end) end
+        _G.UZIVERT_PINK_EFFECTS = {}
+        Lighting.Brightness = 2
+        Lighting.ClockTime = 14
+        Lighting.FogEnd = 100000
+        Lighting.ColorShift_Top = Color3.fromRGB(0, 0, 0)
+        Lighting.ColorShift_Bottom = Color3.fromRGB(0, 0, 0)
+    end
+end)
+
+-- 🎯 SECCIÓN 2: AMBIENTE
+_G.secAp2 = Instance.new("Frame")
+_G.secAp2.Size = UDim2.new(1, 0, 0, 30)
+_G.secAp2.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secAp2.BackgroundTransparency = 0.3
+_G.secAp2.BorderSizePixel = 0
+_G.secAp2.ZIndex = 2
+_G.secAp2.Parent = PaginaRend
+
+_G.cSecAp2 = Instance.new("UICorner")
+_G.cSecAp2.CornerRadius = UDim.new(0, 7)
+_G.cSecAp2.Parent = _G.secAp2
+
+_G.sSecAp2 = Instance.new("UIStroke")
+_G.sSecAp2.Color = COLORES.Morado3
+_G.sSecAp2.Thickness = 1.5
+_G.sSecAp2.Transparency = 0.2
+_G.sSecAp2.Parent = _G.secAp2
+
+_G.lblSecAp2 = Instance.new("TextLabel")
+_G.lblSecAp2.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecAp2.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecAp2.BackgroundTransparency = 1
+_G.lblSecAp2.Text = "🌙 AMBIENTE"
+_G.lblSecAp2.TextColor3 = COLORES.Naranja2
+_G.lblSecAp2.Font = Enum.Font.GothamBlack
+_G.lblSecAp2.TextSize = 12
+_G.lblSecAp2.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecAp2.ZIndex = 3
+_G.lblSecAp2.Parent = _G.secAp2
+
+crearToggle(PaginaRend, "🌙 Modo Noche", CONFIG.ModoNoche or false, function(e)
+    _G.UZIVERT_MODO_NOCHE(e)
+    CONFIG.ModoNoche = e
+    guardarConfig()
+end)
+
+crearToggle(PaginaRend, "⏰ Round Timer", CONFIG.RoundTimer or false, function(e)
+    _G.UZIVERT_TIMER_ON = e
+    CONFIG.RoundTimer = e
+    guardarConfig()
+    if e then
+        _G.UZIVERT_TIMER_START()
+    else
+        _G.UZIVERT_TIMER_STOP()
+    end
+end)
+
+-- 🎯 SECCIÓN 3: RENDIMIENTO
+_G.secAp3 = Instance.new("Frame")
+_G.secAp3.Size = UDim2.new(1, 0, 0, 30)
+_G.secAp3.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secAp3.BackgroundTransparency = 0.3
+_G.secAp3.BorderSizePixel = 0
+_G.secAp3.ZIndex = 2
+_G.secAp3.Parent = PaginaRend
+
+_G.cSecAp3 = Instance.new("UICorner")
+_G.cSecAp3.CornerRadius = UDim.new(0, 7)
+_G.cSecAp3.Parent = _G.secAp3
+
+_G.sSecAp3 = Instance.new("UIStroke")
+_G.sSecAp3.Color = COLORES.Morado3
+_G.sSecAp3.Thickness = 1.5
+_G.sSecAp3.Transparency = 0.2
+_G.sSecAp3.Parent = _G.secAp3
+
+_G.lblSecAp3 = Instance.new("TextLabel")
+_G.lblSecAp3.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecAp3.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecAp3.BackgroundTransparency = 1
+_G.lblSecAp3.Text = "⚙️ RENDIMIENTO"
+_G.lblSecAp3.TextColor3 = COLORES.Naranja2
+_G.lblSecAp3.Font = Enum.Font.GothamBlack
+_G.lblSecAp3.TextSize = 12
+_G.lblSecAp3.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecAp3.ZIndex = 3
+_G.lblSecAp3.Parent = _G.secAp3
 
 crearToggle(PaginaRend, "⚰️ Monitor HUD", CONFIG.Monitor, function(e)
     MONITOR_ACTIVO = e
@@ -2906,6 +4222,7 @@ crearToggle(PaginaRend, "⚰️ Monitor HUD", CONFIG.Monitor, function(e)
         destruirMonitor()
     end
 end)
+
 crearToggle(PaginaRend, "⚡ FPS Boost", CONFIG.FPSBoost, function(e)
     FPS_BOOST_ACTIVO = e
     CONFIG.FPSBoost = e
@@ -2923,23 +4240,6 @@ crearToggle(PaginaRend, "⚡ FPS Boost", CONFIG.FPSBoost, function(e)
         end
     else
         restaurarGraficos()
-    end
-end)
-
-crearToggle(PaginaRend, "🌙 Modo Noche", CONFIG.ModoNoche or false, function(e)
-    _G.UZIVERT_MODO_NOCHE(e)
-    CONFIG.ModoNoche = e
-    guardarConfig()
-end)
-
-crearToggle(PaginaRend, "⏰ Round Timer", CONFIG.RoundTimer or false, function(e)
-    _G.UZIVERT_TIMER_ON = e
-    CONFIG.RoundTimer = e
-    guardarConfig()
-    if e then
-        _G.UZIVERT_TIMER_START()
-    else
-        _G.UZIVERT_TIMER_STOP()
     end
 end)
 
@@ -2972,7 +4272,7 @@ local mantInfo = Instance.new("TextLabel")
 mantInfo.Size = UDim2.new(1, 0, 0, 70)
 mantInfo.BackgroundColor3 = Color3.fromRGB(20, 50, 20)
 mantInfo.BackgroundTransparency = 0.4
-mantInfo.Text = "✅ TODO OPERATIVO\n\nTodos los sistemas funcionando.\nReportá cualquier bug en Discord."
+mantInfo.Text = "TODO OPERATIVO\n\nTodos los sistemas funcionando.\nReportá cualquier bug en Discord."
 mantInfo.TextColor3 = COLORES.Verde
 mantInfo.Font = Enum.Font.GothamMedium
 mantInfo.TextSize = 10
@@ -3070,43 +4370,47 @@ local function crearTarjeta(padre, titulo, contenido, colorBorde)
     return frame
 end
 
-crearTarjeta(PaginaUpdate, "📅 Última actualización: 09/10/2026", "Uzivert Hub v4.7.0", COLORES.Naranja2)
+crearTarjeta(PaginaUpdate, "📅 Última actualización: 10/10/2026", "Uzivert Hub v4.7.1", COLORES.Naranja2)
+
+crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.1",
+    "+ 🎯 Silent Aim (atraviesa paredes)\n" ..
+    "+ 🎯 Gun Aura (rango configurable)\n" ..
+    "+ 🎧 Music Player completo\n" ..
+    "+ 🎨 Shaders Tokyowami\n" ..
+    "+ 🌸 Pink Hour\n" ..
+    "+ ⚡ Auto Get Gun optimizado\n" ..
+    "+ 📦 Secciones organizadas",
+    COLORES.Verde)
 
 crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.0",
-    "+ 🎯 Aim Lock (Shiftlock + Gun)\n" ..
-    "+ 🗡️ Auto Stab (con slider de rango)\n" ..
+    "+ 🎯 Aim Lock\n" ..
+    "+ 🗡️ Auto Stab\n" ..
     "+ 💀 Matar Sheriff\n" ..
     "+ 🌙 Modo Noche\n" ..
-    "+ 🔫 Auto Get Gun (lejano)\n" ..
+    "+ 🔫 Auto Get Gun\n" ..
     "+ ⏰ Round Timer\n" ..
     "+ 🌀 Fling Dropdown",
     COLORES.Verde)
 
-crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.6.4",
-    "+ 🎯 Shoot Murderer más preciso\n" ..
-    "+ 🦸 Fling detecta al Hero\n" ..
-    "+ ⚡ Sistema de roles optimizado",
-    COLORES.Verde)
-
 crearTarjeta(PaginaUpdate, "🐛 BUGS ARREGLADOS",
-    "✓ Auto Get Gun (orden de funciones)\n" ..
-    "✓ Matar Sheriff (orden de funciones)\n" ..
+    "✓ Auto Get Gun sin lag\n" ..
+    "✓ Gun Aura sin lag + guarda estado\n" ..
+    "✓ Auto Stab arreglado\n" ..
+    "✓ End de más en Botón Grab\n" ..
     "✓ Límite de locales (usar _G.)\n" ..
     "✓ Toggle ESP no borraba highlights\n" ..
-    "✓ Fling no detectaba al Hero\n" ..
-    "✓ Shoot disparaba al piso/cielo\n" ..
-    "  cuando el Murderer saltaba",
+    "✓ Fling no detectaba al Hero",
     COLORES.Verde)
 
 crearTarjeta(PaginaUpdate, "🔴 Descartado",
-    "- Silent Aim (cámara trabada)\n" ..
-    "- Knife Throwing TP / Knife Homing\n" ..
-    "- ESP Skeleton (no se ve)\n" ..
-    "- Skin Copier (ApplyDescription)\n" ..
-    "- Anti Silent Aim (muy riesgoso)\n" ..
-    "- Notify / Disable Footstep\n" ..
-    "- Coins Reach / Remove / Optimizer\n" ..
-    "- Round Timer del Nexvyr\n" ..
+    "- Silent Aim con Mouse.Hit\n" ..
+    "- Silent Aim con Camera\n" ..
+    "- Speed Glitch (manual)\n" ..
+    "- Headless / Korblox\n" ..
+    "- Dual Wield\n" ..
+    "- ESP Skeleton\n" ..
+    "- Skin Copier\n" ..
+    "- Anti Silent Aim\n" ..
     "- Herobrine",
     COLORES.Rojo)
 
@@ -3241,7 +4545,7 @@ print("  💥 Kill All (Murderer only)")
 print("  28 presets de animaciones")
 print("====================================")
 
-print("🎃 Parte 10/10 cargada - SCRIPT COMPLETO v4.6.4")
+print("🎃 Parte 10/10 cargada - SCRIPT COMPLETO v4.7.1")
 
 -- ============================================
 -- ⏰ ROUND TIMER
@@ -3449,4 +4753,12 @@ if CONFIG.AntiFling then
     pcall(function()
         loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Anti-fling-73205"))()
     end)
+end
+
+if CONFIG.GunAura then
+    _G.UZIVERT_GUN_AURA_ON = true
+end
+
+if CONFIG.SilentAim then
+    _G.UZIVERT_SILENT_AIM_ON = true
 end
