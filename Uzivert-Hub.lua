@@ -1,5 +1,5 @@
 -- ============================================
--- UZIVERT HUB | v4.7.1 HALLOWEEN 🎃
+-- UZIVERT HUB | v4.7.3 HALLOWEEN 🎃
 -- Proyecto inicial por Uzivert
 -- Con ayuda explicativa de Nexvyr
 -- ============================================
@@ -15,7 +15,230 @@ local Lighting = game:GetService("Lighting")
 local HttpService = game:GetService("HttpService")
 local Debris = game:GetService("Debris")
 
-local VERSION = "v4.7.1 HALLOWEEN"
+local VERSION = "v4.7.3 HALLOWEEN"
+
+-- ============================================
+-- 🎮 DEVICE SELECTOR (ADAPTIVE UI) - TODO _G.
+-- ============================================
+_G.UZIVERT_GAMA_BAJA = false
+_G.UZIVERT_SELECCIONADO = false
+
+_G.PSel = game:GetService("Players")
+_G.LPSel = _G.PSel.LocalPlayer
+_G.UISel = game:GetService("UserInputService")
+_G.TWSel = game:GetService("TweenService")
+_G.PGSel = _G.LPSel:WaitForChild("PlayerGui")
+
+_G.SelGui = Instance.new("ScreenGui")
+_G.SelGui.Name = "UzivertSelector"
+_G.SelGui.ResetOnSpawn = false
+_G.SelGui.IgnoreGuiInset = true
+_G.SelGui.DisplayOrder = 9999
+_G.SelGui.Parent = _G.PGSel
+
+_G.SelFondo = Instance.new("Frame")
+_G.SelFondo.Size = UDim2.new(1, 0, 1, 0)
+_G.SelFondo.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+_G.SelFondo.BackgroundTransparency = 0.4
+_G.SelFondo.BorderSizePixel = 0
+_G.SelFondo.ZIndex = 1
+_G.SelFondo.Parent = _G.SelGui
+
+_G.SelPanel = Instance.new("Frame")
+_G.SelPanel.Size = UDim2.new(0, 500, 0, 350)
+_G.SelPanel.Position = UDim2.new(0.5, -250, 0.5, -175)
+_G.SelPanel.BackgroundColor3 = Color3.fromRGB(15, 10, 20)
+_G.SelPanel.BackgroundTransparency = 0.05
+_G.SelPanel.BorderSizePixel = 0
+_G.SelPanel.ZIndex = 2
+_G.SelPanel.Parent = _G.SelGui
+
+_G.cSelPanel = Instance.new("UICorner")
+_G.cSelPanel.CornerRadius = UDim.new(0, 16)
+_G.cSelPanel.Parent = _G.SelPanel
+
+_G.sSelPanel = Instance.new("UIStroke")
+_G.sSelPanel.Color = Color3.fromRGB(255, 140, 0)
+_G.sSelPanel.Thickness = 2
+_G.sSelPanel.Transparency = 0.3
+_G.sSelPanel.Parent = _G.SelPanel
+
+_G.SelTitulo = Instance.new("TextLabel")
+_G.SelTitulo.Size = UDim2.new(1, -40, 0, 40)
+_G.SelTitulo.Position = UDim2.new(0, 20, 0, 20)
+_G.SelTitulo.BackgroundTransparency = 1
+_G.SelTitulo.Text = "🎃 UZIVERT HUB"
+_G.SelTitulo.TextColor3 = Color3.fromRGB(255, 140, 0)
+_G.SelTitulo.Font = Enum.Font.GothamBlack
+_G.SelTitulo.TextSize = 24
+_G.SelTitulo.TextXAlignment = Enum.TextXAlignment.Center
+_G.SelTitulo.ZIndex = 3
+_G.SelTitulo.Parent = _G.SelPanel
+
+_G.SelSub = Instance.new("TextLabel")
+_G.SelSub.Size = UDim2.new(1, -40, 0, 25)
+_G.SelSub.Position = UDim2.new(0, 20, 0, 60)
+_G.SelSub.BackgroundTransparency = 1
+_G.SelSub.Text = "Elegí tu tipo de dispositivo"
+_G.SelSub.TextColor3 = Color3.fromRGB(150, 150, 170)
+_G.SelSub.Font = Enum.Font.GothamMedium
+_G.SelSub.TextSize = 14
+_G.SelSub.TextXAlignment = Enum.TextXAlignment.Center
+_G.SelSub.ZIndex = 3
+_G.SelSub.Parent = _G.SelPanel
+
+-- 🔵 BOTÓN GAMA ALTA
+_G.SelBtnAlta = Instance.new("TextButton")
+_G.SelBtnAlta.Size = UDim2.new(0.45, -15, 0, 180)
+_G.SelBtnAlta.Position = UDim2.new(0, 20, 0, 105)
+_G.SelBtnAlta.BackgroundColor3 = Color3.fromRGB(20, 30, 50)
+_G.SelBtnAlta.BackgroundTransparency = 0.3
+_G.SelBtnAlta.Text = ""
+_G.SelBtnAlta.BorderSizePixel = 0
+_G.SelBtnAlta.ZIndex = 3
+_G.SelBtnAlta.Parent = _G.SelPanel
+
+_G.cSelAlta = Instance.new("UICorner")
+_G.cSelAlta.CornerRadius = UDim.new(0, 12)
+_G.cSelAlta.Parent = _G.SelBtnAlta
+
+_G.sSelAlta = Instance.new("UIStroke")
+_G.sSelAlta.Color = Color3.fromRGB(60, 120, 255)
+_G.sSelAlta.Thickness = 2
+_G.sSelAlta.Transparency = 0.3
+_G.sSelAlta.Parent = _G.SelBtnAlta
+
+_G.IcoSelAlta = Instance.new("TextLabel")
+_G.IcoSelAlta.Size = UDim2.new(1, 0, 0, 50)
+_G.IcoSelAlta.Position = UDim2.new(0, 0, 0, 20)
+_G.IcoSelAlta.BackgroundTransparency = 1
+_G.IcoSelAlta.Text = "💻"
+_G.IcoSelAlta.TextSize = 40
+_G.IcoSelAlta.ZIndex = 4
+_G.IcoSelAlta.Parent = _G.SelBtnAlta
+
+_G.TxtSelAlta = Instance.new("TextLabel")
+_G.TxtSelAlta.Size = UDim2.new(1, -20, 0, 25)
+_G.TxtSelAlta.Position = UDim2.new(0, 10, 0, 75)
+_G.TxtSelAlta.BackgroundTransparency = 1
+_G.TxtSelAlta.Text = "GAMA ALTA"
+_G.TxtSelAlta.TextColor3 = Color3.fromRGB(60, 120, 255)
+_G.TxtSelAlta.Font = Enum.Font.GothamBlack
+_G.TxtSelAlta.TextSize = 16
+_G.TxtSelAlta.ZIndex = 4
+_G.TxtSelAlta.Parent = _G.SelBtnAlta
+
+_G.DscSelAlta = Instance.new("TextLabel")
+_G.DscSelAlta.Size = UDim2.new(1, -20, 0, 70)
+_G.DscSelAlta.Position = UDim2.new(0, 10, 0, 105)
+_G.DscSelAlta.BackgroundTransparency = 1
+_G.DscSelAlta.Text = "PC / Celular potente\n\n✅ Todas las funciones"
+_G.DscSelAlta.TextColor3 = Color3.fromRGB(255, 255, 255)
+_G.DscSelAlta.Font = Enum.Font.GothamMedium
+_G.DscSelAlta.TextSize = 10
+_G.DscSelAlta.TextWrapped = true
+_G.DscSelAlta.TextXAlignment = Enum.TextXAlignment.Center
+_G.DscSelAlta.TextYAlignment = Enum.TextYAlignment.Top
+_G.DscSelAlta.ZIndex = 4
+_G.DscSelAlta.Parent = _G.SelBtnAlta
+
+-- 🟠 BOTÓN GAMA BAJA
+_G.SelBtnBaja = Instance.new("TextButton")
+_G.SelBtnBaja.Size = UDim2.new(0.45, -15, 0, 180)
+_G.SelBtnBaja.Position = UDim2.new(0.55, 0, 0, 105)
+_G.SelBtnBaja.BackgroundColor3 = Color3.fromRGB(40, 20, 15)
+_G.SelBtnBaja.BackgroundTransparency = 0.3
+_G.SelBtnBaja.Text = ""
+_G.SelBtnBaja.BorderSizePixel = 0
+_G.SelBtnBaja.ZIndex = 3
+_G.SelBtnBaja.Parent = _G.SelPanel
+
+_G.cSelBaja = Instance.new("UICorner")
+_G.cSelBaja.CornerRadius = UDim.new(0, 12)
+_G.cSelBaja.Parent = _G.SelBtnBaja
+
+_G.sSelBaja = Instance.new("UIStroke")
+_G.sSelBaja.Color = Color3.fromRGB(255, 140, 0)
+_G.sSelBaja.Thickness = 2
+_G.sSelBaja.Transparency = 0.3
+_G.sSelBaja.Parent = _G.SelBtnBaja
+
+_G.IcoSelBaja = Instance.new("TextLabel")
+_G.IcoSelBaja.Size = UDim2.new(1, 0, 0, 50)
+_G.IcoSelBaja.Position = UDim2.new(0, 0, 0, 20)
+_G.IcoSelBaja.BackgroundTransparency = 1
+_G.IcoSelBaja.Text = "📱"
+_G.IcoSelBaja.TextSize = 40
+_G.IcoSelBaja.ZIndex = 4
+_G.IcoSelBaja.Parent = _G.SelBtnBaja
+
+_G.TxtSelBaja = Instance.new("TextLabel")
+_G.TxtSelBaja.Size = UDim2.new(1, -20, 0, 25)
+_G.TxtSelBaja.Position = UDim2.new(0, 10, 0, 75)
+_G.TxtSelBaja.BackgroundTransparency = 1
+_G.TxtSelBaja.Text = "GAMA BAJA"
+_G.TxtSelBaja.TextColor3 = Color3.fromRGB(255, 140, 0)
+_G.TxtSelBaja.Font = Enum.Font.GothamBlack
+_G.TxtSelBaja.TextSize = 16
+_G.TxtSelBaja.ZIndex = 4
+_G.TxtSelBaja.Parent = _G.SelBtnBaja
+
+_G.DscSelBaja = Instance.new("TextLabel")
+_G.DscSelBaja.Size = UDim2.new(1, -20, 0, 70)
+_G.DscSelBaja.Position = UDim2.new(0, 10, 0, 105)
+_G.DscSelBaja.BackgroundTransparency = 1
+_G.DscSelBaja.Text = "Celular viejo / lento\n\n✅ Funciones esenciales"
+_G.DscSelBaja.TextColor3 = Color3.fromRGB(255, 255, 255)
+_G.DscSelBaja.Font = Enum.Font.GothamMedium
+_G.DscSelBaja.TextSize = 10
+_G.DscSelBaja.TextWrapped = true
+_G.DscSelBaja.TextXAlignment = Enum.TextXAlignment.Center
+_G.DscSelBaja.TextYAlignment = Enum.TextYAlignment.Top
+_G.DscSelBaja.ZIndex = 4
+_G.DscSelBaja.Parent = _G.SelBtnBaja
+
+-- 🎯 Función de selección
+_G.SelFunc = function(gamaBaja)
+    _G.UZIVERT_GAMA_BAJA = gamaBaja
+    _G.UZIVERT_SELECCIONADO = true
+    print("🎮 Seleccionado: " .. (gamaBaja and "GAMA BAJA" or "GAMA ALTA"))
+    
+    _G.TWSel:Create(_G.SelPanel, TweenInfo.new(0.3), {
+        Size = UDim2.new(0, 0, 0, 0),
+        Position = UDim2.new(0.5, 0, 0.5, 0)
+    }):Play()
+    
+    task.wait(0.3)
+    _G.SelGui:Destroy()
+end
+
+_G.SelBtnAlta.MouseButton1Click:Connect(function() _G.SelFunc(false) end)
+_G.SelBtnBaja.MouseButton1Click:Connect(function() _G.SelFunc(true) end)
+
+_G.SelBtnAlta.MouseEnter:Connect(function()
+    _G.TWSel:Create(_G.SelBtnAlta, TweenInfo.new(0.2), {BackgroundTransparency = 0.1}):Play()
+    _G.TWSel:Create(_G.sSelAlta, TweenInfo.new(0.2), {Transparency = 0}):Play()
+end)
+_G.SelBtnAlta.MouseLeave:Connect(function()
+    _G.TWSel:Create(_G.SelBtnAlta, TweenInfo.new(0.2), {BackgroundTransparency = 0.3}):Play()
+    _G.TWSel:Create(_G.sSelAlta, TweenInfo.new(0.2), {Transparency = 0.3}):Play()
+end)
+
+_G.SelBtnBaja.MouseEnter:Connect(function()
+    _G.TWSel:Create(_G.SelBtnBaja, TweenInfo.new(0.2), {BackgroundTransparency = 0.1}):Play()
+    _G.TWSel:Create(_G.sSelBaja, TweenInfo.new(0.2), {Transparency = 0}):Play()
+end)
+_G.SelBtnBaja.MouseLeave:Connect(function()
+    _G.TWSel:Create(_G.SelBtnBaja, TweenInfo.new(0.2), {BackgroundTransparency = 0.3}):Play()
+    _G.TWSel:Create(_G.sSelBaja, TweenInfo.new(0.2), {Transparency = 0.3}):Play()
+end)
+
+-- ⭐ ESPERAR A QUE EL USUARIO ELIJA
+while not _G.UZIVERT_SELECCIONADO do
+    task.wait(0.1)
+end
+
+print("🎃 Iniciando Uzivert Hub " .. (_G.UZIVERT_GAMA_BAJA and "GAMA BAJA" or "GAMA ALTA"))
 
 local COLORES = {
     Fondo = Color3.fromRGB(10, 5, 15),
@@ -89,6 +312,26 @@ local CONFIG_DEFAULT = {
     SilentPredV = 1.44,
     SilentMaxSim = 0.050,
     SilentPredPing = 0.085,
+    AntiAim = false,
+    AntiAimIgnore = true,
+    AntiAimSlot1 = "None",
+    AntiAimSlot2 = "None",
+    AntiAimSlot3 = "None",
+    SpeedGlitch = false,
+    SpeedGlitchValor = 50,
+    Headless = false,
+    KorbloxRight = false,
+    KorbloxLeft = false,
+    InventoryUnlimiter = false,
+    InventoryMaxItems = 10,
+    AutoGetTools = false,
+    AutoToySlot1 = "None",
+    AutoToySlot2 = "None",
+    AutoToySlot3 = "None",
+    AutoToySlot4 = "None",
+    FireflyClutch = false,
+    FireflyTimer = true,
+    FireflyTimerSize = 5,
 }
 
 local CONFIG = {}
@@ -100,12 +343,12 @@ local function cargarConfig()
         end)
         if ok and data then
             CONFIG = data
-            print("🎃 Configuración v4.7.1 cargada")
+            print("🎃 Configuración v4.7.3 cargada")
             return true
         end
     end
     CONFIG = CONFIG_DEFAULT
-    print("📝 Configuración v4.7.1 por defecto")
+    print("📝 Configuración v4.7.3 por defecto")
     return false
 end
 
@@ -145,7 +388,7 @@ local AUTO_PRANK_BOMB_ACTIVO = CONFIG.AutoPrankBomb or false
 local prankBombConnection = nil
 local KILL_ALL_ACTIVO = CONFIG.KillAllActivo or false
 
-print("🎃 Parte 1/10 cargada - v4.7.1 HALLOWEEN")
+print("🎃 Parte 1/10 cargada - v4.7.3 HALLOWEEN")
 
 -- 🎃 Ping a la API (cada 2 min)
 task.spawn(function()
@@ -839,17 +1082,435 @@ local PaginaVisual = crearPagina("Visual", "🎃", 1)
 local PaginaAim = crearPagina("Combat", "👻", 2)
 local PaginaAura = crearPagina("Crab", "💀", 3)
 local PaginaPlayer = crearPagina("Jugador", "🦇", 4)
-local PaginaFling = crearPagina("Fling", "🕷️", 5)
-local PaginaAnims = crearPagina("Anims", "🕸️", 6)
-local PaginaBomb = crearPagina("Bomb Jump", "🧟", 7)
-local PaginaRend = crearPagina("Fps", "⚰️", 8)
-local PaginaInfo = crearPagina("Info", "🍬", 9)
-local PaginaUpdate = crearPagina("Update", "📜", 10)
-local PaginaAvisos = crearPagina("Avisos", "⚠️", 11)
-local PaginaCreador = crearPagina("Creador", "👑", 12)
+local PaginaBomb = crearPagina("Clutchs", "🔥", 7)
+local PaginaInfo = crearPagina("Info", "🍬", 10)
+local PaginaUpdate = crearPagina("Update", "📜", 11)
+local PaginaAvisos = crearPagina("Avisos", "⚠️", 12)
+local PaginaCreador = crearPagina("Creador", "👑", 13)
+
+-- Pestañas solo de GAMA ALTA
+if not _G.UZIVERT_GAMA_BAJA then
+    PaginaFling = crearPagina("Fling", "🕷️", 5)
+    PaginaAnims = crearPagina("Anims", "🕸️", 6)
+    PaginaUtilidades = crearPagina("Utilidades", "🧰", 8)
+    PaginaRend = crearPagina("Fps", "⚰️", 9)
+end
 
 Paginas[1][2].Visible = true
 Paginas[1][1].BackgroundTransparency = 0.3
+
+-- ============================================
+-- 🧰 UTILIDADES: INVENTORY UNLIMITER + AUTO GET TOOLS
+-- ============================================
+if not _G.UZIVERT_GAMA_BAJA then
+
+-- Variables globales
+_G.UZIVERT_INV_ON = CONFIG.InventoryUnlimiter or false
+_G.UZIVERT_INV_LIMIT = CONFIG.InventoryMaxItems or 10
+_G.UZIVERT_AUTOGET_ON = CONFIG.AutoGetTools or false
+_G.UZIVERT_TOYS = {
+    CONFIG.AutoToySlot1 or "None",
+    CONFIG.AutoToySlot2 or "None",
+    CONFIG.AutoToySlot3 or "None",
+    CONFIG.AutoToySlot4 or "None",
+}
+_G.UZIVERT_TOY_ATTEMPTS = {}
+_G.UZIVERT_TARGET_FUNCTIONS = {}
+_G.UZIVERT_TARGETS_SCANNED = false
+_G.UZIVERT_RECOVERY_TOKEN = 0
+_G.UZIVERT_RECOVERY_RUNNING = false
+_G.UZIVERT_OBSERVED_BACKPACK = nil
+_G.UZIVERT_TOY_ORDER_DIRTY = true
+
+-- Funciones auxiliares
+local getupvaluesLocal = (debug and debug.getupvalues) or getupvalues
+local setupvalueLocal = (debug and debug.setupvalue) or setupvalue
+local getinfoLocal = (debug and debug.getinfo) or getinfo
+local getconstantsLocal = (debug and debug.getconstants) or getconstants
+
+_G.UZIVERT_DISCOVER_TARGETS = function(force)
+    if _G.UZIVERT_TARGETS_SCANNED and not force then return end
+    _G.UZIVERT_TARGETS_SCANNED = false
+    table.clear(_G.UZIVERT_TARGET_FUNCTIONS)
+    
+    if not (type(getgc) == "function" and type(getupvaluesLocal) == "function"
+        and type(setupvalueLocal) == "function" and type(getinfoLocal) == "function") then
+        return
+    end
+    
+    local okGc, objects = pcall(getgc)
+    if not okGc or type(objects) ~= "table" then return end
+    
+    for _, f in ipairs(objects) do
+        if type(f) == "function" then
+            local success, info = pcall(getinfoLocal, f)
+            if success and type(info) == "table" then
+                local isTarget = (info.name == "updateItemFrame" or info.name == "onItemEquipped")
+                if not isTarget and type(getconstantsLocal) == "function" then
+                    local cSuccess, constants = pcall(getconstantsLocal, f)
+                    if cSuccess and type(constants) == "table" then
+                        local hasTouch, hasEquip = false, false
+                        for _, value in pairs(constants) do
+                            if value == "TouchBinding" then hasTouch = true
+                            elseif value == "EquipButton" then hasEquip = true end
+                        end
+                        isTarget = hasTouch and hasEquip
+                    end
+                end
+                if isTarget then table.insert(_G.UZIVERT_TARGET_FUNCTIONS, f) end
+            end
+        end
+    end
+    _G.UZIVERT_TARGETS_SCANNED = #_G.UZIVERT_TARGET_FUNCTIONS > 0
+end
+
+_G.UZIVERT_APPLY_INV_LIMIT = function(force)
+    if not _G.UZIVERT_INV_ON then return end
+    _G.UZIVERT_DISCOVER_TARGETS(force)
+    for _, f in ipairs(_G.UZIVERT_TARGET_FUNCTIONS) do
+        local ok, upvalues = pcall(getupvaluesLocal, f)
+        if ok and type(upvalues) == "table" then
+            for index, value in pairs(upvalues) do
+                if type(index) == "number" and type(value) == "number" and value >= 2 and value <= 10 then
+                    pcall(setupvalueLocal, f, index, _G.UZIVERT_INV_LIMIT)
+                end
+            end
+        end
+    end
+end
+
+_G.UZIVERT_GET_BACKPACK = function()
+    if _G.UZIVERT_OBSERVED_BACKPACK and _G.UZIVERT_OBSERVED_BACKPACK.Parent == LocalPlayer then
+        return _G.UZIVERT_OBSERVED_BACKPACK
+    end
+    return LocalPlayer:FindFirstChildOfClass("Backpack")
+end
+
+_G.UZIVERT_FIND_TOY_FOLDER = function()
+    local backpack = _G.UZIVERT_GET_BACKPACK()
+    return backpack and backpack:FindFirstChild("Toys") or nil
+end
+
+_G.UZIVERT_GET_TOY_NAMES = function()
+    local names = {"None"}
+    local folder = _G.UZIVERT_FIND_TOY_FOLDER()
+    if folder then
+        for _, toy in ipairs(folder:GetChildren()) do
+            if not table.find(names, toy.Name) then names[#names+1] = toy.Name end
+        end
+    end
+    table.sort(names, function(a, b)
+        if a == b then return false end
+        if a == "None" then return true end
+        if b == "None" then return false end
+        return a:lower() < b:lower()
+    end)
+    return names
+end
+
+_G.UZIVERT_HAS_TOOL = function(name, char, backpack)
+    local inChar = char and char:FindFirstChild(name)
+    local inBackpack = backpack and backpack:FindFirstChild(name)
+    return (inChar and inChar:IsA("Tool")) or (inBackpack and inBackpack:IsA("Tool")) or false
+end
+
+_G.UZIVERT_TOY_REMOTE = function()
+    local rs = game:GetService("ReplicatedStorage")
+    local remotes = rs:FindFirstChild("Remotes")
+    local extras = remotes and remotes:FindFirstChild("Extras")
+    local remote = extras and extras:FindFirstChild("ReplicateToy")
+    if remote and remote:IsA("RemoteFunction") then return remote end
+end
+
+_G.UZIVERT_CANCEL_TOY_REQUESTS = function()
+    for _, attempt in pairs(_G.UZIVERT_TOY_ATTEMPTS) do
+        if attempt.thread and type(task.cancel) == "function" then pcall(task.cancel, attempt.thread) end
+    end
+    table.clear(_G.UZIVERT_TOY_ATTEMPTS)
+    _G.UZIVERT_ACTIVE_REQUEST = nil
+end
+
+_G.UZIVERT_REQUEST_RECOVERY = function(forceScan)
+    if not _G.UZIVERT_INV_ON and not _G.UZIVERT_AUTOGET_ON then return end
+    local char = LocalPlayer.Character
+    if not char then return end
+    
+    if forceScan then 
+        _G.UZIVERT_TARGETS_SCANNED = false 
+        table.clear(_G.UZIVERT_TOY_ATTEMPTS)
+    end
+    
+    if _G.UZIVERT_RECOVERY_RUNNING then
+        _G.UZIVERT_RECOVERY_TOKEN = _G.UZIVERT_RECOVERY_TOKEN + 1
+    end
+    
+    _G.UZIVERT_RECOVERY_RUNNING = true
+    _G.UZIVERT_RECOVERY_TOKEN = _G.UZIVERT_RECOVERY_TOKEN + 1
+    local token = _G.UZIVERT_RECOVERY_TOKEN
+    
+    task.spawn(function()
+        local startedAt = os.clock()
+        local scanTimes = {0, 0.5, 1, 2, 3, 5, 8, 12, 16}
+        local scanIndex = 1
+        local nextInventoryApply = 0
+        local nextToyRequest = 0
+        
+        while token == _G.UZIVERT_RECOVERY_TOKEN and os.clock() - startedAt < 25 do
+            local now = os.clock()
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            
+            if humanoid and humanoid.Health > 0 then
+                local force = false
+                if scanTimes[scanIndex] and now - startedAt >= scanTimes[scanIndex] then
+                    force = true
+                    repeat scanIndex = scanIndex + 1
+                    until not scanTimes[scanIndex] or now - startedAt < scanTimes[scanIndex]
+                end
+                
+                if _G.UZIVERT_INV_ON and (force or (_G.UZIVERT_TARGETS_SCANNED and now >= nextInventoryApply)) then
+                    _G.UZIVERT_APPLY_INV_LIMIT(force)
+                    nextInventoryApply = now + 1
+                end
+                
+                if _G.UZIVERT_AUTOGET_ON and not _G.UZIVERT_ACTIVE_REQUEST and now >= nextToyRequest then
+                    local backpack = _G.UZIVERT_GET_BACKPACK()
+                    local folder = _G.UZIVERT_FIND_TOY_FOLDER()
+                    local remote = _G.UZIVERT_TOY_REMOTE()
+                    
+                    if backpack and folder and remote then
+                        for slot = 1, 4 do
+                            local name = _G.UZIVERT_TOYS[slot]
+                            if name and name ~= "None" then
+                                if not _G.UZIVERT_HAS_TOOL(name, char, backpack) then
+                                    local attempt = _G.UZIVERT_TOY_ATTEMPTS[name]
+                                    if not attempt then
+                                        attempt = {count = 0, nextAt = 0, inFlight = false}
+                                        _G.UZIVERT_TOY_ATTEMPTS[name] = attempt
+                                    end
+                                    
+                                    if folder:FindFirstChild(name) and not attempt.inFlight and attempt.count < 12 and now >= attempt.nextAt then
+                                        attempt.count = attempt.count + 1
+                                        attempt.nextAt = now + 0.5
+                                        attempt.inFlight = true
+                                        _G.UZIVERT_ACTIVE_REQUEST = attempt
+                                        nextToyRequest = now + 0.15
+                                        
+                                        attempt.thread = task.spawn(function()
+                                            pcall(function() remote:InvokeServer(name) end)
+                                            task.wait(0.3)
+                                            attempt.inFlight = false
+                                            if _G.UZIVERT_ACTIVE_REQUEST == attempt then _G.UZIVERT_ACTIVE_REQUEST = nil end
+                                        end)
+                                    end
+                                    break
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            task.wait(0.15)
+        end
+        if token == _G.UZIVERT_RECOVERY_TOKEN then _G.UZIVERT_RECOVERY_RUNNING = false end
+    end)
+end
+
+-- Watchers
+local invConns = {}
+_G.UZIVERT_WATCH_TOY_FOLDER = function(folder)
+    for _, conn in ipairs(invConns) do pcall(function() conn:Disconnect() end) end
+    table.clear(invConns)
+    if not folder then return end
+    invConns[#invConns+1] = folder.ChildAdded:Connect(function() _G.UZIVERT_REQUEST_RECOVERY(false) end)
+    invConns[#invConns+1] = folder.ChildRemoved:Connect(function() _G.UZIVERT_REQUEST_RECOVERY(false) end)
+end
+
+_G.UZIVERT_WATCH_BACKPACK = function(backpack)
+    _G.UZIVERT_OBSERVED_BACKPACK = backpack
+    if backpack then
+        _G.UZIVERT_WATCH_TOY_FOLDER(backpack:FindFirstChild("Toys"))
+        backpack.ChildAdded:Connect(function(child)
+            if child.Name == "Toys" then
+                _G.UZIVERT_WATCH_TOY_FOLDER(child)
+                _G.UZIVERT_REQUEST_RECOVERY(false)
+            end
+        end)
+        backpack.ChildRemoved:Connect(function(child)
+            if child.Name == "Toys" then _G.UZIVERT_WATCH_TOY_FOLDER(nil) end
+        end)
+    end
+end
+
+_G.UZIVERT_WATCH_BACKPACK(LocalPlayer:FindFirstChildOfClass("Backpack"))
+
+LocalPlayer.CharacterAdded:Connect(function(char)
+    -- Esperar a que el personaje tenga los componentes clave
+    local timeout = tick() + 10
+    repeat
+        task.wait(0.1)
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        local backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
+        if humanoid and humanoid.Health > 0 and backpack then
+            break
+        end
+    until tick() > timeout
+    
+    -- Esperar un poco más para que cargue todo
+    task.wait(1.5)
+    
+    -- Watch backpack
+    _G.UZIVERT_WATCH_BACKPACK(LocalPlayer:FindFirstChildOfClass("Backpack"))
+    
+    -- Forzar recovery
+    _G.UZIVERT_REQUEST_RECOVERY(true)
+    
+    -- Reintentos adicionales por si el primero falla
+    task.delay(3, function()
+        if _G.UZIVERT_AUTOGET_ON then
+            _G.UZIVERT_REQUEST_RECOVERY(true)
+        end
+    end)
+    
+    task.delay(6, function()
+        if _G.UZIVERT_AUTOGET_ON then
+            local backpack = _G.UZIVERT_GET_BACKPACK()
+            if backpack then
+                local faltantes = false
+                for slot = 1, 4 do
+                    local name = _G.UZIVERT_TOYS[slot]
+                    if name and name ~= "None" then
+                        if not _G.UZIVERT_HAS_TOOL(name, char, backpack) then
+                            faltantes = true
+                            break
+                        end
+                    end
+                end
+                if faltantes then
+                    _G.UZIVERT_REQUEST_RECOVERY(true)
+                end
+            end
+        end
+    end)
+end)
+
+if _G.UZIVERT_INV_ON or _G.UZIVERT_AUTOGET_ON then
+    task.defer(function() _G.UZIVERT_REQUEST_RECOVERY(false) end)
+end
+
+-- ============================================
+-- UI: SECCIÓN
+-- ============================================
+_G.secUtil = Instance.new("Frame")
+_G.secUtil.Size = UDim2.new(1, 0, 0, 30)
+_G.secUtil.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secUtil.BackgroundTransparency = 0.3
+_G.secUtil.BorderSizePixel = 0
+_G.secUtil.ZIndex = 2
+_G.secUtil.Parent = PaginaUtilidades
+
+_G.cSecUtil = Instance.new("UICorner")
+_G.cSecUtil.CornerRadius = UDim.new(0, 7)
+_G.cSecUtil.Parent = _G.secUtil
+
+_G.sSecUtil = Instance.new("UIStroke")
+_G.sSecUtil.Color = COLORES.Morado3
+_G.sSecUtil.Thickness = 1.5
+_G.sSecUtil.Transparency = 0.2
+_G.sSecUtil.Parent = _G.secUtil
+
+_G.lblSecUtil = Instance.new("TextLabel")
+_G.lblSecUtil.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecUtil.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecUtil.BackgroundTransparency = 1
+_G.lblSecUtil.Text = "🧰 INVENTORY + AUTO GET TOOLS"
+_G.lblSecUtil.TextColor3 = COLORES.Naranja2
+_G.lblSecUtil.Font = Enum.Font.GothamBlack
+_G.lblSecUtil.TextSize = 12
+_G.lblSecUtil.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecUtil.ZIndex = 3
+_G.lblSecUtil.Parent = _G.secUtil
+
+-- Toggle Inventory Unlimiter
+crearToggle(PaginaUtilidades, "🎒 Unlimit Inventory (3→10)", CONFIG.InventoryUnlimiter or false, function(e)
+    _G.UZIVERT_INV_ON = e
+    CONFIG.InventoryUnlimiter = e
+    guardarConfig()
+    if e then _G.UZIVERT_REQUEST_RECOVERY(true) end
+end)
+
+-- Slider Max Items
+crearSlider(PaginaUtilidades, "Máx Items", 3, 10, CONFIG.InventoryMaxItems or 10, function(v)
+    _G.UZIVERT_INV_LIMIT = math.clamp(math.floor(v), 3, 10)
+    CONFIG.InventoryMaxItems = _G.UZIVERT_INV_LIMIT
+    guardarConfig()
+    if _G.UZIVERT_INV_ON then _G.UZIVERT_REQUEST_RECOVERY(true) end
+end)
+
+-- Toggle Auto Get Tools
+crearToggle(PaginaUtilidades, "🎒 Auto Get Tools", CONFIG.AutoGetTools or false, function(e)
+    _G.UZIVERT_AUTOGET_ON = e
+    CONFIG.AutoGetTools = e
+    guardarConfig()
+    if e then
+        _G.UZIVERT_REQUEST_RECOVERY(false)
+    else
+        _G.UZIVERT_CANCEL_TOY_REQUESTS()
+    end
+end)
+
+-- Función para crear dropdowns de toys (CORREGIDA)
+_G.UZIVERT_TOY_DD_BUTTONS = {}
+
+_G.UZIVERT_CREAR_TOY_DD = function(slot)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1, 0, 0, 38)
+    btn.BackgroundColor3 = COLORES.Morado3
+    btn.BackgroundTransparency = 0.5
+    btn.Text = "Toy Slot " .. slot .. ": " .. (_G.UZIVERT_TOYS[slot] or "None") .. " ▼"
+    btn.TextColor3 = COLORES.Texto
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 11
+    btn.BorderSizePixel = 0
+    btn.ZIndex = 2
+    btn.Parent = PaginaUtilidades
+    
+    local cDD = Instance.new("UICorner")
+    cDD.CornerRadius = UDim.new(0, 8)
+    cDD.Parent = btn
+    
+    -- Guardar el botón en su propia variable
+    _G.UZIVERT_TOY_DD_BUTTONS[slot] = btn
+    
+    -- Closure: cada botón sabe su propio slot
+    btn.MouseButton1Click:Connect(function()
+        local lista = _G.UZIVERT_GET_TOY_NAMES()
+        local actual = _G.UZIVERT_TOYS[slot]
+        local idx = table.find(lista, actual)
+        if not idx then idx = 0 end
+        idx = idx % #lista + 1
+        local nuevo = lista[idx]
+        _G.UZIVERT_TOYS[slot] = nuevo
+        CONFIG["AutoToySlot" .. slot] = nuevo
+        guardarConfig()
+        btn.Text = "Toy Slot " .. slot .. ": " .. nuevo .. " ▼"
+        if _G.UZIVERT_AUTOGET_ON then _G.UZIVERT_REQUEST_RECOVERY(false) end
+    end)
+end
+
+_G.UZIVERT_CREAR_TOY_DD(1)
+_G.UZIVERT_CREAR_TOY_DD(2)
+_G.UZIVERT_CREAR_TOY_DD(3)
+_G.UZIVERT_CREAR_TOY_DD(4)
+
+-- Botón Refresh
+crearBoton(PaginaUtilidades, "🔄 Refrescar Lista de Toys", function()
+    print("🎒 Toys disponibles:")
+    for _, toy in ipairs(_G.UZIVERT_GET_TOY_NAMES()) do
+        print("  • " .. toy)
+    end
+end, COLORES.Naranja1)
+
+end
 
 -- ============================================
 -- 🆕 DETECCIÓN DE ROLES CON GetPlayerData (v3)
@@ -2715,11 +3376,13 @@ _G.lblSecAim1.TextXAlignment = Enum.TextXAlignment.Left
 _G.lblSecAim1.ZIndex = 3
 _G.lblSecAim1.Parent = _G.secAim1
 
-crearToggle(PaginaAim, "👻 Auto Shoot (logica avanzada)", CONFIG.ShootAuto, function(e)
-    SHOOT_AUTO = e
-    CONFIG.ShootAuto = e
-    guardarConfig()
-end)
+if not _G.UZIVERT_GAMA_BAJA then
+    crearToggle(PaginaAim, "👻 Auto Shoot (logica avanzada)", CONFIG.ShootAuto, function(e)
+        SHOOT_AUTO = e
+        CONFIG.ShootAuto = e
+        guardarConfig()
+    end)
+end
 
 crearToggle(PaginaAim, "🎯 Mostrar boton SHOOT MURDERER", CONFIG.ShootMostrar ~= false, function(e)
     SHOOT_MOSTRAR = e
@@ -2728,11 +3391,13 @@ crearToggle(PaginaAim, "🎯 Mostrar boton SHOOT MURDERER", CONFIG.ShootMostrar 
     if BotonShoot then BotonShoot.Visible = e end
 end)
 
-crearToggle(PaginaAim, "👻 Mostrar boton SHOOT AVANZADO", CONFIG.ShootAvzMostrar or false, function(e)
-    CONFIG.ShootAvzMostrar = e
-    guardarConfig()
-    if BotonAvz then BotonAvz.Visible = e end
-end)
+if not _G.UZIVERT_GAMA_BAJA then
+    crearToggle(PaginaAim, "👻 Mostrar boton SHOOT AVANZADO", CONFIG.ShootAvzMostrar or false, function(e)
+        CONFIG.ShootAvzMostrar = e
+        guardarConfig()
+        if BotonAvz then BotonAvz.Visible = e end
+    end)
+end
 
 -- 🎯 SECCIÓN 2: AIM LOCK
 _G.secAim2 = Instance.new("Frame")
@@ -2871,6 +3536,8 @@ crearBoton(PaginaAim, "🔄 Resetear a Overdrive", function()
     print("🔄 Silent Aim reseteado a valores Overdrive")
 end, COLORES.Naranja1)
 
+if not _G.UZIVERT_GAMA_BAJA then
+
 -- 🎯 SECCIÓN 3: MATAR
 _G.secAim3 = Instance.new("Frame")
 _G.secAim3.Size = UDim2.new(1, 0, 0, 30)
@@ -2968,6 +3635,8 @@ crearSlider(PaginaAim, "Rango Minimo", 0, 50, SHOOT_RANGO_MIN, function(v)
     guardarConfig()
 end)
 
+end
+
 -- 🎯 SECCIÓN 1: KNIFE (Murderer)
 _G.secCrab1 = Instance.new("Frame")
 _G.secCrab1.Size = UDim2.new(1, 0, 0, 30)
@@ -3009,17 +3678,19 @@ crearSlider(PaginaAura, "Distancia Knife Aura", 5, 50, CONFIG.KnifeAuraDist or 1
     guardarConfig()
 end)
 
-crearToggle(PaginaAura, "🗡️ Auto Stab (Murderer)", CONFIG.AutoStab or false, function(e)
-    _G.UZIVERT_AUTO_STAB_ON = e
-    CONFIG.AutoStab = e
-    guardarConfig()
-end)
+if not _G.UZIVERT_GAMA_BAJA then
+    crearToggle(PaginaAura, "🗡️ Auto Stab (Murderer)", CONFIG.AutoStab or false, function(e)
+        _G.UZIVERT_AUTO_STAB_ON = e
+        CONFIG.AutoStab = e
+        guardarConfig()
+    end)
 
-crearSlider(PaginaAura, "Rango Auto Stab", 5, 25, CONFIG.AutoStabRango or 6, function(v)
-    _G.UZIVERT_STAB_RANGO = v
-    CONFIG.AutoStabRango = v
-    guardarConfig()
-end)
+    crearSlider(PaginaAura, "Rango Auto Stab", 5, 25, CONFIG.AutoStabRango or 6, function(v)
+        _G.UZIVERT_STAB_RANGO = v
+        CONFIG.AutoStabRango = v
+        guardarConfig()
+    end)
+end
 
 -- 🎯 SECCIÓN 2: GUN (Sheriff / Innocent)
 _G.secCrab2 = Instance.new("Frame")
@@ -3110,25 +3781,39 @@ _G.lblSecJug1.TextXAlignment = Enum.TextXAlignment.Left
 _G.lblSecJug1.ZIndex = 3
 _G.lblSecJug1.Parent = _G.secJug1
 
-crearSlider(PaginaPlayer, "Walkspeed", 16, 200, CONFIG.Walkspeed, function(v)
-    WALKSPEED_VALOR = v
-    CONFIG.Walkspeed = v
+if not _G.UZIVERT_GAMA_BAJA then
+    crearSlider(PaginaPlayer, "Walkspeed", 16, 200, CONFIG.Walkspeed, function(v)
+        WALKSPEED_VALOR = v
+        CONFIG.Walkspeed = v
+        guardarConfig()
+    end)
+
+    crearToggle(PaginaPlayer, "👻 Noclip", CONFIG.Noclip, function(e)
+        NOCLIP_ACTIVO = e
+        CONFIG.Noclip = e
+        guardarConfig()
+    end)
+
+    crearToggle(PaginaPlayer, "🌀 Spinbot (Anti-Aim)", CONFIG.Spinbot, function(e)
+        SPINBOT_ACTIVO = e
+        CONFIG.Spinbot = e
+        guardarConfig()
+    end)
+end
+
+crearToggle(PaginaPlayer, "⚡ Speed Glitch (Shift Lock)", CONFIG.SpeedGlitch or false, function(e)
+    _G.UZIVERT_SG_ON = e
+    CONFIG.SpeedGlitch = e
     guardarConfig()
 end)
 
-crearToggle(PaginaPlayer, "👻 Noclip", CONFIG.Noclip, function(e)
-    NOCLIP_ACTIVO = e
-    CONFIG.Noclip = e
+crearSlider(PaginaPlayer, "Velocidad Speed Glitch", 1, 300, CONFIG.SpeedGlitchValor or 50, function(v)
+    _G.UZIVERT_SG_VALOR = v
+    CONFIG.SpeedGlitchValor = v
     guardarConfig()
 end)
 
-crearToggle(PaginaPlayer, "🌀 Spinbot (Anti-Aim)", CONFIG.Spinbot, function(e)
-    SPINBOT_ACTIVO = e
-    CONFIG.Spinbot = e
-    guardarConfig()
-end)
-
--- 🎯 SECCIÓN 2: DEFENSA
+-- 🎯 SECCIÓN 2: DEFENSA (Anti-Fling + Invisibilidad → AMBAS)
 _G.secJug2 = Instance.new("Frame")
 _G.secJug2.Size = UDim2.new(1, 0, 0, 30)
 _G.secJug2.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
@@ -3177,6 +3862,309 @@ crearToggle(PaginaPlayer, "👻 Activar Boton de Invisibilidad", false, function
         end)
     end
 end)
+
+-- 🎯 SECCIÓN: ANTI-AIM
+_G.secAntiAim = Instance.new("Frame")
+_G.secAntiAim.Size = UDim2.new(1, 0, 0, 30)
+_G.secAntiAim.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secAntiAim.BackgroundTransparency = 0.3
+_G.secAntiAim.BorderSizePixel = 0
+_G.secAntiAim.ZIndex = 2
+_G.secAntiAim.Parent = PaginaPlayer
+
+_G.cSecAntiAim = Instance.new("UICorner")
+_G.cSecAntiAim.CornerRadius = UDim.new(0, 7)
+_G.cSecAntiAim.Parent = _G.secAntiAim
+
+_G.sSecAntiAim = Instance.new("UIStroke")
+_G.sSecAntiAim.Color = COLORES.Morado3
+_G.sSecAntiAim.Thickness = 1.5
+_G.sSecAntiAim.Transparency = 0.2
+_G.sSecAntiAim.Parent = _G.secAntiAim
+
+_G.lblSecAntiAim = Instance.new("TextLabel")
+_G.lblSecAntiAim.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecAntiAim.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecAntiAim.BackgroundTransparency = 1
+_G.lblSecAntiAim.Text = "🎯 ANTI-AIM"
+_G.lblSecAntiAim.TextColor3 = COLORES.Naranja2
+_G.lblSecAntiAim.Font = Enum.Font.GothamBlack
+_G.lblSecAntiAim.TextSize = 12
+_G.lblSecAntiAim.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecAntiAim.ZIndex = 3
+_G.lblSecAntiAim.Parent = _G.secAntiAim
+
+-- Variables globales del Anti-Aim
+_G.UZIVERT_AA_ON = false
+_G.UZIVERT_AA_IGNORE = true
+_G.UZIVERT_AA_CON = nil
+_G.UZIVERT_AA_HAD_KNIFE = false
+_G.UZIVERT_AA_SLOT1 = nil
+_G.UZIVERT_AA_SLOT2 = nil
+_G.UZIVERT_AA_SLOT3 = nil
+
+-- Funciones auxiliares del Anti-Aim
+_G.UZIVERT_AA_FIND = function(name)
+    if not name or name == "None" then return nil end
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p.Name == name then return p end
+    end
+    return nil
+end
+
+_G.UZIVERT_AA_HAS_KNIFE = function()
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    local character = LocalPlayer.Character
+    if backpack and backpack:FindFirstChild("Knife") then return true end
+    if character and character:FindFirstChild("Knife") then return true end
+    return false
+end
+
+_G.UZIVERT_AA_NEARBY = function(hrp)
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local otherHrp = player.Character.HumanoidRootPart
+            if (otherHrp.Position - hrp.Position).Magnitude <= 6 then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+_G.UZIVERT_AA_WATER = function(humanoid)
+    local state = humanoid:GetState()
+    return state == Enum.HumanoidStateType.Swimming or humanoid.FloorMaterial == Enum.Material.Water
+end
+
+_G.UZIVERT_AA_IGNORED = function()
+    if not _G.UZIVERT_AA_IGNORE then return false end
+    local targets = {_G.UZIVERT_AA_SLOT1, _G.UZIVERT_AA_SLOT2, _G.UZIVERT_AA_SLOT3}
+    for _, player in ipairs(targets) do
+        if player and player.Parent then
+            local backpack = player:FindFirstChild("Backpack")
+            local character = player.Character
+            if backpack then
+                for _, item in ipairs(backpack:GetChildren()) do
+                    if item:IsA("Tool") then return true end
+                end
+            end
+            if character then
+                for _, item in ipairs(character:GetChildren()) do
+                    if item:IsA("Tool") then return true end
+                end
+            end
+        end
+    end
+    return false
+end
+
+_G.UZIVERT_AA_ROLE_STEP = function(humanoid)
+    task.spawn(function()
+        local randomX = math.random() > 0.5 and 1 or -1
+        local randomZ = math.random() > 0.5 and 1 or -1
+        local moveDir = Vector3.new(randomX, 0, randomZ).Unit
+        local startTime = tick()
+        while tick() - startTime < 0.15 do
+            if humanoid and humanoid.Parent then
+                humanoid:Move(moveDir, false)
+            end
+            RunService.RenderStepped:Wait()
+        end
+    end)
+end
+
+_G.UZIVERT_AA_STOP = function()
+    if _G.UZIVERT_AA_CON then
+        _G.UZIVERT_AA_CON:Disconnect()
+        _G.UZIVERT_AA_CON = nil
+    end
+    _G.UZIVERT_AA_HAD_KNIFE = false
+end
+
+_G.UZIVERT_AA_START = function()
+    if _G.UZIVERT_AA_CON then return end
+    
+    _G.UZIVERT_AA_CON = RunService.Heartbeat:Connect(function()
+        if _G.UZIVERT_AA_IGNORED() then return end
+
+        local character = LocalPlayer.Character
+        if character and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Humanoid") then
+            local humanoid = character.Humanoid
+            if humanoid.Health > 0 then
+                local hrp = character.HumanoidRootPart
+                local currentlyHasKnife = _G.UZIVERT_AA_HAS_KNIFE()
+
+                if currentlyHasKnife and not _G.UZIVERT_AA_HAD_KNIFE then
+                    _G.UZIVERT_AA_ROLE_STEP(humanoid)
+                end
+                _G.UZIVERT_AA_HAD_KNIFE = currentlyHasKnife
+
+                if currentlyHasKnife and not _G.UZIVERT_AA_NEARBY(hrp) and not _G.UZIVERT_AA_WATER(humanoid) then
+                    local oldVelocity = hrp.AssemblyLinearVelocity
+                    local state = humanoid:GetState()
+                    local isJumping = (state == Enum.HumanoidStateType.Jumping or state == Enum.HumanoidStateType.Freefall)
+                    local isStopped = (humanoid.MoveDirection.Magnitude == 0)
+                    local multiplier = math.random(1, 2) == 1 and 320 or -320
+                    
+                    if isJumping then
+                        local jumpMultY = math.random(1, 2) == 1 and 250 or -250
+                        hrp.AssemblyLinearVelocity = Vector3.new(multiplier, jumpMultY, multiplier)
+                    elseif isStopped then
+                        local stopMult = math.random(1, 2) == 1 and 400 or -400
+                        hrp.AssemblyLinearVelocity = Vector3.new(stopMult, 0, stopMult)
+                    else
+                        hrp.AssemblyLinearVelocity = Vector3.new(multiplier, 0, multiplier)
+                    end
+                    
+                    RunService.RenderStepped:Wait()
+                    hrp.AssemblyLinearVelocity = oldVelocity
+                end
+            end
+        else
+            _G.UZIVERT_AA_HAD_KNIFE = false
+        end
+    end)
+end
+
+LocalPlayer.CharacterAdded:Connect(function()
+    _G.UZIVERT_AA_HAD_KNIFE = false
+end)
+
+-- 🎯 Toggle principal
+crearToggle(PaginaPlayer, "🎯 Anti-Aim", CONFIG.AntiAim or false, function(e)
+    _G.UZIVERT_AA_ON = e
+    CONFIG.AntiAim = e
+    guardarConfig()
+    if e then
+        _G.UZIVERT_AA_START()
+    else
+        _G.UZIVERT_AA_STOP()
+    end
+end)
+
+-- 🎯 Toggle Ignore List
+crearToggle(PaginaPlayer, "🛡️ Anti-Aim Ignore List", CONFIG.AntiAimIgnore or true, function(e)
+    _G.UZIVERT_AA_IGNORE = e
+    CONFIG.AntiAimIgnore = e
+    guardarConfig()
+end)
+
+-- Función para armar dropdowns
+_G.UZIVERT_AA_GET_LIST = function()
+    local list = {"None"}
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer then
+            table.insert(list, p.Name)
+        end
+    end
+    return list
+end
+
+-- Dropdowns de ignorados
+_G.UZIVERT_AA_DD1 = Instance.new("TextButton")
+_G.UZIVERT_AA_DD1.Size = UDim2.new(1, 0, 0, 38)
+_G.UZIVERT_AA_DD1.BackgroundColor3 = COLORES.Morado3
+_G.UZIVERT_AA_DD1.BackgroundTransparency = 0.5
+_G.UZIVERT_AA_DD1.Text = "Ignorar 1: None ▼"
+_G.UZIVERT_AA_DD1.TextColor3 = COLORES.Texto
+_G.UZIVERT_AA_DD1.Font = Enum.Font.GothamBold
+_G.UZIVERT_AA_DD1.TextSize = 11
+_G.UZIVERT_AA_DD1.BorderSizePixel = 0
+_G.UZIVERT_AA_DD1.ZIndex = 2
+_G.UZIVERT_AA_DD1.Parent = PaginaPlayer
+
+_G.cAADD1 = Instance.new("UICorner")
+_G.cAADD1.CornerRadius = UDim.new(0, 8)
+_G.cAADD1.Parent = _G.UZIVERT_AA_DD1
+
+_G.UZIVERT_AA_DD1.MouseButton1Click:Connect(function()
+    local list = _G.UZIVERT_AA_GET_LIST()
+    local idx = table.find(list, _G.UZIVERT_AA_SLOT1 and _G.UZIVERT_AA_SLOT1.Name or "None")
+    idx = (idx or 1) % #list + 1
+    local newName = list[idx]
+    _G.UZIVERT_AA_SLOT1 = _G.UZIVERT_AA_FIND(newName)
+    _G.UZIVERT_AA_DD1.Text = "Ignorar 1: " .. newName .. " ▼"
+    CONFIG.AntiAimSlot1 = newName
+    guardarConfig()
+end)
+
+_G.UZIVERT_AA_DD2 = Instance.new("TextButton")
+_G.UZIVERT_AA_DD2.Size = UDim2.new(1, 0, 0, 38)
+_G.UZIVERT_AA_DD2.BackgroundColor3 = COLORES.Morado3
+_G.UZIVERT_AA_DD2.BackgroundTransparency = 0.5
+_G.UZIVERT_AA_DD2.Text = "Ignorar 2: None ▼"
+_G.UZIVERT_AA_DD2.TextColor3 = COLORES.Texto
+_G.UZIVERT_AA_DD2.Font = Enum.Font.GothamBold
+_G.UZIVERT_AA_DD2.TextSize = 11
+_G.UZIVERT_AA_DD2.BorderSizePixel = 0
+_G.UZIVERT_AA_DD2.ZIndex = 2
+_G.UZIVERT_AA_DD2.Parent = PaginaPlayer
+
+_G.cAADD2 = Instance.new("UICorner")
+_G.cAADD2.CornerRadius = UDim.new(0, 8)
+_G.cAADD2.Parent = _G.UZIVERT_AA_DD2
+
+_G.UZIVERT_AA_DD2.MouseButton1Click:Connect(function()
+    local list = _G.UZIVERT_AA_GET_LIST()
+    local idx = table.find(list, _G.UZIVERT_AA_SLOT2 and _G.UZIVERT_AA_SLOT2.Name or "None")
+    idx = (idx or 1) % #list + 1
+    local newName = list[idx]
+    _G.UZIVERT_AA_SLOT2 = _G.UZIVERT_AA_FIND(newName)
+    _G.UZIVERT_AA_DD2.Text = "Ignorar 2: " .. newName .. " ▼"
+    CONFIG.AntiAimSlot2 = newName
+    guardarConfig()
+end)
+
+_G.UZIVERT_AA_DD3 = Instance.new("TextButton")
+_G.UZIVERT_AA_DD3.Size = UDim2.new(1, 0, 0, 38)
+_G.UZIVERT_AA_DD3.BackgroundColor3 = COLORES.Morado3
+_G.UZIVERT_AA_DD3.BackgroundTransparency = 0.5
+_G.UZIVERT_AA_DD3.Text = "Ignorar 3: None ▼"
+_G.UZIVERT_AA_DD3.TextColor3 = COLORES.Texto
+_G.UZIVERT_AA_DD3.Font = Enum.Font.GothamBold
+_G.UZIVERT_AA_DD3.TextSize = 11
+_G.UZIVERT_AA_DD3.BorderSizePixel = 0
+_G.UZIVERT_AA_DD3.ZIndex = 2
+_G.UZIVERT_AA_DD3.Parent = PaginaPlayer
+
+_G.cAADD3 = Instance.new("UICorner")
+_G.cAADD3.CornerRadius = UDim.new(0, 8)
+_G.cAADD3.Parent = _G.UZIVERT_AA_DD3
+
+_G.UZIVERT_AA_DD3.MouseButton1Click:Connect(function()
+    local list = _G.UZIVERT_AA_GET_LIST()
+    local idx = table.find(list, _G.UZIVERT_AA_SLOT3 and _G.UZIVERT_AA_SLOT3.Name or "None")
+    idx = (idx or 1) % #list + 1
+    local newName = list[idx]
+    _G.UZIVERT_AA_SLOT3 = _G.UZIVERT_AA_FIND(newName)
+    _G.UZIVERT_AA_DD3.Text = "Ignorar 3: " .. newName .. " ▼"
+    CONFIG.AntiAimSlot3 = newName
+    guardarConfig()
+end)
+
+-- Restaurar valores guardados
+if CONFIG.AntiAimSlot1 and CONFIG.AntiAimSlot1 ~= "None" then
+    _G.UZIVERT_AA_SLOT1 = _G.UZIVERT_AA_FIND(CONFIG.AntiAimSlot1)
+    _G.UZIVERT_AA_DD1.Text = "Ignorar 1: " .. CONFIG.AntiAimSlot1 .. " ▼"
+end
+if CONFIG.AntiAimSlot2 and CONFIG.AntiAimSlot2 ~= "None" then
+    _G.UZIVERT_AA_SLOT2 = _G.UZIVERT_AA_FIND(CONFIG.AntiAimSlot2)
+    _G.UZIVERT_AA_DD2.Text = "Ignorar 2: " .. CONFIG.AntiAimSlot2 .. " ▼"
+end
+if CONFIG.AntiAimSlot3 and CONFIG.AntiAimSlot3 ~= "None" then
+    _G.UZIVERT_AA_SLOT3 = _G.UZIVERT_AA_FIND(CONFIG.AntiAimSlot3)
+    _G.UZIVERT_AA_DD3.Text = "Ignorar 3: " .. CONFIG.AntiAimSlot3 .. " ▼"
+end
+
+-- Arrancar si estaba activo
+if CONFIG.AntiAim then
+    _G.UZIVERT_AA_ON = true
+    task.wait(0.5)
+    _G.UZIVERT_AA_START()
+end
+
+if not _G.UZIVERT_GAMA_BAJA then
 
 -- 🎯 SECCIÓN 3: MUSIC PLAYER
 _G.secJug3 = Instance.new("Frame")
@@ -3228,7 +4216,6 @@ _G.UZIVERT_MUSIC_CANCIONES = {
     {Nombre = "Canción 13", ID = "131465489873214"},
 }
 
--- Cargar canciones custom del CONFIG
 if CONFIG.CancionesCustom then
     for _, c in ipairs(CONFIG.CancionesCustom) do
         table.insert(_G.UZIVERT_MUSIC_CANCIONES, c)
@@ -3295,7 +4282,6 @@ _G.UZIVERT_MUSIC_SOUND.Ended:Connect(function()
     end
 end)
 
--- Label "Ahora suena"
 _G.UZIVERT_MUSIC_LABEL = Instance.new("TextLabel")
 _G.UZIVERT_MUSIC_LABEL.Size = UDim2.new(1, 0, 0, 40)
 _G.UZIVERT_MUSIC_LABEL.BackgroundColor3 = Color3.fromRGB(10, 5, 15)
@@ -3312,7 +4298,6 @@ _G.cMusLabel = Instance.new("UICorner")
 _G.cMusLabel.CornerRadius = UDim.new(0, 8)
 _G.cMusLabel.Parent = _G.UZIVERT_MUSIC_LABEL
 
--- 🎧 CONTENEDOR PLAY / STOP
 _G.musFilaPlay = Instance.new("Frame")
 _G.musFilaPlay.Size = UDim2.new(1, 0, 0, 38)
 _G.musFilaPlay.BackgroundTransparency = 1
@@ -3325,7 +4310,6 @@ _G.musLayoutPlay.Padding = UDim.new(0, 6)
 _G.musLayoutPlay.SortOrder = Enum.SortOrder.LayoutOrder
 _G.musLayoutPlay.Parent = _G.musFilaPlay
 
--- Botón Play/Pausa
 _G.UZIVERT_MUSIC_PLAYBTN = Instance.new("TextButton")
 _G.UZIVERT_MUSIC_PLAYBTN.Size = UDim2.new(0.5, -3, 1, 0)
 _G.UZIVERT_MUSIC_PLAYBTN.BackgroundColor3 = Color3.fromRGB(60, 200, 100)
@@ -3357,7 +4341,6 @@ _G.UZIVERT_MUSIC_PLAYBTN.MouseButton1Click:Connect(function()
     end
 end)
 
--- Botón Stop
 _G.UZIVERT_MUSIC_STOPBTN = Instance.new("TextButton")
 _G.UZIVERT_MUSIC_STOPBTN.Size = UDim2.new(0.5, -3, 1, 0)
 _G.UZIVERT_MUSIC_STOPBTN.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
@@ -3382,7 +4365,6 @@ _G.UZIVERT_MUSIC_STOPBTN.MouseButton1Click:Connect(function()
     _G.UZIVERT_MUSIC_LABEL.Text = "🎵 Sin canción"
 end)
 
--- 🎧 CONTENEDOR ANTERIOR / SIGUIENTE
 _G.musFilaNav = Instance.new("Frame")
 _G.musFilaNav.Size = UDim2.new(1, 0, 0, 38)
 _G.musFilaNav.BackgroundTransparency = 1
@@ -3395,7 +4377,6 @@ _G.musLayoutNav.Padding = UDim.new(0, 6)
 _G.musLayoutNav.SortOrder = Enum.SortOrder.LayoutOrder
 _G.musLayoutNav.Parent = _G.musFilaNav
 
--- Botón Anterior
 _G.UZIVERT_MUSIC_ANTBTN = Instance.new("TextButton")
 _G.UZIVERT_MUSIC_ANTBTN.Size = UDim2.new(0.5, -3, 1, 0)
 _G.UZIVERT_MUSIC_ANTBTN.BackgroundColor3 = COLORES.Morado1
@@ -3417,7 +4398,6 @@ _G.UZIVERT_MUSIC_ANTBTN.MouseButton1Click:Connect(function()
     _G.UZIVERT_MUSIC_ANTERIOR()
 end)
 
--- Botón Siguiente
 _G.UZIVERT_MUSIC_SIGBTN = Instance.new("TextButton")
 _G.UZIVERT_MUSIC_SIGBTN.Size = UDim2.new(0.5, -3, 1, 0)
 _G.UZIVERT_MUSIC_SIGBTN.BackgroundColor3 = COLORES.Morado1
@@ -3439,18 +4419,15 @@ _G.UZIVERT_MUSIC_SIGBTN.MouseButton1Click:Connect(function()
     _G.UZIVERT_MUSIC_SIGUIENTE()
 end)
 
--- Toggle Shuffle
 crearToggle(PaginaPlayer, "🔀 Shuffle (aleatorio)", false, function(e)
     _G.UZIVERT_MUSIC_SHUFFLE = e
 end)
 
--- Toggle Repeat
 crearToggle(PaginaPlayer, "🔁 Repeat (repetir)", false, function(e)
     _G.UZIVERT_MUSIC_REPEAT = e
     _G.UZIVERT_MUSIC_SOUND.Looped = e
 end)
 
--- Slider Volumen
 crearSlider(PaginaPlayer, "🔊 Volumen", 0, 100, math.floor(_G.UZIVERT_MUSIC_VOLUMEN * 100), function(v)
     _G.UZIVERT_MUSIC_VOLUMEN = v / 100
     _G.UZIVERT_MUSIC_SOUND.Volume = _G.UZIVERT_MUSIC_VOLUMEN
@@ -3458,12 +4435,10 @@ crearSlider(PaginaPlayer, "🔊 Volumen", 0, 100, math.floor(_G.UZIVERT_MUSIC_VO
     guardarConfig()
 end)
 
--- Botón Elegir Canción
 crearBoton(PaginaPlayer, "📋 Elegir Canción", function()
     _G.UZIVERT_MUSIC_LISTA.Visible = not _G.UZIVERT_MUSIC_LISTA.Visible
 end, COLORES.Morado1)
 
--- Lista de canciones
 _G.UZIVERT_MUSIC_LISTA = Instance.new("Frame")
 _G.UZIVERT_MUSIC_LISTA.Size = UDim2.new(1, 0, 0, 200)
 _G.UZIVERT_MUSIC_LISTA.BackgroundColor3 = Color3.fromRGB(15, 10, 20)
@@ -3521,7 +4496,6 @@ end
 
 _G.UZIVERT_MUSIC_RECARGAR_LISTA()
 
--- Inputs para agregar canción custom
 _G.UZIVERT_MUSIC_NOMBRE = ""
 _G.UZIVERT_MUSIC_ID = ""
 
@@ -3555,7 +4529,6 @@ _G.lblSecMusAdd.TextXAlignment = Enum.TextXAlignment.Left
 _G.lblSecMusAdd.ZIndex = 3
 _G.lblSecMusAdd.Parent = _G.secMusAdd
 
--- Input Nombre
 _G.UZIVERT_MUSIC_INP_NOMBRE = Instance.new("TextBox")
 _G.UZIVERT_MUSIC_INP_NOMBRE.Size = UDim2.new(1, 0, 0, 38)
 _G.UZIVERT_MUSIC_INP_NOMBRE.BackgroundColor3 = COLORES.Morado3
@@ -3584,7 +4557,6 @@ _G.UZIVERT_MUSIC_INP_NOMBRE.FocusLost:Connect(function()
     _G.UZIVERT_MUSIC_NOMBRE = _G.UZIVERT_MUSIC_INP_NOMBRE.Text
 end)
 
--- Input ID
 _G.UZIVERT_MUSIC_INP_ID = Instance.new("TextBox")
 _G.UZIVERT_MUSIC_INP_ID.Size = UDim2.new(1, 0, 0, 38)
 _G.UZIVERT_MUSIC_INP_ID.BackgroundColor3 = COLORES.Morado3
@@ -3613,21 +4585,18 @@ _G.UZIVERT_MUSIC_INP_ID.FocusLost:Connect(function()
     _G.UZIVERT_MUSIC_ID = _G.UZIVERT_MUSIC_INP_ID.Text
 end)
 
--- Botón Añadir
 crearBoton(PaginaPlayer, "➕ Añadir Canción", function()
     if _G.UZIVERT_MUSIC_NOMBRE == "" or _G.UZIVERT_MUSIC_ID == "" then
         print("❌ Completá nombre e ID")
         return
     end
     
-    -- Contar custom actuales
     local customCount = #_G.UZIVERT_MUSIC_CANCIONES - 13
     if customCount >= 25 then
         print("❌ Lista llena (máximo 25 custom)")
         return
     end
     
-    -- Verificar que no exista
     for _, c in ipairs(_G.UZIVERT_MUSIC_CANCIONES) do
         if tostring(c.ID) == tostring(_G.UZIVERT_MUSIC_ID) then
             print("❌ Esa canción ya existe")
@@ -3635,19 +4604,15 @@ crearBoton(PaginaPlayer, "➕ Añadir Canción", function()
         end
     end
     
-    -- Agregar
     local nueva = {Nombre = _G.UZIVERT_MUSIC_NOMBRE, ID = _G.UZIVERT_MUSIC_ID}
     table.insert(_G.UZIVERT_MUSIC_CANCIONES, nueva)
     
-    -- Guardar en CONFIG
     if not CONFIG.CancionesCustom then CONFIG.CancionesCustom = {} end
     table.insert(CONFIG.CancionesCustom, nueva)
     guardarConfig()
     
-    -- Recargar lista
     _G.UZIVERT_MUSIC_RECARGAR_LISTA()
     
-    -- Limpiar inputs
     _G.UZIVERT_MUSIC_INP_NOMBRE.Text = ""
     _G.UZIVERT_MUSIC_INP_ID.Text = ""
     _G.UZIVERT_MUSIC_NOMBRE = ""
@@ -3656,9 +4621,7 @@ crearBoton(PaginaPlayer, "➕ Añadir Canción", function()
     print("✅ Canción agregada: " .. nueva.Nombre)
 end, COLORES.Verde)
 
--- Botón Vaciar Lista Custom
 crearBoton(PaginaPlayer, "🗑️ Vaciar Lista Custom", function()
-    -- Dejar solo las 13 fijas
     while #_G.UZIVERT_MUSIC_CANCIONES > 13 do
         table.remove(_G.UZIVERT_MUSIC_CANCIONES)
     end
@@ -3667,6 +4630,10 @@ crearBoton(PaginaPlayer, "🗑️ Vaciar Lista Custom", function()
     _G.UZIVERT_MUSIC_RECARGAR_LISTA()
     print("✅ Lista custom vaciada")
 end, COLORES.Rojo)
+
+end
+
+if not _G.UZIVERT_GAMA_BAJA then
 
 -- 🎯 SECCIÓN 1: FLING ROLES
 _G.secFling1 = Instance.new("Frame")
@@ -3819,6 +4786,8 @@ crearBoton(PaginaFling, "🌀 FLINGEAR TARGET", function()
     task.spawn(_G.UZIVERT_FLING_FUNC, _G.UZIVERT_FLING_TARGET)
 end, Color3.fromRGB(20, 15, 25))
 
+end
+
 print("🎃 Parte 7/10 cargada - Páginas Aim/Aura/Player/Fling")
 
 local function crearSelector(padre, titulo, opciones, callback)
@@ -3915,6 +4884,8 @@ local function crearSelector(padre, titulo, opciones, callback)
     end
 end
 
+if not _G.UZIVERT_GAMA_BAJA then
+
 crearToggle(PaginaAnims, "🎬 Activar Animaciones", CONFIG.Anims, function(e)
     ANIMS_ACTIVO = e
     CONFIG.Anims = e
@@ -3953,6 +4924,8 @@ crearSelector(PaginaAnims, "Climb", allOptions, function(sel) animState.climb = 
 crearSelector(PaginaAnims, "Swim", allOptions, function(sel) animState.swim = sel applyAnimations() end)
 crearSelector(PaginaAnims, "SwimIdle", allOptions, function(sel) animState.swimidle = sel applyAnimations() end)
 crearSelector(PaginaAnims, "Death", allOptions, function(sel) animState.death = sel applyAnimations() end)
+
+end
 
 -- ============================================
 -- 🎁 AUTO PRANK BOMB (función + UI)
@@ -4039,6 +5012,730 @@ crearToggle(PaginaBomb, "Auto Bomb Jump", CONFIG.AutoPrankBomb or false, functio
     guardarConfig()
     ApplyAutoPrankBomb(e)
 end)
+
+-- 🎯 SECCIÓN: FIREFLY CLUTCH
+_G.secFF = Instance.new("Frame")
+_G.secFF.Size = UDim2.new(1, 0, 0, 30)
+_G.secFF.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secFF.BackgroundTransparency = 0.3
+_G.secFF.BorderSizePixel = 0
+_G.secFF.ZIndex = 2
+_G.secFF.Parent = PaginaBomb
+
+_G.cSecFF = Instance.new("UICorner")
+_G.cSecFF.CornerRadius = UDim.new(0, 7)
+_G.cSecFF.Parent = _G.secFF
+
+_G.sSecFF = Instance.new("UIStroke")
+_G.sSecFF.Color = COLORES.Morado3
+_G.sSecFF.Thickness = 1.5
+_G.sSecFF.Transparency = 0.2
+_G.sSecFF.Parent = _G.secFF
+
+_G.lblSecFF = Instance.new("TextLabel")
+_G.lblSecFF.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecFF.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecFF.BackgroundTransparency = 1
+_G.lblSecFF.Text = "🔥 FIREFLY CLUTCH"
+_G.lblSecFF.TextColor3 = COLORES.Naranja2
+_G.lblSecFF.Font = Enum.Font.GothamBlack
+_G.lblSecFF.TextSize = 12
+_G.lblSecFF.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecFF.ZIndex = 3
+_G.lblSecFF.Parent = _G.secFF
+
+-- Variables globales Firefly
+_G.UZIVERT_FF_ON = CONFIG.FireflyClutch or false
+_G.UZIVERT_FF_TIMER = CONFIG.FireflyTimer ~= false
+_G.UZIVERT_FF_SIZE = CONFIG.FireflyTimerSize or 5
+_G.UZIVERT_FF_HOOKED = setmetatable({}, {__mode = "k"})
+_G.UZIVERT_FF_CONNS = {}
+_G.UZIVERT_FF_COOLDOWN = false
+_G.UZIVERT_FF_TOKEN = 0
+_G.UZIVERT_FF_COUNTDOWN_CON = nil
+_G.UZIVERT_FF_COOLDOWN_CON = nil
+_G.UZIVERT_FF_BLOCK_CON = nil
+_G.UZIVERT_FF_COUNTDOWN_REM = nil
+_G.UZIVERT_FF_COOLDOWN_END = nil
+_G.UZIVERT_FF_LABEL = nil
+
+local FF_COUNTDOWN = 3.0
+local FF_COOLDOWN = 16
+local FF_TRIGGER = 0.24
+local FF_JUMP_GAP = 0.40
+local FF_GREEN = Color3.fromRGB(0, 255, 0)
+local FF_YELLOW = Color3.fromRGB(255, 200, 0)
+local FF_RED = Color3.fromRGB(255, 0, 0)
+local FF_BLACK = Color3.fromRGB(0, 0, 0)
+
+_G.UZIVERT_FF_COLOR = function(remaining, total)
+    total = math.max(tonumber(total) or 1, 0.001)
+    local ratio = math.clamp((tonumber(remaining) or 0) / total, 0, 1)
+    if ratio >= (2/3) then return FF_GREEN end
+    if ratio >= (1/3) then return FF_YELLOW end
+    return FF_RED
+end
+
+_G.UZIVERT_FF_UPDATE = function()
+    if not _G.UZIVERT_FF_LABEL then return end
+    _G.UZIVERT_FF_LABEL.Visible = _G.UZIVERT_FF_TIMER
+    if not _G.UZIVERT_FF_TIMER then return end
+
+    local now = os.clock()
+    local remaining, total
+    if _G.UZIVERT_FF_COUNTDOWN_REM and _G.UZIVERT_FF_COUNTDOWN_REM > 0 then
+        remaining, total = _G.UZIVERT_FF_COUNTDOWN_REM, FF_COUNTDOWN
+    elseif _G.UZIVERT_FF_COOLDOWN_END and now < _G.UZIVERT_FF_COOLDOWN_END then
+        remaining, total = _G.UZIVERT_FF_COOLDOWN_END - now, FF_COOLDOWN
+    end
+
+    if remaining then
+        _G.UZIVERT_FF_LABEL.Text = string.format("%.1fCD", math.max(0, remaining))
+        _G.UZIVERT_FF_LABEL.TextColor3 = _G.UZIVERT_FF_COLOR(remaining, total)
+    else
+        _G.UZIVERT_FF_LABEL.Text = "Ready"
+        _G.UZIVERT_FF_LABEL.TextColor3 = FF_BLACK
+    end
+end
+
+_G.UZIVERT_FF_DISCONNECT = function(conn)
+    if conn then pcall(function() conn:Disconnect() end) end
+end
+
+_G.UZIVERT_FF_OWNS = function(tool)
+    local backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
+    return (LocalPlayer.Character and tool.Parent == LocalPlayer.Character)
+        or (backpack and tool.Parent == backpack) or false
+end
+
+_G.UZIVERT_FF_BLOCK_ONE = function(tool, state)
+    if not _G.UZIVERT_FF_ON or not _G.UZIVERT_FF_COOLDOWN then return end
+    state.blocked = true
+    if tool.Enabled then pcall(function() tool.Enabled = false end) end
+end
+
+_G.UZIVERT_FF_BLOCK_ALL = function()
+    for tool, state in pairs(_G.UZIVERT_FF_HOOKED) do _G.UZIVERT_FF_BLOCK_ONE(tool, state) end
+end
+
+_G.UZIVERT_FF_RELEASE = function()
+    for tool, state in pairs(_G.UZIVERT_FF_HOOKED) do
+        if state.blocked then
+            state.blocked = false
+            pcall(function()
+                if not tool.Enabled then tool.Enabled = state.originalEnabled end
+            end)
+        end
+    end
+end
+
+_G.UZIVERT_FF_BUILD = function()
+    if _G.UZIVERT_FF_LABEL and _G.UZIVERT_FF_LABEL.Parent then return end
+
+    _G.UZIVERT_FF_GUI = Instance.new("ScreenGui")
+    _G.UZIVERT_FF_GUI.Name = "UzivertFireflyTimer"
+    _G.UZIVERT_FF_GUI.ResetOnSpawn = false
+    _G.UZIVERT_FF_GUI.IgnoreGuiInset = true
+    _G.UZIVERT_FF_GUI.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+    _G.UZIVERT_FF_LABEL = Instance.new("TextLabel")
+    _G.UZIVERT_FF_LABEL.Name = "FireflyTimer"
+    _G.UZIVERT_FF_LABEL.AnchorPoint = Vector2.new(0.5, 0.5)
+    _G.UZIVERT_FF_LABEL.Position = UDim2.new(0.5, 0, 0.05, 0)
+    _G.UZIVERT_FF_LABEL.BackgroundTransparency = 1
+    _G.UZIVERT_FF_LABEL.BorderSizePixel = 0
+    _G.UZIVERT_FF_LABEL.TextColor3 = Color3.new(0, 0, 0)
+    _G.UZIVERT_FF_LABEL.TextStrokeTransparency = 1
+    _G.UZIVERT_FF_LABEL.Font = Enum.Font.GothamBold
+    _G.UZIVERT_FF_LABEL.Text = "Ready"
+    _G.UZIVERT_FF_LABEL.Visible = _G.UZIVERT_FF_TIMER
+    _G.UZIVERT_FF_LABEL.Active = true
+
+    local w = 72 + ((_G.UZIVERT_FF_SIZE - 1) * 8)
+    local h = 24 + ((_G.UZIVERT_FF_SIZE - 1) * 2)
+    _G.UZIVERT_FF_LABEL.Size = UDim2.fromOffset(w, h)
+    _G.UZIVERT_FF_LABEL.TextSize = math.max(12, math.floor(h * 0.65))
+
+    _G.UZIVERT_FF_LABEL.Parent = _G.UZIVERT_FF_GUI
+    _G.UZIVERT_FF_UPDATE()
+end
+
+_G.UZIVERT_FF_JUMP = function()
+    local char = LocalPlayer.Character
+    local humanoid = char and char:FindFirstChildOfClass("Humanoid")
+    if not humanoid or humanoid.Health <= 0 then return end
+    humanoid.Jump = true
+    pcall(function() humanoid:ChangeState(Enum.HumanoidStateType.Jumping) end)
+end
+
+_G.UZIVERT_FF_TWO_JUMP = function(myToken)
+    _G.UZIVERT_FF_JUMP()
+    task.delay(FF_JUMP_GAP, function()
+        if _G.UZIVERT_FF_ON and myToken == _G.UZIVERT_FF_TOKEN then
+            _G.UZIVERT_FF_JUMP()
+        end
+    end)
+end
+
+_G.UZIVERT_FF_STOP = function()
+    _G.UZIVERT_FF_DISCONNECT(_G.UZIVERT_FF_COUNTDOWN_CON)
+    _G.UZIVERT_FF_DISCONNECT(_G.UZIVERT_FF_COOLDOWN_CON)
+    _G.UZIVERT_FF_DISCONNECT(_G.UZIVERT_FF_BLOCK_CON)
+    _G.UZIVERT_FF_COUNTDOWN_CON = nil
+    _G.UZIVERT_FF_COOLDOWN_CON = nil
+    _G.UZIVERT_FF_BLOCK_CON = nil
+    _G.UZIVERT_FF_TOKEN = _G.UZIVERT_FF_TOKEN + 1
+    _G.UZIVERT_FF_COOLDOWN = false
+    _G.UZIVERT_FF_RELEASE()
+    _G.UZIVERT_FF_COUNTDOWN_REM = nil
+    _G.UZIVERT_FF_COOLDOWN_END = nil
+    _G.UZIVERT_FF_UPDATE()
+end
+
+_G.UZIVERT_FF_START_COUNTDOWN = function()
+    if not _G.UZIVERT_FF_ON then return end
+    _G.UZIVERT_FF_BUILD()
+    _G.UZIVERT_FF_DISCONNECT(_G.UZIVERT_FF_COUNTDOWN_CON)
+    _G.UZIVERT_FF_COUNTDOWN_CON = nil
+    local myToken = _G.UZIVERT_FF_TOKEN
+    local jumpDone = false
+    _G.UZIVERT_FF_UPDATE()
+
+    _G.UZIVERT_FF_COUNTDOWN_CON = RunService.Heartbeat:Connect(function(dt)
+        if not _G.UZIVERT_FF_ON or myToken ~= _G.UZIVERT_FF_TOKEN or not _G.UZIVERT_FF_COUNTDOWN_REM then return end
+        _G.UZIVERT_FF_COUNTDOWN_REM = math.max(0, _G.UZIVERT_FF_COUNTDOWN_REM - dt)
+        if not jumpDone and _G.UZIVERT_FF_COUNTDOWN_REM <= FF_TRIGGER then
+            jumpDone = true
+            _G.UZIVERT_FF_TWO_JUMP(myToken)
+        end
+        _G.UZIVERT_FF_UPDATE()
+        if _G.UZIVERT_FF_COUNTDOWN_REM <= 0 then
+            _G.UZIVERT_FF_DISCONNECT(_G.UZIVERT_FF_COUNTDOWN_CON)
+            _G.UZIVERT_FF_COUNTDOWN_CON = nil
+        end
+    end)
+end
+
+_G.UZIVERT_FF_START_COOLDOWN = function()
+    _G.UZIVERT_FF_BUILD()
+    _G.UZIVERT_FF_DISCONNECT(_G.UZIVERT_FF_COOLDOWN_CON)
+    _G.UZIVERT_FF_COOLDOWN_CON = nil
+    _G.UZIVERT_FF_COOLDOWN_CON = RunService.Heartbeat:Connect(function()
+        if not _G.UZIVERT_FF_COOLDOWN_END then return end
+        if _G.UZIVERT_FF_COUNTDOWN_REM and _G.UZIVERT_FF_COUNTDOWN_REM > 0 then return end
+        local remaining = _G.UZIVERT_FF_COOLDOWN_END - os.clock()
+        if remaining <= 0 then
+            _G.UZIVERT_FF_UPDATE()
+            _G.UZIVERT_FF_DISCONNECT(_G.UZIVERT_FF_COOLDOWN_CON)
+            _G.UZIVERT_FF_COOLDOWN_CON = nil
+            return
+        end
+        _G.UZIVERT_FF_UPDATE()
+    end)
+end
+
+_G.UZIVERT_FF_START_BLOCK = function()
+    _G.UZIVERT_FF_COOLDOWN = true
+    local myToken = _G.UZIVERT_FF_TOKEN
+    task.defer(function()
+        if _G.UZIVERT_FF_ON and _G.UZIVERT_FF_COOLDOWN and myToken == _G.UZIVERT_FF_TOKEN then
+            _G.UZIVERT_FF_BLOCK_ALL()
+        end
+    end)
+    _G.UZIVERT_FF_DISCONNECT(_G.UZIVERT_FF_BLOCK_CON)
+    _G.UZIVERT_FF_BLOCK_CON = nil
+    _G.UZIVERT_FF_BLOCK_CON = RunService.Heartbeat:Connect(function()
+        if _G.UZIVERT_FF_COOLDOWN_END and os.clock() >= _G.UZIVERT_FF_COOLDOWN_END then
+            _G.UZIVERT_FF_COOLDOWN = false
+            _G.UZIVERT_FF_RELEASE()
+            _G.UZIVERT_FF_DISCONNECT(_G.UZIVERT_FF_BLOCK_CON)
+            _G.UZIVERT_FF_BLOCK_CON = nil
+        else
+            _G.UZIVERT_FF_BLOCK_ALL()
+        end
+    end)
+end
+
+_G.UZIVERT_FF_CYCLE = function()
+    if not _G.UZIVERT_FF_ON or _G.UZIVERT_FF_COOLDOWN then return end
+    _G.UZIVERT_FF_BUILD()
+    _G.UZIVERT_FF_TOKEN = _G.UZIVERT_FF_TOKEN + 1
+    local start = os.clock()
+    _G.UZIVERT_FF_COUNTDOWN_REM = FF_COUNTDOWN
+    _G.UZIVERT_FF_COOLDOWN_END = start + FF_COOLDOWN
+    _G.UZIVERT_FF_START_COUNTDOWN()
+    _G.UZIVERT_FF_START_COOLDOWN()
+    _G.UZIVERT_FF_START_BLOCK()
+end
+
+_G.UZIVERT_FF_CONNECT_TOOL = function(tool)
+    if not tool or not tool:IsA("Tool") or tool.Name ~= "Fireflies" then return end
+    if _G.UZIVERT_FF_HOOKED[tool] then
+        _G.UZIVERT_FF_BLOCK_ONE(tool, _G.UZIVERT_FF_HOOKED[tool])
+        return
+    end
+
+    local state = {originalEnabled = tool.Enabled, blocked = false}
+    _G.UZIVERT_FF_HOOKED[tool] = state
+
+    table.insert(_G.UZIVERT_FF_CONNS, tool:GetPropertyChangedSignal("Enabled"):Connect(function()
+        if _G.UZIVERT_FF_ON and _G.UZIVERT_FF_COOLDOWN then
+            if tool.Enabled then state.originalEnabled = true end
+            _G.UZIVERT_FF_BLOCK_ONE(tool, state)
+        elseif not state.blocked then
+            state.originalEnabled = tool.Enabled
+        end
+    end))
+
+    table.insert(_G.UZIVERT_FF_CONNS, tool.Activated:Connect(function()
+        if not _G.UZIVERT_FF_ON or _G.UZIVERT_FF_COOLDOWN then return end
+        if not _G.UZIVERT_FF_OWNS(tool) then return end
+        state.originalEnabled = true
+        _G.UZIVERT_FF_CYCLE()
+    end))
+end
+
+_G.UZIVERT_FF_SCAN = function()
+    local backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
+    local character = LocalPlayer.Character
+    local function scanContainer(c)
+        if c then
+            for _, child in ipairs(c:GetChildren()) do
+                if child:IsA("Tool") and child.Name == "Fireflies" then
+                    _G.UZIVERT_FF_CONNECT_TOOL(child)
+                end
+            end
+        end
+    end
+    scanContainer(backpack)
+    scanContainer(character)
+end
+
+_G.UZIVERT_FF_HOOK = function()
+    _G.UZIVERT_FF_SCAN()
+
+    local backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
+    if backpack then
+        table.insert(_G.UZIVERT_FF_CONNS, backpack.ChildAdded:Connect(function(child)
+            if child:IsA("Tool") and child.Name == "Fireflies" then
+                _G.UZIVERT_FF_CONNECT_TOOL(child)
+            end
+        end))
+    end
+
+    LocalPlayer.ChildAdded:Connect(function(child)
+        if child:IsA("Backpack") then
+            table.insert(_G.UZIVERT_FF_CONNS, child.ChildAdded:Connect(function(t)
+                if t:IsA("Tool") and t.Name == "Fireflies" then
+                    _G.UZIVERT_FF_CONNECT_TOOL(t)
+                end
+            end))
+        end
+    end)
+
+    LocalPlayer.CharacterAdded:Connect(function(char)
+        task.wait(1)
+        _G.UZIVERT_FF_SCAN()
+    end)
+end
+
+-- Toggles
+crearToggle(PaginaBomb, "🔥 Auto Firefly Clutch", CONFIG.FireflyClutch or false, function(e)
+    _G.UZIVERT_FF_ON = e
+    CONFIG.FireflyClutch = e
+    guardarConfig()
+    if e then
+        _G.UZIVERT_FF_HOOK()
+        _G.UZIVERT_FF_BUILD()
+    else
+        _G.UZIVERT_FF_STOP()
+    end
+end)
+
+crearToggle(PaginaBomb, "⏰ Timer Firefly", CONFIG.FireflyTimer ~= false, function(e)
+    _G.UZIVERT_FF_TIMER = e
+    CONFIG.FireflyTimer = e
+    guardarConfig()
+    if _G.UZIVERT_FF_LABEL then _G.UZIVERT_FF_LABEL.Visible = e end
+end)
+
+crearSlider(PaginaBomb, "Tamaño Timer Firefly", 1, 10, CONFIG.FireflyTimerSize or 5, function(v)
+    _G.UZIVERT_FF_SIZE = math.clamp(math.floor(v), 1, 10)
+    CONFIG.FireflyTimerSize = _G.UZIVERT_FF_SIZE
+    guardarConfig()
+    if _G.UZIVERT_FF_LABEL then
+        local w = 72 + ((_G.UZIVERT_FF_SIZE - 1) * 8)
+        local h = 24 + ((_G.UZIVERT_FF_SIZE - 1) * 2)
+        _G.UZIVERT_FF_LABEL.Size = UDim2.fromOffset(w, h)
+        _G.UZIVERT_FF_LABEL.TextSize = math.max(12, math.floor(h * 0.65))
+    end
+end)
+
+-- Arrancar si estaba activo
+if _G.UZIVERT_FF_ON then
+    _G.UZIVERT_FF_HOOK()
+    _G.UZIVERT_FF_BUILD()
+end
+
+if not _G.UZIVERT_GAMA_BAJA then
+
+-- ============================================
+-- 💀 HEADLESS + 🦵 KORBLOX
+-- ============================================
+_G.UZIVERT_HEADLESS_ON = CONFIG.Headless or false
+_G.UZIVERT_KORBLOX_RIGHT = CONFIG.KorbloxRight or false
+_G.UZIVERT_KORBLOX_LEFT = CONFIG.KorbloxLeft or false
+
+-- Función Headless
+_G.UZIVERT_APLICAR_HEADLESS = function(char)
+    if not char then return end
+    local head = char:FindFirstChild("Head")
+    if not head then return end
+    
+    if _G.UZIVERT_HEADLESS_ON then
+        head.Transparency = 1
+        head.LocalTransparencyModifier = 1
+        for _, obj in ipairs(head:GetChildren()) do
+            if obj:IsA("Decal") then obj.Transparency = 1 end
+        end
+    else
+        head.Transparency = 0
+        head.LocalTransparencyModifier = 0
+        for _, obj in ipairs(head:GetChildren()) do
+            if obj:IsA("Decal") then obj.Transparency = 0 end
+        end
+    end
+end
+
+-- Sistema Korblox (del add-on)
+_G.UZIVERT_KORBLOX_RIGHT_ASSET = 139607718
+_G.UZIVERT_KORBLOX_LEFT_ASSET = 139607673
+_G.UZIVERT_KORBLOX_MARKER = "UzivertKorbloxSide"
+
+_G.UZIVERT_KORBLOX_SIDE_NAMES = {
+    Right = {"RightUpperLeg", "RightLowerLeg", "RightFoot"},
+    Left = {"LeftUpperLeg", "LeftLowerLeg", "LeftFoot"},
+}
+
+_G.UZIVERT_KORBLOX_SIDE_ENUMS = {
+    Right = {
+        Enum.BodyPartR15.RightUpperLeg,
+        Enum.BodyPartR15.RightLowerLeg,
+        Enum.BodyPartR15.RightFoot,
+    },
+    Left = {
+        Enum.BodyPartR15.LeftUpperLeg,
+        Enum.BodyPartR15.LeftLowerLeg,
+        Enum.BodyPartR15.LeftFoot,
+    },
+}
+
+_G.UZIVERT_KORBLOX_STATE = nil
+_G.UZIVERT_KORBLOX_TEMPLATES = nil
+_G.UZIVERT_KORBLOX_BUILDING = false
+
+_G.UZIVERT_KORBLOX_SIDE_ENABLED = function(side)
+    if side == "Right" then return _G.UZIVERT_KORBLOX_RIGHT end
+    return _G.UZIVERT_KORBLOX_LEFT
+end
+
+_G.UZIVERT_KORBLOX_DISCONNECT = function(conn)
+    if conn then pcall(function() conn:Disconnect() end) end
+end
+
+_G.UZIVERT_KORBLOX_DESTROY_MOTORS = function(root)
+    if not root then return end
+    for _, obj in ipairs(root:GetDescendants()) do
+        if obj:IsA("Motor6D") then pcall(function() obj:Destroy() end) end
+    end
+end
+
+_G.UZIVERT_KORBLOX_CLONE_PART = function(part)
+    if not part or not part:IsA("BasePart") then return nil end
+    local archivable = part.Archivable
+    if not archivable then pcall(function() part.Archivable = true end) end
+    local ok, clone = pcall(function() return part:Clone() end)
+    if not archivable then pcall(function() part.Archivable = false end) end
+    if not ok or not clone then return nil end
+    _G.UZIVERT_KORBLOX_DESTROY_MOTORS(clone)
+    clone.Parent = nil
+    return clone
+end
+
+_G.UZIVERT_KORBLOX_CLEAR_STATE = function(state)
+    if not state then return end
+    for _, conn in ipairs(state.Connections or {}) do _G.UZIVERT_KORBLOX_DISCONNECT(conn) end
+    state.Connections = {}
+    for _, side in ipairs({"Left", "Right"}) do
+        for _, conn in ipairs((state.PartConnections and state.PartConnections[side]) or {}) do
+            _G.UZIVERT_KORBLOX_DISCONNECT(conn)
+        end
+        if state.PartConnections then state.PartConnections[side] = {} end
+    end
+end
+
+_G.UZIVERT_KORBLOX_GET_HUMANOID = function(char)
+    if not char then return nil end
+    return char:FindFirstChildOfClass("Humanoid") or char:WaitForChild("Humanoid", 2)
+end
+
+_G.UZIVERT_KORBLOX_GET_SIDE_PARTS = function(char, side)
+    local names = _G.UZIVERT_KORBLOX_SIDE_NAMES[side]
+    if not char or not names then return nil end
+    local parts = {}
+    for index, name in ipairs(names) do
+        local part = char:FindFirstChild(name)
+        if not part or not part:IsA("BasePart") then return nil end
+        parts[index] = part
+    end
+    return parts
+end
+
+_G.UZIVERT_KORBLOX_WAIT_PARTS = function(char, side, timeout)
+    local deadline = os.clock() + (timeout or 2.5)
+    repeat
+        if LocalPlayer.Character ~= char then return nil end
+        local parts = _G.UZIVERT_KORBLOX_GET_SIDE_PARTS(char, side)
+        if parts then return parts end
+        task.wait(0.05)
+    until os.clock() >= deadline
+    return _G.UZIVERT_KORBLOX_GET_SIDE_PARTS(char, side)
+end
+
+_G.UZIVERT_KORBLOX_BEGIN_STATE = function(char)
+    if _G.UZIVERT_KORBLOX_STATE and _G.UZIVERT_KORBLOX_STATE.Character == char then
+        return _G.UZIVERT_KORBLOX_STATE
+    end
+    _G.UZIVERT_KORBLOX_CLEAR_STATE(_G.UZIVERT_KORBLOX_STATE)
+    local humanoid = _G.UZIVERT_KORBLOX_GET_HUMANOID(char)
+    _G.UZIVERT_KORBLOX_STATE = {
+        Character = char,
+        Humanoid = humanoid,
+        Connections = {},
+        PartConnections = {Left = {}, Right = {}},
+        Applying = {Left = false, Right = false},
+    }
+    return _G.UZIVERT_KORBLOX_STATE
+end
+
+_G.UZIVERT_KORBLOX_EXTRACT = function(model)
+    if not model then return nil end
+    local result = {Left = {}, Right = {}}
+    for _, side in ipairs({"Left", "Right"}) do
+        for index, name in ipairs(_G.UZIVERT_KORBLOX_SIDE_NAMES[side]) do
+            local source = model:FindFirstChild(name)
+            local clone = _G.UZIVERT_KORBLOX_CLONE_PART(source)
+            if not clone then return nil end
+            clone.Name = name
+            result[side][index] = clone
+        end
+    end
+    return result
+end
+
+_G.UZIVERT_KORBLOX_BUILD_TEMPLATES = function()
+    if _G.UZIVERT_KORBLOX_TEMPLATES then return true end
+    if _G.UZIVERT_KORBLOX_BUILDING then
+        local deadline = os.clock() + 4
+        repeat
+            if _G.UZIVERT_KORBLOX_TEMPLATES then return true end
+            if not _G.UZIVERT_KORBLOX_BUILDING then break end
+            task.wait(0.05)
+        until os.clock() >= deadline
+        return _G.UZIVERT_KORBLOX_TEMPLATES ~= nil
+    end
+    _G.UZIVERT_KORBLOX_BUILDING = true
+
+    local description = Instance.new("HumanoidDescription")
+    description.LeftLeg = _G.UZIVERT_KORBLOX_LEFT_ASSET
+    description.RightLeg = _G.UZIVERT_KORBLOX_RIGHT_ASSET
+
+    local model = nil
+    local ok = pcall(function()
+        model = Players:CreateHumanoidModelFromDescriptionAsync(
+            description,
+            Enum.HumanoidRigType.R15
+        )
+    end)
+
+    if not ok or not model then
+        ok = pcall(function()
+            model = Players:CreateHumanoidModelFromDescription(
+                description,
+                Enum.HumanoidRigType.R15
+            )
+        end)
+    end
+
+    local extracted = nil
+    if ok and model then
+        extracted = _G.UZIVERT_KORBLOX_EXTRACT(model)
+    end
+
+    pcall(function() description:Destroy() end)
+    if model then pcall(function() model:Destroy() end) end
+
+    if extracted then _G.UZIVERT_KORBLOX_TEMPLATES = extracted end
+    _G.UZIVERT_KORBLOX_BUILDING = false
+    return _G.UZIVERT_KORBLOX_TEMPLATES ~= nil
+end
+
+_G.UZIVERT_KORBLOX_REPLACE_PART = function(state, side, index, source)
+    if not state or not state.Humanoid or not source then return false end
+    if LocalPlayer.Character ~= state.Character then return false end
+
+    local clone = _G.UZIVERT_KORBLOX_CLONE_PART(source)
+    if not clone then return false end
+
+    clone.Name = _G.UZIVERT_KORBLOX_SIDE_NAMES[side][index]
+    clone:SetAttribute(_G.UZIVERT_KORBLOX_MARKER, side)
+
+    local ok, result = pcall(function()
+        return state.Humanoid:ReplaceBodyPartR15(_G.UZIVERT_KORBLOX_SIDE_ENUMS[side][index], clone)
+    end)
+
+    if not ok or result == false then
+        pcall(function() clone:Destroy() end)
+        return false
+    end
+    return true
+end
+
+_G.UZIVERT_KORBLOX_APPLY_SIDE = function(state, side)
+    if not state or not _G.UZIVERT_KORBLOX_SIDE_ENABLED(side) then return false end
+    if LocalPlayer.Character ~= state.Character then return false end
+
+    local parts = _G.UZIVERT_KORBLOX_WAIT_PARTS(state.Character, side, 2.5)
+    if not parts then return false end
+
+    if not _G.UZIVERT_KORBLOX_BUILD_TEMPLATES() then return false end
+
+    state.Applying[side] = true
+    local success = true
+    for index = 1, 3 do
+        if not _G.UZIVERT_KORBLOX_REPLACE_PART(state, side, index, _G.UZIVERT_KORBLOX_TEMPLATES[side][index]) then
+            success = false
+            break
+        end
+    end
+    state.Applying[side] = false
+    return success
+end
+
+_G.UZIVERT_APLICAR_COSMETICOS = function(char)
+    if not char then return end
+    task.wait(0.5)
+    _G.UZIVERT_APLICAR_HEADLESS(char)
+
+    local esR15 = char:FindFirstChild("UpperTorso") ~= nil
+    if not esR15 then return end
+
+    local state = _G.UZIVERT_KORBLOX_BEGIN_STATE(char)
+    if _G.UZIVERT_KORBLOX_RIGHT then _G.UZIVERT_KORBLOX_APPLY_SIDE(state, "Right") end
+    if _G.UZIVERT_KORBLOX_LEFT then _G.UZIVERT_KORBLOX_APPLY_SIDE(state, "Left") end
+end
+
+LocalPlayer.CharacterAdded:Connect(function(char)
+    task.wait(1)
+    if _G.UZIVERT_HEADLESS_ON or _G.UZIVERT_KORBLOX_RIGHT or _G.UZIVERT_KORBLOX_LEFT then
+        _G.UZIVERT_APLICAR_COSMETICOS(char)
+    end
+end)
+
+if LocalPlayer.Character and (_G.UZIVERT_HEADLESS_ON or _G.UZIVERT_KORBLOX_RIGHT or _G.UZIVERT_KORBLOX_LEFT) then
+    task.spawn(function()
+        _G.UZIVERT_APLICAR_COSMETICOS(LocalPlayer.Character)
+    end)
+end
+
+-- 💀 SECCIÓN: HEADLESS + KORBLOX
+_G.secSkin = Instance.new("Frame")
+_G.secSkin.Size = UDim2.new(1, 0, 0, 30)
+_G.secSkin.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secSkin.BackgroundTransparency = 0.3
+_G.secSkin.BorderSizePixel = 0
+_G.secSkin.ZIndex = 2
+_G.secSkin.Parent = PaginaRend
+
+_G.cSecSkin = Instance.new("UICorner")
+_G.cSecSkin.CornerRadius = UDim.new(0, 7)
+_G.cSecSkin.Parent = _G.secSkin
+
+_G.sSecSkin = Instance.new("UIStroke")
+_G.sSecSkin.Color = COLORES.Morado3
+_G.sSecSkin.Thickness = 1.5
+_G.sSecSkin.Transparency = 0.2
+_G.sSecSkin.Parent = _G.secSkin
+
+_G.lblSecSkin = Instance.new("TextLabel")
+_G.lblSecSkin.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecSkin.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecSkin.BackgroundTransparency = 1
+_G.lblSecSkin.Text = "💀 SKIN (Headless + Korblox)"
+_G.lblSecSkin.TextColor3 = COLORES.Naranja2
+_G.lblSecSkin.Font = Enum.Font.GothamBlack
+_G.lblSecSkin.TextSize = 12
+_G.lblSecSkin.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecSkin.ZIndex = 3
+_G.lblSecSkin.Parent = _G.secSkin
+
+crearToggle(PaginaRend, "💀 Headless", CONFIG.Headless or false, function(e)
+    _G.UZIVERT_HEADLESS_ON = e
+    CONFIG.Headless = e
+    guardarConfig()
+    if LocalPlayer.Character then
+        _G.UZIVERT_APLICAR_HEADLESS(LocalPlayer.Character)
+    end
+end)
+
+crearToggle(PaginaRend, "🦵 Korblox Right Leg", CONFIG.KorbloxRight or false, function(e)
+    _G.UZIVERT_KORBLOX_RIGHT = e
+    CONFIG.KorbloxRight = e
+    guardarConfig()
+    if e and LocalPlayer.Character then
+        local state = _G.UZIVERT_KORBLOX_BEGIN_STATE(LocalPlayer.Character)
+        _G.UZIVERT_KORBLOX_APPLY_SIDE(state, "Right")
+    end
+end)
+
+crearToggle(PaginaRend, "🦵 Korblox Left Leg", CONFIG.KorbloxLeft or false, function(e)
+    _G.UZIVERT_KORBLOX_LEFT = e
+    CONFIG.KorbloxLeft = e
+    guardarConfig()
+    if e and LocalPlayer.Character then
+        local state = _G.UZIVERT_KORBLOX_BEGIN_STATE(LocalPlayer.Character)
+        _G.UZIVERT_KORBLOX_APPLY_SIDE(state, "Left")
+    end
+end)
+
+crearBoton(PaginaRend, "🔄 Resetear Apariencia", function()
+    _G.UZIVERT_HEADLESS_ON = false
+    _G.UZIVERT_KORBLOX_RIGHT = false
+    _G.UZIVERT_KORBLOX_LEFT = false
+    CONFIG.Headless = false
+    CONFIG.KorbloxRight = false
+    CONFIG.KorbloxLeft = false
+    guardarConfig()
+    
+    -- Restaurar cabeza
+    if LocalPlayer.Character then
+        _G.UZIVERT_APLICAR_HEADLESS(LocalPlayer.Character)
+    end
+    
+    -- Limpiar templates (para que se regeneren si vuelve a activar)
+    _G.UZIVERT_KORBLOX_TEMPLATES = nil
+    _G.UZIVERT_KORBLOX_STATE = nil
+    
+    -- Matar el personaje (respawn limpio)
+    if LocalPlayer.Character then
+        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.Health = 0
+        end
+    end
+    
+    print("🔄 Apariencia reseteada (respawneando)")
+end, COLORES.Rojo)
 
 -- 🎯 SECCIÓN 1: SHADERS
 _G.secAp1 = Instance.new("Frame")
@@ -4243,6 +5940,8 @@ crearToggle(PaginaRend, "⚡ FPS Boost", CONFIG.FPSBoost, function(e)
     end
 end)
 
+end
+
 print("🎃 Parte 8/10 cargada - Selector + Anims + Bomb Jump + Rend")
 
 local infoTitulo = Instance.new("TextLabel")
@@ -4370,7 +6069,25 @@ local function crearTarjeta(padre, titulo, contenido, colorBorde)
     return frame
 end
 
-crearTarjeta(PaginaUpdate, "📅 Última actualización: 10/10/2026", "Uzivert Hub v4.7.1", COLORES.Naranja2)
+crearTarjeta(PaginaUpdate, "📅 Última actualización: 11/10/2026", "Uzivert Hub v4.7.3", COLORES.Naranja2)
+
+crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.3",
+    "🎮 SELECTOR DE GAMA\n" ..
+    "• Ahora podés elegir GAMA ALTA o GAMA BAJA al iniciar\n" ..
+    "• GAMA BAJA → solo funciones esenciales (menos lag)\n" ..
+    "• GAMA ALTA → todas las funciones del hub\n\n" ..
+    "🎯 NUEVAS FUNCIONES:\n" ..
+    "• 🎯 Anti-Aim → te protege contra aim de Sheriffs (AMBAS)\n" ..
+    "• ⚡ Speed Glitch → velocidad aérea con Shift Lock (GAMA ALTA)\n" ..
+    "• 💀 Headless → oculta la cabeza (GAMA ALTA)\n" ..
+    "• 🦵 Korblox → pierna izquierda y derecha (GAMA ALTA)\n" ..
+    "• 🎒 Inventory Unlimiter → equipate 10 items en vez de 3 (GAMA ALTA)\n" ..
+    "• 🎒 Auto Get Tools → te da los toys automáticamente (GAMA ALTA)\n" ..
+    "• 🔥 Firefly Clutch → doble salto automático con el frasco (AMBAS)\n\n" ..
+    "📋 NUEVA PESTAÑA:\n" ..
+    "• 🧰 Utilidades → Inventory + Auto Get Tools\n" ..
+    "• 🔥 Clutchs (antes Bomb Jump) → ahora tiene Firefly Clutch",
+    COLORES.Verde)
 
 crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.1",
     "+ 🎯 Silent Aim (atraviesa paredes)\n" ..
@@ -4382,31 +6099,23 @@ crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.1",
     "+ 📦 Secciones organizadas",
     COLORES.Verde)
 
-crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.0",
-    "+ 🎯 Aim Lock\n" ..
-    "+ 🗡️ Auto Stab\n" ..
-    "+ 💀 Matar Sheriff\n" ..
-    "+ 🌙 Modo Noche\n" ..
-    "+ 🔫 Auto Get Gun\n" ..
-    "+ ⏰ Round Timer\n" ..
-    "+ 🌀 Fling Dropdown",
-    COLORES.Verde)
-
 crearTarjeta(PaginaUpdate, "🐛 BUGS ARREGLADOS",
+    "✓ ESP ahora se ve bien en celus con DPI alto\n" ..
+    "✓ Auto Get Tools ahora da las cosas al respawnear\n" ..
+    "✓ Firefly Clutch ahora funciona correctamente\n" ..
+    "✓ Selector de Gama ya no rompe el script\n" ..
+    "✓ Anti-Aim ahora pausa con Ignore List\n" ..
+    "✓ Toggle ESP no borra highlights\n" ..
+    "✓ Fling no detectaba al Hero\n" ..
     "✓ Auto Get Gun sin lag\n" ..
-    "✓ Gun Aura sin lag + guarda estado\n" ..
-    "✓ Auto Stab arreglado\n" ..
-    "✓ End de más en Botón Grab\n" ..
-    "✓ Límite de locales (usar _G.)\n" ..
-    "✓ Toggle ESP no borraba highlights\n" ..
-    "✓ Fling no detectaba al Hero",
+    "✓ Gun Aura sin lag + guarda estado",
     COLORES.Verde)
 
 crearTarjeta(PaginaUpdate, "🔴 Descartado",
     "- Silent Aim con Mouse.Hit\n" ..
     "- Silent Aim con Camera\n" ..
     "- Speed Glitch (manual)\n" ..
-    "- Headless / Korblox\n" ..
+    "- Headless / Korblox con ID viejo\n" ..
     "- Dual Wield\n" ..
     "- ESP Skeleton\n" ..
     "- Skin Copier\n" ..
@@ -4537,15 +6246,18 @@ print("👻 Niebla animada")
 print("🎃 Iconos temáticos")
 print("💀 Colores de Halloween")
 print("====================================")
-print("Nuevo en v4.6:")
-print("  🎁 Auto Prank Bomb (Bomb Jump)")
-print("  🍬 Auto Grab Gun Nexus Style")
-print("  🌀 Fling Nexus Style")
-print("  💥 Kill All (Murderer only)")
-print("  28 presets de animaciones")
+print("Nuevo en v4.7.3:")
+print("  🎮 Selector de Gama (Alta/Baja)")
+print("  🎯 Anti-Aim")
+print("  ⚡ Speed Glitch")
+print("  💀 Headless + 🦵 Korblox")
+print("  🎒 Inventory Unlimiter + Auto Get Tools")
+print("  🔥 Firefly Clutch")
+print("  🧰 Nueva pestaña Utilidades")
+print("  🔥 Pestaña Clutchs")
 print("====================================")
 
-print("🎃 Parte 10/10 cargada - SCRIPT COMPLETO v4.7.1")
+print("🎃 Parte 10/10 cargada - SCRIPT COMPLETO v4.7.3")
 
 -- ============================================
 -- ⏰ ROUND TIMER
@@ -4726,33 +6438,46 @@ _G.UZIVERT_ABRIR_LISTA = function(framePadre, botonDropdown)
     end
 end
 
+-- ============================================
+-- ⚡ SPEED GLITCH
+-- ============================================
+_G.UZIVERT_SG_ON = false
+_G.UZIVERT_SG_VALOR = CONFIG.SpeedGlitchValor or 50
+
+if not _G.UZIVERT_GAMA_BAJA then
+    RunService.Heartbeat:Connect(function()
+        if not _G.UZIVERT_SG_ON then return end
+        
+        local shiftLock = UserInputService.MouseBehavior == Enum.MouseBehavior.LockCenter
+        if not shiftLock then return end
+        
+        local char = LocalPlayer.Character
+        local humanoid = char and char:FindFirstChildOfClass("Humanoid")
+        local hrp = char and char:FindFirstChild("HumanoidRootPart")
+        
+        if humanoid and hrp and humanoid.FloorMaterial == Enum.Material.Air then
+            local moveDir = humanoid.MoveDirection
+            if moveDir.Magnitude > 0 then
+                local vel = hrp.AssemblyLinearVelocity
+                hrp.AssemblyLinearVelocity = Vector3.new(
+                    moveDir.X * _G.UZIVERT_SG_VALOR,
+                    vel.Y,
+                    moveDir.Z * _G.UZIVERT_SG_VALOR
+                )
+            end
+        end
+    end)
+end
+
 -- 🎯 Restaurar estados guardados
 task.wait(0.5)
-
-if CONFIG.RoundTimer then
-    _G.UZIVERT_TIMER_START()
-end
 
 if CONFIG.AutoGetGun then
     _G.UZIVERT_AUTO_GET_GUN_ON = true
 end
 
-if CONFIG.ModoNoche then
-    _G.UZIVERT_MODO_NOCHE(true)
-end
-
-if CONFIG.AutoStab then
-    _G.UZIVERT_AUTO_STAB_ON = true
-end
-
 if CONFIG.AimLock then
     _G.AIM_ON = true
-end
-
-if CONFIG.AntiFling then
-    pcall(function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Anti-fling-73205"))()
-    end)
 end
 
 if CONFIG.GunAura then
@@ -4761,4 +6486,51 @@ end
 
 if CONFIG.SilentAim then
     _G.UZIVERT_SILENT_AIM_ON = true
+end
+
+if not _G.UZIVERT_GAMA_BAJA then
+    if CONFIG.RoundTimer then
+        _G.UZIVERT_TIMER_START()
+    end
+    if CONFIG.ModoNoche then
+        _G.UZIVERT_MODO_NOCHE(true)
+    end
+    if CONFIG.AutoStab then
+        _G.UZIVERT_AUTO_STAB_ON = true
+    end
+    if CONFIG.AntiFling then
+        pcall(function()
+            loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Anti-fling-73205"))()
+        end)
+    end
+end
+
+if CONFIG.AntiAim then
+    _G.UZIVERT_AA_ON = true
+    _G.UZIVERT_AA_START()
+end
+
+if CONFIG.SpeedGlitch then
+    _G.UZIVERT_SG_ON = true
+end
+if CONFIG.SpeedGlitchValor then
+    _G.UZIVERT_SG_VALOR = CONFIG.SpeedGlitchValor
+end
+
+if CONFIG.Headless or CONFIG.KorbloxRight or CONFIG.KorbloxLeft then
+    task.wait(1)
+    if LocalPlayer.Character then
+        _G.UZIVERT_APLICAR_COSMETICOS(LocalPlayer.Character)
+    end
+end
+
+if CONFIG.InventoryUnlimiter then
+    _G.UZIVERT_INV_ON = true
+    _G.UZIVERT_REQUEST_RECOVERY(true)
+end
+if CONFIG.AutoGetTools then
+    _G.UZIVERT_AUTOGET_ON = true
+end
+if CONFIG.InventoryMaxItems then
+    _G.UZIVERT_INV_LIMIT = CONFIG.InventoryMaxItems
 end
