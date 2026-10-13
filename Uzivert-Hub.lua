@@ -30,7 +30,7 @@ _G.UZ_SEL_CONFIG = {
     CREATOR_NAME = "Uzivert",
     TIKTOK = "@Uzivert550",
     INSTAGRAM = "@hxuntedluv77",
-    VERSION = "v4.7.5",
+    VERSION = "v4.7.4",
 }
 
 _G.UZ_SEL_Players = game:GetService("Players")
