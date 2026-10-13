@@ -1,5 +1,5 @@
 -- ============================================
--- UZIVERT HUB | v4.7.3 HALLOWEEN 🎃
+-- UZIVERT HUB | v4.7.4 HALLOWEEN 🎃
 -- Proyecto inicial por Uzivert
 -- Con ayuda explicativa de Nexvyr
 -- ============================================
@@ -15,230 +15,1322 @@ local Lighting = game:GetService("Lighting")
 local HttpService = game:GetService("HttpService")
 local Debris = game:GetService("Debris")
 
-local VERSION = "v4.7.3 HALLOWEEN"
+local VERSION = "v4.7.4 HALLOWEEN"
 
 -- ============================================
--- 🎮 DEVICE SELECTOR (ADAPTIVE UI) - TODO _G.
+-- UZIVERT HUB - HALLOWEEN DEVICE SELECTOR (v2)
+-- Todo con _G.UZ_SEL_*  |  Sin emojis: todo dibujado con Frames
 -- ============================================
 _G.UZIVERT_GAMA_BAJA = false
 _G.UZIVERT_SELECCIONADO = false
 
-_G.PSel = game:GetService("Players")
-_G.LPSel = _G.PSel.LocalPlayer
-_G.UISel = game:GetService("UserInputService")
-_G.TWSel = game:GetService("TweenService")
-_G.PGSel = _G.LPSel:WaitForChild("PlayerGui")
+_G.UZ_SEL_CONFIG = {
+    LAUGH_SOUND = "rbxassetid://30588394",
+    TEETH_SOUND = "rbxassetid://8047405326",
+    CREATOR_NAME = "Uzivert",
+    TIKTOK = "@Uzivert550",
+    INSTAGRAM = "@hxuntedluv77",
+    VERSION = "v4.7.5",
+}
 
-_G.SelGui = Instance.new("ScreenGui")
-_G.SelGui.Name = "UzivertSelector"
-_G.SelGui.ResetOnSpawn = false
-_G.SelGui.IgnoreGuiInset = true
-_G.SelGui.DisplayOrder = 9999
-_G.SelGui.Parent = _G.PGSel
+_G.UZ_SEL_Players = game:GetService("Players")
+_G.UZ_SEL_Tween = game:GetService("TweenService")
+_G.UZ_SEL_Run = game:GetService("RunService")
+_G.UZ_SEL_Input = game:GetService("UserInputService")
+_G.UZ_SEL_Debris = game:GetService("Debris")
 
-_G.SelFondo = Instance.new("Frame")
-_G.SelFondo.Size = UDim2.new(1, 0, 1, 0)
-_G.SelFondo.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-_G.SelFondo.BackgroundTransparency = 0.4
-_G.SelFondo.BorderSizePixel = 0
-_G.SelFondo.ZIndex = 1
-_G.SelFondo.Parent = _G.SelGui
+_G.UZ_SEL_player = _G.UZ_SEL_Players.LocalPlayer
 
-_G.SelPanel = Instance.new("Frame")
-_G.SelPanel.Size = UDim2.new(0, 500, 0, 350)
-_G.SelPanel.Position = UDim2.new(0.5, -250, 0.5, -175)
-_G.SelPanel.BackgroundColor3 = Color3.fromRGB(15, 10, 20)
-_G.SelPanel.BackgroundTransparency = 0.05
-_G.SelPanel.BorderSizePixel = 0
-_G.SelPanel.ZIndex = 2
-_G.SelPanel.Parent = _G.SelGui
+_G.UZ_SEL_ORANGE = Color3.fromRGB(245, 135, 35)
+_G.UZ_SEL_ORANGE_LIGHT = Color3.fromRGB(255, 190, 90)
+_G.UZ_SEL_PURPLE = Color3.fromRGB(150, 80, 230)
+_G.UZ_SEL_GREEN = Color3.fromRGB(74, 222, 128)
+_G.UZ_SEL_WEB = Color3.fromRGB(210, 200, 225)
+_G.UZ_SEL_BG = Color3.fromRGB(14, 10, 18)
+_G.UZ_SEL_BAR = Color3.fromRGB(20, 14, 26)
+_G.UZ_SEL_CARD = Color3.fromRGB(24, 17, 30)
+_G.UZ_SEL_CARD_LINE = Color3.fromRGB(58, 40, 66)
+_G.UZ_SEL_GRAY = Color3.fromRGB(140, 130, 152)
+_G.UZ_SEL_BONE = Color3.fromRGB(235, 228, 205)
+_G.UZ_SEL_INK = Color3.fromRGB(60, 45, 30)
 
-_G.cSelPanel = Instance.new("UICorner")
-_G.cSelPanel.CornerRadius = UDim.new(0, 16)
-_G.cSelPanel.Parent = _G.SelPanel
+_G.UZ_SEL_WIN_W, _G.UZ_SEL_WIN_H = 540, 320
 
-_G.sSelPanel = Instance.new("UIStroke")
-_G.sSelPanel.Color = Color3.fromRGB(255, 140, 0)
-_G.sSelPanel.Thickness = 2
-_G.sSelPanel.Transparency = 0.3
-_G.sSelPanel.Parent = _G.SelPanel
-
-_G.SelTitulo = Instance.new("TextLabel")
-_G.SelTitulo.Size = UDim2.new(1, -40, 0, 40)
-_G.SelTitulo.Position = UDim2.new(0, 20, 0, 20)
-_G.SelTitulo.BackgroundTransparency = 1
-_G.SelTitulo.Text = "🎃 UZIVERT HUB"
-_G.SelTitulo.TextColor3 = Color3.fromRGB(255, 140, 0)
-_G.SelTitulo.Font = Enum.Font.GothamBlack
-_G.SelTitulo.TextSize = 24
-_G.SelTitulo.TextXAlignment = Enum.TextXAlignment.Center
-_G.SelTitulo.ZIndex = 3
-_G.SelTitulo.Parent = _G.SelPanel
-
-_G.SelSub = Instance.new("TextLabel")
-_G.SelSub.Size = UDim2.new(1, -40, 0, 25)
-_G.SelSub.Position = UDim2.new(0, 20, 0, 60)
-_G.SelSub.BackgroundTransparency = 1
-_G.SelSub.Text = "Elegí tu tipo de dispositivo"
-_G.SelSub.TextColor3 = Color3.fromRGB(150, 150, 170)
-_G.SelSub.Font = Enum.Font.GothamMedium
-_G.SelSub.TextSize = 14
-_G.SelSub.TextXAlignment = Enum.TextXAlignment.Center
-_G.SelSub.ZIndex = 3
-_G.SelSub.Parent = _G.SelPanel
-
--- 🔵 BOTÓN GAMA ALTA
-_G.SelBtnAlta = Instance.new("TextButton")
-_G.SelBtnAlta.Size = UDim2.new(0.45, -15, 0, 180)
-_G.SelBtnAlta.Position = UDim2.new(0, 20, 0, 105)
-_G.SelBtnAlta.BackgroundColor3 = Color3.fromRGB(20, 30, 50)
-_G.SelBtnAlta.BackgroundTransparency = 0.3
-_G.SelBtnAlta.Text = ""
-_G.SelBtnAlta.BorderSizePixel = 0
-_G.SelBtnAlta.ZIndex = 3
-_G.SelBtnAlta.Parent = _G.SelPanel
-
-_G.cSelAlta = Instance.new("UICorner")
-_G.cSelAlta.CornerRadius = UDim.new(0, 12)
-_G.cSelAlta.Parent = _G.SelBtnAlta
-
-_G.sSelAlta = Instance.new("UIStroke")
-_G.sSelAlta.Color = Color3.fromRGB(60, 120, 255)
-_G.sSelAlta.Thickness = 2
-_G.sSelAlta.Transparency = 0.3
-_G.sSelAlta.Parent = _G.SelBtnAlta
-
-_G.IcoSelAlta = Instance.new("TextLabel")
-_G.IcoSelAlta.Size = UDim2.new(1, 0, 0, 50)
-_G.IcoSelAlta.Position = UDim2.new(0, 0, 0, 20)
-_G.IcoSelAlta.BackgroundTransparency = 1
-_G.IcoSelAlta.Text = "💻"
-_G.IcoSelAlta.TextSize = 40
-_G.IcoSelAlta.ZIndex = 4
-_G.IcoSelAlta.Parent = _G.SelBtnAlta
-
-_G.TxtSelAlta = Instance.new("TextLabel")
-_G.TxtSelAlta.Size = UDim2.new(1, -20, 0, 25)
-_G.TxtSelAlta.Position = UDim2.new(0, 10, 0, 75)
-_G.TxtSelAlta.BackgroundTransparency = 1
-_G.TxtSelAlta.Text = "GAMA ALTA"
-_G.TxtSelAlta.TextColor3 = Color3.fromRGB(60, 120, 255)
-_G.TxtSelAlta.Font = Enum.Font.GothamBlack
-_G.TxtSelAlta.TextSize = 16
-_G.TxtSelAlta.ZIndex = 4
-_G.TxtSelAlta.Parent = _G.SelBtnAlta
-
-_G.DscSelAlta = Instance.new("TextLabel")
-_G.DscSelAlta.Size = UDim2.new(1, -20, 0, 70)
-_G.DscSelAlta.Position = UDim2.new(0, 10, 0, 105)
-_G.DscSelAlta.BackgroundTransparency = 1
-_G.DscSelAlta.Text = "PC / Celular potente\n\n✅ Todas las funciones"
-_G.DscSelAlta.TextColor3 = Color3.fromRGB(255, 255, 255)
-_G.DscSelAlta.Font = Enum.Font.GothamMedium
-_G.DscSelAlta.TextSize = 10
-_G.DscSelAlta.TextWrapped = true
-_G.DscSelAlta.TextXAlignment = Enum.TextXAlignment.Center
-_G.DscSelAlta.TextYAlignment = Enum.TextYAlignment.Top
-_G.DscSelAlta.ZIndex = 4
-_G.DscSelAlta.Parent = _G.SelBtnAlta
-
--- 🟠 BOTÓN GAMA BAJA
-_G.SelBtnBaja = Instance.new("TextButton")
-_G.SelBtnBaja.Size = UDim2.new(0.45, -15, 0, 180)
-_G.SelBtnBaja.Position = UDim2.new(0.55, 0, 0, 105)
-_G.SelBtnBaja.BackgroundColor3 = Color3.fromRGB(40, 20, 15)
-_G.SelBtnBaja.BackgroundTransparency = 0.3
-_G.SelBtnBaja.Text = ""
-_G.SelBtnBaja.BorderSizePixel = 0
-_G.SelBtnBaja.ZIndex = 3
-_G.SelBtnBaja.Parent = _G.SelPanel
-
-_G.cSelBaja = Instance.new("UICorner")
-_G.cSelBaja.CornerRadius = UDim.new(0, 12)
-_G.cSelBaja.Parent = _G.SelBtnBaja
-
-_G.sSelBaja = Instance.new("UIStroke")
-_G.sSelBaja.Color = Color3.fromRGB(255, 140, 0)
-_G.sSelBaja.Thickness = 2
-_G.sSelBaja.Transparency = 0.3
-_G.sSelBaja.Parent = _G.SelBtnBaja
-
-_G.IcoSelBaja = Instance.new("TextLabel")
-_G.IcoSelBaja.Size = UDim2.new(1, 0, 0, 50)
-_G.IcoSelBaja.Position = UDim2.new(0, 0, 0, 20)
-_G.IcoSelBaja.BackgroundTransparency = 1
-_G.IcoSelBaja.Text = "📱"
-_G.IcoSelBaja.TextSize = 40
-_G.IcoSelBaja.ZIndex = 4
-_G.IcoSelBaja.Parent = _G.SelBtnBaja
-
-_G.TxtSelBaja = Instance.new("TextLabel")
-_G.TxtSelBaja.Size = UDim2.new(1, -20, 0, 25)
-_G.TxtSelBaja.Position = UDim2.new(0, 10, 0, 75)
-_G.TxtSelBaja.BackgroundTransparency = 1
-_G.TxtSelBaja.Text = "GAMA BAJA"
-_G.TxtSelBaja.TextColor3 = Color3.fromRGB(255, 140, 0)
-_G.TxtSelBaja.Font = Enum.Font.GothamBlack
-_G.TxtSelBaja.TextSize = 16
-_G.TxtSelBaja.ZIndex = 4
-_G.TxtSelBaja.Parent = _G.SelBtnBaja
-
-_G.DscSelBaja = Instance.new("TextLabel")
-_G.DscSelBaja.Size = UDim2.new(1, -20, 0, 70)
-_G.DscSelBaja.Position = UDim2.new(0, 10, 0, 105)
-_G.DscSelBaja.BackgroundTransparency = 1
-_G.DscSelBaja.Text = "Celular viejo / lento\n\n✅ Funciones esenciales"
-_G.DscSelBaja.TextColor3 = Color3.fromRGB(255, 255, 255)
-_G.DscSelBaja.Font = Enum.Font.GothamMedium
-_G.DscSelBaja.TextSize = 10
-_G.DscSelBaja.TextWrapped = true
-_G.DscSelBaja.TextXAlignment = Enum.TextXAlignment.Center
-_G.DscSelBaja.TextYAlignment = Enum.TextYAlignment.Top
-_G.DscSelBaja.ZIndex = 4
-_G.DscSelBaja.Parent = _G.SelBtnBaja
-
--- 🎯 Función de selección
-_G.SelFunc = function(gamaBaja)
-    _G.UZIVERT_GAMA_BAJA = gamaBaja
-    _G.UZIVERT_SELECCIONADO = true
-    print("🎮 Seleccionado: " .. (gamaBaja and "GAMA BAJA" or "GAMA ALTA"))
-    
-    _G.TWSel:Create(_G.SelPanel, TweenInfo.new(0.3), {
-        Size = UDim2.new(0, 0, 0, 0),
-        Position = UDim2.new(0.5, 0, 0.5, 0)
-    }):Play()
-    
-    task.wait(0.3)
-    _G.SelGui:Destroy()
+------------------------------------------------------------------ helpers
+_G.UZ_SEL_new = function(class, props, parent)
+    local o = Instance.new(class)
+    for k, v in pairs(props) do o[k] = v end
+    o.Parent = parent
+    return o
 end
 
-_G.SelBtnAlta.MouseButton1Click:Connect(function() _G.SelFunc(false) end)
-_G.SelBtnBaja.MouseButton1Click:Connect(function() _G.SelFunc(true) end)
+_G.UZ_SEL_tween = function(obj, info, goal)
+    local t = _G.UZ_SEL_Tween:Create(obj, info, goal)
+    t:Play()
+    return t
+end
 
-_G.SelBtnAlta.MouseEnter:Connect(function()
-    _G.TWSel:Create(_G.SelBtnAlta, TweenInfo.new(0.2), {BackgroundTransparency = 0.1}):Play()
-    _G.TWSel:Create(_G.sSelAlta, TweenInfo.new(0.2), {Transparency = 0}):Play()
-end)
-_G.SelBtnAlta.MouseLeave:Connect(function()
-    _G.TWSel:Create(_G.SelBtnAlta, TweenInfo.new(0.2), {BackgroundTransparency = 0.3}):Play()
-    _G.TWSel:Create(_G.sSelAlta, TweenInfo.new(0.2), {Transparency = 0.3}):Play()
+_G.UZ_SEL_corner = function(parent, r)
+    return _G.UZ_SEL_new("UICorner", { CornerRadius = r or UDim.new(0, 6) }, parent)
+end
+
+_G.UZ_SEL_LOOP = function(t, style)
+    return TweenInfo.new(t, style or Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+end
+
+-- linea entre dos puntos (Frame rotado)
+_G.UZ_SEL_setLine = function(f, x1, y1, x2, y2, th)
+    local dx, dy = x2 - x1, y2 - y1
+    f.Size = UDim2.fromOffset(math.sqrt(dx * dx + dy * dy), th)
+    f.Position = UDim2.fromOffset((x1 + x2) / 2, (y1 + y2) / 2)
+    f.Rotation = math.deg(math.atan2(dy, dx))
+end
+
+_G.UZ_SEL_line = function(parent, color, z)
+    return _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        BackgroundColor3 = color,
+        BorderSizePixel = 0,
+        ZIndex = z or 1,
+    }, parent)
+end
+
+_G.UZ_SEL_dot = function(parent, size, color, z)
+    local f = _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        Size = UDim2.fromOffset(size, size),
+        BackgroundColor3 = color,
+        BorderSizePixel = 0,
+        ZIndex = z or 1,
+    }, parent)
+    _G.UZ_SEL_corner(f, UDim.new(1, 0))
+    return f
+end
+
+_G.UZ_SEL_outline = function(parent, pos, size, color, thick, radius, z)
+    local f = _G.UZ_SEL_new("Frame", {
+        Position = pos,
+        Size = size,
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+        ZIndex = z or 10,
+    }, parent)
+    _G.UZ_SEL_corner(f, UDim.new(0, radius or 0))
+    _G.UZ_SEL_new("UIStroke", { Thickness = thick, Color = color }, f)
+    return f
+end
+
+_G.UZ_SEL_solid = function(parent, pos, size, color, radius, z)
+    local f = _G.UZ_SEL_new("Frame", {
+        Position = pos,
+        Size = size,
+        BackgroundColor3 = color,
+        BorderSizePixel = 0,
+        ZIndex = z or 10,
+    }, parent)
+    if radius then _G.UZ_SEL_corner(f, UDim.new(0, radius)) end
+    return f
+end
+
+_G.UZ_SEL_hoverable = function(btn, on, off)
+    btn.MouseEnter:Connect(on)
+    btn.MouseLeave:Connect(off)
+    btn.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.Touch then on() end
+    end)
+    btn.InputEnded:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.Touch then off() end
+    end)
+end
+
+-- un solo Heartbeat para todas las animaciones
+_G.UZ_SEL_updaters = {}
+_G.UZ_SEL_addUpdater = function(fn)
+    table.insert(_G.UZ_SEL_updaters, fn)
+end
+_G.UZ_SEL_T0 = os.clock()
+_G.UZ_SEL_hb = _G.UZ_SEL_Run.Heartbeat:Connect(function(dt)
+    local t = os.clock() - _G.UZ_SEL_T0
+    for _, fn in ipairs(_G.UZ_SEL_updaters) do
+        pcall(fn, t, dt)
+    end
 end)
 
-_G.SelBtnBaja.MouseEnter:Connect(function()
-    _G.TWSel:Create(_G.SelBtnBaja, TweenInfo.new(0.2), {BackgroundTransparency = 0.1}):Play()
-    _G.TWSel:Create(_G.sSelBaja, TweenInfo.new(0.2), {Transparency = 0}):Play()
-end)
-_G.SelBtnBaja.MouseLeave:Connect(function()
-    _G.TWSel:Create(_G.SelBtnBaja, TweenInfo.new(0.2), {BackgroundTransparency = 0.3}):Play()
-    _G.TWSel:Create(_G.sSelBaja, TweenInfo.new(0.2), {Transparency = 0.3}):Play()
+------------------------------------------------------------------ gui + ventana
+_G.UZ_SEL_pg = _G.UZ_SEL_player:WaitForChild("PlayerGui")
+if _G.UZ_SEL_pg:FindFirstChild("UzivertSelectorHalloween") then
+    _G.UZ_SEL_pg.UzivertSelectorHalloween:Destroy()
+end
+
+_G.UZ_SEL_gui = _G.UZ_SEL_new("ScreenGui", {
+    Name = "UzivertSelectorHalloween",
+    ResetOnSpawn = false,
+    IgnoreGuiInset = true,
+    DisplayOrder = 9999,
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+}, _G.UZ_SEL_pg)
+
+_G.UZ_SEL_root = _G.UZ_SEL_new("Frame", {
+    Name = "Root",
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.fromOffset(_G.UZ_SEL_WIN_W, _G.UZ_SEL_WIN_H),
+    BackgroundTransparency = 1,
+}, _G.UZ_SEL_gui)
+_G.UZ_SEL_winScale = _G.UZ_SEL_new("UIScale", { Scale = 0 }, _G.UZ_SEL_root)
+
+-- resplandor morado pulsante alrededor
+_G.UZ_SEL_glow1 = _G.UZ_SEL_new("Frame", {
+    AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.new(1, 60, 1, 60), BackgroundColor3 = Color3.fromRGB(140, 60, 220),
+    BackgroundTransparency = 0.85, BorderSizePixel = 0, ZIndex = 0,
+}, _G.UZ_SEL_root)
+_G.UZ_SEL_corner(_G.UZ_SEL_glow1, UDim.new(0, 40))
+_G.UZ_SEL_glow2 = _G.UZ_SEL_new("Frame", {
+    AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.new(1, 30, 1, 30), BackgroundColor3 = Color3.fromRGB(180, 80, 255),
+    BackgroundTransparency = 0.7, BorderSizePixel = 0, ZIndex = 1,
+}, _G.UZ_SEL_root)
+_G.UZ_SEL_corner(_G.UZ_SEL_glow2, UDim.new(0, 25))
+_G.UZ_SEL_glow3 = _G.UZ_SEL_new("Frame", {
+    AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.new(1, 12, 1, 12), BackgroundColor3 = Color3.fromRGB(220, 130, 255),
+    BackgroundTransparency = 0.55, BorderSizePixel = 0, ZIndex = 2,
+}, _G.UZ_SEL_root)
+_G.UZ_SEL_corner(_G.UZ_SEL_glow3, UDim.new(0, 14))
+
+_G.UZ_SEL_addUpdater(function(t)
+    _G.UZ_SEL_glow1.BackgroundTransparency = 0.88 + 0.04 * math.sin(t * 1.2)
+    _G.UZ_SEL_glow2.BackgroundTransparency = 0.78 + 0.05 * math.sin(t * 1.7 + 1)
+    _G.UZ_SEL_glow3.BackgroundTransparency = 0.68 + 0.06 * math.sin(t * 2.3 + 2)
 end)
 
--- ⭐ ESPERAR A QUE EL USUARIO ELIJA
+_G.UZ_SEL_fitScale = function()
+    local cam = workspace.CurrentCamera
+    local vp = cam and cam.ViewportSize or Vector2.new(1280, 720)
+    return math.clamp(math.min(vp.X / (_G.UZ_SEL_WIN_W + 60), vp.Y / (_G.UZ_SEL_WIN_H + 60)), 0.5, 1.4)
+end
+
+-- CanvasGroup: recorta todo (telaranas, murcielagos) con las esquinas redondeadas
+_G.UZ_SEL_main = _G.UZ_SEL_new("CanvasGroup", {
+    Size = UDim2.fromScale(1, 1),
+    BackgroundColor3 = _G.UZ_SEL_BG,
+    BackgroundTransparency = 0.15,
+    ZIndex = 3,
+}, _G.UZ_SEL_root)
+_G.UZ_SEL_corner(_G.UZ_SEL_main, UDim.new(0, 8))
+
+-- borde animado (degradado que gira)
+_G.UZ_SEL_border = _G.UZ_SEL_new("Frame", {
+    Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 20,
+}, _G.UZ_SEL_root)
+_G.UZ_SEL_corner(_G.UZ_SEL_border, UDim.new(0, 8))
+_G.UZ_SEL_mainStroke = _G.UZ_SEL_new("UIStroke", {
+    Thickness = 1.5, Color = Color3.new(1, 1, 1), ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+}, _G.UZ_SEL_border)
+_G.UZ_SEL_mainStrokeGrad = _G.UZ_SEL_new("UIGradient", {
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, _G.UZ_SEL_ORANGE),
+        ColorSequenceKeypoint.new(0.33, _G.UZ_SEL_PURPLE),
+        ColorSequenceKeypoint.new(0.66, _G.UZ_SEL_ORANGE),
+        ColorSequenceKeypoint.new(1, _G.UZ_SEL_PURPLE),
+    }),
+}, _G.UZ_SEL_mainStroke)
+_G.UZ_SEL_addUpdater(function(t)
+    _G.UZ_SEL_mainStrokeGrad.Rotation = (t * 45) % 360
+end)
+
+-- fondo con degradado
+_G.UZ_SEL_bgGrad = _G.UZ_SEL_new("Frame", {
+    Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.new(1, 1, 1),
+    BackgroundTransparency = 0.7, BorderSizePixel = 0, ZIndex = 1,
+}, _G.UZ_SEL_main)
+_G.UZ_SEL_new("UIGradient", {
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(20, 10, 30)),
+        ColorSequenceKeypoint.new(0.7, Color3.fromRGB(60, 25, 20)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(110, 45, 15)),
+    }),
+    Rotation = 35,
+}, _G.UZ_SEL_bgGrad)
+
+------------------------------------------------------------------ decoracion de fondo
+-- telaranas dibujadas (sutiles y animadas)
+_G.UZ_SEL_webs = {}
+_G.UZ_SEL_createWeb = function(corner, size, yOff)
+    local sx = (corner == "TL" or corner == "BL") and 1 or -1
+    local sy = (corner == "TL" or corner == "TR") and 1 or -1
+    local holder = _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(sx == 1 and 0 or 1, sy == 1 and 0 or 1),
+        Position = UDim2.new(sx == 1 and 0 or 1, 0, sy == 1 and 0 or 1, yOff or 0),
+        Size = UDim2.fromOffset(size, size),
+        BackgroundTransparency = 1, ClipsDescendants = true, ZIndex = 2,
+    }, _G.UZ_SEL_main)
+    local ox = sx == 1 and 0 or size
+    local oy = sy == 1 and 0 or size
+    local function pt(a, r) return ox + sx * r * math.cos(a), oy + sy * r * math.sin(a) end
+
+    local N, RINGS = 6, 6
+    local jitter = { 1.0, 0.97, 1.04, 0.99, 1.03, 1.0 }
+    local strands, segs = {}, {}
+    for i = 0, N - 1 do
+        local a = (math.pi / 2) * i / (N - 1)
+        local l = _G.UZ_SEL_line(holder, _G.UZ_SEL_WEB, 2)
+        local x2, y2 = pt(a, size * 1.5)
+        _G.UZ_SEL_setLine(l, ox, oy, x2, y2, 1)
+        strands[#strands + 1] = l
+    end
+    for r = 1, RINGS do
+        for i = 0, N - 2 do
+            segs[#segs + 1] = {
+                r = r, i = i, R = size * 1.1 * (r / RINGS) * jitter[r],
+                a1 = (math.pi / 2) * i / (N - 1),
+                a2 = (math.pi / 2) * (i + 1) / (N - 1),
+                am = (math.pi / 2) * (i + 0.5) / (N - 1),
+                l1 = _G.UZ_SEL_line(holder, _G.UZ_SEL_WEB, 1),
+                l2 = _G.UZ_SEL_line(holder, _G.UZ_SEL_WEB, 1),
+            }
+        end
+    end
+    _G.UZ_SEL_addUpdater(function(t)
+        for _, s in ipairs(segs) do
+            local sag = 0.84 + 0.035 * math.sin(t * 1.3 + s.r * 0.8 + s.i * 0.5)
+            local x1, y1 = pt(s.a1, s.R)
+            local x2, y2 = pt(s.a2, s.R)
+            local xm, ym = pt(s.am, s.R * sag)
+            _G.UZ_SEL_setLine(s.l1, x1, y1, xm, ym, 1)
+            _G.UZ_SEL_setLine(s.l2, xm, ym, x2, y2, 1)
+            local tr = 0.8 + 0.08 * math.sin(t * 1.8 - s.r * 0.9)
+            s.l1.BackgroundTransparency = tr
+            s.l2.BackgroundTransparency = tr
+        end
+        for i, l in ipairs(strands) do
+            l.BackgroundTransparency = 0.72 + 0.08 * math.sin(t * 1.1 + i)
+        end
+    end)
+    table.insert(_G.UZ_SEL_webs, holder)
+end
+_G.UZ_SEL_createWeb("TL", 70, 50)
+_G.UZ_SEL_createWeb("TR", 46, 50)
+_G.UZ_SEL_createWeb("BL", 56, 0)
+_G.UZ_SEL_createWeb("BR", 84, 0)
+
+-- lapidas
+_G.UZ_SEL_tombColor = Color3.fromRGB(44, 30, 56)
+for _, d in ipairs({
+    { 24, 16, 22 }, { 70, 3, 24, true }, { 118, 18, 28 }, { 176, 12, 16 },
+    { 236, 3, 20, true }, { 300, 16, 20 }, { 372, 12, 26 }, { 430, 3, 22, true }, { 478, 18, 18 },
+}) do
+    local x, w, h, cross = d[1], d[2], d[3], d[4]
+    if cross then
+        _G.UZ_SEL_new("Frame", {
+            AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromOffset(x, _G.UZ_SEL_WIN_H + 2),
+            Size = UDim2.fromOffset(3, h), BackgroundColor3 = _G.UZ_SEL_tombColor,
+            BackgroundTransparency = 0.2, BorderSizePixel = 0, ZIndex = 3,
+        }, _G.UZ_SEL_main)
+        _G.UZ_SEL_new("Frame", {
+            AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(x, _G.UZ_SEL_WIN_H + 2 - h * 0.7),
+            Size = UDim2.fromOffset(12, 3), BackgroundColor3 = _G.UZ_SEL_tombColor,
+            BackgroundTransparency = 0.2, BorderSizePixel = 0, ZIndex = 3,
+        }, _G.UZ_SEL_main)
+    else
+        local g = _G.UZ_SEL_new("Frame", {
+            AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromOffset(x, _G.UZ_SEL_WIN_H + 12),
+            Size = UDim2.fromOffset(w, h + 12), BackgroundColor3 = _G.UZ_SEL_tombColor,
+            BackgroundTransparency = 0.2, BorderSizePixel = 0, ZIndex = 3,
+        }, _G.UZ_SEL_main)
+        _G.UZ_SEL_corner(g, UDim.new(0, w))
+        _G.UZ_SEL_new("UIStroke", { Color = Color3.fromRGB(90, 60, 90), Transparency = 0.7, Thickness = 1 }, g)
+    end
+end
+
+-- brasas flotantes (pool, sin crear instancias en bucle)
+_G.UZ_SEL_embers = {}
+for i = 1, 18 do
+    local s = math.random(2, 4)
+    local f = _G.UZ_SEL_new("Frame", {
+        Size = UDim2.fromOffset(s, s),
+        BackgroundColor3 = (i % 3 == 0) and _G.UZ_SEL_PURPLE or ((i % 2 == 0) and _G.UZ_SEL_ORANGE or _G.UZ_SEL_ORANGE_LIGHT),
+        BorderSizePixel = 0, ZIndex = 3,
+    }, _G.UZ_SEL_main)
+    _G.UZ_SEL_corner(f, UDim.new(1, 0))
+    _G.UZ_SEL_embers[i] = {
+        f = f, x = math.random() * _G.UZ_SEL_WIN_W, y = math.random() * _G.UZ_SEL_WIN_H,
+        speed = 8 + math.random() * 16, amp = 6 + math.random() * 10,
+        ph = math.random() * 6.28, fr = 0.6 + math.random() * 0.8,
+    }
+end
+_G.UZ_SEL_addUpdater(function(t, dt)
+    for _, e in ipairs(_G.UZ_SEL_embers) do
+        e.y -= e.speed * dt
+        if e.y < -6 then
+            e.y = _G.UZ_SEL_WIN_H + 6
+            e.x = math.random() * _G.UZ_SEL_WIN_W
+        end
+        e.f.Position = UDim2.fromOffset(e.x + math.sin(t * e.fr + e.ph) * e.amp, e.y)
+        e.f.BackgroundTransparency = 1 - 0.8 * math.sin(math.pi * math.clamp(e.y / _G.UZ_SEL_WIN_H, 0, 1))
+    end
+end)
+
+-- niebla
+_G.UZ_SEL_fogLayer = function(height, color, keys)
+    local f = _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(0, 1), Position = UDim2.fromScale(0, 1),
+        Size = UDim2.new(1, 0, 0, height), BackgroundColor3 = color,
+        BorderSizePixel = 0, ZIndex = 4,
+    }, _G.UZ_SEL_main)
+    return _G.UZ_SEL_new("UIGradient", { Transparency = NumberSequence.new(keys) }, f)
+end
+_G.UZ_SEL_new("UIGradient", {
+    Rotation = 90,
+    Color = ColorSequence.new(_G.UZ_SEL_PURPLE, _G.UZ_SEL_ORANGE),
+    Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(1, 0.85) }),
+}, _G.UZ_SEL_new("Frame", {
+    AnchorPoint = Vector2.new(0, 1), Position = UDim2.fromScale(0, 1),
+    Size = UDim2.new(1, 0, 0, 80), BackgroundColor3 = Color3.new(1, 1, 1),
+    BorderSizePixel = 0, ZIndex = 4,
+}, _G.UZ_SEL_main))
+_G.UZ_SEL_wispKeys = {
+    NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.2, 0.9),
+    NumberSequenceKeypoint.new(0.4, 1), NumberSequenceKeypoint.new(0.65, 0.88),
+    NumberSequenceKeypoint.new(0.85, 1), NumberSequenceKeypoint.new(1, 1),
+}
+_G.UZ_SEL_wispA = _G.UZ_SEL_fogLayer(44, Color3.fromRGB(190, 150, 255), _G.UZ_SEL_wispKeys)
+_G.UZ_SEL_wispB = _G.UZ_SEL_fogLayer(28, Color3.fromRGB(255, 170, 110), _G.UZ_SEL_wispKeys)
+_G.UZ_SEL_phaseA, _G.UZ_SEL_phaseB = 0, 0
+_G.UZ_SEL_addUpdater(function(t, dt)
+    _G.UZ_SEL_phaseA = (_G.UZ_SEL_phaseA + dt * 0.08) % 2
+    _G.UZ_SEL_phaseB = (_G.UZ_SEL_phaseB + dt * 0.05) % 2
+    _G.UZ_SEL_wispA.Offset = Vector2.new(_G.UZ_SEL_phaseA - 1, 0)
+    _G.UZ_SEL_wispB.Offset = Vector2.new(1 - _G.UZ_SEL_phaseB, 0)
+end)
+
+-- murcielagos dibujados con lineas
+_G.UZ_SEL_bats = {}
+_G.UZ_SEL_batColor = Color3.fromRGB(125, 85, 175)
+for i = 1, 2 do
+    local b = {
+        active = false, timer = 2 + i * 3, x = 0, baseY = 0, dir = 1,
+        flap = 0, seed = i * 2.1, s = (i == 1) and 1 or 0.75, lines = {},
+    }
+    b.root = _G.UZ_SEL_new("Frame", {
+        Size = UDim2.fromOffset(0, 0), BackgroundTransparency = 1, Visible = false, ZIndex = 2,
+    }, _G.UZ_SEL_main)
+    for k = 1, 8 do
+        b.lines[k] = _G.UZ_SEL_line(b.root, _G.UZ_SEL_batColor, 1)
+        b.lines[k].BackgroundTransparency = 0.25
+    end
+    b.body = _G.UZ_SEL_dot(b.root, 5 * b.s, _G.UZ_SEL_batColor, 2)
+    _G.UZ_SEL_bats[i] = b
+end
+_G.UZ_SEL_addUpdater(function(t, dt)
+    for _, b in ipairs(_G.UZ_SEL_bats) do
+        if not b.active then
+            b.timer -= dt
+            if b.timer <= 0 then
+                b.active = true
+                b.dir = (math.random() > 0.5) and 1 or -1
+                b.x = (b.dir == 1) and -24 or (_G.UZ_SEL_WIN_W + 24)
+                b.baseY = math.random(64, 200)
+                b.root.Visible = true
+            end
+        else
+            b.x += b.dir * (46 + b.s * 10) * dt
+            b.flap += dt * 13
+            b.root.Position = UDim2.fromOffset(b.x, b.baseY + math.sin(t * 1.8 + b.seed) * 16)
+            local f, s, li = math.sin(b.flap), b.s, 1
+            for side = -1, 1, 2 do
+                local tx, ty = side * 14 * s, -f * 9 * s - 2 * s
+                local p1x, p1y = side * 9 * s, 5 * s - f * 3 * s
+                local p2x, p2y = side * 4 * s, 4 * s
+                _G.UZ_SEL_setLine(b.lines[li], 0, -1 * s, tx, ty, 1.5)
+                _G.UZ_SEL_setLine(b.lines[li + 1], tx, ty, p1x, p1y, 1.5)
+                _G.UZ_SEL_setLine(b.lines[li + 2], p1x, p1y, p2x, p2y, 1.5)
+                _G.UZ_SEL_setLine(b.lines[li + 3], p2x, p2y, 0, 2 * s, 1.5)
+                li += 4
+            end
+            if b.x < -30 or b.x > _G.UZ_SEL_WIN_W + 30 then
+                b.active = false
+                b.root.Visible = false
+                b.timer = 5 + math.random() * 7
+            end
+        end
+    end
+end)
+
+-- arana colgando de un hilo (sube y baja)
+_G.UZ_SEL_spLayer = _G.UZ_SEL_new("Frame", {
+    Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 7,
+}, _G.UZ_SEL_main)
+_G.UZ_SEL_spThread = _G.UZ_SEL_line(_G.UZ_SEL_spLayer, _G.UZ_SEL_WEB, 1)
+_G.UZ_SEL_spThread.BackgroundTransparency = 0.35
+_G.UZ_SEL_spBody = _G.UZ_SEL_new("Frame", {
+    Size = UDim2.fromOffset(0, 0), BackgroundTransparency = 1,
+}, _G.UZ_SEL_spLayer)
+_G.UZ_SEL_spLegs = {}
+for k = 0, 7 do
+    _G.UZ_SEL_spLegs[k] = {
+        a = _G.UZ_SEL_line(_G.UZ_SEL_spBody, Color3.fromRGB(110, 70, 160), 1),
+        b = _G.UZ_SEL_line(_G.UZ_SEL_spBody, Color3.fromRGB(110, 70, 160), 1),
+    }
+end
+_G.UZ_SEL_spAbd = _G.UZ_SEL_dot(_G.UZ_SEL_spBody, 10, Color3.fromRGB(45, 30, 70), 2)
+_G.UZ_SEL_spAbd.Position = UDim2.fromOffset(0, 6)
+_G.UZ_SEL_spAbd.Size = UDim2.fromOffset(10, 12)
+_G.UZ_SEL_new("Frame", {
+    AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(5, 6), Size = UDim2.fromOffset(3, 5),
+    BackgroundColor3 = _G.UZ_SEL_ORANGE, BorderSizePixel = 0, ZIndex = 3,
+}, _G.UZ_SEL_spAbd)
+_G.UZ_SEL_spHead = _G.UZ_SEL_dot(_G.UZ_SEL_spBody, 7, Color3.fromRGB(60, 42, 90), 2)
+_G.UZ_SEL_spHead.Position = UDim2.fromOffset(0, -4)
+_G.UZ_SEL_spEyeL = _G.UZ_SEL_dot(_G.UZ_SEL_spBody, 2, _G.UZ_SEL_GREEN, 3)
+_G.UZ_SEL_spEyeL.Position = UDim2.fromOffset(-1.6, -5)
+_G.UZ_SEL_spEyeR = _G.UZ_SEL_dot(_G.UZ_SEL_spBody, 2, _G.UZ_SEL_GREEN, 3)
+_G.UZ_SEL_spEyeR.Position = UDim2.fromOffset(1.6, -5)
+
+_G.UZ_SEL_sp = { x = _G.UZ_SEL_WIN_W - 30, state = "idle", timer = 3.5, drop = 0, phase = 0 }
+_G.UZ_SEL_legAngles = { -55, -18, 18, 55 }
+_G.UZ_SEL_addUpdater(function(t, dt)
+    local s = _G.UZ_SEL_sp
+    local moving = false
+    s.timer -= dt
+    if s.state == "idle" then
+        if s.timer <= 0 then s.state, s.timer = "drop", 3.4 end
+    else
+        local el = 3.4 - s.timer
+        local k = math.clamp(math.min(el, s.timer), 0, 1)
+        s.drop = (1 - (1 - k) ^ 3) * 56
+        moving = true
+        if s.timer <= 0 then s.state, s.timer, s.drop = "idle", 5 + math.random() * 4, 0 end
+    end
+    s.phase += dt * (moving and 9 or 2)
+
+    local len = 26 + s.drop + math.sin(t * 1.3) * 5
+    local sway = math.sin(t * 0.9) * 4
+    local by = 50 + len
+    _G.UZ_SEL_setLine(_G.UZ_SEL_spThread, s.x, 50, s.x + sway, by, 1)
+    _G.UZ_SEL_spBody.Position = UDim2.fromOffset(s.x + sway, by)
+    for k = 0, 7 do
+        local side = k < 4 and -1 or 1
+        local ang = math.rad(_G.UZ_SEL_legAngles[(k % 4) + 1])
+        local dx, dy = side * math.cos(ang), math.sin(ang)
+        local wig = math.sin(s.phase + k * 0.9) * 0.22
+        local kx, ky = dx * 7, dy * 7 - 5
+        local fx, fy = dx * 15 * (1 + wig), dy * 15 + 4 + wig * 5
+        _G.UZ_SEL_setLine(_G.UZ_SEL_spLegs[k].a, 0, 0, kx, ky, 1.2)
+        _G.UZ_SEL_setLine(_G.UZ_SEL_spLegs[k].b, kx, ky, fx, fy, 1.2)
+    end
+    local blink = (math.sin(t * 1.7) > 0.96) and 0.9 or 0
+    _G.UZ_SEL_spEyeL.BackgroundTransparency = blink
+    _G.UZ_SEL_spEyeR.BackgroundTransparency = blink
+end)
+
+------------------------------------------------------------------ barra superior
+_G.UZ_SEL_topbar = _G.UZ_SEL_new("Frame", {
+    Size = UDim2.new(1, 0, 0, 50), BackgroundColor3 = _G.UZ_SEL_BAR,
+    BackgroundTransparency = 0.2, BorderSizePixel = 0, ZIndex = 10,
+}, _G.UZ_SEL_main)
+_G.UZ_SEL_new("Frame", {
+    AnchorPoint = Vector2.new(0, 1), Position = UDim2.fromScale(0, 1), Size = UDim2.new(1, 0, 0, 1),
+    BackgroundColor3 = _G.UZ_SEL_ORANGE, BackgroundTransparency = 0.6, BorderSizePixel = 0, ZIndex = 11,
+}, _G.UZ_SEL_topbar)
+
+_G.UZ_SEL_avatar = _G.UZ_SEL_new("ImageLabel", {
+    Position = UDim2.fromOffset(14, 8), Size = UDim2.fromOffset(34, 34),
+    BackgroundColor3 = _G.UZ_SEL_CARD, ZIndex = 12,
+}, _G.UZ_SEL_topbar)
+_G.UZ_SEL_corner(_G.UZ_SEL_avatar, UDim.new(1, 0))
+_G.UZ_SEL_avatarStroke = _G.UZ_SEL_new("UIStroke", { Thickness = 2, Color = Color3.new(1, 1, 1) }, _G.UZ_SEL_avatar)
+_G.UZ_SEL_avatarGrad = _G.UZ_SEL_new("UIGradient", {
+    Color = ColorSequence.new(_G.UZ_SEL_ORANGE, _G.UZ_SEL_ORANGE_LIGHT),
+    Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(0.55, 0.85), NumberSequenceKeypoint.new(1, 0),
+    }),
+}, _G.UZ_SEL_avatarStroke)
+task.spawn(function()
+    local ok, img = pcall(function()
+        return _G.UZ_SEL_Players:GetUserThumbnailAsync(_G.UZ_SEL_player.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
+    end)
+    if ok then _G.UZ_SEL_avatar.Image = img end
+end)
+
+_G.UZ_SEL_onlineDot = _G.UZ_SEL_dot(_G.UZ_SEL_topbar, 9, _G.UZ_SEL_GREEN, 13)
+_G.UZ_SEL_onlineDot.Position = UDim2.fromOffset(42.5, 40.5)
+_G.UZ_SEL_new("UIStroke", { Thickness = 1.5, Color = _G.UZ_SEL_BAR }, _G.UZ_SEL_onlineDot)
+
+_G.UZ_SEL_new("TextLabel", {
+    Position = UDim2.fromOffset(56, 9), Size = UDim2.fromOffset(110, 14), BackgroundTransparency = 1,
+    Text = _G.UZ_SEL_player.Name, Font = Enum.Font.GothamBold, TextSize = 11,
+    TextColor3 = Color3.new(1, 1, 1), TextXAlignment = Enum.TextXAlignment.Left,
+    TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 12,
+}, _G.UZ_SEL_topbar)
+
+_G.UZ_SEL_xpBack = _G.UZ_SEL_new("Frame", {
+    Position = UDim2.fromOffset(56, 29), Size = UDim2.fromOffset(70, 3),
+    BackgroundColor3 = Color3.fromRGB(50, 35, 50), BorderSizePixel = 0, ZIndex = 12,
+}, _G.UZ_SEL_topbar)
+_G.UZ_SEL_corner(_G.UZ_SEL_xpBack, UDim.new(1, 0))
+_G.UZ_SEL_xpFill = _G.UZ_SEL_new("Frame", {
+    Size = UDim2.fromScale(0, 1), BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, ZIndex = 13,
+}, _G.UZ_SEL_xpBack)
+_G.UZ_SEL_corner(_G.UZ_SEL_xpFill, UDim.new(1, 0))
+_G.UZ_SEL_xpGrad = _G.UZ_SEL_new("UIGradient", {
+    Color = ColorSequence.new(_G.UZ_SEL_ORANGE, _G.UZ_SEL_ORANGE_LIGHT),
+}, _G.UZ_SEL_xpFill)
+_G.UZ_SEL_tween(_G.UZ_SEL_xpFill, TweenInfo.new(1.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), { Size = UDim2.fromScale(0.65, 1) })
+
+-- pestanas
+_G.UZ_SEL_TAB_W = 90
+_G.UZ_SEL_tabNames = { "INICIO", "REDES", "CREADOR" }
+_G.UZ_SEL_tabHolder = _G.UZ_SEL_new("Frame", {
+    AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, 0),
+    Size = UDim2.fromOffset(_G.UZ_SEL_TAB_W * 3, 50), BackgroundTransparency = 1, ZIndex = 12,
+}, _G.UZ_SEL_topbar)
+_G.UZ_SEL_tabGlow = _G.UZ_SEL_new("Frame", {
+    Size = UDim2.fromOffset(_G.UZ_SEL_TAB_W, 50), BackgroundColor3 = _G.UZ_SEL_ORANGE,
+    BorderSizePixel = 0, ZIndex = 12,
+}, _G.UZ_SEL_tabHolder)
+_G.UZ_SEL_new("UIGradient", {
+    Rotation = 90,
+    Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(1, 0.8) }),
+}, _G.UZ_SEL_tabGlow)
+_G.UZ_SEL_underline = _G.UZ_SEL_new("Frame", {
+    AnchorPoint = Vector2.new(0, 1), Position = UDim2.fromOffset(15, 50),
+    Size = UDim2.fromOffset(_G.UZ_SEL_TAB_W - 30, 2),
+    BackgroundColor3 = _G.UZ_SEL_ORANGE, BorderSizePixel = 0, ZIndex = 13,
+}, _G.UZ_SEL_tabHolder)
+
+-- FPS / ping reales
+_G.UZ_SEL_stats = _G.UZ_SEL_new("TextLabel", {
+    AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -14, 0.5, 0), Size = UDim2.fromOffset(100, 16),
+    BackgroundTransparency = 1, Text = "-- FPS   |   -- ms", Font = Enum.Font.Gotham, TextSize = 9,
+    TextColor3 = _G.UZ_SEL_GRAY, TextXAlignment = Enum.TextXAlignment.Right, ZIndex = 12,
+}, _G.UZ_SEL_topbar)
+_G.UZ_SEL_statDot = _G.UZ_SEL_dot(_G.UZ_SEL_topbar, 6, _G.UZ_SEL_GREEN, 12)
+_G.UZ_SEL_statDot.Position = UDim2.new(1, -120, 0.5, 0)
+_G.UZ_SEL_frames, _G.UZ_SEL_acc = 0, 0
+_G.UZ_SEL_addUpdater(function(t, dt)
+    _G.UZ_SEL_frames += 1
+    _G.UZ_SEL_acc += dt
+    if _G.UZ_SEL_acc >= 0.5 then
+        local fps = math.floor(_G.UZ_SEL_frames / _G.UZ_SEL_acc + 0.5)
+        local ok, ping = pcall(function()
+            return math.floor(_G.UZ_SEL_player:GetNetworkPing() * 1000 + 0.5)
+        end)
+        _G.UZ_SEL_stats.Text = string.format("%d FPS   |   %s ms", fps, ok and tostring(ping) or "--")
+        _G.UZ_SEL_statDot.Position = UDim2.new(1, -14 - _G.UZ_SEL_stats.TextBounds.X - 10, 0.5, 0)
+        _G.UZ_SEL_frames, _G.UZ_SEL_acc = 0, 0
+    end
+    _G.UZ_SEL_statDot.BackgroundTransparency = 0.4 + 0.4 * math.sin(t * 2.4)
+    _G.UZ_SEL_onlineDot.BackgroundTransparency = 0.35 + 0.35 * math.sin(t * 3)
+    _G.UZ_SEL_avatarGrad.Rotation = (t * 120) % 360
+    _G.UZ_SEL_xpGrad.Offset = Vector2.new(math.sin(t * 2) * 0.3, 0)
+end)
+
+-- contenido y pie
+_G.UZ_SEL_content = _G.UZ_SEL_new("Frame", {
+    Position = UDim2.fromOffset(0, 50), Size = UDim2.new(1, 0, 1, -74),
+    BackgroundTransparency = 1, ZIndex = 5,
+}, _G.UZ_SEL_main)
+
+_G.UZ_SEL_makePage = function()
+    return _G.UZ_SEL_new("CanvasGroup", {
+        Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1,
+        GroupTransparency = 1, Visible = false, ZIndex = 5,
+    }, _G.UZ_SEL_content)
+end
+_G.UZ_SEL_pages = { INICIO = _G.UZ_SEL_makePage(), REDES = _G.UZ_SEL_makePage(), CREADOR = _G.UZ_SEL_makePage() }
+
+_G.UZ_SEL_new("TextLabel", {
+    AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, -14, 1, -5), Size = UDim2.fromOffset(40, 14),
+    BackgroundTransparency = 1, Text = "ONLINE", Font = Enum.Font.GothamMedium, TextSize = 8,
+    TextColor3 = _G.UZ_SEL_GREEN, TextXAlignment = Enum.TextXAlignment.Right, ZIndex = 12,
+}, _G.UZ_SEL_main)
+_G.UZ_SEL_footDot = _G.UZ_SEL_dot(_G.UZ_SEL_main, 5, _G.UZ_SEL_GREEN, 12)
+_G.UZ_SEL_footDot.Position = UDim2.new(1, -62, 1, -12)
+_G.UZ_SEL_new("TextLabel", {
+    AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, -70, 1, -5), Size = UDim2.fromOffset(150, 14),
+    BackgroundTransparency = 1, Text = "By/ " .. _G.UZ_SEL_CONFIG.CREATOR_NAME, Font = Enum.Font.Gotham,
+    TextSize = 8, TextColor3 = _G.UZ_SEL_GRAY, TextXAlignment = Enum.TextXAlignment.Right, ZIndex = 12,
+}, _G.UZ_SEL_main)
+_G.UZ_SEL_addUpdater(function(t)
+    _G.UZ_SEL_footDot.BackgroundTransparency = 0.4 + 0.4 * math.sin(t * 2.4 + 1)
+end)
+
+-- aviso (toast)
+_G.UZ_SEL_toastFrame = _G.UZ_SEL_new("Frame", {
+    AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, 40), Size = UDim2.fromOffset(210, 26),
+    BackgroundColor3 = _G.UZ_SEL_CARD, BorderSizePixel = 0, ZIndex = 30,
+}, _G.UZ_SEL_main)
+_G.UZ_SEL_corner(_G.UZ_SEL_toastFrame, UDim.new(0, 13))
+_G.UZ_SEL_new("UIStroke", { Color = _G.UZ_SEL_ORANGE, Thickness = 1, Transparency = 0.3 }, _G.UZ_SEL_toastFrame)
+_G.UZ_SEL_toastText = _G.UZ_SEL_new("TextLabel", {
+    Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Text = "", Font = Enum.Font.GothamMedium,
+    TextSize = 10, TextColor3 = Color3.new(1, 1, 1), ZIndex = 31,
+}, _G.UZ_SEL_toastFrame)
+_G.UZ_SEL_toastToken = 0
+_G.UZ_SEL_toast = function(msg)
+    _G.UZ_SEL_toastToken += 1
+    local my = _G.UZ_SEL_toastToken
+    _G.UZ_SEL_toastText.Text = msg
+    _G.UZ_SEL_tween(_G.UZ_SEL_toastFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, 0, 1, -30) })
+    task.delay(2.2, function()
+        if my == _G.UZ_SEL_toastToken then
+            _G.UZ_SEL_tween(_G.UZ_SEL_toastFrame, TweenInfo.new(0.35, Enum.EasingStyle.Quint), { Position = UDim2.new(0.5, 0, 1, 40) })
+        end
+    end)
+end
+
+_G.UZ_SEL_copy = function(text, okMsg)
+    local ok = pcall(function() setclipboard(text) end)
+    _G.UZ_SEL_toast(ok and okMsg or "No se pudo copiar")
+end
+
+------------------------------------------------------------------ iconos dibujados (caja de 34x34)
+_G.UZ_SEL_iconDesktop = function(p, c)
+    _G.UZ_SEL_outline(p, UDim2.fromOffset(6, 7), UDim2.fromOffset(22, 15), c, 2, 3)
+    _G.UZ_SEL_solid(p, UDim2.fromOffset(10, 12), UDim2.fromOffset(14, 2), c, 1)
+    _G.UZ_SEL_solid(p, UDim2.fromOffset(10, 16), UDim2.fromOffset(8, 2), c, 1)
+    _G.UZ_SEL_solid(p, UDim2.fromOffset(15, 22), UDim2.fromOffset(4, 4), c)
+    _G.UZ_SEL_solid(p, UDim2.fromOffset(11, 26), UDim2.fromOffset(12, 2), c, 1)
+end
+
+_G.UZ_SEL_iconPhone = function(p, c)
+    _G.UZ_SEL_outline(p, UDim2.fromOffset(10, 5), UDim2.fromOffset(14, 24), c, 2, 4)
+    _G.UZ_SEL_solid(p, UDim2.fromOffset(14, 8), UDim2.fromOffset(6, 2), c, 1)
+    _G.UZ_SEL_solid(p, UDim2.fromOffset(14, 24), UDim2.fromOffset(6, 2), c, 1)
+end
+
+_G.UZ_SEL_iconTikTok = function(p, c)
+    _G.UZ_SEL_solid(p, UDim2.fromOffset(19, 7), UDim2.fromOffset(3, 16), c)
+    _G.UZ_SEL_setLine(_G.UZ_SEL_line(p, c, 10), 21, 8, 27, 13, 3)
+    local head = _G.UZ_SEL_dot(p, 9, c, 10)
+    head.Position = UDim2.fromOffset(15.5, 23)
+end
+
+_G.UZ_SEL_iconInstagram = function(p, c)
+    _G.UZ_SEL_outline(p, UDim2.fromOffset(6, 6), UDim2.fromOffset(22, 22), c, 2, 7)
+    local lens = _G.UZ_SEL_dot(p, 10, c, 10)
+    lens.BackgroundTransparency = 1
+    lens.Position = UDim2.fromOffset(17, 17)
+    _G.UZ_SEL_new("UIStroke", { Thickness = 2, Color = c }, lens)
+    local pt = _G.UZ_SEL_dot(p, 3, c, 10)
+    pt.Position = UDim2.fromOffset(23.5, 10.5)
+end
+
+------------------------------------------------------------------ efectos: chispas y ondas
+_G.UZ_SEL_sparkColors = { _G.UZ_SEL_ORANGE, _G.UZ_SEL_ORANGE_LIGHT, _G.UZ_SEL_PURPLE, Color3.fromRGB(255, 255, 255) }
+
+_G.UZ_SEL_burst = function(origin)
+    local main = _G.UZ_SEL_main
+    local pos = (origin.AbsolutePosition + origin.AbsoluteSize / 2 - main.AbsolutePosition) / math.max(_G.UZ_SEL_winScale.Scale, 0.05)
+    local ring = _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(pos.X, pos.Y),
+        Size = UDim2.fromOffset(10, 10), BackgroundTransparency = 1, ZIndex = 40,
+    }, main)
+    _G.UZ_SEL_corner(ring, UDim.new(1, 0))
+    local rs = _G.UZ_SEL_new("UIStroke", { Thickness = 2, Color = _G.UZ_SEL_ORANGE_LIGHT }, ring)
+    _G.UZ_SEL_tween(ring, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Size = UDim2.fromOffset(96, 96) })
+    _G.UZ_SEL_tween(rs, TweenInfo.new(0.5), { Transparency = 1 })
+    _G.UZ_SEL_Debris:AddItem(ring, 0.6)
+    for _ = 1, 10 do
+        local s = math.random(4, 7)
+        local p = _G.UZ_SEL_new("Frame", {
+            AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(pos.X, pos.Y),
+            Size = UDim2.fromOffset(s, s), Rotation = 45, BorderSizePixel = 0, ZIndex = 41,
+            BackgroundColor3 = _G.UZ_SEL_sparkColors[math.random(#_G.UZ_SEL_sparkColors)],
+        }, main)
+        local a, d = math.random() * math.pi * 2, 36 + math.random() * 50
+        _G.UZ_SEL_tween(p, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            Position = UDim2.fromOffset(pos.X + math.cos(a) * d, pos.Y + math.sin(a) * d),
+            BackgroundTransparency = 1, Rotation = 45 + math.random(-200, 200), Size = UDim2.fromOffset(1, 1),
+        })
+        _G.UZ_SEL_Debris:AddItem(p, 0.7)
+    end
+end
+
+------------------------------------------------------------------ botones del menu
+_G.UZ_SEL_menuItem = function(parentFrame, order, drawIcon, accent, title, subtitle, callback)
+    local btn = _G.UZ_SEL_new("TextButton", {
+        LayoutOrder = order, Size = UDim2.new(1, 0, 0, 52), BackgroundColor3 = _G.UZ_SEL_CARD,
+        BackgroundTransparency = 0.1, AutoButtonColor = false, Text = "", ClipsDescendants = true, ZIndex = 8,
+    }, parentFrame)
+    _G.UZ_SEL_corner(btn, UDim.new(0, 8))
+    local st = _G.UZ_SEL_new("UIStroke", { Thickness = 1, Color = _G.UZ_SEL_CARD_LINE }, btn)
+    local sc = _G.UZ_SEL_new("UIScale", { Scale = 0 }, btn)
+    local bar = _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 0, 0.5, 0), Size = UDim2.fromOffset(3, 0),
+        BackgroundColor3 = accent, BorderSizePixel = 0, ZIndex = 10,
+    }, btn)
+
+    local textX = 18
+    local boxStroke
+    if drawIcon then
+        textX = 54
+        local box = _G.UZ_SEL_new("Frame", {
+            Position = UDim2.fromOffset(9, 9), Size = UDim2.fromOffset(34, 34), BackgroundColor3 = accent,
+            BackgroundTransparency = 0.8, BorderSizePixel = 0, ZIndex = 9,
+        }, btn)
+        _G.UZ_SEL_corner(box, UDim.new(0, 6))
+        boxStroke = _G.UZ_SEL_new("UIStroke", { Thickness = 1, Color = accent, Transparency = 0.3 }, box)
+        drawIcon(box, accent)
+    end
+
+    local tl = _G.UZ_SEL_new("TextLabel", {
+        Position = UDim2.fromOffset(textX, 9), Size = UDim2.new(1, -textX - 24, 0, 16), BackgroundTransparency = 1,
+        Text = title, Font = Enum.Font.GothamBold, TextSize = 12, TextColor3 = Color3.new(1, 1, 1),
+        TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 9,
+    }, btn)
+    _G.UZ_SEL_new("TextLabel", {
+        Position = UDim2.fromOffset(textX, 28), Size = UDim2.new(1, -textX - 24, 0, 14), BackgroundTransparency = 1,
+        Text = subtitle, Font = Enum.Font.Gotham, TextSize = 10, TextColor3 = _G.UZ_SEL_GRAY,
+        TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 9,
+    }, btn)
+
+    local shine = _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, -30, 0.5, 0), Size = UDim2.fromOffset(26, 100),
+        BackgroundColor3 = Color3.new(1, 1, 1), BackgroundTransparency = 0.9, BorderSizePixel = 0, Rotation = 20, ZIndex = 9,
+    }, btn)
+
+    local chev = _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(1, -8, 0.5, 0),
+        Size = UDim2.fromOffset(10, 12), BackgroundTransparency = 1, ZIndex = 10,
+    }, btn)
+    local c1 = _G.UZ_SEL_line(chev, accent, 10)
+    local c2 = _G.UZ_SEL_line(chev, accent, 10)
+    _G.UZ_SEL_setLine(c1, 2, 1, 8, 6, 2)
+    _G.UZ_SEL_setLine(c2, 8, 6, 2, 11, 2)
+    c1.BackgroundTransparency, c2.BackgroundTransparency = 1, 1
+
+    _G.UZ_SEL_hoverable(btn, function()
+        _G.UZ_SEL_tween(btn, TweenInfo.new(0.2), { BackgroundColor3 = _G.UZ_SEL_CARD:Lerp(accent, 0.2) })
+        _G.UZ_SEL_tween(st, TweenInfo.new(0.2), { Color = accent })
+        _G.UZ_SEL_tween(sc, TweenInfo.new(0.2, Enum.EasingStyle.Back), { Scale = 1.03 })
+        _G.UZ_SEL_tween(bar, TweenInfo.new(0.3, Enum.EasingStyle.Back), { Size = UDim2.fromOffset(3, 26) })
+        _G.UZ_SEL_tween(tl, TweenInfo.new(0.2), { TextColor3 = accent:Lerp(Color3.new(1, 1, 1), 0.4) })
+        if boxStroke then _G.UZ_SEL_tween(boxStroke, TweenInfo.new(0.2), { Transparency = 0 }) end
+        shine.Position = UDim2.new(0, -30, 0.5, 0)
+        _G.UZ_SEL_tween(shine, TweenInfo.new(0.55, Enum.EasingStyle.Quad), { Position = UDim2.new(1, 40, 0.5, 0) })
+        chev.Position = UDim2.new(1, -2, 0.5, 0)
+        _G.UZ_SEL_tween(chev, TweenInfo.new(0.3, Enum.EasingStyle.Back), { Position = UDim2.new(1, -16, 0.5, 0) })
+        _G.UZ_SEL_tween(c1, TweenInfo.new(0.2), { BackgroundTransparency = 0 })
+        _G.UZ_SEL_tween(c2, TweenInfo.new(0.2), { BackgroundTransparency = 0 })
+    end, function()
+        _G.UZ_SEL_tween(btn, TweenInfo.new(0.25), { BackgroundColor3 = _G.UZ_SEL_CARD })
+        _G.UZ_SEL_tween(st, TweenInfo.new(0.25), { Color = _G.UZ_SEL_CARD_LINE })
+        _G.UZ_SEL_tween(sc, TweenInfo.new(0.2), { Scale = 1 })
+        _G.UZ_SEL_tween(bar, TweenInfo.new(0.2), { Size = UDim2.fromOffset(3, 0) })
+        _G.UZ_SEL_tween(tl, TweenInfo.new(0.25), { TextColor3 = Color3.new(1, 1, 1) })
+        if boxStroke then _G.UZ_SEL_tween(boxStroke, TweenInfo.new(0.25), { Transparency = 0.3 }) end
+        _G.UZ_SEL_tween(c1, TweenInfo.new(0.2), { BackgroundTransparency = 1 })
+        _G.UZ_SEL_tween(c2, TweenInfo.new(0.2), { BackgroundTransparency = 1 })
+    end)
+
+    btn.Activated:Connect(function()
+        _G.UZ_SEL_tween(sc, TweenInfo.new(0.07), { Scale = 0.96 })
+        task.delay(0.07, function()
+            _G.UZ_SEL_tween(sc, TweenInfo.new(0.2, Enum.EasingStyle.Back), { Scale = 1.03 })
+        end)
+        _G.UZ_SEL_burst(btn)
+        if callback then task.spawn(callback) end
+    end)
+
+    task.delay(0.4 + order * 0.1, function()
+        _G.UZ_SEL_tween(sc, TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = 1 })
+    end)
+    return btn
+end
+
+_G.UZ_SEL_elegirGama = function(gamaBaja)
+    _G.UZIVERT_GAMA_BAJA = gamaBaja
+    _G.UZIVERT_SELECCIONADO = true
+    print("[Uzivert] Seleccionado: " .. (gamaBaja and "GAMA BAJA" or "GAMA ALTA"))
+
+    _G.UZ_SEL_tween(_G.UZ_SEL_winScale, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), { Scale = 0 })
+    task.wait(0.4)
+    if _G.UZ_SEL_hb then _G.UZ_SEL_hb:Disconnect() end
+    _G.UZ_SEL_gui:Destroy()
+    print("[Uzivert] Iniciando Uzivert Hub " .. (gamaBaja and "GAMA BAJA" or "GAMA ALTA"))
+end
+
+------------------------------------------------------------------ pagina INICIO
+_G.UZ_SEL_home = _G.UZ_SEL_pages.INICIO
+
+_G.UZ_SEL_new("TextLabel", {
+    Position = UDim2.fromOffset(16, 10), Size = UDim2.fromOffset(200, 12), BackgroundTransparency = 1,
+    Text = "ELEGÍ TU DISPOSITIVO", Font = Enum.Font.GothamBold, TextSize = 8, TextColor3 = Color3.new(1, 1, 1),
+    TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8,
+}, _G.UZ_SEL_home)
+_G.UZ_SEL_new("TextLabel", {
+    Position = UDim2.new(0, 206, 0, 10), Size = UDim2.fromOffset(60, 12), BackgroundTransparency = 1,
+    Text = _G.UZ_SEL_CONFIG.VERSION, Font = Enum.Font.GothamBold, TextSize = 8, TextColor3 = _G.UZ_SEL_ORANGE,
+    TextXAlignment = Enum.TextXAlignment.Right, ZIndex = 8,
+}, _G.UZ_SEL_home)
+
+_G.UZ_SEL_menuList = _G.UZ_SEL_new("Frame", {
+    Position = UDim2.fromOffset(16, 28), Size = UDim2.fromOffset(250, 112), BackgroundTransparency = 1, ZIndex = 8,
+}, _G.UZ_SEL_home)
+_G.UZ_SEL_new("UIListLayout", { Padding = UDim.new(0, 8), SortOrder = Enum.SortOrder.LayoutOrder }, _G.UZ_SEL_menuList)
+
+_G.UZ_SEL_menuItem(_G.UZ_SEL_menuList, 1, _G.UZ_SEL_iconDesktop, Color3.fromRGB(60, 120, 255),
+    "GAMA ALTA", "Todas las funciones del hub",
+    function()
+        task.wait(0.3)
+        _G.UZ_SEL_elegirGama(false)
+    end)
+
+_G.UZ_SEL_menuItem(_G.UZ_SEL_menuList, 2, _G.UZ_SEL_iconPhone, _G.UZ_SEL_ORANGE,
+    "GAMA BAJA", "Solo funciones esenciales",
+    function()
+        task.wait(0.3)
+        _G.UZ_SEL_elegirGama(true)
+    end)
+
+-- logo con brillo y parpadeo de vela
+_G.UZ_SEL_logo = _G.UZ_SEL_new("TextLabel", {
+    Position = UDim2.fromOffset(16, 150), Size = UDim2.fromOffset(250, 44), BackgroundTransparency = 1,
+    Text = "UZIVERT HUB", Font = Enum.Font.Creepster, TextSize = 38, TextColor3 = Color3.new(1, 1, 1),
+    TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8,
+}, _G.UZ_SEL_home)
+_G.UZ_SEL_logoGrad = _G.UZ_SEL_new("UIGradient", {
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 150, 50)),
+        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 225, 170)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 150, 50)),
+    }),
+}, _G.UZ_SEL_logo)
+_G.UZ_SEL_addUpdater(function(t)
+    _G.UZ_SEL_logoGrad.Offset = Vector2.new(math.sin(t * 0.9) * 0.7, 0)
+    _G.UZ_SEL_logo.TextTransparency = ((t % 6) < 0.3 and math.sin(t * 90) > 0) and 0.55 or 0
+end)
+
+-- pieza central: aura, sellos giratorios, chispas orbitando, craneo
+_G.UZ_SEL_showcase = _G.UZ_SEL_new("Frame", {
+    AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.77, 0, 0.47, 0),
+    Size = UDim2.fromOffset(190, 190), BackgroundTransparency = 1, ZIndex = 6,
+}, _G.UZ_SEL_home)
+
+_G.UZ_SEL_aura = {}
+for i, sz in ipairs({ 186, 150, 112 }) do
+    local c = _G.UZ_SEL_dot(_G.UZ_SEL_showcase, sz, _G.UZ_SEL_ORANGE, 5)
+    c.Position = UDim2.fromScale(0.5, 0.5)
+    c.BackgroundTransparency = 0.9 - i * 0.012
+    _G.UZ_SEL_aura[i] = c
+end
+
+_G.UZ_SEL_halo = _G.UZ_SEL_dot(_G.UZ_SEL_showcase, 150, _G.UZ_SEL_ORANGE, 6)
+_G.UZ_SEL_halo.Position = UDim2.fromScale(0.5, 0.5)
+_G.UZ_SEL_halo.BackgroundTransparency = 0.85
+_G.UZ_SEL_new("UIStroke", { Thickness = 1.5, Color = _G.UZ_SEL_ORANGE, Transparency = 0.4 }, _G.UZ_SEL_halo)
+
+_G.UZ_SEL_squares = {}
+for i = 1, 2 do
+    local sq = _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+        Size = UDim2.fromOffset(i == 1 and 140 or 128, i == 1 and 140 or 128),
+        BackgroundTransparency = 1, ZIndex = 7,
+    }, _G.UZ_SEL_showcase)
+    _G.UZ_SEL_new("UIStroke", { Thickness = 1.5, Color = _G.UZ_SEL_ORANGE, Transparency = (i == 1) and 0.1 or 0.35 }, sq)
+    if i == 1 then
+        for _, p in ipairs({ { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } }) do
+            _G.UZ_SEL_new("Frame", {
+                AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(p[1], p[2]), Size = UDim2.fromOffset(5, 5),
+                BackgroundColor3 = _G.UZ_SEL_ORANGE_LIGHT, BorderSizePixel = 0, ZIndex = 8,
+            }, sq)
+        end
+    end
+    _G.UZ_SEL_squares[i] = sq
+end
+
+_G.UZ_SEL_orbiters = {}
+for i = 1, 8 do
+    local c = _G.UZ_SEL_dot(_G.UZ_SEL_showcase, 3 + (i % 3), (i % 3 == 0) and _G.UZ_SEL_PURPLE or _G.UZ_SEL_ORANGE_LIGHT, 8)
+    _G.UZ_SEL_orbiters[i] = {
+        f = c, r = 80 + (i % 3) * 7, sp = ((i % 2 == 0) and 1 or -1) * (0.3 + i * 0.06), ph = i * 0.8,
+    }
+end
+
+_G.UZ_SEL_skullHolder = _G.UZ_SEL_new("Frame", {
+    AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.fromOffset(92, 102), BackgroundTransparency = 1, ZIndex = 9,
+}, _G.UZ_SEL_showcase)
+_G.UZ_SEL_skull = _G.UZ_SEL_new("Frame", {
+    AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 9,
+}, _G.UZ_SEL_skullHolder)
+_G.UZ_SEL_skullScale = _G.UZ_SEL_new("UIScale", { Scale = 1 }, _G.UZ_SEL_skull)
+
+_G.UZ_SEL_bone = function(props, parent)
+    props.BackgroundColor3 = props.BackgroundColor3 or _G.UZ_SEL_BONE
+    props.BorderSizePixel = 0
+    props.ZIndex = props.ZIndex or 10
+    return _G.UZ_SEL_new("Frame", props, parent)
+end
+
+_G.UZ_SEL_cranium = _G.UZ_SEL_bone({
+    AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.02), Size = UDim2.fromScale(0.88, 0.68),
+}, _G.UZ_SEL_skull)
+_G.UZ_SEL_corner(_G.UZ_SEL_cranium, UDim.new(0.5, 0))
+_G.UZ_SEL_new("UIStroke", { Thickness = 2, Color = _G.UZ_SEL_INK }, _G.UZ_SEL_cranium)
+
+_G.UZ_SEL_cheek = _G.UZ_SEL_bone({
+    AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.62, 0.3),
+}, _G.UZ_SEL_skull)
+_G.UZ_SEL_corner(_G.UZ_SEL_cheek, UDim.new(0.3, 0))
+_G.UZ_SEL_new("UIStroke", { Thickness = 2, Color = _G.UZ_SEL_INK }, _G.UZ_SEL_cheek)
+
+_G.UZ_SEL_mouth = _G.UZ_SEL_bone({
+    AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.66), Size = UDim2.fromScale(0.5, 0.2),
+    BackgroundColor3 = Color3.fromRGB(10, 5, 10),
+}, _G.UZ_SEL_skull)
+_G.UZ_SEL_corner(_G.UZ_SEL_mouth, UDim.new(0.3, 0))
+
+_G.UZ_SEL_eyes, _G.UZ_SEL_pupils = {}, {}
+for i = 1, 2 do
+    local socket = _G.UZ_SEL_bone({
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(i == 1 and 0.34 or 0.66, 0.33),
+        Size = UDim2.fromScale(0.24, 0.24), BackgroundColor3 = Color3.fromRGB(8, 4, 8),
+        Rotation = i == 1 and 12 or -12, ZIndex = 12,
+    }, _G.UZ_SEL_skull)
+    _G.UZ_SEL_corner(socket, UDim.new(0.45, 0))
+    local pupil = _G.UZ_SEL_bone({
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.35, 0.35),
+        BackgroundColor3 = _G.UZ_SEL_ORANGE, ZIndex = 13,
+    }, socket)
+    _G.UZ_SEL_corner(pupil, UDim.new(1, 0))
+    _G.UZ_SEL_tween(pupil, _G.UZ_SEL_LOOP(0.5), { BackgroundColor3 = Color3.fromRGB(255, 40, 30), Size = UDim2.fromScale(0.5, 0.5) })
+    _G.UZ_SEL_eyes[i] = socket
+    _G.UZ_SEL_pupils[i] = pupil
+end
+
+-- nariz (triangulo dibujado con un rombo)
+_G.UZ_SEL_nose = _G.UZ_SEL_bone({
+    AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.56), Size = UDim2.fromOffset(7, 7),
+    BackgroundColor3 = Color3.fromRGB(10, 5, 10), Rotation = 45, ZIndex = 12,
+}, _G.UZ_SEL_skull)
+
+_G.UZ_SEL_teethRow = function(parent, pos, size, z)
+    local row = _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0), Position = pos, Size = size, BackgroundTransparency = 1, ZIndex = z,
+    }, parent)
+    _G.UZ_SEL_new("UIListLayout", {
+        FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0.02, 0),
+        HorizontalAlignment = Enum.HorizontalAlignment.Center,
+    }, row)
+    for _ = 1, 6 do
+        local t = _G.UZ_SEL_bone({ Size = UDim2.fromScale(0.13, 1), ZIndex = z }, row)
+        _G.UZ_SEL_corner(t, UDim.new(0.2, 0))
+        _G.UZ_SEL_new("UIStroke", { Thickness = 1, Color = _G.UZ_SEL_INK }, t)
+    end
+end
+_G.UZ_SEL_teethRow(_G.UZ_SEL_skull, UDim2.fromScale(0.5, 0.64), UDim2.fromScale(0.5, 0.1), 12)
+
+_G.UZ_SEL_JAW_CLOSED = UDim2.fromScale(0.5, 0.74)
+_G.UZ_SEL_JAW_OPEN = UDim2.fromScale(0.5, 0.9)
+_G.UZ_SEL_jaw = _G.UZ_SEL_bone({
+    AnchorPoint = Vector2.new(0.5, 0), Position = _G.UZ_SEL_JAW_CLOSED, Size = UDim2.fromScale(0.56, 0.2), ZIndex = 11,
+}, _G.UZ_SEL_skull)
+_G.UZ_SEL_corner(_G.UZ_SEL_jaw, UDim.new(0.35, 0))
+_G.UZ_SEL_new("UIStroke", { Thickness = 2, Color = _G.UZ_SEL_INK }, _G.UZ_SEL_jaw)
+_G.UZ_SEL_teethRow(_G.UZ_SEL_jaw, UDim2.fromScale(0.5, 0.05), UDim2.fromScale(0.9, 0.45), 12)
+
+_G.UZ_SEL_laughText = _G.UZ_SEL_new("TextLabel", {
+    AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.06), Size = UDim2.fromOffset(150, 24),
+    BackgroundTransparency = 1, Text = "", Font = Enum.Font.Creepster, TextScaled = true,
+    TextColor3 = _G.UZ_SEL_ORANGE_LIGHT, TextTransparency = 1, ZIndex = 20,
+}, _G.UZ_SEL_showcase)
+_G.UZ_SEL_laughStroke = _G.UZ_SEL_new("UIStroke", { Thickness = 2, Color = Color3.fromRGB(80, 0, 0), Transparency = 1 }, _G.UZ_SEL_laughText)
+
+-- animacion continua de la pieza central (flota, gira, orbita, ojos siguen el cursor)
+_G.UZ_SEL_eyeX, _G.UZ_SEL_eyeY = 0, 0
+_G.UZ_SEL_addUpdater(function(t, dt)
+    _G.UZ_SEL_squares[1].Rotation = (t * 22) % 360
+    _G.UZ_SEL_squares[2].Rotation = (-t * 15) % 360
+    local pulse = math.sin(t * 2.2)
+    _G.UZ_SEL_halo.Size = UDim2.fromOffset(150 + pulse * 6, 150 + pulse * 6)
+    _G.UZ_SEL_halo.BackgroundTransparency = 0.88 + pulse * 0.03
+    for i, c in ipairs(_G.UZ_SEL_aura) do
+        c.BackgroundTransparency = 0.9 - i * 0.012 + 0.02 * math.sin(t * 1.6 + i)
+    end
+    for _, o in ipairs(_G.UZ_SEL_orbiters) do
+        local a = t * o.sp + o.ph
+        o.f.Position = UDim2.fromScale(0.5, 0.5) + UDim2.fromOffset(math.cos(a) * o.r, math.sin(a) * o.r * 0.92)
+        o.f.BackgroundTransparency = 0.1 + 0.4 * (0.5 + 0.5 * math.sin(t * 2 + o.ph))
+    end
+    _G.UZ_SEL_skullHolder.Position = UDim2.fromScale(0.5, 0.5 + math.sin(t * 1.8) * 0.025)
+
+    local sh = _G.UZ_SEL_showcase
+    local c = sh.AbsolutePosition + sh.AbsoluteSize / 2
+    local d = _G.UZ_SEL_Input:GetMouseLocation() - c
+    local m = d.Magnitude
+    local k = math.min(m, 300) / 300
+    local dir = (m > 0) and d.Unit or Vector2.new(0, 0)
+    local a = math.min(1, dt * 10)
+    _G.UZ_SEL_eyeX += (dir.X * 0.18 * k - _G.UZ_SEL_eyeX) * a
+    _G.UZ_SEL_eyeY += (dir.Y * 0.18 * k - _G.UZ_SEL_eyeY) * a
+    for _, p in ipairs(_G.UZ_SEL_pupils) do
+        p.Position = UDim2.fromScale(0.5 + _G.UZ_SEL_eyeX, 0.5 + _G.UZ_SEL_eyeY)
+    end
+end)
+
+_G.UZ_SEL_playSound = function(id, speed)
+    if id == "" then return end
+    pcall(function()
+        local s = _G.UZ_SEL_new("Sound", { SoundId = id, Volume = 1, PlaybackSpeed = speed or 1 }, _G.UZ_SEL_root)
+        s:Play()
+        _G.UZ_SEL_Debris:AddItem(s, 4)
+    end)
+end
+
+_G.UZ_SEL_ripple = function()
+    local ring = _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+        Size = UDim2.fromOffset(60, 60), BackgroundTransparency = 1, ZIndex = 6,
+    }, _G.UZ_SEL_showcase)
+    _G.UZ_SEL_corner(ring, UDim.new(1, 0))
+    local rs = _G.UZ_SEL_new("UIStroke", { Thickness = 2, Color = _G.UZ_SEL_ORANGE_LIGHT }, ring)
+    _G.UZ_SEL_tween(ring, TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Size = UDim2.fromOffset(200, 200) })
+    _G.UZ_SEL_tween(rs, TweenInfo.new(0.7), { Transparency = 1 })
+    _G.UZ_SEL_Debris:AddItem(ring, 0.8)
+end
+
+_G.UZ_SEL_laughTexts = { "HA HA HA!", "MUAJAJAJA!", "JE JE JE!", "HAHAHAHA!" }
+_G.UZ_SEL_isLaughing = false
+
+_G.UZ_SEL_laugh = function()
+    if _G.UZ_SEL_isLaughing then return end
+    _G.UZ_SEL_isLaughing = true
+    _G.UZ_SEL_laughText.Text = _G.UZ_SEL_laughTexts[math.random(#_G.UZ_SEL_laughTexts)]
+    _G.UZ_SEL_laughText.TextTransparency = 1
+    _G.UZ_SEL_laughText.Position = UDim2.fromScale(0.5, 0.1)
+    _G.UZ_SEL_laughText.Rotation = -6
+    _G.UZ_SEL_tween(_G.UZ_SEL_laughText, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        TextTransparency = 0, Position = UDim2.fromScale(0.5, 0.0), Rotation = 6,
+    })
+    _G.UZ_SEL_tween(_G.UZ_SEL_laughStroke, TweenInfo.new(0.3), { Transparency = 0 })
+    _G.UZ_SEL_playSound(_G.UZ_SEL_CONFIG.LAUGH_SOUND, 1)
+
+    for i = 1, 8 do
+        if i % 3 == 1 then _G.UZ_SEL_ripple() end
+        _G.UZ_SEL_tween(_G.UZ_SEL_jaw, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), { Position = _G.UZ_SEL_JAW_OPEN })
+        _G.UZ_SEL_tween(_G.UZ_SEL_skull, TweenInfo.new(0.1, Enum.EasingStyle.Quad), { Rotation = (i % 2 == 0) and 7 or -7 })
+        _G.UZ_SEL_tween(_G.UZ_SEL_skullScale, TweenInfo.new(0.1, Enum.EasingStyle.Quad), { Scale = 1.08 })
+        for _, e in ipairs(_G.UZ_SEL_eyes) do
+            _G.UZ_SEL_tween(e, TweenInfo.new(0.1), { Size = UDim2.fromScale(0.24, 0.17) })
+        end
+        task.wait(0.11)
+        _G.UZ_SEL_tween(_G.UZ_SEL_jaw, TweenInfo.new(0.09, Enum.EasingStyle.Quad, Enum.EasingDirection.In), { Position = _G.UZ_SEL_JAW_CLOSED })
+        _G.UZ_SEL_tween(_G.UZ_SEL_skullScale, TweenInfo.new(0.09, Enum.EasingStyle.Quad), { Scale = 1 })
+        for _, e in ipairs(_G.UZ_SEL_eyes) do
+            _G.UZ_SEL_tween(e, TweenInfo.new(0.09), { Size = UDim2.fromScale(0.24, 0.24) })
+        end
+        _G.UZ_SEL_playSound(_G.UZ_SEL_CONFIG.TEETH_SOUND, 0.9 + math.random() * 0.4)
+        task.wait(0.09)
+    end
+
+    _G.UZ_SEL_tween(_G.UZ_SEL_skull, TweenInfo.new(0.25, Enum.EasingStyle.Back), { Rotation = 0 })
+    _G.UZ_SEL_tween(_G.UZ_SEL_laughText, TweenInfo.new(0.4), { TextTransparency = 1 })
+    _G.UZ_SEL_tween(_G.UZ_SEL_laughStroke, TweenInfo.new(0.4), { Transparency = 1 })
+    _G.UZ_SEL_isLaughing = false
+end
+
+task.spawn(function()
+    task.wait(1.2)
+    while _G.UZ_SEL_gui.Parent do
+        if _G.UZ_SEL_home.Visible and _G.UZ_SEL_home.GroupTransparency < 0.5 then
+            pcall(_G.UZ_SEL_laugh)
+        end
+        task.wait(1.5 + math.random() * 1.5)
+    end
+end)
+
+_G.UZ_SEL_skullBtn = _G.UZ_SEL_new("TextButton", {
+    Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Text = "", ZIndex = 25,
+}, _G.UZ_SEL_skullHolder)
+_G.UZ_SEL_skullBtn.Activated:Connect(function()
+    _G.UZ_SEL_burst(_G.UZ_SEL_skullHolder)
+    _G.UZ_SEL_laugh()
+end)
+
+------------------------------------------------------------------ pagina REDES
+do
+    local r = _G.UZ_SEL_pages.REDES
+    _G.UZ_SEL_new("TextLabel", {
+        Position = UDim2.fromOffset(16, 10), Size = UDim2.fromOffset(200, 12), BackgroundTransparency = 1,
+        Text = "MIS REDES", Font = Enum.Font.GothamBold, TextSize = 8, TextColor3 = Color3.new(1, 1, 1),
+        TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8,
+    }, r)
+
+    _G.UZ_SEL_redesList = _G.UZ_SEL_new("Frame", {
+        Position = UDim2.fromOffset(16, 28), Size = UDim2.fromOffset(250, 112), BackgroundTransparency = 1, ZIndex = 8,
+    }, r)
+    _G.UZ_SEL_new("UIListLayout", { Padding = UDim.new(0, 8), SortOrder = Enum.SortOrder.LayoutOrder }, _G.UZ_SEL_redesList)
+
+    _G.UZ_SEL_menuItem(_G.UZ_SEL_redesList, 1, _G.UZ_SEL_iconTikTok, Color3.fromRGB(70, 220, 230),
+        "TIKTOK", _G.UZ_SEL_CONFIG.TIKTOK,
+        function()
+            _G.UZ_SEL_copy("https://tiktok.com/" .. _G.UZ_SEL_CONFIG.TIKTOK, "Link de TikTok copiado")
+        end)
+
+    _G.UZ_SEL_menuItem(_G.UZ_SEL_redesList, 2, _G.UZ_SEL_iconInstagram, Color3.fromRGB(230, 80, 150),
+        "INSTAGRAM", _G.UZ_SEL_CONFIG.INSTAGRAM,
+        function()
+            _G.UZ_SEL_copy("https://instagram.com/" .. _G.UZ_SEL_CONFIG.INSTAGRAM, "Link de Instagram copiado")
+        end)
+
+    _G.UZ_SEL_new("TextLabel", {
+        Position = UDim2.fromOffset(16, 150), Size = UDim2.fromOffset(250, 20), BackgroundTransparency = 1,
+        Text = "Tocá un botón para copiar el link", Font = Enum.Font.Gotham, TextSize = 9,
+        TextColor3 = _G.UZ_SEL_GRAY, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8,
+    }, r)
+
+    -- adorno a la derecha: rombo giratorio con anillos
+    _G.UZ_SEL_redesDeco = _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.77, 0, 0.47, 0),
+        Size = UDim2.fromOffset(150, 150), BackgroundTransparency = 1, ZIndex = 6,
+    }, r)
+    _G.UZ_SEL_redesRings = {}
+    for i = 1, 3 do
+        local sq = _G.UZ_SEL_outline(_G.UZ_SEL_redesDeco, UDim2.fromScale(0.5, 0.5) - UDim2.fromOffset(40 + i * 14, 40 + i * 14),
+            UDim2.fromOffset(80 + i * 28, 80 + i * 28), (i == 2) and _G.UZ_SEL_PURPLE or _G.UZ_SEL_ORANGE, 1.5, 6, 7)
+        _G.UZ_SEL_redesRings[i] = sq
+    end
+    _G.UZ_SEL_redesCore = _G.UZ_SEL_dot(_G.UZ_SEL_redesDeco, 26, _G.UZ_SEL_ORANGE, 8)
+    _G.UZ_SEL_redesCore.Position = UDim2.fromScale(0.5, 0.5)
+    _G.UZ_SEL_addUpdater(function(t)
+        for i, sq in ipairs(_G.UZ_SEL_redesRings) do
+            sq.Rotation = (t * (i % 2 == 0 and -16 or 20) + i * 15) % 360
+        end
+        local p = 0.5 + 0.5 * math.sin(t * 2.4)
+        _G.UZ_SEL_redesCore.BackgroundTransparency = 0.2 + 0.5 * p
+        _G.UZ_SEL_redesCore.Size = UDim2.fromOffset(22 + p * 8, 22 + p * 8)
+    end)
+end
+
+------------------------------------------------------------------ pagina CREADOR
+do
+    local c = _G.UZ_SEL_pages.CREADOR
+    _G.UZ_SEL_credTitle = _G.UZ_SEL_new("TextLabel", {
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.3), Size = UDim2.fromOffset(300, 56),
+        BackgroundTransparency = 1, Text = "UZIVERT HUB", Font = Enum.Font.Creepster, TextScaled = true,
+        TextColor3 = Color3.new(1, 1, 1), ZIndex = 8,
+    }, c)
+    _G.UZ_SEL_credGrad = _G.UZ_SEL_new("UIGradient", {
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 150, 50)),
+            ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 225, 170)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 150, 50)),
+        }),
+    }, _G.UZ_SEL_credTitle)
+
+    -- divisor con rombo central
+    _G.UZ_SEL_divL = _G.UZ_SEL_solid(c, UDim2.new(0.5, -90, 0.5, -4), UDim2.fromOffset(78, 1), _G.UZ_SEL_ORANGE, nil, 8)
+    _G.UZ_SEL_divR = _G.UZ_SEL_solid(c, UDim2.new(0.5, 12, 0.5, -4), UDim2.fromOffset(78, 1), _G.UZ_SEL_ORANGE, nil, 8)
+    _G.UZ_SEL_divD = _G.UZ_SEL_new("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0.5, 0, 0.5, -3.5), Size = UDim2.fromOffset(8, 8),
+        BackgroundColor3 = _G.UZ_SEL_ORANGE, BorderSizePixel = 0, Rotation = 45, ZIndex = 8,
+    }, c)
+
+    _G.UZ_SEL_new("TextLabel", {
+        AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0.5, 14), Size = UDim2.fromOffset(300, 70),
+        BackgroundTransparency = 1, RichText = true,
+        Text = "Hecho por <b>" .. _G.UZ_SEL_CONFIG.CREATOR_NAME .. "</b>\nTruco o trato\n\nVersión: " .. _G.UZ_SEL_CONFIG.VERSION,
+        Font = Enum.Font.Gotham, TextSize = 11, TextColor3 = _G.UZ_SEL_GRAY, ZIndex = 8,
+    }, c)
+
+    _G.UZ_SEL_addUpdater(function(t)
+        _G.UZ_SEL_credGrad.Offset = Vector2.new(math.sin(t * 0.9) * 0.7, 0)
+        _G.UZ_SEL_credTitle.TextTransparency = ((t % 5) < 0.25 and math.sin(t * 90) > 0) and 0.5 or 0
+        _G.UZ_SEL_divD.Rotation = 45 + math.sin(t * 1.5) * 20
+        _G.UZ_SEL_divD.BackgroundTransparency = 0.1 + 0.3 * (0.5 + 0.5 * math.sin(t * 2.2))
+    end)
+end
+
+------------------------------------------------------------------ pestanas: logica
+_G.UZ_SEL_currentTab = nil
+_G.UZ_SEL_tabButtons = {}
+
+_G.UZ_SEL_setTab = function(name)
+    if _G.UZ_SEL_currentTab == name then return end
+    local prev = _G.UZ_SEL_currentTab
+    _G.UZ_SEL_currentTab = name
+    local idx = table.find(_G.UZ_SEL_tabNames, name)
+    local x = (idx - 1) * _G.UZ_SEL_TAB_W
+    _G.UZ_SEL_tween(_G.UZ_SEL_underline, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        Position = UDim2.fromOffset(x + 15, 50),
+    })
+    _G.UZ_SEL_tween(_G.UZ_SEL_tabGlow, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+        Position = UDim2.fromOffset(x, 0),
+    })
+    for n, b in pairs(_G.UZ_SEL_tabButtons) do
+        _G.UZ_SEL_tween(b, TweenInfo.new(0.2), { TextColor3 = (n == name) and _G.UZ_SEL_ORANGE or _G.UZ_SEL_GRAY })
+    end
+    if prev then
+        local old = _G.UZ_SEL_pages[prev]
+        _G.UZ_SEL_tween(old, TweenInfo.new(0.18, Enum.EasingStyle.Quint), {
+            GroupTransparency = 1, Position = UDim2.fromOffset(-24, 0),
+        })
+        task.delay(0.18, function()
+            if _G.UZ_SEL_currentTab ~= prev then old.Visible = false end
+        end)
+    end
+    local new = _G.UZ_SEL_pages[name]
+    new.Position = UDim2.fromOffset(24, 0)
+    new.GroupTransparency = 1
+    new.Visible = true
+    _G.UZ_SEL_tween(new, TweenInfo.new(0.35, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+        GroupTransparency = 0, Position = UDim2.fromOffset(0, 0),
+    })
+end
+
+for i, name in ipairs(_G.UZ_SEL_tabNames) do
+    local b = _G.UZ_SEL_new("TextButton", {
+        Position = UDim2.fromOffset((i - 1) * _G.UZ_SEL_TAB_W, 0), Size = UDim2.fromOffset(_G.UZ_SEL_TAB_W, 50),
+        BackgroundTransparency = 1, Text = name, Font = Enum.Font.GothamBold, TextSize = 9,
+        TextColor3 = _G.UZ_SEL_GRAY, ZIndex = 14,
+    }, _G.UZ_SEL_tabHolder)
+    b.Activated:Connect(function()
+        _G.UZ_SEL_setTab(name)
+    end)
+    _G.UZ_SEL_tabButtons[name] = b
+end
+
+-- arrastrar ventana
+do
+    local dragging, dragStart, startPos
+    _G.UZ_SEL_topbar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = _G.UZ_SEL_root.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then dragging = false end
+            end)
+        end
+    end)
+    _G.UZ_SEL_Input.InputChanged:Connect(function(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local d = (input.Position - dragStart) / math.max(_G.UZ_SEL_winScale.Scale, 0.1)
+            _G.UZ_SEL_root.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+        end
+    end)
+end
+
+------------------------------------------------------------------ abrir
+_G.UZ_SEL_setTab("INICIO")
+_G.UZ_SEL_tween(_G.UZ_SEL_winScale, TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = _G.UZ_SEL_fitScale() })
+
+_G.UZ_SEL_cam = workspace.CurrentCamera
+if _G.UZ_SEL_cam then
+    _G.UZ_SEL_cam:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+        _G.UZ_SEL_winScale.Scale = _G.UZ_SEL_fitScale()
+    end)
+end
+
+-- esperar a que el usuario elija
 while not _G.UZIVERT_SELECCIONADO do
     task.wait(0.1)
 end
-
-print("🎃 Iniciando Uzivert Hub " .. (_G.UZIVERT_GAMA_BAJA and "GAMA BAJA" or "GAMA ALTA"))
 
 local COLORES = {
     Fondo = Color3.fromRGB(10, 5, 15),
@@ -295,6 +1387,15 @@ local CONFIG_DEFAULT = {
     KnifeAura = false,
     KnifeAuraDist = 15,
     AimLock = false,
+    AimWall = false,
+    AimFOV = false,
+    AimFOVRadius = 250,
+    AimSmooth = 25,
+    AimHoriz = false,
+    AimPart = "Head",
+    AimPred = 0.145,
+    AimBtnShow = true,
+    AimBtnPos = nil,
     AutoStab = false,
     AutoStabRango = 6,
     ModoNoche = false,
@@ -332,6 +1433,8 @@ local CONFIG_DEFAULT = {
     FireflyClutch = false,
     FireflyTimer = true,
     FireflyTimerSize = 5,
+    ShootTPVisible = false,
+    ShootTPPos = nil,
 }
 
 local CONFIG = {}
@@ -343,12 +1446,12 @@ local function cargarConfig()
         end)
         if ok and data then
             CONFIG = data
-            print("🎃 Configuración v4.7.3 cargada")
+            print("🎃 Configuración v4.7.4 cargada")
             return true
         end
     end
     CONFIG = CONFIG_DEFAULT
-    print("📝 Configuración v4.7.3 por defecto")
+    print("📝 Configuración v4.7.4 por defecto")
     return false
 end
 
@@ -388,7 +1491,7 @@ local AUTO_PRANK_BOMB_ACTIVO = CONFIG.AutoPrankBomb or false
 local prankBombConnection = nil
 local KILL_ALL_ACTIVO = CONFIG.KillAllActivo or false
 
-print("🎃 Parte 1/10 cargada - v4.7.3 HALLOWEEN")
+print("🎃 Parte 1/10 cargada - v4.7.4 HALLOWEEN")
 
 -- 🎃 Ping a la API (cada 2 min)
 task.spawn(function()
@@ -611,7 +1714,7 @@ sidebarLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 sidebarLayout.Parent = SidebarScroll
 
 local sidebarPadding = Instance.new("UIPadding")
-sidebarPadding.PaddingTop = UDim.new(0, 100)
+sidebarPadding.PaddingTop = UDim.new(0, 130)
 sidebarPadding.PaddingBottom = UDim.new(0, 20)
 sidebarPadding.PaddingLeft = UDim.new(0, 6)
 sidebarPadding.PaddingRight = UDim.new(0, 6)
@@ -641,7 +1744,7 @@ local Titulo = Instance.new("TextLabel")
 Titulo.Size = UDim2.new(1, -20, 0, 22)
 Titulo.Position = UDim2.new(0, 10, 0, 44)
 Titulo.BackgroundTransparency = 1
-Titulo.Text = "Uzivert"
+Titulo.Text = "Uzivert Hub"
 Titulo.TextColor3 = COLORES.Naranja2
 Titulo.Font = Enum.Font.GothamBlack
 Titulo.TextSize = 16
@@ -659,14 +1762,39 @@ Subtitulo.TextSize = 9
 Subtitulo.ZIndex = 6
 Subtitulo.Parent = Sidebar
 
+local Credits = Instance.new("TextLabel")
+Credits.Size = UDim2.new(1, -20, 0, 12)
+Credits.Position = UDim2.new(0, 10, 0, 84)
+Credits.BackgroundTransparency = 1
+Credits.Text = "By Uzivert 🇵🇾"
+Credits.TextColor3 = COLORES.Morado2
+Credits.Font = Enum.Font.Gotham
+Credits.TextSize = 9
+Credits.ZIndex = 6
+Credits.Parent = Sidebar
+
 local Sep = Instance.new("Frame")
 Sep.Size = UDim2.new(1, -24, 0, 1)
-Sep.Position = UDim2.new(0, 12, 0, 90)
+Sep.Position = UDim2.new(0, 12, 0, 106)
 Sep.BackgroundColor3 = COLORES.Naranja1
 Sep.BackgroundTransparency = 0.5
 Sep.BorderSizePixel = 0
 Sep.ZIndex = 6
 Sep.Parent = Sidebar
+
+-- 🎭 MÁSCARA: tapa las pestañas que scrollean por encima del título
+local SidebarMask = Instance.new("Frame")
+SidebarMask.Size = UDim2.new(1, 0, 0, 130)
+SidebarMask.Position = UDim2.new(0, 0, 0, 0)
+SidebarMask.BackgroundColor3 = COLORES.Sidebar
+SidebarMask.BackgroundTransparency = 0.35
+SidebarMask.BorderSizePixel = 0
+SidebarMask.ZIndex = 5
+SidebarMask.Parent = Sidebar
+
+local cMask = Instance.new("UICorner")
+cMask.CornerRadius = UDim.new(0, 16)
+cMask.Parent = SidebarMask
 
 local BotonCerrar = Instance.new("TextButton")
 BotonCerrar.Size = UDim2.new(0, 22, 0, 22)
@@ -1093,7 +2221,7 @@ if not _G.UZIVERT_GAMA_BAJA then
     PaginaFling = crearPagina("Fling", "🕷️", 5)
     PaginaAnims = crearPagina("Anims", "🕸️", 6)
     PaginaUtilidades = crearPagina("Utilidades", "🧰", 8)
-    PaginaRend = crearPagina("Fps", "⚰️", 9)
+    PaginaRend = crearPagina("Apariencia", "⚰️", 9)
 end
 
 Paginas[1][2].Visible = true
@@ -1510,6 +2638,133 @@ crearBoton(PaginaUtilidades, "🔄 Refrescar Lista de Toys", function()
     end
 end, COLORES.Naranja1)
 
+-- ==================================================
+-- 💀 FE HEADLESS (3 VERSIONES)
+-- ==================================================
+
+_G.UZIVERT_FEHL_CONFIGS = {
+    {id="78837807518622",  on=CONFIG["FEHeadless"]   or false, track=nil, freeze=nil, stopped=nil, name="Headless"},
+    {id="117080641351340", on=CONFIG["FEHeadlessV2"] or false, track=nil, freeze=nil, stopped=nil, name="Headless V2"},
+    {id="136055001302601", on=CONFIG["FEHeadlessV3"] or false, track=nil, freeze=nil, stopped=nil, name="Headless V3"}
+}
+
+_G.UZIVERT_FEHL_STOP = function(cfg)
+    if cfg.stopped then cfg.stopped:Disconnect() cfg.stopped = nil end
+    if cfg.track then cfg.track:Stop() cfg.track:Destroy() cfg.track = nil end
+end
+
+_G.UZIVERT_FEHL_PLAY = function(cfg, hum)
+    if not hum or not hum.Parent then return end
+    local ani = hum:FindFirstChildOfClass("Animator")
+    if not ani then return end
+    _G.UZIVERT_FEHL_STOP(cfg)
+    local a = Instance.new("Animation")
+    a.AnimationId = "rbxassetid://"..cfg.id
+    cfg.track = ani:LoadAnimation(a)
+    cfg.track.Priority = Enum.AnimationPriority.Action
+    cfg.track.Looped = true
+    cfg.track:Play()
+    cfg.stopped = cfg.track.Stopped:Connect(function()
+        if cfg.on and hum.Parent then task.wait(0.1) _G.UZIVERT_FEHL_PLAY(cfg, hum) end
+    end)
+end
+
+_G.UZIVERT_FEHL_FREEZE = function(cfg, hum)
+    if cfg.freeze then cfg.freeze:Disconnect() end
+    cfg.freeze = hum.StateChanged:Connect(function()
+        if cfg.on and hum.Parent and (not cfg.track or not cfg.track.IsPlaying) then
+            task.wait(0.05)
+            if cfg.on and hum.Parent then _G.UZIVERT_FEHL_PLAY(cfg, hum) end
+        end
+    end)
+end
+
+_G.UZIVERT_FEHL_ENABLE = function(cfg)
+    local c = game.Players.LocalPlayer.Character
+    if not c then return end
+    local h = c:FindFirstChild("Humanoid")
+    if not h then return end
+    _G.UZIVERT_FEHL_FREEZE(cfg, h)
+    _G.UZIVERT_FEHL_PLAY(cfg, h)
+end
+
+_G.UZIVERT_FEHL_DISABLE = function(cfg)
+    _G.UZIVERT_FEHL_STOP(cfg)
+    if cfg.freeze then cfg.freeze:Disconnect() cfg.freeze = nil end
+end
+
+game.Players.LocalPlayer.CharacterRemoving:Connect(function()
+    for _, cfg in ipairs(_G.UZIVERT_FEHL_CONFIGS) do
+        _G.UZIVERT_FEHL_STOP(cfg)
+        if cfg.freeze then cfg.freeze:Disconnect() cfg.freeze = nil end
+    end
+end)
+
+game.Players.LocalPlayer.CharacterAdded:Connect(function()
+    task.wait(0.5)
+    for _, cfg in ipairs(_G.UZIVERT_FEHL_CONFIGS) do
+        if cfg.on then _G.UZIVERT_FEHL_ENABLE(cfg) end
+    end
+end)
+
+-- Título visual FE Headless
+local _g_secFehl = Instance.new("Frame")
+_g_secFehl.Size = UDim2.new(1, 0, 0, 30)
+_g_secFehl.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_g_secFehl.BackgroundTransparency = 0.3
+_g_secFehl.BorderSizePixel = 0
+_g_secFehl.ZIndex = 2
+_g_secFehl.Parent = PaginaUtilidades
+
+local _g_cSecFehl = Instance.new("UICorner")
+_g_cSecFehl.CornerRadius = UDim.new(0, 7)
+_g_cSecFehl.Parent = _g_secFehl
+
+local _g_sSecFehl = Instance.new("UIStroke")
+_g_sSecFehl.Color = COLORES.Morado3
+_g_sSecFehl.Thickness = 1.5
+_g_sSecFehl.Transparency = 0.2
+_g_sSecFehl.Parent = _g_secFehl
+
+local _g_lblSecFehl = Instance.new("TextLabel")
+_g_lblSecFehl.Size = UDim2.new(1, -20, 1, 0)
+_g_lblSecFehl.Position = UDim2.new(0, 10, 0, 0)
+_g_lblSecFehl.BackgroundTransparency = 1
+_g_lblSecFehl.Text = "💀 FE HEADLESS (3 VERSIONES)"
+_g_lblSecFehl.TextColor3 = COLORES.Naranja2
+_g_lblSecFehl.Font = Enum.Font.GothamBlack
+_g_lblSecFehl.TextSize = 12
+_g_lblSecFehl.TextXAlignment = Enum.TextXAlignment.Left
+_g_lblSecFehl.ZIndex = 3
+_g_lblSecFehl.Parent = _g_secFehl
+
+crearToggle(PaginaUtilidades, "💀 Headless (V1)", CONFIG.FEHeadless or false, function(e)
+    local cfg = _G.UZIVERT_FEHL_CONFIGS[1]
+    cfg.on = e
+    CONFIG.FEHeadless = e
+    guardarConfig()
+    if e then _G.UZIVERT_FEHL_ENABLE(cfg)
+    else _G.UZIVERT_FEHL_DISABLE(cfg) end
+end)
+
+crearToggle(PaginaUtilidades, "💀 Headless V2", CONFIG.FEHeadlessV2 or false, function(e)
+    local cfg = _G.UZIVERT_FEHL_CONFIGS[2]
+    cfg.on = e
+    CONFIG.FEHeadlessV2 = e
+    guardarConfig()
+    if e then _G.UZIVERT_FEHL_ENABLE(cfg)
+    else _G.UZIVERT_FEHL_DISABLE(cfg) end
+end)
+
+crearToggle(PaginaUtilidades, "💀 Headless V3", CONFIG.FEHeadlessV3 or false, function(e)
+    local cfg = _G.UZIVERT_FEHL_CONFIGS[3]
+    cfg.on = e
+    CONFIG.FEHeadlessV3 = e
+    guardarConfig()
+    if e then _G.UZIVERT_FEHL_ENABLE(cfg)
+    else _G.UZIVERT_FEHL_DISABLE(cfg) end
+end)
+
 end
 
 -- ============================================
@@ -1592,26 +2847,224 @@ local function detectarRol(jugador)
     return "Lobby"
 end
 
-_G.AIM_ON = false
+-- ============================================
+-- 🎯 AIMLOCK V4 (Smooth + FOV + Select)
+-- ============================================
+_G.AIM_ON = CONFIG.AimLock or false
+_G.AIM_WALL = CONFIG.AimWall or false
+_G.AIM_FOV_ON = CONFIG.AimFOV or false
+_G.AIM_FOV_RADIUS = CONFIG.AimFOVRadius or 250
+_G.AIM_SMOOTH = CONFIG.AimSmooth or 25
+_G.AIM_HORIZ = CONFIG.AimHoriz or false
+_G.AIM_PART = CONFIG.AimPart or "Head"
+_G.AIM_PRED = CONFIG.AimPred or 0.145
+_G.AIM_SELECTED = nil
+_G.AIM_TARGET = nil
+_G.AIM_LAST_POS = nil
+_G.AIM_LAST_TARGET = nil
+_G.AIM_LAST_SEARCH = 0
+_G.AIM_FOV_CIRCLE = nil
 
-_G.UZIVERT_aim_loop = function()
-    if not _G.AIM_ON then return end
-    local char = LocalPlayer.Character
-    if not char then return end
-    local gun = char:FindFirstChild("Gun") or char:FindFirstChild("Revolver")
-    if not gun then return end
-    local murderer = detectarMurderer()
-    if not murderer or not murderer.Character then return end
-    local targetHrp = murderer.Character:FindFirstChild("HumanoidRootPart")
-    if not targetHrp then return end
-    local cam = workspace.CurrentCamera
-    if not cam then return end
-    cam.CFrame = CFrame.new(cam.CFrame.Position, targetHrp.Position)
+_G.AIM_FIND_MURDERER = function()
+    local candidates = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character then
+            local hum = player.Character:FindFirstChildOfClass("Humanoid")
+            if hum and hum.Health > 0 then
+                local role = nil
+                local char = player.Character
+                for _, tool in ipairs(char:GetChildren()) do
+                    if tool:IsA("Tool") then
+                        local n = tool.Name:lower()
+                        if n == "knife" or n == "default knife" then
+                            role = "Murderer"
+                            break
+                        end
+                    end
+                end
+                if not role and player:FindFirstChild("Backpack") then
+                    for _, tool in ipairs(player.Backpack:GetChildren()) do
+                        if tool:IsA("Tool") then
+                            local n = tool.Name:lower()
+                            if n == "knife" or n == "default knife" then
+                                role = "Murderer"
+                                break
+                            end
+                        end
+                    end
+                end
+                if role == "Murderer" then
+                    table.insert(candidates, player)
+                end
+            end
+        end
+    end
+    if #candidates > 0 then
+        local myRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if myRoot then
+            local closest, closestDist = nil, math.huge
+            for _, p in ipairs(candidates) do
+                local root = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+                if root then
+                    local dist = (root.Position - myRoot.Position).Magnitude
+                    if dist < closestDist then
+                        closestDist = dist
+                        closest = p
+                    end
+                end
+            end
+            return closest
+        end
+        return candidates[1]
+    end
+    return nil
 end
 
-_G.UZIVERT_aim_con = RunService.RenderStepped:Connect(function()
+_G.AIM_IS_VISIBLE = function(targetPart, targetPlayer)
+    if not _G.AIM_WALL then return true end
+    if not targetPart or not targetPlayer or not targetPlayer.Character then return false end
+    local filterList = {}
+    if LocalPlayer.Character then table.insert(filterList, LocalPlayer.Character) end
+    table.insert(filterList, targetPlayer.Character)
+    local params = RaycastParams.new()
+    params.FilterType = Enum.RaycastFilterType.Exclude
+    params.FilterDescendantsInstances = filterList
+    params.IgnoreWater = true
+    local origin = workspace.CurrentCamera.CFrame.Position
+    local checkParts = {"Head", "UpperTorso", "Torso", "HumanoidRootPart"}
+    local visible = 0
+    local checked = 0
+    for _, partName in ipairs(checkParts) do
+        local part = targetPlayer.Character:FindFirstChild(partName)
+        if part then
+            checked = checked + 1
+            local result = workspace:Raycast(origin, part.Position - origin, params)
+            if not result then visible = visible + 1 end
+        end
+    end
+    if checked == 0 then return true end
+    return visible >= (checked > 2 and 2 or 1)
+end
+
+_G.AIM_IN_FOV = function(worldPos)
+    if not _G.AIM_FOV_ON then return true end
+    local cam = workspace.CurrentCamera
+    if not cam then return true end
+    local screenPos, onScreen = cam:WorldToViewportPoint(worldPos)
+    if not onScreen then return false end
+    local screen = cam.ViewportSize
+    local center = Vector2.new(screen.X / 2, screen.Y / 2)
+    local dist = (Vector2.new(screenPos.X, screenPos.Y) - center).Magnitude
+    return dist <= _G.AIM_FOV_RADIUS
+end
+
+_G.AIM_UPDATE_FOV = function()
+    if not _G.AIM_FOV_ON then
+        if _G.AIM_FOV_CIRCLE then _G.AIM_FOV_CIRCLE.Visible = false end
+        return
+    end
+    if not _G.AIM_FOV_CIRCLE then
+        local frame = Instance.new("Frame")
+        frame.Name = "@AIM_FOV"
+        frame.AnchorPoint = Vector2.new(0.5, 0.5)
+        frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+        frame.Size = UDim2.new(0, _G.AIM_FOV_RADIUS * 2, 0, _G.AIM_FOV_RADIUS * 2)
+        frame.BackgroundTransparency = 1
+        frame.BorderSizePixel = 0
+        frame.ZIndex = 9999
+        local stroke = Instance.new("UIStroke")
+        stroke.Color = Color3.fromRGB(0, 255, 120)
+        stroke.Thickness = 2
+        stroke.Transparency = 0
+        stroke.Parent = frame
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(1, 0)
+        corner.Parent = frame
+        frame.Parent = ScreenGui
+        _G.AIM_FOV_CIRCLE = frame
+    end
+    _G.AIM_FOV_CIRCLE.Visible = true
+    _G.AIM_FOV_CIRCLE.Size = UDim2.new(0, _G.AIM_FOV_RADIUS * 2, 0, _G.AIM_FOV_RADIUS * 2)
+end
+
+_G.UZIVERT_aim_loop = function(dt)
     if not _G.AIM_ON then return end
-    _G.UZIVERT_aim_loop()
+
+    local ahora = tick()
+    if ahora - _G.AIM_LAST_SEARCH > 0.1 then
+        _G.AIM_LAST_SEARCH = ahora
+        if _G.AIM_SELECTED then
+            if not _G.AIM_SELECTED.Character or not _G.AIM_SELECTED.Character:FindFirstChildOfClass("Humanoid") 
+               or _G.AIM_SELECTED.Character:FindFirstChildOfClass("Humanoid").Health <= 0 
+               or not Players:FindFirstChild(_G.AIM_SELECTED.Name) then
+                _G.AIM_SELECTED = nil
+                _G.AIM_TARGET = _G.AIM_FIND_MURDERER()
+            end
+        else
+            _G.AIM_TARGET = _G.AIM_FIND_MURDERER()
+        end
+    end
+
+    local target = _G.AIM_SELECTED or _G.AIM_TARGET
+    if not target or not target.Character then
+        _G.AIM_LAST_POS = nil
+        return
+    end
+
+    local aimPart
+    if _G.AIM_PART == "HumanoidRootPart" then
+        aimPart = target.Character:FindFirstChild("HumanoidRootPart")
+    else
+        aimPart = target.Character:FindFirstChild("Head") or target.Character:FindFirstChild("HumanoidRootPart")
+    end
+    if not aimPart then
+        _G.AIM_LAST_POS = nil
+        return
+    end
+
+    if _G.AIM_LAST_TARGET ~= target then
+        _G.AIM_LAST_POS = nil
+        _G.AIM_LAST_TARGET = target
+    end
+
+    if not _G.AIM_IS_VISIBLE(aimPart, target) then
+        _G.AIM_LAST_POS = nil
+        return
+    end
+
+    local vel = aimPart.AssemblyLinearVelocity or Vector3.new()
+    local predX, predZ = 0, 0
+    if _G.AIM_HORIZ then
+        predX, predZ = vel.X * _G.AIM_PRED, vel.Z * _G.AIM_PRED
+    end
+    local pred = Vector3.new(predX, vel.Y * 0.3 * _G.AIM_PRED, predZ)
+    local aimPos = aimPart.Position + pred
+
+    if not _G.AIM_IN_FOV(aimPos) then
+        _G.AIM_LAST_POS = nil
+        return
+    end
+
+    local cam = workspace.CurrentCamera
+    if _G.AIM_LAST_POS and _G.AIM_SMOOTH > 0 then
+        local pct = _G.AIM_SMOOTH / 100
+        local rate
+        if pct <= 0.001 then
+            rate = 1000
+        else
+            rate = math.clamp(24 * (1 - pct) + 1, 1, 1000)
+        end
+        local alpha = 1 - math.exp(-rate * dt)
+        alpha = math.clamp(alpha, 0, 1)
+        aimPos = _G.AIM_LAST_POS:Lerp(aimPos, alpha)
+    end
+    _G.AIM_LAST_POS = aimPos
+
+    cam.CFrame = CFrame.lookAt(cam.CFrame.Position, aimPos, Vector3.new(0, 1, 0))
+end
+
+_G.UZIVERT_aim_con = RunService.RenderStepped:Connect(function(dt)
+    _G.UZIVERT_aim_loop(dt)
 end)
 
 -- ============================================
@@ -1798,9 +3251,18 @@ local COLORES_ESP = {
     Lobby    = Color3.fromRGB(150, 150, 150),
 }
 
+-- ============================================
+-- 🎯 ESP OPTIMIZADO v2 (funcional)
+-- ============================================
+local ESP_CACHE = {}
+
 local function aplicarESP(jugador)
     if jugador == LocalPlayer then return end
-    if not jugador.Character then return end
+    local char = jugador.Character
+    if not char then return end
+    
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    if not hum or hum.Health <= 0 then return end
     
     local rol = "Lobby"
     if RoleCache and RoleCache[jugador.Name] then
@@ -1809,35 +3271,75 @@ local function aplicarESP(jugador)
     end
     
     local color = COLORES_ESP[rol] or COLORES_ESP.Lobby
+    local cache = ESP_CACHE[jugador.Name]
     
-    local anterior = jugador.Character:FindFirstChild("ESP_Highlight")
-    if anterior then anterior:Destroy() end
+    -- Si el Highlight no existe o está roto → crear
+    if not cache or not cache.Highlight or not cache.Highlight.Parent or cache.Highlight.Adornee ~= char then
+        if cache and cache.Highlight then
+            pcall(function() cache.Highlight:Destroy() end)
+        end
+        
+        local hl = Instance.new("Highlight")
+        hl.Name = "ESP_Highlight"
+        hl.Adornee = char
+        hl.Parent = char
+        hl.FillColor = color
+        hl.FillTransparency = 0.35
+        hl.OutlineColor = color
+        hl.OutlineTransparency = 0
+        hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        
+        ESP_CACHE[jugador.Name] = {Highlight = hl, ColorAnterior = color}
+        return
+    end
     
-    local hl = Instance.new("Highlight")
-    hl.Name = "ESP_Highlight"
-    hl.Parent = jugador.Character
-    hl.Adornee = jugador.Character
-    hl.FillColor = color
-    hl.FillTransparency = 0.35
-    hl.OutlineColor = color
-    hl.OutlineTransparency = 0
-    hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    -- ✅ SIEMPRE actualizar el color (por si cambió el rol)
+    if cache.ColorAnterior ~= color then
+        cache.Highlight.FillColor = color
+        cache.Highlight.OutlineColor = color
+        cache.ColorAnterior = color
+    end
+    
+    -- ✅ Asegurar que el Adornee esté bien
+    if cache.Highlight.Adornee ~= char then
+        cache.Highlight.Adornee = char
+    end
 end
 
+local function limpiarESP()
+    for name, cache in pairs(ESP_CACHE) do
+        if cache.Highlight then pcall(function() cache.Highlight:Destroy() end) end
+    end
+    ESP_CACHE = {}
+end
+
+Players.PlayerRemoving:Connect(function(plr)
+    local cache = ESP_CACHE[plr.Name]
+    if cache and cache.Highlight then pcall(function() cache.Highlight:Destroy() end) end
+    ESP_CACHE[plr.Name] = nil
+end)
+
+Players.PlayerAdded:Connect(function(plr)
+    plr.CharacterAdded:Connect(function()
+        local cache = ESP_CACHE[plr.Name]
+        if cache and cache.Highlight then
+            pcall(function() cache.Highlight:Destroy() end)
+        end
+        ESP_CACHE[plr.Name] = nil
+    end)
+end)
+
 task.spawn(function()
-    while task.wait(0.3) do
+    while task.wait(0.3) do  -- ⬅️ volvemos a 0.3 para que sea rápido
         if ESP_ACTIVO then
             for _, jugador in ipairs(Players:GetPlayers()) do
                 if jugador ~= LocalPlayer and jugador.Character then
-                    local hum = jugador.Character:FindFirstChildOfClass("Humanoid")
-                    if hum and hum.Health > 0 then
-                        aplicarESP(jugador)
-                    end
+                    aplicarESP(jugador)
                 end
             end
         end
     end
-end) 
+end)
 
 local highlights = {}
 
@@ -1967,25 +3469,39 @@ _G.UZIVERT_GUN_AURA_LOOP = task.spawn(function()
 end)
 
 -- ============================================
--- 🎯 SILENT AIM (Offsets Overdrive)
+-- 🎯 SILENT AIM v4.0 — LÓGICA
 -- ============================================
-_G.UZIVERT_SILENT_AIM_ON = false
-_G.UZIVERT_SILENT_REMOTE = nil
-_G.UZIVERT_SILENT_TARGET = nil
-_G.UZIVERT_SILENT_ORIGIN = nil
-_G.UZIVERT_SILENT_ULTIMA_ACT = 0
 
--- Offsets (con valores guardados o Overdrive por defecto)
-_G.UZIVERT_SILENT_OFF_X = CONFIG.SilentOffX or -0.04
-_G.UZIVERT_SILENT_OFF_Y = CONFIG.SilentOffY or -0.06
-_G.UZIVERT_SILENT_OFF_Z = CONFIG.SilentOffZ or 0
-_G.UZIVERT_SILENT_PRED_H = CONFIG.SilentPredH or 1.49
-_G.UZIVERT_SILENT_PRED_V = CONFIG.SilentPredV or 1.44
-_G.UZIVERT_SILENT_MAX_SIM = CONFIG.SilentMaxSim or 0.050
-_G.UZIVERT_SILENT_INTERVAL = 0.063
-_G.UZIVERT_SILENT_PRED_PING = CONFIG.SilentPredPing or 0.085
+_G.UZIVERT_SA_ON = CONFIG.SilentAim or false
+_G.UZIVERT_SA_AUTO_PING = CONFIG.SilentAutoPing ~= false
+_G.UZIVERT_SA_MULTI = CONFIG.SilentMultiPoint ~= false
+_G.UZIVERT_SA_ANTIHACK = CONFIG.SilentAntiHack ~= false
 
-_G.UZIVERT_GET_SHOOT_REMOTE = function()
+_G.UZIVERT_SA_OFF_X = CONFIG.SilentOffX or 0
+_G.UZIVERT_SA_OFF_Y = CONFIG.SilentOffY or -0.10
+_G.UZIVERT_SA_OFF_Z = CONFIG.SilentOffZ or 0
+_G.UZIVERT_SA_PRED_H = CONFIG.SilentPredH or 1.5
+_G.UZIVERT_SA_PRED_V = CONFIG.SilentPredV or 0.5
+_G.UZIVERT_SA_MAX_SIM = CONFIG.SilentMaxSim or 0.080
+_G.UZIVERT_SA_PRED_PING = CONFIG.SilentPredPing or 0.060
+
+_G.UZIVERT_SA_TARGET = nil
+_G.UZIVERT_SA_ORIGIN = nil
+_G.UZIVERT_SA_REMOTE = nil
+_G.UZIVERT_SA_ULTIMA = 0
+_G.UZIVERT_SA_INTERVALO = 0.030
+_G.UZIVERT_SA_VEL_SUAV = Vector3.new(0, 0, 0)
+
+_G.UZIVERT_SA_FIND = function()
+    for plrName, role in pairs(RoleCache) do
+        if role == "Murderer" then
+            return Players:FindFirstChild(plrName)
+        end
+    end
+    return nil
+end
+
+_G.UZIVERT_SA_GET_REMOTE = function()
     local char = LocalPlayer.Character
     if not char then return nil end
     local gun = char:FindFirstChild("Gun") or char:FindFirstChild("Revolver")
@@ -2004,16 +3520,7 @@ _G.UZIVERT_GET_SHOOT_REMOTE = function()
     return nil
 end
 
-_G.UZIVERT_GET_MURDERER = function()
-    for plrName, role in pairs(RoleCache) do
-        if role == "Murderer" then
-            return Players:FindFirstChild(plrName)
-        end
-    end
-    return nil
-end
-
-_G.UZIVERT_SILENT_GET_PING = function()
+_G.UZIVERT_SA_GET_PING = function()
     local ping = 0
     pcall(function()
         ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
@@ -2022,83 +3529,146 @@ _G.UZIVERT_SILENT_GET_PING = function()
     return ping
 end
 
-_G.UZIVERT_SILENT_LOOP = RunService.RenderStepped:Connect(function()
-    local ahora = tick()
-    if ahora - _G.UZIVERT_SILENT_ULTIMA_ACT < _G.UZIVERT_SILENT_INTERVAL then return end
-    _G.UZIVERT_SILENT_ULTIMA_ACT = ahora
+_G.UZIVERT_SA_ES_HACKER = function(hrp, char)
+    local vel = hrp.AssemblyLinearVelocity
+    if math.abs(vel.Y) > 100 then return true end
+    if vel.Magnitude > 150 then return true end
+    local rp = RaycastParams.new()
+    rp.FilterDescendantsInstances = {char}
+    rp.FilterType = Enum.RaycastFilterType.Exclude
+    local ray = workspace:Raycast(hrp.Position, Vector3.new(0, -100, 0), rp)
+    if not ray then return true end
+    local alt = hrp.Position.Y - ray.Position.Y
+    if alt > 30 then return true end
+    return false
+end
+
+_G.UZIVERT_SA_LOOP = RunService.RenderStepped:Connect(function(dt)
+    if not _G.UZIVERT_SA_ON then return end
     
-    _G.UZIVERT_SILENT_REMOTE = _G.UZIVERT_GET_SHOOT_REMOTE()
+    local ahora = tick()
+    if ahora - _G.UZIVERT_SA_ULTIMA < _G.UZIVERT_SA_INTERVALO then return end
+    local deltaTiempo = ahora - _G.UZIVERT_SA_ULTIMA
+    _G.UZIVERT_SA_ULTIMA = ahora
+    
+    _G.UZIVERT_SA_REMOTE = _G.UZIVERT_SA_GET_REMOTE()
     
     local char = LocalPlayer.Character
     if char then
         local miHrp = char:FindFirstChild("HumanoidRootPart")
-        if miHrp then _G.UZIVERT_SILENT_ORIGIN = miHrp.CFrame end
+        if miHrp then _G.UZIVERT_SA_ORIGIN = miHrp.CFrame end
     end
     
-    local murderer = _G.UZIVERT_GET_MURDERER()
-    if murderer and murderer.Character then
-        local targetChar = murderer.Character
-        local targetHum = targetChar:FindFirstChildOfClass("Humanoid")
-        local targetHead = targetChar:FindFirstChild("Head")
-        local targetHrp = targetChar:FindFirstChild("HumanoidRootPart")
-        
-        if targetHead and targetHum and targetHrp then
-            local pingReal = _G.UZIVERT_SILENT_GET_PING()
-            local pingTotal = pingReal + _G.UZIVERT_SILENT_PRED_PING
-            if pingTotal > _G.UZIVERT_SILENT_MAX_SIM then pingTotal = _G.UZIVERT_SILENT_MAX_SIM end
-            
-            local vel = targetHrp.AssemblyLinearVelocity
-            local velHoriz = Vector3.new(vel.X, 0, vel.Z)
-            local velY = vel.Y
-            
-            local predHoriz = velHoriz * pingTotal * _G.UZIVERT_SILENT_PRED_H
-            local predVert = 0
-            local estado = targetHum:GetState()
-            if estado == Enum.HumanoidStateType.Jumping or estado == Enum.HumanoidStateType.Freefall then
-                local g = workspace.Gravity
-                predVert = velY * pingTotal * _G.UZIVERT_SILENT_PRED_V + 0.5 * (-g) * pingTotal * pingTotal
-            end
-            
-            local alturaPersonaje = targetHead.Position.Y - targetHrp.Position.Y + 1
-            local offsetX = _G.UZIVERT_SILENT_OFF_X * alturaPersonaje
-            local offsetY = _G.UZIVERT_SILENT_OFF_Y * alturaPersonaje
-            local offsetZ = _G.UZIVERT_SILENT_OFF_Z * alturaPersonaje
-            
-            local posFinal = targetHead.Position + predHoriz + Vector3.new(0, predVert, 0) + Vector3.new(offsetX, offsetY, offsetZ)
-            _G.UZIVERT_SILENT_TARGET = CFrame.new(posFinal)
-        end
+    local murderer = _G.UZIVERT_SA_FIND()
+    if not murderer or not murderer.Character then
+        _G.UZIVERT_SA_TARGET = nil
+        return
+    end
+    
+    local targetChar = murderer.Character
+    local targetHum = targetChar:FindFirstChildOfClass("Humanoid")
+    local targetHead = targetChar:FindFirstChild("Head")
+    local targetHrp = targetChar:FindFirstChild("HumanoidRootPart")
+    
+    if not targetHead or not targetHum or not targetHrp then
+        _G.UZIVERT_SA_TARGET = nil
+        return
+    end
+    
+    local pingReal = _G.UZIVERT_SA_GET_PING()
+    local pingTotal = pingReal * 1.5 + _G.UZIVERT_SA_PRED_PING
+    if not _G.UZIVERT_SA_AUTO_PING then
+        pingTotal = pingReal + _G.UZIVERT_SA_PRED_PING
+    end
+    if pingTotal > _G.UZIVERT_SA_MAX_SIM then pingTotal = _G.UZIVERT_SA_MAX_SIM end
+    
+    local tiempoVuelo = pingTotal + deltaTiempo
+    
+    local velActual = targetHrp.AssemblyLinearVelocity
+    _G.UZIVERT_SA_VEL_SUAV = _G.UZIVERT_SA_VEL_SUAV * 0.3 + velActual * 0.7
+    local vel = _G.UZIVERT_SA_VEL_SUAV
+    local velHoriz = Vector3.new(vel.X, 0, vel.Z)
+    
+    local estado = targetHum:GetState()
+    local enAire = (estado == Enum.HumanoidStateType.Jumping or estado == Enum.HumanoidStateType.Freefall)
+    local corriendoYSaltando = enAire and velHoriz.Magnitude > 5
+    
+    local hacker = false
+    if _G.UZIVERT_SA_ANTIHACK then
+        hacker = _G.UZIVERT_SA_ES_HACKER(targetHrp, targetChar)
+    end
+    
+    local predH = _G.UZIVERT_SA_PRED_H
+    if corriendoYSaltando then
+        predH = _G.UZIVERT_SA_PRED_H * 1.3
+    end
+    local predHoriz = velHoriz * tiempoVuelo * predH
+    
+    local predVert = 0
+    if enAire and not hacker then
+        local g = workspace.Gravity
+        predVert = 0.5 * (-g) * (tiempoVuelo * tiempoVuelo)
+        if predVert > 1.2 then predVert = 1.2 end
+        if predVert < -1.2 then predVert = -1.2 end
+    end
+    
+    local altura = targetHead.Position.Y - targetHrp.Position.Y + 1
+    local offsetX = _G.UZIVERT_SA_OFF_X * altura
+    local offsetY = _G.UZIVERT_SA_OFF_Y * altura
+    local offsetZ = _G.UZIVERT_SA_OFF_Z * altura
+    
+    local posFinal = targetHrp.Position 
+        + Vector3.new(0, altura * 0.4, 0)
+        + predHoriz 
+        + Vector3.new(0, predVert, 0)
+        + Vector3.new(offsetX, offsetY, offsetZ)
+    
+    if _G.UZIVERT_SA_MULTI then
+        local tight = hacker and 0.6 or 0.25
+        _G.UZIVERT_SA_TARGET = {
+            CFrame.new(posFinal),
+            CFrame.new(posFinal + Vector3.new(0, tight, 0)),
+            CFrame.new(posFinal + Vector3.new(0, -tight, 0)),
+            CFrame.new(posFinal + Vector3.new(tight, 0, 0)),
+            CFrame.new(posFinal + Vector3.new(-tight, 0, 0)),
+            CFrame.new(posFinal + Vector3.new(0, 0, tight)),
+            CFrame.new(posFinal + Vector3.new(0, 0, -tight)),
+        }
     else
-        _G.UZIVERT_SILENT_TARGET = nil
+        _G.UZIVERT_SA_TARGET = {CFrame.new(posFinal)}
     end
 end)
 
-if not _G.UZIVERT_SILENT_HOOK_OK then
-    _G.UZIVERT_SILENT_HOOK_OK = true
-    local ok = pcall(function()
+if not _G.UZIVERT_SA_HOOKED then
+    _G.UZIVERT_SA_HOOKED = true
+    pcall(function()
         local mt = getrawmetatable(game)
-        local old = mt.__namecall
+        local oldNamecall = mt.__namecall
         setreadonly(mt, false)
         
         mt.__namecall = newcclosure(function(self, ...)
             local method = getnamecallmethod()
-            if _G.UZIVERT_SILENT_AIM_ON 
-                and _G.UZIVERT_SILENT_REMOTE 
-                and self == _G.UZIVERT_SILENT_REMOTE 
-                and method == "FireServer" 
-            then
-                if not _G.UZIVERT_SILENT_TARGET or not _G.UZIVERT_SILENT_ORIGIN then 
-                    return old(self, ...) 
+            if _G.UZIVERT_SA_ON and _G.UZIVERT_SA_REMOTE and self == _G.UZIVERT_SA_REMOTE and method == "FireServer" then
+                if not _G.UZIVERT_SA_TARGET or not _G.UZIVERT_SA_ORIGIN then
+                    return oldNamecall(self, ...)
                 end
+                
                 local args = {...}
-                args[1] = _G.UZIVERT_SILENT_ORIGIN
-                args[2] = _G.UZIVERT_SILENT_TARGET
-                return old(self, unpack(args))
+                args[1] = _G.UZIVERT_SA_ORIGIN
+                
+                for _, punto in ipairs(_G.UZIVERT_SA_TARGET) do
+                    args[2] = punto
+                    oldNamecall(self, unpack(args))
+                end
+                
+                return
             end
-            return old(self, ...)
+            return oldNamecall(self, ...)
         end)
+        
         setreadonly(mt, true)
     end)
-    if ok then print("🎯 [SILENT AIM] Hook activado") end
+    print("🎯 [SILENT AIM v4.0] Hook activado")
 end
 
 local function aplicarGunESP(obj, esTirada)
@@ -2267,13 +3837,40 @@ local animPresets = {
     ["Furry"] = {idle1="http://www.roblox.com/asset/?id=111821292044705", idle2="http://www.roblox.com/asset/?id=111821292044705", walk="http://www.roblox.com/asset/?id=104011441852459", run="http://www.roblox.com/asset/?id=87770060317862", jump="http://www.roblox.com/asset/?id=102635582722041", climb="http://www.roblox.com/asset/?id=76660530164497", fall="http://www.roblox.com/asset/?id=137079985547592"},
     ["Vlada Model"] = {idle1="http://www.roblox.com/asset/?id=100139116433530", idle2="http://www.roblox.com/asset/?id=100139116433530", walk="http://www.roblox.com/asset/?id=77983757225444", run="http://www.roblox.com/asset/?id=116717848244930", jump="http://www.roblox.com/asset/?id=120751055172567", climb="http://www.roblox.com/asset/?id=70966616077778", fall="http://www.roblox.com/asset/?id=136118518255777"},
     ["R6 Converter"] = {idle1="http://www.roblox.com/asset/?id=90040240627854", idle2="http://www.roblox.com/asset/?id=90040240627854", walk="http://www.roblox.com/asset/?id=92149852708428", run="http://www.roblox.com/asset/?id=72259383092959", jump="http://www.roblox.com/asset/?id=130519980521511", climb="http://www.roblox.com/asset/?id=80369171706383", fall="http://www.roblox.com/asset/?id=130011792193300"},
+    ["Mage"] = {idle1="http://www.roblox.com/asset/?id=707742142", idle2="http://www.roblox.com/asset/?id=707855907", walk="http://www.roblox.com/asset/?id=707897309", run="http://www.roblox.com/asset/?id=707861613", jump="http://www.roblox.com/asset/?id=707853694", climb="http://www.roblox.com/asset/?id=707826056", fall="http://www.roblox.com/asset/?id=707829716"},
+    ["Ghost"] = {idle1="http://www.roblox.com/asset/?id=616006778", idle2="http://www.roblox.com/asset/?id=616008087", walk="http://www.roblox.com/asset/?id=616010382", run="http://www.roblox.com/asset/?id=616013216", jump="http://www.roblox.com/asset/?id=616008936", climb="http://www.roblox.com/asset/?id=616003713", fall="http://www.roblox.com/asset/?id=616005863"},
+    ["Elder"] = {idle1="http://www.roblox.com/asset/?id=845397899", idle2="http://www.roblox.com/asset/?id=845400520", walk="http://www.roblox.com/asset/?id=845403856", run="http://www.roblox.com/asset/?id=845386501", jump="http://www.roblox.com/asset/?id=845398858", climb="http://www.roblox.com/asset/?id=845392038", fall="http://www.roblox.com/asset/?id=845396048"},
+    ["Levitation"] = {idle1="http://www.roblox.com/asset/?id=616006778", idle2="http://www.roblox.com/asset/?id=616008087", walk="http://www.roblox.com/asset/?id=616013216", run="http://www.roblox.com/asset/?id=616010382", jump="http://www.roblox.com/asset/?id=616008936", climb="http://www.roblox.com/asset/?id=616003713", fall="http://www.roblox.com/asset/?id=616005863"},
+    ["Sneaky"] = {idle1="http://www.roblox.com/asset/?id=1132473842", idle2="http://www.roblox.com/asset/?id=1132477671", walk="http://www.roblox.com/asset/?id=1132510133", run="http://www.roblox.com/asset/?id=1132494274", jump="http://www.roblox.com/asset/?id=1132489853", climb="http://www.roblox.com/asset/?id=1132461372", fall="http://www.roblox.com/asset/?id=1132469004"},
+    ["Toy"] = {idle1="http://www.roblox.com/asset/?id=782841498", idle2="http://www.roblox.com/asset/?id=782845736", walk="http://www.roblox.com/asset/?id=782843345", run="http://www.roblox.com/asset/?id=782842708", jump="http://www.roblox.com/asset/?id=782847020", climb="http://www.roblox.com/asset/?id=782843869", fall="http://www.roblox.com/asset/?id=782846423"},
+    ["Knight"] = {idle1="http://www.roblox.com/asset/?id=657595757", idle2="http://www.roblox.com/asset/?id=657568135", walk="http://www.roblox.com/asset/?id=657552124", run="http://www.roblox.com/asset/?id=657564596", jump="http://www.roblox.com/asset/?id=658409194", climb="http://www.roblox.com/asset/?id=658360781", fall="http://www.roblox.com/asset/?id=657600338"},
+    ["Confident"] = {idle1="http://www.roblox.com/asset/?id=1069977950", idle2="http://www.roblox.com/asset/?id=1069987858", walk="http://www.roblox.com/asset/?id=1070017263", run="http://www.roblox.com/asset/?id=1070001516", jump="http://www.roblox.com/asset/?id=1069984524", climb="http://www.roblox.com/asset/?id=1069946257", fall="http://www.roblox.com/asset/?id=1069973677"},
+    ["Popstar"] = {idle1="http://www.roblox.com/asset/?id=1212900985", idle2="http://www.roblox.com/asset/?id=1212900985", walk="http://www.roblox.com/asset/?id=1212980338", run="http://www.roblox.com/asset/?id=1212980348", jump="http://www.roblox.com/asset/?id=1212954642", climb="http://www.roblox.com/asset/?id=1213044953", fall="http://www.roblox.com/asset/?id=1212900995"},
+    ["Princess"] = {idle1="http://www.roblox.com/asset/?id=941003647", idle2="http://www.roblox.com/asset/?id=941013098", walk="http://www.roblox.com/asset/?id=941028902", run="http://www.roblox.com/asset/?id=941015281", jump="http://www.roblox.com/asset/?id=941008832", climb="http://www.roblox.com/asset/?id=940996062", fall="http://www.roblox.com/asset/?id=941000007"},
+    ["Cowboy"] = {idle1="http://www.roblox.com/asset/?id=1014390418", idle2="http://www.roblox.com/asset/?id=1014398616", walk="http://www.roblox.com/asset/?id=1014421541", run="http://www.roblox.com/asset/?id=1014401683", jump="http://www.roblox.com/asset/?id=1014394726", climb="http://www.roblox.com/asset/?id=1014380606", fall="http://www.roblox.com/asset/?id=1014384571"},
+    ["Patrol"] = {idle1="http://www.roblox.com/asset/?id=1149612882", idle2="http://www.roblox.com/asset/?id=1150842221", walk="http://www.roblox.com/asset/?id=1151231493", run="http://www.roblox.com/asset/?id=1150967949", jump="http://www.roblox.com/asset/?id=1150944216", climb="http://www.roblox.com/asset/?id=1148811837", fall="http://www.roblox.com/asset/?id=1148863382"},
+    ["Zombie FE"] = {idle1="http://www.roblox.com/asset/?id=3489171152", idle2="http://www.roblox.com/asset/?id=3489171152", walk="http://www.roblox.com/asset/?id=3489174223", run="http://www.roblox.com/asset/?id=3489173414", jump="http://www.roblox.com/asset/?id=616161997", climb="http://www.roblox.com/asset/?id=616156119", fall="http://www.roblox.com/asset/?id=616157476"},
+    ["Amazon Unboxed"] = {idle1="http://www.roblox.com/asset/?id=98281136301627", idle2="http://www.roblox.com/asset/?id=98281136301627", walk="http://www.roblox.com/asset/?id=90478085024465", run="http://www.roblox.com/asset/?id=134824450619865", jump="http://www.roblox.com/asset/?id=121454505477205", climb="http://www.roblox.com/asset/?id=121145883950231", fall="http://www.roblox.com/asset/?id=94788218468396"},
+    ["Bubbly"] = {idle1="https://www.roblox.com/asset/?id=10921054344", idle2="https://www.roblox.com/asset/?id=10921054344", walk="http://www.roblox.com/asset/?id=10980888364", run="http://www.roblox.com/asset/?id=10921057244", jump="http://www.roblox.com/asset/?id=10921062673", climb="http://www.roblox.com/asset/?id=10921053544", fall="https://www.roblox.com/asset/?id=10921061530"},
+    ["Adidas Comm"] = {idle1="https://www.roblox.com/asset/?id=122257458498464", idle2="https://www.roblox.com/asset/?id=122257458498464", walk="http://www.roblox.com/asset/?id=122150855457006", run="http://www.roblox.com/asset/?id=82598234841035", jump="http://www.roblox.com/asset/?id=75290611992385", climb="http://www.roblox.com/asset/?id=88763136693023", fall="https://www.roblox.com/asset/?id=98600215928904"},
+    ["KATSEYE"] = {idle1="https://www.roblox.com/asset/?id=108187809145790", idle2="https://www.roblox.com/asset/?id=108187809145790", walk="http://www.roblox.com/asset/?id=99182913548783", run="http://www.roblox.com/asset/?id=73117360545482", jump="http://www.roblox.com/asset/?id=103632305262747", climb="http://www.roblox.com/asset/?id=106213237973858", fall="https://www.roblox.com/asset/?id=127802717128367"},
+    ["Wicked Popular"] = {idle1="https://www.roblox.com/asset/?id=118832222982049", idle2="https://www.roblox.com/asset/?id=118832222982049", walk="http://www.roblox.com/asset/?id=92072849924640", run="http://www.roblox.com/asset/?id=72301599441680", jump="http://www.roblox.com/asset/?id=104325245285198", climb="http://www.roblox.com/asset/?id=131326830509784", fall="https://www.roblox.com/asset/?id=121152442762481"},
+    ["Dizzy"] = {idle1="http://www.roblox.com/asset/?id=132806359718468", idle2="http://www.roblox.com/asset/?id=132806359718468", walk="http://www.roblox.com/asset/?id=110106034100313", run="http://www.roblox.com/asset/?id=138305342272849", jump="http://www.roblox.com/asset/?id=108564434408211", climb="http://www.roblox.com/asset/?id=93550710314258", fall="http://www.roblox.com/asset/?id=138967706335414"},
+    ["WDTL"] = {idle1="http://www.roblox.com/asset/?id=92849173543269", idle2="http://www.roblox.com/asset/?id=92849173543269", walk="http://www.roblox.com/asset/?id=73718308412641", run="http://www.roblox.com/asset/?id=135515454877967", jump="http://www.roblox.com/asset/?id=78508480717326", climb="http://www.roblox.com/asset/?id=129447497744818", fall="http://www.roblox.com/asset/?id=78147885297412"},
+    ["Billie Eilish"] = {idle1="http://www.roblox.com/asset/?id=102934602884410", idle2="http://www.roblox.com/asset/?id=102934602884410", walk="http://www.roblox.com/asset/?id=81877886552514", run="http://www.roblox.com/asset/?id=100920560634123", jump="http://www.roblox.com/asset/?id=117602630922781", climb="http://www.roblox.com/asset/?id=117873469361430", fall="http://www.roblox.com/asset/?id=81072141180299"},
+    ["Cute Bouncy"] = {idle1="http://www.roblox.com/asset/?id=88464649697812", idle2="http://www.roblox.com/asset/?id=88464649697812", walk="http://www.roblox.com/asset/?id=98713727778027", run="http://www.roblox.com/asset/?id=133955346539948", jump="http://www.roblox.com/asset/?id=124147147418885", climb="http://www.roblox.com/asset/?id=95542189442725", fall="http://www.roblox.com/asset/?id=128620818122982"},
+    ["Cute"] = {idle1="http://www.roblox.com/asset/?id=85735421117197", idle2="http://www.roblox.com/asset/?id=85735421117197", walk="http://www.roblox.com/asset/?id=140409718187215", run="http://www.roblox.com/asset/?id=118375157537412", jump="http://www.roblox.com/asset/?id=132381016103721", climb="http://www.roblox.com/asset/?id=86318575131600", fall="http://www.roblox.com/asset/?id=77496925287217"},
 }
 
 local allOptions = {
     "Default", "Vampire", "Hero", "Zombie", "Ninja", "Astronaut", "Cartoon", "Pirate", "Werewolf",
     "OG Run", "Jolly", "Cute Kawaii", "Doll 3.0", "Victoria Model", "Bike/Bicyclist", "Animal",
     "It-Girl Essential Model", "Oldschool", "Spider", "Joy", "Flying Aura", "FHA V2",
-    "Silent Nurse", "Supermodel", "Enchanted Fairy", "Furry", "Vlada Model", "R6 Converter"
+    "Silent Nurse", "Supermodel", "Enchanted Fairy", "Furry", "Vlada Model", "R6 Converter",
+    "Mage", "Ghost", "Elder", "Levitation", "Sneaky", "Toy", "Knight", "Confident",
+    "Popstar", "Princess", "Cowboy", "Patrol", "Zombie FE", "Amazon Unboxed", "Bubbly",
+    "Adidas Comm", "KATSEYE", "Wicked Popular", "Dizzy", "WDTL", "Billie Eilish",
+    "Cute Bouncy", "Cute"
 }
 
 local animState = {all="Default", idle="Default", walk="Default", run="Default", jump="Default", climb="Default", fall="Default", swim="Default", swimidle="Default", death="Default"}
@@ -2771,20 +4368,24 @@ local function dispararV1()
     
     local origin = obtenerOriginArma(gun)
     
+    -- Ping
     local ping = 0
     pcall(function()
         ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
     end)
     
+    -- Tiempo de vuelo de la bala
     local VELOCIDAD_BALA = 600
     local tiempoVuelo = dist / VELOCIDAD_BALA
     local tiempoTotal = tiempoVuelo + ping
     
+    -- Torso del target
     local torsoPart = targetChar:FindFirstChild("UpperTorso") 
                    or targetChar:FindFirstChild("Torso") 
                    or targetHrp
     local basePos = torsoPart.Position
     
+    -- Velocidad
     local vel = targetHrp.AssemblyLinearVelocity
     local velMag = vel.Magnitude
     
@@ -2795,24 +4396,65 @@ local function dispararV1()
         factor = factor * 0.8
     end
     
+    -- 🔥 PREDICCIÓN HORIZONTAL + VERTICAL
+    local prediccionXZ = Vector3.new(0, 0, 0)
+    local prediccionY = 0
+    
     if velMag > 1 then
-        local prediccion = vel * tiempoTotal * factor
-        basePos = basePos + Vector3.new(prediccion.X, 0, prediccion.Z)
+        prediccionXZ = Vector3.new(vel.X, 0, vel.Z) * tiempoTotal * factor
     elseif hum.MoveDirection.Magnitude > 0 then
-        local prediccion = hum.MoveDirection * hum.WalkSpeed * tiempoTotal * factor
-        basePos = basePos + Vector3.new(prediccion.X, 0, prediccion.Z)
+        prediccionXZ = Vector3.new(
+            hum.MoveDirection.X * hum.WalkSpeed * tiempoTotal * factor,
+            0,
+            hum.MoveDirection.Z * hum.WalkSpeed * tiempoTotal * factor
+        )
     end
     
+    -- 🚀 PREDICCIÓN VERTICAL (la clave para el jump spam)
+    local estado = hum:GetState()
+    local estaEnAire = (estado == Enum.HumanoidStateType.Jumping or estado == Enum.HumanoidStateType.Freefall)
+    
+    if estaEnAire then
+        local g = workspace.Gravity
+        -- Predice la posición Y basada en gravedad
+        prediccionY = vel.Y * tiempoTotal - 0.5 * g * tiempoTotal * tiempoTotal
+        
+        -- 🔥 CLAVE: aplicar la predicción Y a la posición
+        basePos = basePos + Vector3.new(0, prediccionY, 0)
+        
+        -- 🔥 IMPORTANTE: ajustar según cuánto tiempo lleva saltando
+        -- Si acaba de saltar → la velocidad Y es positiva (subiendo) → dispara más arriba
+        -- Si está cayendo → la velocidad Y es negativa → dispara más abajo
+        -- Esto YA lo hace la fórmula de arriba
+    end
+    
+    basePos = basePos + prediccionXZ
+    
+    -- Límite de seguridad (evita predicciones locas)
     if basePos.X ~= basePos.X then return end
     if (basePos - torsoPart.Position).Magnitude > 100 then return end
     
+    -- 🔥 Ajuste vertical adicional para jump spam
+    -- Si el murderer está saltando mucho, bajamos un toque el punto de aim
+    if estaEnAire and vel.Y > 5 then
+        -- Está subiendo → apuntamos al centro del cuerpo (no a la cabeza)
+        basePos = basePos + Vector3.new(0, -0.5, 0)
+    end
+    
+    -- 🔥 Múltiples puntos (aumenta chance de impactar)
     local puntos = {
-        basePos,
-        basePos + Vector3.new(0, 0.6, 0),
-        basePos + Vector3.new(0, -0.3, 0),
-        basePos + Vector3.new(1.0, 0, 0),
-        basePos + Vector3.new(-1.0, 0, 0),
+        basePos,                                       -- centro
+        basePos + Vector3.new(0, 0.6, 0),              -- arriba
+        basePos + Vector3.new(0, -0.3, 0),             -- abajo
+        basePos + Vector3.new(1.0, 0, 0),              -- derecha
+        basePos + Vector3.new(-1.0, 0, 0),             -- izquierda
     }
+    
+    -- Si está saltando, agregar puntos extra verticales
+    if estaEnAire then
+        table.insert(puntos, basePos + Vector3.new(0, 1.0, 0))
+        table.insert(puntos, basePos + Vector3.new(0, -0.8, 0))
+    end
     
     for i, punto in ipairs(puntos) do
         pcall(function()
@@ -2821,11 +4463,12 @@ local function dispararV1()
         task.wait(0.025)
     end
     
-    print(string.format("🎯 Shoot → %s | Dist: %d | Vel: %d | Torso: %s",
+    print(string.format("🎯 Shoot → %s | Dist: %d | VelY: %.1f | Aire: %s | Puntos: %d",
         murderer.Name,
         math.floor(dist),
-        math.floor(velMag),
-        torsoPart.Name
+        vel.Y,
+        tostring(estaEnAire),
+        #puntos
     ))
 end
 
@@ -3242,6 +4885,454 @@ BotonAvz.MouseButton1Click:Connect(function()
     task.delay(0.5, function() BotonAvz.Text = "SHOOT AVANZADO" end)
 end)
 
+-- ============================================
+-- 🔫 SHOOT TELEPORT (SHOOT TP)
+-- ============================================
+if not _G.UZIVERT_GAMA_BAJA then
+
+-- Variables globales
+_G.UZIVERT_SHOOT_TP_ACTIVO = false
+_G.UZIVERT_SHOOT_TP_DISTANCIA = 5.5
+_G.UZIVERT_SHOOT_TP_DURACION = 1.0
+_G.UZIVERT_SHOOT_TP_INTERVALO = 0.10
+_G.UZIVERT_SHOOT_TP_LOCK = 0.03
+
+-- ============================================
+-- FUNCIÓN: BUSCAR GUN
+-- ============================================
+_G.UZIVERT_STP_BUSCAR_GUN = function()
+    local char = LocalPlayer.Character
+    if not char then return nil, nil end
+    
+    local gun = char:FindFirstChild("Gun") or char:FindFirstChild("Revolver")
+    if gun then return gun, "equipada" end
+    
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    if backpack then
+        gun = backpack:FindFirstChild("Gun") or backpack:FindFirstChild("Revolver")
+        if gun then return gun, "backpack" end
+    end
+    
+    return nil, nil
+end
+
+_G.UZIVERT_STP_EQUIPAR = function(gun)
+    local char = LocalPlayer.Character
+    local hum = char and char:FindFirstChildOfClass("Humanoid")
+    if hum and gun then
+        pcall(function() hum:EquipTool(gun) end)
+        task.wait(0.1)
+    end
+end
+
+_G.UZIVERT_STP_DESEQUIPAR = function()
+    local char = LocalPlayer.Character
+    local hum = char and char:FindFirstChildOfClass("Humanoid")
+    if hum then
+        pcall(function() hum:UnequipTools() end)
+    end
+end
+
+-- ============================================
+-- FUNCIÓN: BUSCAR MURDERER
+-- ============================================
+_G.UZIVERT_STP_BUSCAR_MURDERER = function()
+    for plrName, role in pairs(RoleCache) do
+        if role == "Murderer" then
+            return Players:FindFirstChild(plrName)
+        end
+    end
+    return nil
+end
+
+-- ============================================
+-- FUNCIÓN PRINCIPAL: SHOOT TELEPORT
+-- ============================================
+_G.UZIVERT_SHOOT_TP = function()
+    if _G.UZIVERT_SHOOT_TP_ACTIVO then
+        pcall(function()
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "⚠️ Shoot TP", Text = "Ya en progreso", Duration = 2
+            })
+        end)
+        return false
+    end
+    
+    -- 1. Buscar murderer
+    local murderer = _G.UZIVERT_STP_BUSCAR_MURDERER()
+    if not murderer or not murderer.Character then
+        pcall(function()
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "❌ Shoot TP", Text = "No hay Murderer", Duration = 2
+            })
+        end)
+        return false
+    end
+    
+    local murdererHum = murderer.Character:FindFirstChildOfClass("Humanoid")
+    if not murdererHum or murdererHum.Health <= 0 then
+        return false
+    end
+    
+    -- 2. Buscar gun
+    local gun, ubicacion = _G.UZIVERT_STP_BUSCAR_GUN()
+    if not gun then
+        pcall(function()
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "❌ Shoot TP", Text = "No tenés gun", Duration = 2
+            })
+        end)
+        return false
+    end
+    
+    -- 3. Chequear personaje
+    local myChar = LocalPlayer.Character
+    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+    local myHum = myChar and myChar:FindFirstChildOfClass("Humanoid")
+    if not myRoot then return false end
+    
+    -- 4. Guardar estado
+    local posOriginal = myRoot.CFrame
+    local estabaEquipada = (ubicacion == "equipada")
+    local walkSpeedOriginal = myHum and myHum.WalkSpeed or 16
+    local jumpPowerOriginal = myHum and myHum.JumpPower or 50
+    
+    _G.UZIVERT_SHOOT_TP_ACTIVO = true
+    
+    -- 5. Equipar gun
+    if not estabaEquipada then
+        _G.UZIVERT_STP_EQUIPAR(gun)
+    end
+    
+    -- 6. Buscar remote Shoot
+    local shootRemote = gun:FindFirstChild("Shoot", true)
+    if not shootRemote then
+        if not estabaEquipada then _G.UZIVERT_STP_DESEQUIPAR() end
+        _G.UZIVERT_SHOOT_TP_ACTIVO = false
+        return false
+    end
+    
+    -- 7. Bloquear movimiento
+    if myHum then
+        myHum.WalkSpeed = 0
+        myHum.JumpPower = 0
+    end
+    
+    -- 8. Lock + disparos
+    local tiempoInicio = tick()
+    local ultimoTiro = 0
+    local tirosDisparados = 0
+    local ultimoLock = 0
+    
+    while (tick() - tiempoInicio) < _G.UZIVERT_SHOOT_TP_DURACION do
+        if not murderer.Character or not murdererHum.Parent or murdererHum.Health <= 0 then
+            break
+        end
+        if not myRoot or not myRoot.Parent then break end
+        
+        local ahora = tick() - tiempoInicio
+        
+        -- Lock
+        if ahora - ultimoLock >= _G.UZIVERT_SHOOT_TP_LOCK then
+            local mRootActual = murderer.Character:FindFirstChild("HumanoidRootPart")
+            if mRootActual then
+                myRoot.CFrame = mRootActual.CFrame * CFrame.new(0, 1, _G.UZIVERT_SHOOT_TP_DISTANCIA)
+                myRoot.Velocity = Vector3.new(0, 0, 0)
+                myRoot.RotVelocity = Vector3.new(0, 0, 0)
+            end
+            ultimoLock = ahora
+        end
+        
+        -- Disparar
+        if ahora - ultimoTiro >= _G.UZIVERT_SHOOT_TP_INTERVALO then
+            local mHeadActual = murderer.Character:FindFirstChild("Head")
+            if mHeadActual then
+                local handle = gun:FindFirstChild("Handle")
+                local originCF = handle and handle.CFrame or myRoot.CFrame
+                
+                pcall(function()
+                    shootRemote:FireServer(originCF, CFrame.new(mHeadActual.Position))
+                end)
+                tirosDisparados = tirosDisparados + 1
+            end
+            ultimoTiro = ahora
+        end
+        
+        RunService.Heartbeat:Wait()
+    end
+    
+    -- 9. Restaurar movimiento
+    if myHum and myHum.Parent then
+        myHum.WalkSpeed = walkSpeedOriginal
+        myHum.JumpPower = jumpPowerOriginal
+    end
+    
+    -- 10. Volver posición
+    if myRoot and myRoot.Parent then
+        myRoot.CFrame = posOriginal
+        myRoot.Velocity = Vector3.new(0, 0, 0)
+    end
+    
+    -- 11. Desequipar gun
+    task.wait(0.1)
+    if not estabaEquipada then
+        _G.UZIVERT_STP_DESEQUIPAR()
+    end
+    
+    _G.UZIVERT_SHOOT_TP_ACTIVO = false
+    print("🔫 Shoot TP → " .. murderer.Name .. " | " .. tirosDisparados .. " tiros")
+    return true
+end
+
+-- ============================================
+-- SECCIÓN EN PESTAÑA COMBAT
+-- ============================================
+_G.secSTP = Instance.new("Frame")
+_G.secSTP.Size = UDim2.new(1, 0, 0, 30)
+_G.secSTP.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secSTP.BackgroundTransparency = 0.3
+_G.secSTP.BorderSizePixel = 0
+_G.secSTP.ZIndex = 2
+_G.secSTP.Parent = PaginaAim
+
+_G.cSecSTP = Instance.new("UICorner")
+_G.cSecSTP.CornerRadius = UDim.new(0, 7)
+_G.cSecSTP.Parent = _G.secSTP
+
+_G.sSecSTP = Instance.new("UIStroke")
+_G.sSecSTP.Color = COLORES.Morado3
+_G.sSecSTP.Thickness = 1.5
+_G.sSecSTP.Transparency = 0.2
+_G.sSecSTP.Parent = _G.secSTP
+
+_G.lblSecSTP = Instance.new("TextLabel")
+_G.lblSecSTP.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecSTP.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecSTP.BackgroundTransparency = 1
+_G.lblSecSTP.Text = "🔫 SHOOT TELEPORT"
+_G.lblSecSTP.TextColor3 = COLORES.Naranja2
+_G.lblSecSTP.Font = Enum.Font.GothamBlack
+_G.lblSecSTP.TextSize = 12
+_G.lblSecSTP.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecSTP.ZIndex = 3
+_G.lblSecSTP.Parent = _G.secSTP
+
+-- Botón principal STP (mismo estilo SHOOT MURDERER)
+local BotonSTP = Instance.new("TextButton")
+BotonSTP.Name = "UzivertShootTP"
+BotonSTP.Size = UDim2.new(1, 0, 0, 50)
+BotonSTP.BackgroundColor3 = COLORES.Fondo
+BotonSTP.BackgroundTransparency = 0.3
+BotonSTP.Text = "🔫 SHOOT TP"
+BotonSTP.TextColor3 = COLORES.Texto
+BotonSTP.Font = Enum.Font.GothamBold
+BotonSTP.TextSize = 14
+BotonSTP.BorderSizePixel = 0
+BotonSTP.Active = true
+BotonSTP.ClipsDescendants = true
+BotonSTP.ZIndex = 2
+BotonSTP.Parent = PaginaAim
+
+local cBSTP = Instance.new("UICorner")
+cBSTP.CornerRadius = UDim.new(0, 10)
+cBSTP.Parent = BotonSTP
+
+local sBSTP = Instance.new("UIStroke")
+sBSTP.Color = COLORES.Naranja1
+sBSTP.Thickness = 2
+sBSTP.Transparency = 0.2
+sBSTP.Parent = BotonSTP
+
+-- Animación RGB
+task.spawn(function()
+    while BotonSTP.Parent do
+        local t = tick()
+        local a = (math.sin(t * 1.5) + 1) / 2
+        sBSTP.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
+        sBSTP.Transparency = 0.4 - a * 0.3
+        task.wait(0.05)
+    end
+end)
+
+BotonSTP.MouseButton1Click:Connect(function()
+    if _G.UZIVERT_SHOOT_TP_ACTIVO then return end
+    BotonSTP.Text = "⚡ EJECUTANDO..."
+    task.spawn(function()
+        _G.UZIVERT_SHOOT_TP()
+        task.wait(0.3)
+        BotonSTP.Text = "🔫 SHOOT TP"
+    end)
+end)
+
+-- Toggle mostrar bindable STP
+crearToggle(PaginaAim, "📌 Mostrar botón flotante STP", CONFIG.ShootTPVisible or false, function(e)
+    CONFIG.ShootTPVisible = e
+    guardarConfig()
+    
+    if e then
+        -- Crear bindable si no existe
+        if not _G.UZIVERT_STP_BINDABLE or not _G.UZIVERT_STP_BINDABLE.Parent then
+            local btn = Instance.new("TextButton")
+            btn.Name = "STP_Bindable"
+            btn.Size = UDim2.new(0, 40, 0, 40)
+            
+            if CONFIG.ShootTPPos then
+                btn.Position = UDim2.new(CONFIG.ShootTPPos[1], CONFIG.ShootTPPos[2], CONFIG.ShootTPPos[3], CONFIG.ShootTPPos[4])
+            else
+                btn.Position = UDim2.new(0, 30, 0.6, 0)
+            end
+            
+            btn.BackgroundColor3 = COLORES.Fondo
+            btn.BackgroundTransparency = 0.3
+            btn.Text = "STP"
+            btn.TextColor3 = COLORES.Texto
+            btn.Font = Enum.Font.GothamBold
+            btn.TextSize = 11
+            btn.BorderSizePixel = 0
+            btn.Active = true
+            btn.Draggable = true
+            btn.ClipsDescendants = true
+            btn.ZIndex = 998
+            btn.Parent = ScreenGui
+            
+            local c = Instance.new("UICorner")
+            c.CornerRadius = UDim.new(0, 10)
+            c.Parent = btn
+            
+            local s = Instance.new("UIStroke")
+            s.Color = COLORES.Naranja1
+            s.Thickness = 2
+            s.Transparency = 0.2
+            s.Parent = btn
+            
+            -- Animación RGB
+            task.spawn(function()
+                while btn.Parent do
+                    local t = tick()
+                    local a = (math.sin(t * 1.5) + 1) / 2
+                    s.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
+                    s.Transparency = 0.4 - a * 0.3
+                    task.wait(0.05)
+                end
+            end)
+            
+            btn.MouseButton1Click:Connect(function()
+                if _G.UZIVERT_SHOOT_TP_ACTIVO then return end
+                btn.Text = "⚡"
+                task.spawn(function()
+                    _G.UZIVERT_SHOOT_TP()
+                    task.wait(0.3)
+                    btn.Text = "STP"
+                end)
+            end)
+            
+            _G.UZIVERT_STP_BINDABLE = btn
+            
+            -- Guardar posición cada 2s
+            task.spawn(function()
+                while btn.Parent do
+                    task.wait(2)
+                    if btn.Parent then
+                        CONFIG.ShootTPPos = {
+                            btn.Position.X.Scale,
+                            btn.Position.X.Offset,
+                            btn.Position.Y.Scale,
+                            btn.Position.Y.Offset
+                        }
+                        guardarConfig()
+                    end
+                end
+            end)
+        end
+    else
+        -- Destruir bindable
+        if _G.UZIVERT_STP_BINDABLE then
+            _G.UZIVERT_STP_BINDABLE:Destroy()
+            _G.UZIVERT_STP_BINDABLE = nil
+        end
+    end
+end)
+
+-- Arrancar bindable si estaba guardado activo
+if CONFIG.ShootTPVisible then
+    task.wait(0.5)
+    -- Simular toggle para crear el bindable
+    if not _G.UZIVERT_STP_BINDABLE or not _G.UZIVERT_STP_BINDABLE.Parent then
+        local btn = Instance.new("TextButton")
+        btn.Name = "STP_Bindable"
+        btn.Size = UDim2.new(0, 40, 0, 40)
+        
+        if CONFIG.ShootTPPos then
+            btn.Position = UDim2.new(CONFIG.ShootTPPos[1], CONFIG.ShootTPPos[2], CONFIG.ShootTPPos[3], CONFIG.ShootTPPos[4])
+        else
+            btn.Position = UDim2.new(0, 30, 0.6, 0)
+        end
+        
+        btn.BackgroundColor3 = COLORES.Fondo
+        btn.BackgroundTransparency = 0.3
+        btn.Text = "STP"
+        btn.TextColor3 = COLORES.Texto
+        btn.Font = Enum.Font.GothamBold
+        btn.TextSize = 11
+        btn.BorderSizePixel = 0
+        btn.Active = true
+        btn.Draggable = true
+        btn.ClipsDescendants = true
+        btn.ZIndex = 998
+        btn.Parent = ScreenGui
+        
+        local c = Instance.new("UICorner")
+        c.CornerRadius = UDim.new(0, 10)
+        c.Parent = btn
+        
+        local s = Instance.new("UIStroke")
+        s.Color = COLORES.Naranja1
+        s.Thickness = 2
+        s.Transparency = 0.2
+        s.Parent = btn
+        
+        task.spawn(function()
+            while btn.Parent do
+                local t = tick()
+                local a = (math.sin(t * 1.5) + 1) / 2
+                s.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
+                s.Transparency = 0.4 - a * 0.3
+                task.wait(0.05)
+            end
+        end)
+        
+        btn.MouseButton1Click:Connect(function()
+            if _G.UZIVERT_SHOOT_TP_ACTIVO then return end
+            btn.Text = "⚡"
+            task.spawn(function()
+                _G.UZIVERT_SHOOT_TP()
+                task.wait(0.3)
+                btn.Text = "STP"
+            end)
+        end)
+        
+        _G.UZIVERT_STP_BINDABLE = btn
+        
+        task.spawn(function()
+            while btn.Parent do
+                task.wait(2)
+                if btn.Parent then
+                    CONFIG.ShootTPPos = {
+                        btn.Position.X.Scale,
+                        btn.Position.X.Offset,
+                        btn.Position.Y.Scale,
+                        btn.Position.Y.Offset
+                    }
+                    guardarConfig()
+                end
+            end
+        end)
+    end
+end
+
+end
+-- Fin del bloque SHOOT TP
+
 local monitorGui = nil
 local monitorConexion = nil
 local monitorFrames = 0
@@ -3315,6 +5406,7 @@ crearToggle(PaginaVisual, "🎃 ESP Jugadores", CONFIG.ESP, function(e)
     ESP_ACTIVO = e
     CONFIG.ESP = e
     guardarConfig()
+    if not e then limpiarESP() end
 end)
 crearToggle(PaginaVisual, "🔫 Gun ESP (equipada + tirada)", CONFIG.GunESP, function(e)
     GUN_ESP_ACTIVO = e
@@ -3399,7 +5491,7 @@ if not _G.UZIVERT_GAMA_BAJA then
     end)
 end
 
--- 🎯 SECCIÓN 2: AIM LOCK
+-- 🎯 SECCIÓN: AIMLOCK V2
 _G.secAim2 = Instance.new("Frame")
 _G.secAim2.Size = UDim2.new(1, 0, 0, 30)
 _G.secAim2.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
@@ -3422,7 +5514,7 @@ _G.lblSecAim2 = Instance.new("TextLabel")
 _G.lblSecAim2.Size = UDim2.new(1, -20, 1, 0)
 _G.lblSecAim2.Position = UDim2.new(0, 10, 0, 0)
 _G.lblSecAim2.BackgroundTransparency = 1
-_G.lblSecAim2.Text = "🎯 AIM LOCK"
+_G.lblSecAim2.Text = "🎯 AIMLOCK V2"
 _G.lblSecAim2.TextColor3 = COLORES.Naranja2
 _G.lblSecAim2.Font = Enum.Font.GothamBlack
 _G.lblSecAim2.TextSize = 12
@@ -3430,110 +5522,358 @@ _G.lblSecAim2.TextXAlignment = Enum.TextXAlignment.Left
 _G.lblSecAim2.ZIndex = 3
 _G.lblSecAim2.Parent = _G.secAim2
 
-crearToggle(PaginaAim, "🎯 Aim Lock (Shiftlock + Gun)", CONFIG.AimLock or false, function(e)
+crearToggle(PaginaAim, "🎯 Enable Aimlock", CONFIG.AimLock or false, function(e)
     _G.AIM_ON = e
     CONFIG.AimLock = e
     guardarConfig()
+    if e then _G.AIM_TARGET = _G.AIM_FIND_MURDERER() end
+    if _G.AIM_ACTUALIZAR_BTN then _G.AIM_ACTUALIZAR_BTN() end
 end)
 
+crearToggle(PaginaAim, "📱 Mostrar botón flotante (AIM)", CONFIG.AimBtnShow ~= false, function(e)
+    CONFIG.AimBtnShow = e
+    guardarConfig()
+    if e then
+        _G.AIM_CREAR_BTN()
+    else
+        if _G.AIM_BTN then
+            _G.AIM_BTN:Destroy()
+            _G.AIM_BTN = nil
+        end
+    end
+end)
+
+crearToggle(PaginaAim, "🧱 Wall Check", CONFIG.AimWall or false, function(e)
+    _G.AIM_WALL = e
+    CONFIG.AimWall = e
+    guardarConfig()
+end)
+
+crearToggle(PaginaAim, "🎯 FOV Check", CONFIG.AimFOV or false, function(e)
+    _G.AIM_FOV_ON = e
+    CONFIG.AimFOV = e
+    guardarConfig()
+    _G.AIM_UPDATE_FOV()
+end)
+
+crearToggle(PaginaAim, "↔️ Horizontal Prediction", CONFIG.AimHoriz or false, function(e)
+    _G.AIM_HORIZ = e
+    CONFIG.AimHoriz = e
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "🌀 Smoothness (0=instant)", 0, 95, CONFIG.AimSmooth or 25, function(v)
+    _G.AIM_SMOOTH = v
+    CONFIG.AimSmooth = v
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "🎯 FOV Radius (px)", 50, 800, CONFIG.AimFOVRadius or 250, function(v)
+    _G.AIM_FOV_RADIUS = v
+    CONFIG.AimFOVRadius = v
+    guardarConfig()
+    _G.AIM_UPDATE_FOV()
+end)
+
+crearSlider(PaginaAim, "⚡ Prediction (x1000)", 0, 300, math.floor((CONFIG.AimPred or 0.145) * 1000), function(v)
+    _G.AIM_PRED = v / 1000
+    CONFIG.AimPred = v / 1000
+    guardarConfig()
+end)
+
+-- Select Player
+_G.AIM_SELBTN = Instance.new("TextButton")
+_G.AIM_SELBTN.Size = UDim2.new(1, 0, 0, 32)
+_G.AIM_SELBTN.BackgroundColor3 = COLORES.Morado3
+_G.AIM_SELBTN.BackgroundTransparency = 0.5
+_G.AIM_SELBTN.Text = "👤 Select Player: Auto Murderer"
+_G.AIM_SELBTN.TextColor3 = COLORES.Texto
+_G.AIM_SELBTN.Font = Enum.Font.GothamBold
+_G.AIM_SELBTN.TextSize = 11
+_G.AIM_SELBTN.BorderSizePixel = 0
+_G.AIM_SELBTN.ZIndex = 2
+_G.AIM_SELBTN.Parent = PaginaAim
+
+_G.cAimSel = Instance.new("UICorner")
+_G.cAimSel.CornerRadius = UDim.new(0, 8)
+_G.cAimSel.Parent = _G.AIM_SELBTN
+
+_G.AIM_SELBTN.MouseButton1Click:Connect(function()
+    local lista = {"Auto Murderer"}
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer then table.insert(lista, p.Name) end
+    end
+    local actual = _G.AIM_SELECTED and _G.AIM_SELECTED.Name or "Auto Murderer"
+    local idx = table.find(lista, actual) or 1
+    idx = idx % #lista + 1
+    local nuevo = lista[idx]
+    if nuevo == "Auto Murderer" then
+        _G.AIM_SELECTED = nil
+        _G.AIM_SELBTN.Text = "👤 Select Player: Auto Murderer"
+    else
+        _G.AIM_SELECTED = Players:FindFirstChild(nuevo)
+        _G.AIM_SELBTN.Text = "👤 Select Player: " .. nuevo
+    end
+end)
+
+-- Target Part
+_G.AIM_PARTBTN = Instance.new("TextButton")
+_G.AIM_PARTBTN.Size = UDim2.new(1, 0, 0, 32)
+_G.AIM_PARTBTN.BackgroundColor3 = COLORES.Morado3
+_G.AIM_PARTBTN.BackgroundTransparency = 0.5
+_G.AIM_PARTBTN.Text = "🎯 Part: " .. (_G.AIM_PART == "Head" and "Head" or "Torso")
+_G.AIM_PARTBTN.TextColor3 = COLORES.Texto
+_G.AIM_PARTBTN.Font = Enum.Font.GothamBold
+_G.AIM_PARTBTN.TextSize = 11
+_G.AIM_PARTBTN.BorderSizePixel = 0
+_G.AIM_PARTBTN.ZIndex = 2
+_G.AIM_PARTBTN.Parent = PaginaAim
+
+_G.cAimPart = Instance.new("UICorner")
+_G.cAimPart.CornerRadius = UDim.new(0, 8)
+_G.cAimPart.Parent = _G.AIM_PARTBTN
+
+_G.AIM_PARTBTN.MouseButton1Click:Connect(function()
+    if _G.AIM_PART == "Head" then
+        _G.AIM_PART = "HumanoidRootPart"
+        _G.AIM_PARTBTN.Text = "🎯 Part: Torso"
+    else
+        _G.AIM_PART = "Head"
+        _G.AIM_PARTBTN.Text = "🎯 Part: Head"
+    end
+    CONFIG.AimPart = _G.AIM_PART
+    guardarConfig()
+end)
+
+-- ============================================
+-- BOTÓN BINDABLE "AIM" con ON/OFF + guardar posición
+-- ============================================
+_G.AIM_BTN = nil
+
+_G.AIM_ACTUALIZAR_BTN = function()
+    if not _G.AIM_BTN then return end
+    if _G.AIM_ON then
+        _G.AIM_BTN.Text = "ON"
+    else
+        _G.AIM_BTN.Text = "AIM"
+    end
+end
+
+_G.AIM_CREAR_BTN = function()
+    if _G.AIM_BTN then return end
+
+    local btn = Instance.new("TextButton")
+    btn.Name = "AimBind"
+    btn.Size = UDim2.new(0, 40, 0, 40)
+    btn.Position = UDim2.new(0, 30, 0.4, 0)
+    btn.BackgroundColor3 = COLORES.Fondo
+    btn.BackgroundTransparency = 0.3
+    btn.Text = "AIM"
+    btn.TextColor3 = COLORES.Texto
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 12
+    btn.BorderSizePixel = 0
+    btn.Active = true
+    btn.Draggable = true
+    btn.ZIndex = 998
+    btn.Parent = ScreenGui
+
+    -- 🎯 Cargar posición guardada
+    if CONFIG.AimBtnPos then
+        pcall(function()
+            btn.Position = UDim2.new(
+                CONFIG.AimBtnPos[1],
+                CONFIG.AimBtnPos[2],
+                CONFIG.AimBtnPos[3],
+                CONFIG.AimBtnPos[4]
+            )
+        end)
+    end
+
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 10)
+    c.Parent = btn
+
+    local s = Instance.new("UIStroke")
+    s.Name = "@Stroke"
+    s.Color = Color3.fromRGB(100, 100, 100)
+    s.Thickness = 2
+    s.Transparency = 0.2
+    s.Parent = btn
+
+    task.spawn(function()
+        while btn.Parent do
+            local t = tick()
+            local a = (math.sin(t * 1.5) + 1) / 2
+            if _G.AIM_ON then
+                s.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
+                s.Transparency = 0.4 - a * 0.3
+            else
+                s.Color = Color3.fromRGB(100, 100, 100)
+                s.Transparency = 0.4
+            end
+            task.wait(0.05)
+        end
+    end)
+
+    btn.MouseButton1Click:Connect(function()
+        _G.AIM_ON = not _G.AIM_ON
+        CONFIG.AimLock = _G.AIM_ON
+        guardarConfig()
+        if _G.AIM_ON then
+            _G.AIM_TARGET = _G.AIM_FIND_MURDERER()
+        end
+        _G.AIM_ACTUALIZAR_BTN()
+    end)
+
+    -- 🎯 Guardar posición cada 2s
+    task.spawn(function()
+        while btn.Parent do
+            task.wait(2)
+            if btn.Parent then
+                CONFIG.AimBtnPos = {
+                    btn.Position.X.Scale,
+                    btn.Position.X.Offset,
+                    btn.Position.Y.Scale,
+                    btn.Position.Y.Offset
+                }
+                guardarConfig()
+            end
+        end
+    end)
+
+    _G.AIM_BTN = btn
+    _G.AIM_ACTUALIZAR_BTN()
+end
+
+-- Arrancar botón bindable si estaba activo
+if CONFIG.AimBtnShow ~= false then
+    task.wait(0.3)
+    _G.AIM_CREAR_BTN()
+end
+
+-- Arrancar FOV circle si estaba activo
+if CONFIG.AimFOV then
+    task.wait(0.5)
+    _G.AIM_UPDATE_FOV()
+end
+
+-- 🎯 SECCIÓN: SILENT AIM v2
+_G.secSA = Instance.new("Frame")
+_G.secSA.Size = UDim2.new(1, 0, 0, 30)
+_G.secSA.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secSA.BackgroundTransparency = 0.3
+_G.secSA.BorderSizePixel = 0
+_G.secSA.ZIndex = 2
+_G.secSA.Parent = PaginaAim
+
+_G.cSecSA = Instance.new("UICorner")
+_G.cSecSA.CornerRadius = UDim.new(0, 7)
+_G.cSecSA.Parent = _G.secSA
+
+_G.sSecSA = Instance.new("UIStroke")
+_G.sSecSA.Color = COLORES.Morado3
+_G.sSecSA.Thickness = 1.5
+_G.sSecSA.Transparency = 0.2
+_G.sSecSA.Parent = _G.secSA
+
+_G.lblSecSA = Instance.new("TextLabel")
+_G.lblSecSA.Size = UDim2.new(1, -20, 1, 0)
+_G.lblSecSA.Position = UDim2.new(0, 10, 0, 0)
+_G.lblSecSA.BackgroundTransparency = 1
+_G.lblSecSA.Text = "🎯 SILENT AIM v2"
+_G.lblSecSA.TextColor3 = COLORES.Naranja2
+_G.lblSecSA.Font = Enum.Font.GothamBlack
+_G.lblSecSA.TextSize = 12
+_G.lblSecSA.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblSecSA.ZIndex = 3
+_G.lblSecSA.Parent = _G.secSA
+
 crearToggle(PaginaAim, "🎯 Silent Aim", CONFIG.SilentAim or false, function(e)
-    _G.UZIVERT_SILENT_AIM_ON = e
+    _G.UZIVERT_SA_ON = e
     CONFIG.SilentAim = e
     guardarConfig()
 end)
 
--- ⚙️ Sub-sección de config
-_G.secSilent = Instance.new("Frame")
-_G.secSilent.Size = UDim2.new(1, 0, 0, 30)
-_G.secSilent.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
-_G.secSilent.BackgroundTransparency = 0.3
-_G.secSilent.BorderSizePixel = 0
-_G.secSilent.ZIndex = 2
-_G.secSilent.Parent = PaginaAim
+crearToggle(PaginaAim, "📡 Auto Ping (adaptativo)", CONFIG.SilentAutoPing ~= false, function(e)
+    _G.UZIVERT_SA_AUTO_PING = e
+    CONFIG.SilentAutoPing = e
+    guardarConfig()
+end)
 
-_G.cSecSilent = Instance.new("UICorner")
-_G.cSecSilent.CornerRadius = UDim.new(0, 7)
-_G.cSecSilent.Parent = _G.secSilent
+crearToggle(PaginaAim, "🎯 Multi-Point (7 tiros)", CONFIG.SilentMultiPoint ~= false, function(e)
+    _G.UZIVERT_SA_MULTI = e
+    CONFIG.SilentMultiPoint = e
+    guardarConfig()
+end)
 
-_G.sSecSilent = Instance.new("UIStroke")
-_G.sSecSilent.Color = COLORES.Morado3
-_G.sSecSilent.Thickness = 1.5
-_G.sSecSilent.Transparency = 0.2
-_G.sSecSilent.Parent = _G.secSilent
+crearToggle(PaginaAim, "🛡️ Anti-Hack (vuelo/tp)", CONFIG.SilentAntiHack ~= false, function(e)
+    _G.UZIVERT_SA_ANTIHACK = e
+    CONFIG.SilentAntiHack = e
+    guardarConfig()
+end)
 
-_G.lblSecSilent = Instance.new("TextLabel")
-_G.lblSecSilent.Size = UDim2.new(1, -20, 1, 0)
-_G.lblSecSilent.Position = UDim2.new(0, 10, 0, 0)
-_G.lblSecSilent.BackgroundTransparency = 1
-_G.lblSecSilent.Text = "⚙️ SILENT AIM CONFIG"
-_G.lblSecSilent.TextColor3 = COLORES.Naranja2
-_G.lblSecSilent.Font = Enum.Font.GothamBlack
-_G.lblSecSilent.TextSize = 12
-_G.lblSecSilent.TextXAlignment = Enum.TextXAlignment.Left
-_G.lblSecSilent.ZIndex = 3
-_G.lblSecSilent.Parent = _G.secSilent
-
-crearSlider(PaginaAim, "X Offset (%)", -50, 50, math.floor((CONFIG.SilentOffX or -0.04) * 100), function(v)
-    _G.UZIVERT_SILENT_OFF_X = v / 100
+crearSlider(PaginaAim, "X Offset (%)", -50, 50, math.floor((CONFIG.SilentOffX or 0) * 100), function(v)
+    _G.UZIVERT_SA_OFF_X = v / 100
     CONFIG.SilentOffX = v / 100
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Y Offset (%)", -50, 50, math.floor((CONFIG.SilentOffY or -0.06) * 100), function(v)
-    _G.UZIVERT_SILENT_OFF_Y = v / 100
+crearSlider(PaginaAim, "Y Offset (%)", -50, 50, math.floor((CONFIG.SilentOffY or -0.10) * 100), function(v)
+    _G.UZIVERT_SA_OFF_Y = v / 100
     CONFIG.SilentOffY = v / 100
     guardarConfig()
 end)
 
 crearSlider(PaginaAim, "Z Offset (%)", -50, 50, math.floor((CONFIG.SilentOffZ or 0) * 100), function(v)
-    _G.UZIVERT_SILENT_OFF_Z = v / 100
+    _G.UZIVERT_SA_OFF_Z = v / 100
     CONFIG.SilentOffZ = v / 100
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Pred Horizontal (%)", 0, 300, math.floor((CONFIG.SilentPredH or 1.49) * 100), function(v)
-    _G.UZIVERT_SILENT_PRED_H = v / 100
+crearSlider(PaginaAim, "Pred Horizontal (%)", 0, 300, math.floor((CONFIG.SilentPredH or 1.5) * 100), function(v)
+    _G.UZIVERT_SA_PRED_H = v / 100
     CONFIG.SilentPredH = v / 100
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Pred Vertical (%)", 0, 300, math.floor((CONFIG.SilentPredV or 1.44) * 100), function(v)
-    _G.UZIVERT_SILENT_PRED_V = v / 100
+crearSlider(PaginaAim, "Pred Vertical (%)", 0, 300, math.floor((CONFIG.SilentPredV or 0.5) * 100), function(v)
+    _G.UZIVERT_SA_PRED_V = v / 100
     CONFIG.SilentPredV = v / 100
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Max Sim Time (ms)", 10, 200, math.floor((CONFIG.SilentMaxSim or 0.050) * 1000), function(v)
-    _G.UZIVERT_SILENT_MAX_SIM = v / 1000
+crearSlider(PaginaAim, "Max Sim Time (ms)", 10, 200, math.floor((CONFIG.SilentMaxSim or 0.080) * 1000), function(v)
+    _G.UZIVERT_SA_MAX_SIM = v / 1000
     CONFIG.SilentMaxSim = v / 1000
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Pred Ping (ms)", 0, 200, math.floor((CONFIG.SilentPredPing or 0.085) * 1000), function(v)
-    _G.UZIVERT_SILENT_PRED_PING = v / 1000
+crearSlider(PaginaAim, "Pred Ping (ms)", 0, 200, math.floor((CONFIG.SilentPredPing or 0.060) * 1000), function(v)
+    _G.UZIVERT_SA_PRED_PING = v / 1000
     CONFIG.SilentPredPing = v / 1000
     guardarConfig()
 end)
 
 crearBoton(PaginaAim, "🔄 Resetear a Overdrive", function()
-    _G.UZIVERT_SILENT_OFF_X = -0.04
-    _G.UZIVERT_SILENT_OFF_Y = -0.06
-    _G.UZIVERT_SILENT_OFF_Z = 0
-    _G.UZIVERT_SILENT_PRED_H = 1.49
-    _G.UZIVERT_SILENT_PRED_V = 1.44
-    _G.UZIVERT_SILENT_MAX_SIM = 0.050
-    _G.UZIVERT_SILENT_PRED_PING = 0.085
+    _G.UZIVERT_SA_OFF_X = 0
+    _G.UZIVERT_SA_OFF_Y = -0.10
+    _G.UZIVERT_SA_OFF_Z = 0
+    _G.UZIVERT_SA_PRED_H = 1.5
+    _G.UZIVERT_SA_PRED_V = 0.5
+    _G.UZIVERT_SA_MAX_SIM = 0.080
+    _G.UZIVERT_SA_PRED_PING = 0.060
     
-    CONFIG.SilentOffX = -0.04
-    CONFIG.SilentOffY = -0.06
+    CONFIG.SilentOffX = 0
+    CONFIG.SilentOffY = -0.10
     CONFIG.SilentOffZ = 0
-    CONFIG.SilentPredH = 1.49
-    CONFIG.SilentPredV = 1.44
-    CONFIG.SilentMaxSim = 0.050
-    CONFIG.SilentPredPing = 0.085
+    CONFIG.SilentPredH = 1.5
+    CONFIG.SilentPredV = 0.5
+    CONFIG.SilentMaxSim = 0.080
+    CONFIG.SilentPredPing = 0.060
     guardarConfig()
     
-    print("🔄 Silent Aim reseteado a valores Overdrive")
+    print("🔄 Silent Aim reseteado a valores Overdrive v4.0")
 end, COLORES.Naranja1)
 
 if not _G.UZIVERT_GAMA_BAJA then
@@ -4419,7 +6759,7 @@ _G.UZIVERT_MUSIC_SIGBTN.MouseButton1Click:Connect(function()
     _G.UZIVERT_MUSIC_SIGUIENTE()
 end)
 
-crearToggle(PaginaPlayer, "🔀 Shuffle (aleatorio)", false, function(e)
+crearToggle(PaginaPlayer, "?? Shuffle (aleatorio)", false, function(e)
     _G.UZIVERT_MUSIC_SHUFFLE = e
 end)
 
@@ -6069,51 +8409,77 @@ local function crearTarjeta(padre, titulo, contenido, colorBorde)
     return frame
 end
 
-crearTarjeta(PaginaUpdate, "📅 Última actualización: 11/10/2026", "Uzivert Hub v4.7.3", COLORES.Naranja2)
+crearTarjeta(PaginaUpdate, "📅 Última actualización: 13/10/2026", "Uzivert Hub v4.7.4 HALLOWEEN", COLORES.Naranja2)
+
+crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.4",
+    "🎯 AIMLOCK V2 (NUEVO)\n" ..
+    "• 🌀 Smoothing → cámara suave al lockear\n" ..
+    "• 🎯 FOV Check → círculo en pantalla\n" ..
+    "• 👤 Select Player → elegí a quién lockear\n" ..
+    "• 🧱 Wall Check mejorado (multi-punto)\n" ..
+    "• ↔️ Horizontal Prediction (toggle)\n" ..
+    "• 📱 Botón flotante AIM con ON/OFF\n" ..
+    "• 💾 Guarda la posición del botón\n\n" ..
+    "🎬 23 ANIMACIONES NUEVAS\n" ..
+    "• Mage, Ghost, Elder, Levitation\n" ..
+    "• Sneaky, Toy, Knight, Confident\n" ..
+    "• Popstar, Princess, Cowboy, Patrol\n" ..
+    "• Zombie FE, Amazon Unboxed, Bubbly\n" ..
+    "• Adidas Comm, KATSEYE, Wicked Popular\n" ..
+    "• Dizzy, WDTL, Billie Eilish\n" ..
+    "• Cute Bouncy, Cute\n" ..
+    "• Total: 51 animaciones 🔥\n\n" ..
+    "🎯 SILENT AIM MEJORADO\n" ..
+    "• 📡 Auto Ping adaptativo\n" ..
+    "• 🎯 Multi-Point (7 tiros)\n" ..
+    "• 🛡️ Anti-Hack (vuelo/tp)\n" ..
+    "• 🌀 Velocidad suavizada\n" ..
+    "• ⚡ Predicción adaptativa\n\n" ..
+    "🔫 SHOOT TELEPORT\n" ..
+    "• Teletransporte detrás del murderer\n" ..
+    "• Dispara + vuelve a tu posición\n" ..
+    "• Botón flotante STP bindable\n\n" ..
+    "🏷️ By Uzivert 🇵🇾 en el sidebar\n" ..
+    "💀 FE HEADLESS (3 versiones)",
+    COLORES.Verde)
 
 crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.3",
     "🎮 SELECTOR DE GAMA\n" ..
-    "• Ahora podés elegir GAMA ALTA o GAMA BAJA al iniciar\n" ..
-    "• GAMA BAJA → solo funciones esenciales (menos lag)\n" ..
-    "• GAMA ALTA → todas las funciones del hub\n\n" ..
+    "• Elegís GAMA ALTA o GAMA BAJA al iniciar\n" ..
+    "• GAMA BAJA → solo lo esencial (menos lag)\n" ..
+    "• GAMA ALTA → todas las funciones\n\n" ..
     "🎯 NUEVAS FUNCIONES:\n" ..
-    "• 🎯 Anti-Aim → te protege contra aim de Sheriffs (AMBAS)\n" ..
-    "• ⚡ Speed Glitch → velocidad aérea con Shift Lock (GAMA ALTA)\n" ..
-    "• 💀 Headless → oculta la cabeza (GAMA ALTA)\n" ..
-    "• 🦵 Korblox → pierna izquierda y derecha (GAMA ALTA)\n" ..
-    "• 🎒 Inventory Unlimiter → equipate 10 items en vez de 3 (GAMA ALTA)\n" ..
-    "• 🎒 Auto Get Tools → te da los toys automáticamente (GAMA ALTA)\n" ..
-    "• 🔥 Firefly Clutch → doble salto automático con el frasco (AMBAS)\n\n" ..
-    "📋 NUEVA PESTAÑA:\n" ..
-    "• 🧰 Utilidades → Inventory + Auto Get Tools\n" ..
-    "• 🔥 Clutchs (antes Bomb Jump) → ahora tiene Firefly Clutch",
+    "• 🎯 Anti-Aim\n" ..
+    "• ⚡ Speed Glitch\n" ..
+    "• 💀 Headless + 🦵 Korblox\n" ..
+    "• 🎒 Inventory Unlimiter\n" ..
+    "• 🎒 Auto Get Tools\n" ..
+    "• 🔥 Firefly Clutch\n\n" ..
+    "📋 NUEVAS PESTAÑAS:\n" ..
+    "• 🧰 Utilidades\n" ..
+    "• 🔥 Clutchs (antes Bomb Jump)",
     COLORES.Verde)
 
-crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.1",
-    "+ 🎯 Silent Aim (atraviesa paredes)\n" ..
-    "+ 🎯 Gun Aura (rango configurable)\n" ..
-    "+ 🎧 Music Player completo\n" ..
-    "+ 🎨 Shaders Tokyowami\n" ..
-    "+ 🌸 Pink Hour\n" ..
-    "+ ⚡ Auto Get Gun optimizado\n" ..
-    "+ 📦 Secciones organizadas",
-    COLORES.Verde)
-
-crearTarjeta(PaginaUpdate, "🐛 BUGS ARREGLADOS",
-    "✓ ESP ahora se ve bien en celus con DPI alto\n" ..
-    "✓ Auto Get Tools ahora da las cosas al respawnear\n" ..
-    "✓ Firefly Clutch ahora funciona correctamente\n" ..
-    "✓ Selector de Gama ya no rompe el script\n" ..
-    "✓ Anti-Aim ahora pausa con Ignore List\n" ..
+crearTarjeta(PaginaUpdate, "🐛 BUGS ARREGLADOS EN v4.7.4",
+    "✓ Aimlock ahora tiene Smoothing (cámara suave)\n" ..
+    "✓ Silent Aim mejorado (menos fallos)\n" ..
+    "✓ Silent Aim ya no rompe el hub\n" ..
+    "✓ ESP ahora se ve bien en DPI alto\n" ..
+    "✓ Auto Get Tools al respawnear\n" ..
+    "✓ Firefly Clutch funciona OK\n" ..
+    "✓ Selector de Gama ya no rompe\n" ..
+    "✓ Anti-Aim pausa con Ignore List\n" ..
     "✓ Toggle ESP no borra highlights\n" ..
-    "✓ Fling no detectaba al Hero\n" ..
-    "✓ Auto Get Gun sin lag\n" ..
-    "✓ Gun Aura sin lag + guarda estado",
+    "✓ Fling detecta al Hero\n" ..
+    "✓ Gun Aura sin lag\n" ..
+    "✓ Shoot TP + bindable STP\n" ..
+    "✓ Botón AIM guarda la posición",
     COLORES.Verde)
 
 crearTarjeta(PaginaUpdate, "🔴 Descartado",
     "- Silent Aim con Mouse.Hit\n" ..
     "- Silent Aim con Camera\n" ..
+    "- Silent Aim v4.0 completo (rompía el script)\n" ..
     "- Speed Glitch (manual)\n" ..
     "- Headless / Korblox con ID viejo\n" ..
     "- Dual Wield\n" ..
@@ -6122,6 +8488,23 @@ crearTarjeta(PaginaUpdate, "🔴 Descartado",
     "- Anti Silent Aim\n" ..
     "- Herobrine",
     COLORES.Rojo)
+
+crearTarjeta(PaginaUpdate, "🎯 ROADMAP PRÓXIMAS VERSIONES",
+    "🔜 Próximamente:\n\n" ..
+    "• 🔪 Throwing Knife Aura\n" ..
+    "• 🌌 Sky Changer (20 cielos)\n" ..
+    "• 🎬 RTX (efectos visuales pro)\n" ..
+    "• 🌫️ Motion Blur\n" ..
+    "• 🔒 Privacy (Hide Name + Avatar)\n" ..
+    "• 🎨 Font Changer\n" ..
+    "• 🎭 Fake Knife + Fake Dual\n" ..
+    "• 🎯 Tools Outline (rainbow)\n" ..
+    "• 🎡 Auto 360 Trickshot\n" ..
+    "• 🧱 Wallhop\n" ..
+    "• 🔫 Gun Sound Changer\n" ..
+    "• 📊 Performance Optimization\n\n" ..
+    "💬 Sugerencias → Discord oficial",
+    COLORES.Naranja2)
 
 crearTarjeta(PaginaAvisos, "⚠️ Aviso Importante", "El script está en fase de desarrollo.\nPuede contener bugs y errores.", COLORES.Amarillo)
 crearTarjeta(PaginaAvisos, "🚨 Aviso Oficial — Incidente 08/10/2026",
@@ -6246,7 +8629,7 @@ print("👻 Niebla animada")
 print("🎃 Iconos temáticos")
 print("💀 Colores de Halloween")
 print("====================================")
-print("Nuevo en v4.7.3:")
+print("Nuevo en v4.7.4:")
 print("  🎮 Selector de Gama (Alta/Baja)")
 print("  🎯 Anti-Aim")
 print("  ⚡ Speed Glitch")
@@ -6257,7 +8640,7 @@ print("  🧰 Nueva pestaña Utilidades")
 print("  🔥 Pestaña Clutchs")
 print("====================================")
 
-print("🎃 Parte 10/10 cargada - SCRIPT COMPLETO v4.7.3")
+print("🎃 Parte 10/10 cargada - SCRIPT COMPLETO v4.7.4")
 
 -- ============================================
 -- ⏰ ROUND TIMER
