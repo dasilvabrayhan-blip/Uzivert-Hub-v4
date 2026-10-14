@@ -1,5 +1,5 @@
 -- ============================================
--- UZIVERT HUB | v4.7.4 HALLOWEEN 🎃
+-- UZIVERT HUB | v4.7.5 HALLOWEEN 🎃
 -- Proyecto inicial por Uzivert
 -- Con ayuda explicativa de Nexvyr
 -- ============================================
@@ -15,7 +15,7 @@ local Lighting = game:GetService("Lighting")
 local HttpService = game:GetService("HttpService")
 local Debris = game:GetService("Debris")
 
-local VERSION = "v4.7.4 HALLOWEEN"
+local VERSION = "v4.7.5 HALLOWEEN"
 
 -- ============================================
 -- UZIVERT HUB - HALLOWEEN DEVICE SELECTOR (v2)
@@ -30,7 +30,7 @@ _G.UZ_SEL_CONFIG = {
     CREATOR_NAME = "Uzivert",
     TIKTOK = "@Uzivert550",
     INSTAGRAM = "@hxuntedluv77",
-    VERSION = "v4.7.4",
+    VERSION = "v4.7.5",
 }
 
 _G.UZ_SEL_Players = game:GetService("Players")
@@ -1507,6 +1507,7 @@ task.spawn(function()
 end)
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+if PlayerGui:FindFirstChild("UzivertHub") then PlayerGui.UzivertHub:Destroy() end
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "UzivertHub"
@@ -1516,716 +1517,1827 @@ ScreenGui.IgnoreGuiInset = true
 ScreenGui.DisplayOrder = 999
 ScreenGui.Parent = PlayerGui
 
-local BotonFlotante = Instance.new("TextButton")
-BotonFlotante.Size = UDim2.new(0, 65, 0, 65)
-BotonFlotante.Position = UDim2.new(0, 30, 0.5, -32)
-BotonFlotante.BackgroundColor3 = COLORES.FondoPanel
-BotonFlotante.Text = ""
-BotonFlotante.BorderSizePixel = 0
-BotonFlotante.Active = true
-BotonFlotante.Draggable = true
-BotonFlotante.ClipsDescendants = true
-BotonFlotante.Parent = ScreenGui
-
-local cBoton = Instance.new("UICorner")
-cBoton.CornerRadius = UDim.new(1, 0)
-cBoton.Parent = BotonFlotante
-
-local gradBoton = Instance.new("UIGradient")
-gradBoton.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, COLORES.Naranja3),
-    ColorSequenceKeypoint.new(0.5, COLORES.Naranja1),
-    ColorSequenceKeypoint.new(1, COLORES.Morado3),
-})
-gradBoton.Rotation = 45
-gradBoton.Parent = BotonFlotante
-
-local LetraU = Instance.new("TextLabel")
-LetraU.Size = UDim2.new(1, 0, 1, 0)
-LetraU.BackgroundTransparency = 1
-LetraU.Text = "🎃"
-LetraU.TextColor3 = COLORES.Texto
-LetraU.Font = Enum.Font.GothamBlack
-LetraU.TextSize = 32
-LetraU.ZIndex = 2
-LetraU.Parent = BotonFlotante
-
-local sBoton = Instance.new("UIStroke")
-sBoton.Color = COLORES.Naranja2
-sBoton.Thickness = 2
-sBoton.Transparency = 0.3
-sBoton.Parent = BotonFlotante
-
-task.spawn(function()
-    while task.wait() do
-        local t = tick()
-        local a = (math.sin(t * 2) + 1) / 2
-        sBoton.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
-        sBoton.Transparency = 0.5 - a * 0.3
-    end
-end)
-
-local Panel = Instance.new("Frame")
-Panel.Name = "UzivertPanel"
-Panel.Size = UDim2.new(0, 520, 0, 340)
-Panel.Position = UDim2.new(0.5, -260, 0.5, -170)
-Panel.BackgroundColor3 = COLORES.Fondo
-Panel.BackgroundTransparency = 0.15
-Panel.BorderSizePixel = 0
-Panel.Visible = false
-Panel.Active = true
-Panel.Draggable = true
-Panel.ClipsDescendants = true
-Panel.Parent = ScreenGui
-
-local cP = Instance.new("UICorner")
-cP.CornerRadius = UDim.new(0, 16)
-cP.Parent = Panel
-
-local sP = Instance.new("UIStroke")
-sP.Color = COLORES.Naranja1
-sP.Thickness = 2
-sP.Transparency = 0.3
-sP.Parent = Panel
-
-task.spawn(function()
-    while task.wait() do
-        local t = tick()
-        local a = (math.sin(t * 1.5) + 1) / 2
-        sP.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
-        sP.Transparency = 0.5 - a * 0.3
-    end
-end)
-
-local Niebla1 = Instance.new("Frame")
-Niebla1.Size = UDim2.new(0, 200, 0, 200)
-Niebla1.Position = UDim2.new(-0.2, 0, 0.3, 0)
-Niebla1.BackgroundColor3 = COLORES.Morado1
-Niebla1.BackgroundTransparency = 0.9
-Niebla1.BorderSizePixel = 0
-Niebla1.ZIndex = 0
-Niebla1.Parent = Panel
-
-local cN1 = Instance.new("UICorner")
-cN1.CornerRadius = UDim.new(1, 0)
-cN1.Parent = Niebla1
-
-local Niebla2 = Instance.new("Frame")
-Niebla2.Size = UDim2.new(0, 250, 0, 250)
-Niebla2.Position = UDim2.new(0.7, 0, 0.5, 0)
-Niebla2.BackgroundColor3 = COLORES.Morado2
-Niebla2.BackgroundTransparency = 0.9
-Niebla2.BorderSizePixel = 0
-Niebla2.ZIndex = 0
-Niebla2.Parent = Panel
-
-local cN2 = Instance.new("UICorner")
-cN2.CornerRadius = UDim.new(1, 0)
-cN2.Parent = Niebla2
-
-task.spawn(function()
-    while task.wait() do
-        local t = tick()
-        Niebla1.Position = UDim2.new(-0.2 + math.sin(t * 0.3) * 0.05, 0, 0.3 + math.cos(t * 0.3) * 0.05, 0)
-        Niebla2.Position = UDim2.new(0.7 + math.sin(t * 0.4) * 0.05, 0, 0.5 + math.cos(t * 0.4) * 0.05, 0)
-    end
-end)
-
-task.spawn(function()
-    while true do
-        if Panel.Visible then
-            local bat = Instance.new("TextLabel")
-            bat.Size = UDim2.new(0, 20, 0, 20)
-            bat.BackgroundTransparency = 1
-            bat.Text = "🦇"
-            bat.TextSize = math.random(12, 20)
-            bat.TextColor3 = Color3.fromRGB(50, 30, 60)
-            bat.Position = UDim2.new(-0.1, 0, math.random(), 0)
-            bat.ZIndex = 1
-            bat.Parent = Panel
-            local duracion = math.random(6, 12)
-            local targetY = bat.Position.Y.Scale + (math.random() - 0.5) * 0.3
-            TweenService:Create(bat, TweenInfo.new(duracion, Enum.EasingStyle.Linear), {
-                Position = UDim2.new(1.1, 0, targetY, 0),
-            }):Play()
-            Debris:AddItem(bat, duracion + 1)
-        end
-        task.wait(math.random(15, 35) / 10)
-    end
-end)
-
-local function crearTelarana(posX, posY, rot)
-    local web = Instance.new("TextLabel")
-    web.Size = UDim2.new(0, 80, 0, 80)
-    web.Position = UDim2.new(posX, 0, posY, 0)
-    web.BackgroundTransparency = 1
-    web.Text = "🕸️"
-    web.TextSize = 60
-    web.TextColor3 = Color3.fromRGB(200, 200, 220)
-    web.TextTransparency = 0.3
-    web.Rotation = rot
-    web.ZIndex = 1
-    web.Parent = Panel
-end
-
-crearTelarana(0, 0, 0)
-crearTelarana(1, 0, 90)
-crearTelarana(0, 1, -90)
-crearTelarana(1, 1, 180)
-
-local Sidebar = Instance.new("Frame")
-Sidebar.Size = UDim2.new(0, 130, 1, 0)
-Sidebar.BackgroundColor3 = COLORES.Sidebar
-Sidebar.BackgroundTransparency = 0.35
-Sidebar.BorderSizePixel = 0
-Sidebar.ZIndex = 2
-Sidebar.ClipsDescendants = true
-Sidebar.Parent = Panel
-
-local cSidebar = Instance.new("UICorner")
-cSidebar.CornerRadius = UDim.new(0, 16)
-cSidebar.Parent = Sidebar
-
-local SidebarScroll = Instance.new("ScrollingFrame")
-SidebarScroll.Size = UDim2.new(1, 0, 1, 0)
-SidebarScroll.Position = UDim2.new(0, 0, 0, 0)
-SidebarScroll.BackgroundTransparency = 1
-SidebarScroll.BorderSizePixel = 0
-SidebarScroll.ScrollBarThickness = 3
-SidebarScroll.ScrollBarImageColor3 = COLORES.Naranja1
-SidebarScroll.ScrollBarImageTransparency = 0.5
-SidebarScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
-SidebarScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
-SidebarScroll.ScrollingDirection = Enum.ScrollingDirection.Y
-SidebarScroll.ScrollingEnabled = true
-SidebarScroll.Active = true
-SidebarScroll.ClipsDescendants = true
-SidebarScroll.ZIndex = 3
-SidebarScroll.Parent = Sidebar
-
-local cScroll = Instance.new("UICorner")
-cScroll.CornerRadius = UDim.new(0, 16)
-cScroll.Parent = SidebarScroll
-
-local sidebarLayout = Instance.new("UIListLayout")
-sidebarLayout.Padding = UDim.new(0, 4)
-sidebarLayout.SortOrder = Enum.SortOrder.LayoutOrder
-sidebarLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-sidebarLayout.Parent = SidebarScroll
-
-local sidebarPadding = Instance.new("UIPadding")
-sidebarPadding.PaddingTop = UDim.new(0, 130)
-sidebarPadding.PaddingBottom = UDim.new(0, 20)
-sidebarPadding.PaddingLeft = UDim.new(0, 6)
-sidebarPadding.PaddingRight = UDim.new(0, 6)
-sidebarPadding.Parent = SidebarScroll
-
-local SidebarFix = Instance.new("Frame")
-SidebarFix.Size = UDim2.new(0, 16, 1, 0)
-SidebarFix.Position = UDim2.new(1, -16, 0, 0)
-SidebarFix.BackgroundColor3 = COLORES.Sidebar
-SidebarFix.BackgroundTransparency = 0.35
-SidebarFix.BorderSizePixel = 0
-SidebarFix.ZIndex = 5
-SidebarFix.Parent = Sidebar
-
-local LogoU = Instance.new("TextLabel")
-LogoU.Size = UDim2.new(1, 0, 0, 32)
-LogoU.Position = UDim2.new(0, 0, 0, 10)
-LogoU.BackgroundTransparency = 1
-LogoU.Text = "🎃"
-LogoU.TextColor3 = COLORES.Naranja2
-LogoU.Font = Enum.Font.GothamBlack
-LogoU.TextSize = 26
-LogoU.ZIndex = 6
-LogoU.Parent = Sidebar
-
-local Titulo = Instance.new("TextLabel")
-Titulo.Size = UDim2.new(1, -20, 0, 22)
-Titulo.Position = UDim2.new(0, 10, 0, 44)
-Titulo.BackgroundTransparency = 1
-Titulo.Text = "Uzivert Hub"
-Titulo.TextColor3 = COLORES.Naranja2
-Titulo.Font = Enum.Font.GothamBlack
-Titulo.TextSize = 16
-Titulo.ZIndex = 6
-Titulo.Parent = Sidebar
-
-local Subtitulo = Instance.new("TextLabel")
-Subtitulo.Size = UDim2.new(1, -20, 0, 14)
-Subtitulo.Position = UDim2.new(0, 10, 0, 68)
-Subtitulo.BackgroundTransparency = 1
-Subtitulo.Text = "★ " .. VERSION .. " ★"
-Subtitulo.TextColor3 = COLORES.Morado2
-Subtitulo.Font = Enum.Font.Gotham
-Subtitulo.TextSize = 9
-Subtitulo.ZIndex = 6
-Subtitulo.Parent = Sidebar
-
-local Credits = Instance.new("TextLabel")
-Credits.Size = UDim2.new(1, -20, 0, 12)
-Credits.Position = UDim2.new(0, 10, 0, 84)
-Credits.BackgroundTransparency = 1
-Credits.Text = "By Uzivert 🇵🇾"
-Credits.TextColor3 = COLORES.Morado2
-Credits.Font = Enum.Font.Gotham
-Credits.TextSize = 9
-Credits.ZIndex = 6
-Credits.Parent = Sidebar
-
-local Sep = Instance.new("Frame")
-Sep.Size = UDim2.new(1, -24, 0, 1)
-Sep.Position = UDim2.new(0, 12, 0, 106)
-Sep.BackgroundColor3 = COLORES.Naranja1
-Sep.BackgroundTransparency = 0.5
-Sep.BorderSizePixel = 0
-Sep.ZIndex = 6
-Sep.Parent = Sidebar
-
--- 🎭 MÁSCARA: tapa las pestañas que scrollean por encima del título
-local SidebarMask = Instance.new("Frame")
-SidebarMask.Size = UDim2.new(1, 0, 0, 130)
-SidebarMask.Position = UDim2.new(0, 0, 0, 0)
-SidebarMask.BackgroundColor3 = COLORES.Sidebar
-SidebarMask.BackgroundTransparency = 0.35
-SidebarMask.BorderSizePixel = 0
-SidebarMask.ZIndex = 5
-SidebarMask.Parent = Sidebar
-
-local cMask = Instance.new("UICorner")
-cMask.CornerRadius = UDim.new(0, 16)
-cMask.Parent = SidebarMask
-
-local BotonCerrar = Instance.new("TextButton")
-BotonCerrar.Size = UDim2.new(0, 22, 0, 22)
-BotonCerrar.Position = UDim2.new(1, -28, 0, 12)
-BotonCerrar.BackgroundColor3 = COLORES.Rojo
-BotonCerrar.Text = "×"
-BotonCerrar.TextColor3 = COLORES.Texto
-BotonCerrar.Font = Enum.Font.GothamBold
-BotonCerrar.TextSize = 16
-BotonCerrar.BorderSizePixel = 0
-BotonCerrar.ZIndex = 10
-BotonCerrar.Parent = Panel
-
-local cCerrar = Instance.new("UICorner")
-cCerrar.CornerRadius = UDim.new(1, 0)
-cCerrar.Parent = BotonCerrar
-
-local BotonMin = Instance.new("TextButton")
-BotonMin.Size = UDim2.new(0, 22, 0, 22)
-BotonMin.Position = UDim2.new(1, -54, 0, 12)
-BotonMin.BackgroundColor3 = COLORES.Amarillo
-BotonMin.Text = "−"
-BotonMin.TextColor3 = COLORES.Texto
-BotonMin.Font = Enum.Font.GothamBold
-BotonMin.TextSize = 16
-BotonMin.BorderSizePixel = 0
-BotonMin.ZIndex = 10
-BotonMin.Parent = Panel
-
-local cMin = Instance.new("UICorner")
-cMin.CornerRadius = UDim.new(1, 0)
-cMin.Parent = BotonMin
-
-BotonCerrar.MouseButton1Click:Connect(function()
-    Panel.Visible = false
-    BotonFlotante.Visible = true
-end)
-
-BotonMin.MouseButton1Click:Connect(function()
-    Panel.Visible = false
-    BotonFlotante.Visible = true
-end)
-
-BotonFlotante.MouseButton1Click:Connect(function()
-    Panel.Visible = not Panel.Visible
-    if Panel.Visible then BotonFlotante.Visible = false end
-end)
-
+local Panel, crearPagina, crearToggle, crearBoton, crearSlider, crearSelector, crearTarjeta
 local Paginas = {}
 
-local function crearRipple(boton)
-    boton.MouseButton1Down:Connect(function()
-        local ripple = Instance.new("Frame")
-        ripple.Size = UDim2.new(0, 0, 0, 0)
-        ripple.Position = UDim2.new(0.5, 0, 0.5, 0)
-        ripple.AnchorPoint = Vector2.new(0.5, 0.5)
-        ripple.BackgroundColor3 = COLORES.Naranja2
-        ripple.BackgroundTransparency = 0.6
-        ripple.BorderSizePixel = 0
-        ripple.ZIndex = 10
-        ripple.Parent = boton
-        local c = Instance.new("UICorner")
-        c.CornerRadius = UDim.new(1, 0)
-        c.Parent = ripple
-        TweenService:Create(ripple, TweenInfo.new(0.5), {
-            Size = UDim2.new(0, 300, 0, 300),
-            BackgroundTransparency = 1,
-        }):Play()
-        task.wait(0.6)
-        ripple:Destroy()
-    end)
+do
+	local LITE = (_G.UZIVERT_GAMA_BAJA == true) -- gama baja: menos efectos
+	local UI = {}
+	_G.UZ_UI = UI
+	UI.visible = false
+	UI.abierto = false
+
+	local WIN_W, WIN_H, SIDE_W = 520, 340, 132
+	local BACK = Enum.EasingStyle.Back
+
+	local C = {
+		bg = Color3.fromRGB(14, 10, 18),
+		card = Color3.fromRGB(26, 17, 32),
+		cardHi = Color3.fromRGB(44, 26, 40),
+		dark = Color3.fromRGB(18, 11, 24),
+		line = Color3.fromRGB(70, 46, 60),
+		off = Color3.fromRGB(50, 38, 64),
+		web = Color3.fromRGB(210, 200, 225),
+		or1 = COLORES.Naranja1, or2 = COLORES.Naranja2, or3 = COLORES.Naranja3,
+		pu1 = COLORES.Morado1, pu2 = COLORES.Morado2, pu3 = COLORES.Morado3,
+		text = COLORES.Texto, sub = COLORES.Sub,
+		red = COLORES.Rojo, green = COLORES.Verde, yellow = COLORES.Amarillo,
+	}
+
+	---------------------------------------------------------------- helpers
+	local function N(class, props, parent)
+		local o = Instance.new(class)
+		for k, v in pairs(props) do o[k] = v end
+		o.Parent = parent
+		return o
+	end
+
+	local function TW(o, t, goal, style, dir)
+		local tw = TweenService:Create(o, TweenInfo.new(t, style or Enum.EasingStyle.Quint, dir or Enum.EasingDirection.Out), goal)
+		tw:Play()
+		return tw
+	end
+
+	local function corner(p, r)
+		return N("UICorner", { CornerRadius = UDim.new(0, r) }, p)
+	end
+
+	local function setLine(f, x1, y1, x2, y2, th)
+		local dx, dy = x2 - x1, y2 - y1
+		f.Size = UDim2.fromOffset(math.sqrt(dx * dx + dy * dy), th)
+		f.Position = UDim2.fromOffset((x1 + x2) / 2, (y1 + y2) / 2)
+		f.Rotation = math.deg(math.atan2(dy, dx))
+	end
+
+	local function line(parent, color, z)
+		return N("Frame", {
+			AnchorPoint = Vector2.new(0.5, 0.5), BackgroundColor3 = color, BorderSizePixel = 0, ZIndex = z or 1,
+		}, parent)
+	end
+
+	local function dot(parent, size, color, z)
+		local f = N("Frame", {
+			AnchorPoint = Vector2.new(0.5, 0.5), Size = UDim2.fromOffset(size, size),
+			BackgroundColor3 = color, BorderSizePixel = 0, ZIndex = z or 1,
+		}, parent)
+		corner(f, 999)
+		return f
+	end
+
+	local function lum(c) return 0.299 * c.R + 0.587 * c.G + 0.114 * c.B end
+
+	local function accentOf(color)
+		if not color then return C.pu2 end
+		if lum(color) < 0.2 then return C.or1 end
+		return color
+	end
+
+	local function hoverable(btn, on, off)
+		btn.MouseEnter:Connect(on)
+		btn.MouseLeave:Connect(off)
+		btn.InputBegan:Connect(function(i)
+			if i.UserInputType == Enum.UserInputType.Touch then on() end
+		end)
+		btn.InputEnded:Connect(function(i)
+			if i.UserInputType == Enum.UserInputType.Touch then off() end
+		end)
+	end
+
+	local function ripple(parent, color, z, size)
+		local r = dot(parent, 10, color, z or 12)
+		r.Position = UDim2.fromScale(0.5, 0.5)
+		r.BackgroundTransparency = 0.6
+		TW(r, 0.5, { Size = UDim2.fromOffset(size or 260, size or 260), BackgroundTransparency = 1 })
+		Debris:AddItem(r, 0.6)
+	end
+
+	---------------------------------------------------------------- animador global
+	local upAlways, upPanel = {}, {}
+	UI.addUpdater = function(fn, always)
+		table.insert(always and upAlways or upPanel, fn)
+	end
+	local T0 = os.clock()
+	UI.hb = RunService.Heartbeat:Connect(function(dt)
+		local t = os.clock() - T0
+		for _, fn in ipairs(upAlways) do pcall(fn, t, dt) end
+		if UI.visible then
+			for _, fn in ipairs(upPanel) do pcall(fn, t, dt) end
+		end
+	end)
+
+	---------------------------------------------------------------- ventana
+	Panel = N("Frame", {
+		Name = "UzivertPanel", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromOffset(WIN_W, WIN_H), BackgroundTransparency = 1, Visible = false,
+	}, ScreenGui)
+	local winScale = N("UIScale", { Scale = 0.9 }, Panel)
+
+	local function fitScale()
+		local cam = workspace.CurrentCamera
+		local vp = cam and cam.ViewportSize or Vector2.new(1280, 720)
+		return math.clamp(math.min(vp.X / (WIN_W + 30), vp.Y / (WIN_H + 30)), 0.55, 1.3)
+	end
+	UI.base = fitScale()
+
+	-- resplandor morado
+	local glows = {}
+	local glowDefs = LITE
+		and { { 30, 0.9, 30 } }
+		or { { 60, 0.85, 40 }, { 30, 0.72, 25 }, { 12, 0.58, 14 } }
+	for i, d in ipairs(glowDefs) do
+		local g = N("Frame", {
+			AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.new(1, d[1], 1, d[1]), BackgroundColor3 = Color3.fromRGB(150 + i * 25, 60 + i * 25, 230),
+			BackgroundTransparency = d[2], BorderSizePixel = 0, ZIndex = i,
+		}, Panel)
+		corner(g, d[3])
+		glows[i] = { g, d[2] }
+	end
+	if not LITE then
+		UI.addUpdater(function(t)
+			for i, g in ipairs(glows) do
+				g[1].BackgroundTransparency = g[2] + 0.04 * math.sin(t * (1.1 + i * 0.5) + i)
+			end
+		end)
+	end
+
+	local surface = N(LITE and "Frame" or "CanvasGroup", {
+		Name = "Surface", Size = UDim2.fromScale(1, 1), BackgroundColor3 = C.bg,
+		BackgroundTransparency = 0.1, BorderSizePixel = 0, ZIndex = 5, ClipsDescendants = true,
+	}, Panel)
+	corner(surface, 14)
+	UI.surface = surface
+
+	-- borde animado
+	local border = N("Frame", { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 30 }, Panel)
+	corner(border, 14)
+	local bstroke = N("UIStroke", {
+		Thickness = 1.5, Color = Color3.new(1, 1, 1), ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+	}, border)
+	local bgrad = N("UIGradient", {
+		Color = ColorSequence.new({
+			ColorSequenceKeypoint.new(0, C.or1), ColorSequenceKeypoint.new(0.33, C.pu2),
+			ColorSequenceKeypoint.new(0.66, C.or1), ColorSequenceKeypoint.new(1, C.pu2),
+		}),
+	}, bstroke)
+	UI.addUpdater(function(t) bgrad.Rotation = (t * 45) % 360 end)
+
+	-- fondo
+	N("UIGradient", {
+		Rotation = 35,
+		Color = ColorSequence.new({
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(20, 10, 30)),
+			ColorSequenceKeypoint.new(0.7, Color3.fromRGB(60, 25, 20)),
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(110, 45, 15)),
+		}),
+	}, N("Frame", {
+		Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.new(1, 1, 1),
+		BackgroundTransparency = 0.72, BorderSizePixel = 0, ZIndex = 1,
+	}, surface))
+
+	---------------------------------------------------------------- decoracion
+	local function createWeb(esq, size, yOff)
+		local sx = (esq == "TL" or esq == "BL") and 1 or -1
+		local sy = (esq == "TL" or esq == "TR") and 1 or -1
+		local holder = N("Frame", {
+			AnchorPoint = Vector2.new(sx == 1 and 0 or 1, sy == 1 and 0 or 1),
+			Position = UDim2.new(sx == 1 and 0 or 1, 0, sy == 1 and 0 or 1, yOff or 0),
+			Size = UDim2.fromOffset(size, size), BackgroundTransparency = 1, ClipsDescendants = true, ZIndex = 2,
+		}, surface)
+		local ox = sx == 1 and 0 or size
+		local oy = sy == 1 and 0 or size
+		local function pt(a, r) return ox + sx * r * math.cos(a), oy + sy * r * math.sin(a) end
+		local NS, RINGS = 5, 5
+		local strands, segs = {}, {}
+		for i = 0, NS - 1 do
+			local a = (math.pi / 2) * i / (NS - 1)
+			local l = line(holder, C.web, 2)
+			local x2, y2 = pt(a, size * 1.5)
+			setLine(l, ox, oy, x2, y2, 1)
+			strands[#strands + 1] = l
+		end
+		for r = 1, RINGS do
+			for i = 0, NS - 2 do
+				segs[#segs + 1] = {
+					r = r, i = i, R = size * 1.1 * (r / RINGS),
+					a1 = (math.pi / 2) * i / (NS - 1), a2 = (math.pi / 2) * (i + 1) / (NS - 1),
+					am = (math.pi / 2) * (i + 0.5) / (NS - 1),
+					l1 = line(holder, C.web, 1), l2 = line(holder, C.web, 1),
+				}
+			end
+		end
+		local function render(t)
+			for _, s in ipairs(segs) do
+				local sag = 0.84 + (t and 0.035 * math.sin(t * 1.3 + s.r * 0.8 + s.i * 0.5) or 0)
+				local x1, y1 = pt(s.a1, s.R)
+				local x2, y2 = pt(s.a2, s.R)
+				local xm, ym = pt(s.am, s.R * sag)
+				setLine(s.l1, x1, y1, xm, ym, 1)
+				setLine(s.l2, xm, ym, x2, y2, 1)
+				local tr = 0.8 + (t and 0.08 * math.sin(t * 1.8 - s.r * 0.9) or 0)
+				s.l1.BackgroundTransparency = tr
+				s.l2.BackgroundTransparency = tr
+			end
+			for i, l in ipairs(strands) do
+				l.BackgroundTransparency = 0.72 + (t and 0.08 * math.sin(t * 1.1 + i) or 0)
+			end
+		end
+		render(nil)
+		if not LITE then
+			local n = 0
+			UI.addUpdater(function(t)
+				n += 1
+				if n % 3 == 0 then render(t) end
+			end)
+		end
+	end
+	createWeb("TL", 70, 0)
+	createWeb("TR", 46, 0)
+	createWeb("BL", 56, 0)
+	createWeb("BR", 84, 0)
+
+	-- brillo inferior (siempre) + niebla / brasas / murcielagos (solo gama alta)
+	N("UIGradient", {
+		Rotation = 90, Color = ColorSequence.new(C.pu1, C.or1),
+		Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(1, 0.86) }),
+	}, N("Frame", {
+		AnchorPoint = Vector2.new(0, 1), Position = UDim2.fromScale(0, 1), Size = UDim2.new(1, 0, 0, 70),
+		BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, ZIndex = 4,
+	}, surface))
+
+	if not LITE then
+		-- brasas
+		local embers = {}
+		for i = 1, 12 do
+			local s = math.random(2, 4)
+			local f = N("Frame", {
+				Size = UDim2.fromOffset(s, s), BorderSizePixel = 0, ZIndex = 3,
+				BackgroundColor3 = (i % 3 == 0) and C.pu2 or ((i % 2 == 0) and C.or1 or C.or2),
+			}, surface)
+			corner(f, 4)
+			embers[i] = {
+				f = f, x = math.random() * WIN_W, y = math.random() * WIN_H, speed = 8 + math.random() * 16,
+				amp = 6 + math.random() * 10, ph = math.random() * 6.28, fr = 0.6 + math.random() * 0.8,
+			}
+		end
+		UI.addUpdater(function(t, dt)
+			for _, e in ipairs(embers) do
+				e.y -= e.speed * dt
+				if e.y < -6 then e.y = WIN_H + 6; e.x = math.random() * WIN_W end
+				e.f.Position = UDim2.fromOffset(e.x + math.sin(t * e.fr + e.ph) * e.amp, e.y)
+				e.f.BackgroundTransparency = 1 - 0.8 * math.sin(math.pi * math.clamp(e.y / WIN_H, 0, 1))
+			end
+		end)
+
+		-- niebla que se mueve
+		local wispKeys = {
+			NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.2, 0.9), NumberSequenceKeypoint.new(0.4, 1),
+			NumberSequenceKeypoint.new(0.65, 0.88), NumberSequenceKeypoint.new(0.85, 1), NumberSequenceKeypoint.new(1, 1),
+		}
+		local function wisp(h, col)
+			local f = N("Frame", {
+				AnchorPoint = Vector2.new(0, 1), Position = UDim2.fromScale(0, 1), Size = UDim2.new(1, 0, 0, h),
+				BackgroundColor3 = col, BorderSizePixel = 0, ZIndex = 4,
+			}, surface)
+			return N("UIGradient", { Transparency = NumberSequence.new(wispKeys) }, f)
+		end
+		local wA, wB = wisp(44, Color3.fromRGB(190, 150, 255)), wisp(28, Color3.fromRGB(255, 170, 110))
+		local pA, pB = 0, 0
+		UI.addUpdater(function(t, dt)
+			pA = (pA + dt * 0.08) % 2
+			pB = (pB + dt * 0.05) % 2
+			wA.Offset = Vector2.new(pA - 1, 0)
+			wB.Offset = Vector2.new(1 - pB, 0)
+		end)
+
+		-- murcielagos dibujados con lineas
+		local batColor = Color3.fromRGB(125, 85, 175)
+		local bats = {}
+		for i = 1, 2 do
+			local b = { active = false, timer = 2 + i * 3, x = 0, baseY = 0, dir = 1, flap = 0, seed = i * 2.1, s = (i == 1) and 1 or 0.75, lines = {} }
+			b.root = N("Frame", { Size = UDim2.fromOffset(0, 0), BackgroundTransparency = 1, Visible = false, ZIndex = 2 }, surface)
+			for k = 1, 10 do
+				b.lines[k] = line(b.root, batColor, 1)
+				b.lines[k].BackgroundTransparency = 0.25
+			end
+			dot(b.root, 5 * b.s, batColor, 2)
+			bats[i] = b
+		end
+		UI.addUpdater(function(t, dt)
+			for _, b in ipairs(bats) do
+				if not b.active then
+					b.timer -= dt
+					if b.timer <= 0 then
+						b.active = true
+						b.dir = (math.random() > 0.5) and 1 or -1
+						b.x = (b.dir == 1) and -24 or (WIN_W + 24)
+						b.baseY = math.random(60, WIN_H - 80)
+						b.root.Visible = true
+					end
+				else
+					b.x += b.dir * (46 + b.s * 10) * dt
+					b.flap += dt * 13
+					b.root.Position = UDim2.fromOffset(b.x, b.baseY + math.sin(t * 1.8 + b.seed) * 16)
+					local f, s, li = math.sin(b.flap), b.s, 1
+					for side = -1, 1, 2 do
+						local tx, ty = side * 14 * s, -f * 9 * s - 2 * s
+						local p1x, p1y = side * 9 * s, 5 * s - f * 3 * s
+						local p2x, p2y = side * 4 * s, 4 * s
+						setLine(b.lines[li], 0, -1 * s, tx, ty, 1.5)
+						setLine(b.lines[li + 1], tx, ty, p1x, p1y, 1.5)
+						setLine(b.lines[li + 2], p1x, p1y, p2x, p2y, 1.5)
+						setLine(b.lines[li + 3], p2x, p2y, 0, 2 * s, 1.5)
+						li += 4
+					end
+					if b.x < -30 or b.x > WIN_W + 30 then
+						b.active = false
+						b.root.Visible = false
+						b.timer = 5 + math.random() * 7
+					end
+				end
+			end
+		end)
+	end
+
+	---------------------------------------------------------------- barra lateral
+	local side = N("Frame", {
+		Size = UDim2.new(0, SIDE_W, 1, 0), BackgroundColor3 = Color3.fromRGB(10, 5, 16),
+		BackgroundTransparency = 0.35, BorderSizePixel = 0, ZIndex = 6,
+	}, surface)
+	N("Frame", {
+		Position = UDim2.new(1, -1, 0, 0), Size = UDim2.new(0, 1, 1, 0), BackgroundColor3 = C.or1,
+		BackgroundTransparency = 0.7, BorderSizePixel = 0, ZIndex = 7,
+	}, side)
+
+	-- logo (luna + sellos giratorios)
+	local logoBox = N("Frame", { Position = UDim2.fromOffset(12, 12), Size = UDim2.fromOffset(34, 34), BackgroundTransparency = 1, ZIndex = 8 }, side)
+	local function sello(sz, col, tr)
+		local f = N("Frame", {
+			AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(sz, sz), BackgroundTransparency = 1, ZIndex = 8,
+		}, logoBox)
+		corner(f, 6)
+		N("UIStroke", { Thickness = 1.5, Color = col, Transparency = tr }, f)
+		return f
+	end
+	local lr1, lr2 = sello(32, C.or1, 0.2), sello(25, C.pu2, 0.4)
+	local lMoon = dot(logoBox, 15, C.or2, 9)
+	lMoon.Position = UDim2.fromScale(0.5, 0.5)
+	local lCut = dot(logoBox, 13, Color3.fromRGB(14, 9, 20), 10)
+	lCut.Position = UDim2.new(0.5, 4, 0.5, -3)
+	UI.addUpdater(function(t)
+		lr1.Rotation = (t * 22) % 360
+		lr2.Rotation = (-t * 30) % 360
+	end)
+
+	local sTitulo = N("TextLabel", {
+		Position = UDim2.fromOffset(52, 12), Size = UDim2.fromOffset(76, 22), BackgroundTransparency = 1,
+		Text = "Uzivert Hub", Font = Enum.Font.Creepster, TextScaled = true, TextColor3 = Color3.new(1, 1, 1),
+		TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8,
+	}, side)
+	N("UITextSizeConstraint", { MaxTextSize = 19, MinTextSize = 8 }, sTitulo)
+	local sTituloGrad = N("UIGradient", {
+		Color = ColorSequence.new({
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 150, 50)),
+			ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 225, 170)),
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 150, 50)),
+		}),
+	}, sTitulo)
+	UI.addUpdater(function(t)
+		sTituloGrad.Offset = Vector2.new(math.sin(t * 0.9) * 0.7, 0)
+		sTitulo.TextTransparency = ((t % 6) < 0.25 and math.sin(t * 90) > 0) and 0.5 or 0
+	end)
+	N("TextLabel", {
+		Position = UDim2.fromOffset(52, 34), Size = UDim2.fromOffset(78, 12), BackgroundTransparency = 1,
+		Text = VERSION, Font = Enum.Font.GothamBold, TextSize = 7, TextColor3 = C.pu2,
+		TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 8,
+	}, side)
+	N("TextLabel", {
+		Position = UDim2.fromOffset(14, 54), Size = UDim2.new(1, -20, 0, 14), BackgroundTransparency = 1,
+		Text = "By Uzivert 🇵🇾", Font = Enum.Font.GothamMedium, TextSize = 10, TextColor3 = C.sub,
+		TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8,
+	}, side)
+	local sepL = N("Frame", {
+		Position = UDim2.fromOffset(12, 78), Size = UDim2.new(1, -24, 0, 1), BackgroundColor3 = C.or1,
+		BackgroundTransparency = 0.4, BorderSizePixel = 0, ZIndex = 8,
+	}, side)
+	N("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(1, 1) }) }, sepL)
+
+	local sideScroll = N("ScrollingFrame", {
+		Position = UDim2.fromOffset(0, 86), Size = UDim2.new(1, 0, 1, -86), BackgroundTransparency = 1, BorderSizePixel = 0,
+		ScrollBarThickness = 2, ScrollBarImageColor3 = C.or1, ScrollBarImageTransparency = 0.4,
+		CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y,
+		ScrollingDirection = Enum.ScrollingDirection.Y, Active = true, ZIndex = 7,
+	}, side)
+	N("UIListLayout", { Padding = UDim.new(0, 4), SortOrder = Enum.SortOrder.LayoutOrder, HorizontalAlignment = Enum.HorizontalAlignment.Center }, sideScroll)
+	N("UIPadding", { PaddingTop = UDim.new(0, 4), PaddingBottom = UDim.new(0, 14), PaddingLeft = UDim.new(0, 6), PaddingRight = UDim.new(0, 6) }, sideScroll)
+
+	---------------------------------------------------------------- encabezado
+	local head = N("Frame", {
+		Position = UDim2.fromOffset(SIDE_W, 0), Size = UDim2.new(1, -SIDE_W, 0, 42), BackgroundTransparency = 1, ZIndex = 8,
+	}, surface)
+	N("Frame", {
+		Position = UDim2.new(0, 0, 1, -1), Size = UDim2.new(1, 0, 0, 1), BackgroundColor3 = C.or1,
+		BackgroundTransparency = 0.75, BorderSizePixel = 0, ZIndex = 9,
+	}, head)
+	UI.titulo = N("TextLabel", {
+		Position = UDim2.fromOffset(14, 4), Size = UDim2.fromOffset(220, 32), BackgroundTransparency = 1, Text = "",
+		Font = Enum.Font.Creepster, TextSize = 26, TextColor3 = Color3.new(1, 1, 1),
+		TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 9,
+	}, head)
+	local tGrad = N("UIGradient", { Color = ColorSequence.new(C.or1, C.or2) }, UI.titulo)
+	UI.titleBar = N("Frame", {
+		Position = UDim2.fromOffset(16, 35), Size = UDim2.fromOffset(46, 2), BackgroundColor3 = C.or1,
+		BorderSizePixel = 0, ZIndex = 9,
+	}, head)
+	corner(UI.titleBar, 1)
+	UI.addUpdater(function(t) tGrad.Offset = Vector2.new(math.sin(t * 1.1) * 0.4, 0) end)
+
+	local function iconButton(x, kind, hover)
+		local b = N("TextButton", {
+			Position = UDim2.new(1, x, 0, 9), Size = UDim2.fromOffset(24, 24), BackgroundColor3 = C.card,
+			BackgroundTransparency = 0.2, Text = "", AutoButtonColor = false, BorderSizePixel = 0, ZIndex = 10,
+		}, head)
+		corner(b, 12)
+		local st = N("UIStroke", { Color = hover, Thickness = 1, Transparency = 0.55 }, b)
+		local ic = N("Frame", {
+			AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(12, 12), BackgroundTransparency = 1, ZIndex = 11,
+		}, b)
+		if kind == "min" then
+			setLine(line(ic, C.text, 11), 1, 6, 11, 6, 2)
+		else
+			setLine(line(ic, C.text, 11), 1, 1, 11, 11, 2)
+			setLine(line(ic, C.text, 11), 11, 1, 1, 11, 2)
+		end
+		hoverable(b, function()
+			TW(b, 0.18, { BackgroundColor3 = hover, BackgroundTransparency = 0.05 })
+			TW(st, 0.18, { Transparency = 0 })
+			TW(ic, 0.3, { Rotation = 90 }, BACK)
+		end, function()
+			TW(b, 0.22, { BackgroundColor3 = C.card, BackgroundTransparency = 0.2 })
+			TW(st, 0.22, { Transparency = 0.55 })
+			TW(ic, 0.3, { Rotation = 0 }, BACK)
+		end)
+		return b
+	end
+	local minBtn = iconButton(-62, "min", C.yellow)
+	local closeBtn = iconButton(-32, "close", C.red)
+	minBtn.Activated:Connect(function() UI.cerrar() end)
+	closeBtn.Activated:Connect(function() UI.cerrar() end)
+
+	-- arrastrar desde el encabezado y el logo
+	local function makeDrag(handle)
+		local dragging, dragStart, startPos
+		handle.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				dragging, dragStart, startPos = true, input.Position, Panel.Position
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then dragging = false end
+				end)
+			end
+		end)
+		UserInputService.InputChanged:Connect(function(input)
+			if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+				local d = (input.Position - dragStart) / math.max(winScale.Scale, 0.1)
+				Panel.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+			end
+		end)
+	end
+	makeDrag(head)
+	makeDrag(side)
+
+	local veil = N("Frame", {
+		Position = UDim2.fromOffset(SIDE_W + 6, 46), Size = UDim2.new(1, -(SIDE_W + 12), 1, -54),
+		BackgroundColor3 = C.bg, BackgroundTransparency = 1, BorderSizePixel = 0, ZIndex = 9,
+	}, surface)
+
+	---------------------------------------------------------------- iconos dibujados
+	local function rect(parts, box, x, y, w, h, col, r, rot)
+		local f = N("Frame", {
+			Position = UDim2.fromOffset(x, y), Size = UDim2.fromOffset(w, h), BackgroundColor3 = col,
+			BorderSizePixel = 0, ZIndex = 10, Rotation = rot or 0,
+		}, box)
+		if r then corner(f, r) end
+		parts[#parts + 1] = { f, "bg" }
+		return f
+	end
+	local function rectF(box, x, y, w, h, col, r)
+		local f = N("Frame", {
+			Position = UDim2.fromOffset(x, y), Size = UDim2.fromOffset(w, h), BackgroundColor3 = col, BorderSizePixel = 0, ZIndex = 11,
+		}, box)
+		if r and r > 0 then corner(f, r) end
+		return f
+	end
+	local function ring(parts, box, x, y, w, h, col, th, r, rot)
+		local f = N("Frame", {
+			Position = UDim2.fromOffset(x, y), Size = UDim2.fromOffset(w, h), BackgroundTransparency = 1,
+			BorderSizePixel = 0, ZIndex = 10, Rotation = rot or 0,
+		}, box)
+		if r then corner(f, r) end
+		local s = N("UIStroke", { Thickness = th, Color = col }, f)
+		parts[#parts + 1] = { s, "stroke" }
+		return f
+	end
+	local function seg(parts, box, x1, y1, x2, y2, col, th)
+		local l = line(box, col, 10)
+		setLine(l, x1, y1, x2, y2, th)
+		parts[#parts + 1] = { l, "bg" }
+		return l
+	end
+
+	local ICONS = {}
+	ICONS.Visual = function(p, b, c)
+		ring(p, b, 2, 6, 20, 12, c, 2, 6)
+		rect(p, b, 9, 9, 6, 6, c, 3)
+	end
+	ICONS.Combat = function(p, b, c)
+		ring(p, b, 4, 4, 16, 16, c, 2, 8)
+		seg(p, b, 12, 1, 12, 7, c, 2); seg(p, b, 12, 17, 12, 23, c, 2)
+		seg(p, b, 1, 12, 7, 12, c, 2); seg(p, b, 17, 12, 23, 12, c, 2)
+		rect(p, b, 10, 10, 4, 4, c, 2)
+	end
+	ICONS.Crab = function(p, b, c)
+		rect(p, b, 4, 2, 16, 14, c, 7)
+		rect(p, b, 8, 13, 8, 7, c, 2)
+		rectF(b, 7, 8, 4, 4, C.dark, 2); rectF(b, 13, 8, 4, 4, C.dark, 2)
+		rectF(b, 11, 13, 2, 2, C.dark, 1)
+		rectF(b, 10, 17, 1, 3, C.dark, 0); rectF(b, 13, 17, 1, 3, C.dark, 0)
+	end
+	ICONS.Jugador = function(p, b, c)
+		rect(p, b, 10, 8, 4, 9, c, 2)
+		seg(p, b, 10, 9, 9, 5, c, 1.5); seg(p, b, 14, 9, 15, 5, c, 1.5)
+		for _, s in ipairs({ -1, 1 }) do
+			local function x(v) return 12 + s * v end
+			seg(p, b, x(1), 10, x(10), 6, c, 2)
+			seg(p, b, x(10), 6, x(10), 13, c, 2)
+			seg(p, b, x(10), 13, x(6), 11, c, 2)
+			seg(p, b, x(6), 11, x(3), 16, c, 2)
+			seg(p, b, x(3), 16, x(1), 12, c, 2)
+		end
+	end
+	ICONS.Fling = function(p, b, c)
+		ring(p, b, 2, 2, 20, 20, c, 2, 10)
+		ring(p, b, 6, 6, 12, 12, c, 2, 6)
+		rect(p, b, 10, 10, 4, 4, c, 2)
+	end
+	ICONS.Anims = function(p, b, c)
+		ring(p, b, 3, 5, 18, 14, c, 2, 3)
+		rect(p, b, 9, 9, 6, 6, c, 1, 45)
+		seg(p, b, 6, 5, 6, 19, c, 1)
+		seg(p, b, 18, 5, 18, 19, c, 1)
+	end
+	ICONS.Clutchs = function(p, b, c)
+		rect(p, b, 6, 10, 12, 12, c, 6)
+		rect(p, b, 8, 2, 8, 8, c, 1, 45)
+		rectF(b, 10, 14, 4, 6, C.dark, 2)
+	end
+	ICONS.Utilidades = function(p, b, c)
+		ring(p, b, 5, 5, 14, 14, c, 2.5, 7)
+		rect(p, b, 10, 1, 4, 4, c, 1); rect(p, b, 10, 19, 4, 4, c, 1)
+		rect(p, b, 1, 10, 4, 4, c, 1); rect(p, b, 19, 10, 4, 4, c, 1)
+		rect(p, b, 10, 10, 4, 4, c, 2)
+	end
+	ICONS.Apariencia = function(p, b, c)
+		ring(p, b, 2, 3, 20, 18, c, 2, 9)
+		rect(p, b, 6, 8, 3, 3, c, 2); rect(p, b, 11, 6, 3, 3, c, 2)
+		rect(p, b, 15, 9, 3, 3, c, 2); rect(p, b, 8, 13, 3, 3, c, 2)
+	end
+	ICONS.Info = function(p, b, c)
+		ring(p, b, 2, 2, 20, 20, c, 2, 10)
+		rect(p, b, 11, 10, 2, 8, c, 1); rect(p, b, 11, 6, 2, 2, c, 1)
+	end
+	ICONS.Update = function(p, b, c)
+		ring(p, b, 5, 3, 14, 18, c, 2, 3)
+		seg(p, b, 8, 8, 16, 8, c, 2); seg(p, b, 8, 12, 16, 12, c, 2); seg(p, b, 8, 16, 13, 16, c, 2)
+	end
+	ICONS.Avisos = function(p, b, c)
+		ring(p, b, 4, 4, 16, 16, c, 2, 2, 45)
+		rect(p, b, 11, 8, 2, 6, c, 1); rect(p, b, 11, 16, 2, 2, c, 1)
+	end
+	ICONS.Creador = function(p, b, c)
+		rect(p, b, 4, 16, 16, 4, c, 1)
+		seg(p, b, 4, 16, 3, 7, c, 2); seg(p, b, 3, 7, 9, 12, c, 2)
+		seg(p, b, 9, 12, 12, 5, c, 2); seg(p, b, 12, 5, 15, 12, c, 2)
+		seg(p, b, 15, 12, 21, 7, c, 2); seg(p, b, 21, 7, 20, 16, c, 2)
+	end
+ICONS.AutoFarm = function(p, b, c)
+    -- Bolsa de monedas
+    ring(p, b, 3, 9, 18, 14, c, 2, 7)
+    seg(p, b, 8, 9, 16, 9, c, 1.5)
+    rect(p, b, 11, 4, 2, 6, c, 1)
+    rect(p, b, 9, 2, 6, 3, c, 1)
+    -- Moneda con $
+    ring(p, b, 9, 12, 6, 6, c, 1, 3)
+    seg(p, b, 12, 13, 12, 17, c, 1)
+    seg(p, b, 10, 14, 14, 14, c, 1)
+end
+	UI.icon = function(name, box, col)
+		local parts = {}
+		local fn = ICONS[name]
+		if fn then
+			fn(parts, box, col)
+		else
+			ring(parts, box, 4, 4, 16, 16, col, 2, 8)
+			rect(parts, box, 10, 10, 4, 4, col, 2)
+		end
+		return parts
+	end
+	UI.recolor = function(parts, color)
+		for _, p in ipairs(parts) do
+			if p[2] == "stroke" then TW(p[1], 0.2, { Color = color }) else TW(p[1], 0.2, { BackgroundColor3 = color }) end
+		end
+	end
+
+	---------------------------------------------------------------- boton flotante (orbe)
+	local orb = N("TextButton", {
+		Name = "UzivertOrb", Size = UDim2.fromOffset(60, 60), Position = UDim2.new(0, 30, 0.5, -30),
+		BackgroundTransparency = 1, Text = "", AutoButtonColor = false, ZIndex = 50,
+	}, ScreenGui)
+	local orbScale = N("UIScale", { Scale = 1 }, orb)
+	local orbGlow = dot(orb, 90, C.pu1, 1)
+	orbGlow.Position = UDim2.fromScale(0.5, 0.5)
+	orbGlow.BackgroundTransparency = 0.85
+	local orbRing = N("Frame", {
+		AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(58, 58),
+		BackgroundTransparency = 1, ZIndex = 2,
+	}, orb)
+	corner(orbRing, 29)
+	local orbStroke = N("UIStroke", { Thickness = 2.5, Color = Color3.new(1, 1, 1) }, orbRing)
+	local orbRingGrad = N("UIGradient", {
+		Color = ColorSequence.new({
+			ColorSequenceKeypoint.new(0, C.or1), ColorSequenceKeypoint.new(0.5, C.pu2), ColorSequenceKeypoint.new(1, C.or1),
+		}),
+		Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(0.55, 0.65), NumberSequenceKeypoint.new(1, 0) }),
+	}, orbStroke)
+	local orbCoreColor = Color3.fromRGB(22, 13, 30)
+	local orbCore = dot(orb, 50, orbCoreColor, 3)
+	orbCore.Position = UDim2.fromScale(0.5, 0.5)
+	local function orbSq(sz, col, tr)
+		local f = N("Frame", {
+			AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(sz, sz),
+			BackgroundTransparency = 1, ZIndex = 4,
+		}, orb)
+		corner(f, 4)
+		N("UIStroke", { Thickness = 1.2, Color = col, Transparency = tr }, f)
+		return f
+	end
+	local orbSq1, orbSq2 = orbSq(36, C.or1, 0.35), orbSq(30, C.pu2, 0.5)
+	local orbMoon = dot(orb, 20, C.or2, 5)
+	orbMoon.Position = UDim2.new(0.5, -1, 0.5, 0)
+	local orbCut = dot(orb, 17, orbCoreColor, 6)
+	orbCut.Position = UDim2.new(0.5, 4, 0.5, -3)
+	local orbiters = {}
+	for i = 1, 3 do
+		local d = dot(orb, 3 + (i % 2), (i % 2 == 0) and C.or2 or C.pu2, 7)
+		orbiters[i] = { f = d, r = 29, sp = (i % 2 == 0 and 1 or -1) * (0.9 + i * 0.35), ph = i * 2.1 }
+	end
+	UI.addUpdater(function(t)
+		orbGlow.BackgroundTransparency = (UI.abierto and 0.92 or 0.84) + 0.04 * math.sin(t * 2)
+		orbRingGrad.Rotation = (t * 90) % 360
+		orbSq1.Rotation = (t * 24) % 360
+		orbSq2.Rotation = (-t * 16) % 360
+		for _, o in ipairs(orbiters) do
+			local a = t * o.sp + o.ph
+			o.f.Position = UDim2.fromScale(0.5, 0.5) + UDim2.fromOffset(math.cos(a) * o.r, math.sin(a) * o.r)
+		end
+	end, true)
+
+	do
+		local dragging, moved, dragStart, startPos, dragInput = false, false, nil, nil, nil
+		orb.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				dragging, moved = true, false
+  dragStart, startPos = input.Position, orb.Position
+  dragInput = input
+				TW(orbScale, 0.12, { Scale = 0.9 })
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragging = false
+						TW(orbScale, 0.25, { Scale = 1 }, BACK)
+						if not moved then
+    ripple(orb, C.or2, 8, 120)
+    UI.abrir()
+end
+dragInput = nil
+					end
+				end)
+			end
+		end)
+	UserInputService.InputChanged:Connect(function(input)
+    if dragging and input == dragInput and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local d = input.Position - dragStart
+        if moved or d.Magnitude > 8 then
+            moved = true
+            orb.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+        end
+    end
+end)
+end
+	---------------------------------------------------------------- abrir / cerrar
+	local function setFade(v)
+		if surface:IsA("CanvasGroup") then surface.GroupTransparency = v end
+	end
+	UI.abrir = function()
+		if UI.abierto then return end
+		UI.abierto = true
+		UI.visible = true
+		Panel.Visible = true
+		winScale.Scale = UI.base * 0.9
+		setFade(1)
+		if surface:IsA("CanvasGroup") then TW(surface, 0.35, { GroupTransparency = 0 }) end
+		TW(winScale, 0.45, { Scale = UI.base }, BACK)
+		TW(orbScale, 0.2, { Scale = 0 })
+		task.delay(0.2, function() if UI.abierto then orb.Visible = false end end)
+	end
+	UI.cerrar = function()
+		if not UI.abierto then return end
+		UI.abierto = false
+		orb.Visible = true
+		orbScale.Scale = 0
+		TW(orbScale, 0.4, { Scale = 1 }, BACK)
+		if surface:IsA("CanvasGroup") then TW(surface, 0.2, { GroupTransparency = 1 }) end
+		TW(winScale, 0.22, { Scale = UI.base * 0.9 })
+		task.delay(0.24, function()
+			if not UI.abierto then
+				Panel.Visible = false
+				UI.visible = false
+			end
+		end)
+	end
+	do
+		local cam = workspace.CurrentCamera
+		if cam then
+			cam:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+				UI.base = fitScale()
+				if UI.abierto then winScale.Scale = UI.base end
+			end)
+		end
+	end
+
+	---------------------------------------------------------------- paginas (pestanas)
+	UI.mostrar = function(entry, instant)
+		local prev = UI.actual
+		if prev == entry then return end
+		UI.actual = entry
+		if prev then
+			prev[2].Visible = false
+			TW(prev[1], 0.2, { BackgroundTransparency = 0.6 })
+			TW(prev.st, 0.2, { Transparency = 0.8 })
+			TW(prev.bar, 0.2, { Size = UDim2.fromOffset(3, 0) })
+			TW(prev[3], 0.2, { TextColor3 = C.sub })
+			UI.recolor(prev[4], C.sub)
+		end
+		TW(entry[1], 0.25, { BackgroundTransparency = 0.3 })
+		TW(entry.st, 0.25, { Transparency = 0.3 })
+		TW(entry.bar, 0.35, { Size = UDim2.fromOffset(3, 18) }, BACK)
+		TW(entry[3], 0.25, { TextColor3 = C.text })
+		UI.recolor(entry[4], C.or2)
+		entry[2].Visible = true
+		UI.titulo.Text = string.upper(entry.nombre)
+		if instant then
+			entry[2].Position = UDim2.fromOffset(SIDE_W + 6, 46)
+		else
+			entry[2].Position = UDim2.fromOffset(SIDE_W + 28, 46)
+			TW(entry[2], 0.38, { Position = UDim2.fromOffset(SIDE_W + 6, 46) })
+			veil.BackgroundTransparency = 0.3
+			TW(veil, 0.32, { BackgroundTransparency = 1 })
+			UI.titulo.Position = UDim2.fromOffset(14, 14)
+			UI.titulo.TextTransparency = 1
+			TW(UI.titulo, 0.35, { Position = UDim2.fromOffset(14, 4), TextTransparency = 0 })
+			UI.titleBar.Size = UDim2.fromOffset(0, 2)
+			TW(UI.titleBar, 0.5, { Size = UDim2.fromOffset(46, 2) })
+		end
+	end
+
+	crearPagina = function(nombre, icono, orden)
+		local btn = N("TextButton", {
+			Size = UDim2.new(1, 0, 0, 32), LayoutOrder = orden, BackgroundColor3 = C.card, BackgroundTransparency = 0.6,
+			Text = "", AutoButtonColor = false, BorderSizePixel = 0, ZIndex = 8, ClipsDescendants = true,
+		}, sideScroll)
+		btn:SetAttribute("UZ", true)
+		corner(btn, 8)
+		local st = N("UIStroke", { Color = C.or1, Thickness = 1, Transparency = 0.8 }, btn)
+		local bar = N("Frame", {
+			AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 0, 0.5, 0), Size = UDim2.fromOffset(3, 0),
+			BackgroundColor3 = C.or1, BorderSizePixel = 0, ZIndex = 10,
+		}, btn)
+		corner(bar, 2)
+		local box = N("Frame", { Position = UDim2.fromOffset(8, 4), Size = UDim2.fromOffset(24, 24), BackgroundTransparency = 1, ZIndex = 9 }, btn)
+		local parts = UI.icon(icono, box, C.sub)
+		local texto = N("TextLabel", {
+			Position = UDim2.fromOffset(38, 0), Size = UDim2.new(1, -42, 1, 0), BackgroundTransparency = 1,
+			Text = nombre, TextColor3 = C.sub, Font = Enum.Font.GothamMedium, TextSize = 11,
+			TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 9,
+		}, btn)
+
+		local pagina = N("ScrollingFrame", {
+			Name = "Pagina_" .. nombre, Position = UDim2.fromOffset(SIDE_W + 6, 46), Size = UDim2.new(1, -(SIDE_W + 12), 1, -54),
+			BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 3, ScrollBarImageColor3 = C.or1,
+			ScrollBarImageTransparency = 0.3, CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y,
+			ScrollingDirection = Enum.ScrollingDirection.Y, ScrollingEnabled = true, Active = true, ClipsDescendants = true,
+			ElasticBehavior = Enum.ElasticBehavior.WhenScrollable, Visible = false, ZIndex = 6,
+		}, surface)
+		N("UIListLayout", { Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder, HorizontalAlignment = Enum.HorizontalAlignment.Center }, pagina)
+		N("UIPadding", { PaddingTop = UDim.new(0, 6), PaddingBottom = UDim.new(0, 40), PaddingLeft = UDim.new(0, 4), PaddingRight = UDim.new(0, 8) }, pagina)
+
+		local entry = { btn, pagina, texto, parts, bar = bar, st = st, nombre = nombre }
+		table.insert(Paginas, entry)
+
+		hoverable(btn, function()
+			if UI.actual ~= entry then
+				TW(btn, 0.15, { BackgroundTransparency = 0.45 })
+				TW(st, 0.15, { Transparency = 0.5 })
+			end
+		end, function()
+			if UI.actual ~= entry then
+				TW(btn, 0.2, { BackgroundTransparency = 0.6 })
+				TW(st, 0.2, { Transparency = 0.8 })
+			end
+		end)
+		btn.Activated:Connect(function()
+			ripple(btn, C.or2, 11, 120)
+			UI.mostrar(entry)
+		end)
+		if #Paginas == 1 then UI.mostrar(entry, true) end
+		return pagina
+	end
+
+	---------------------------------------------------------------- toggle
+	crearToggle = function(padre, texto, estadoInicial, callback)
+		local estado = estadoInicial and true or false
+		local frame = N("Frame", {
+			Size = UDim2.new(1, 0, 0, 40), BackgroundColor3 = C.card, BackgroundTransparency = 0.35, BorderSizePixel = 0, ZIndex = 7,
+		}, padre)
+		frame:SetAttribute("UZ", true)
+		corner(frame, 9)
+		local st = N("UIStroke", { Color = C.line, Thickness = 1, Transparency = 0.3 }, frame)
+		local bar = N("Frame", {
+			AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 0, 0.5, 0), Size = UDim2.fromOffset(3, estado and 20 or 8),
+			BackgroundColor3 = C.or1, BackgroundTransparency = estado and 0 or 0.6, BorderSizePixel = 0, ZIndex = 8,
+		}, frame)
+		corner(bar, 2)
+		local label = N("TextLabel", {
+			Position = UDim2.fromOffset(14, 0), Size = UDim2.new(1, -86, 1, 0), BackgroundTransparency = 1, Text = texto,
+			TextColor3 = estado and C.text or C.sub, Font = Enum.Font.GothamMedium, TextSize = 11,
+			TextXAlignment = Enum.TextXAlignment.Left, TextWrapped = true, ZIndex = 8,
+		}, frame)
+		local sw = N("Frame", {
+			Position = UDim2.new(1, -58, 0.5, -11), Size = UDim2.fromOffset(46, 22),
+			BackgroundColor3 = estado and C.or1 or C.off, BorderSizePixel = 0, ZIndex = 9,
+		}, frame)
+		corner(sw, 11)
+		local swSt = N("UIStroke", { Color = C.or2, Thickness = 1.5, Transparency = estado and 0.4 or 1 }, sw)
+		local knob = dot(sw, 16, Color3.new(1, 1, 1), 10)
+		knob.Position = estado and UDim2.new(1, -12, 0.5, 0) or UDim2.new(0, 12, 0.5, 0)
+		local hit = N("TextButton", { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Text = "", ZIndex = 11 }, frame)
+
+		hit.Activated:Connect(function()
+			estado = not estado
+			TW(knob, 0.3, { Position = estado and UDim2.new(1, -12, 0.5, 0) or UDim2.new(0, 12, 0.5, 0) }, BACK)
+			knob.Size = UDim2.fromOffset(22, 14)
+			TW(knob, 0.3, { Size = UDim2.fromOffset(16, 16) }, BACK)
+			TW(sw, 0.25, { BackgroundColor3 = estado and C.or1 or C.off })
+			TW(swSt, 0.25, { Transparency = estado and 0.4 or 1 })
+			TW(bar, 0.3, { Size = UDim2.fromOffset(3, estado and 20 or 8), BackgroundTransparency = estado and 0 or 0.6 }, BACK)
+			TW(label, 0.25, { TextColor3 = estado and C.text or C.sub })
+			ripple(sw, estado and C.or2 or C.pu2, 12, 70)
+			callback(estado)
+		end)
+		hoverable(hit, function()
+			TW(st, 0.15, { Color = C.or1 })
+			TW(frame, 0.15, { BackgroundTransparency = 0.2 })
+		end, function()
+			TW(st, 0.2, { Color = C.line })
+			TW(frame, 0.2, { BackgroundTransparency = 0.35 })
+		end)
+		return frame
+	end
+
+	---------------------------------------------------------------- boton
+	crearBoton = function(padre, texto, callback, color)
+		local accent = accentOf(color)
+		local btn = N("TextButton", {
+			Size = UDim2.new(1, 0, 0, 40), BackgroundColor3 = C.card, BackgroundTransparency = 0.25, Text = "",
+			AutoButtonColor = false, BorderSizePixel = 0, ClipsDescendants = true, ZIndex = 7,
+		}, padre)
+		btn:SetAttribute("UZ", true)
+		corner(btn, 9)
+		local st = N("UIStroke", { Thickness = 1.5, Color = Color3.new(1, 1, 1), Transparency = 0.2 }, btn)
+		local sg = N("UIGradient", { Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, accent),
+    ColorSequenceKeypoint.new(0.5, C.pu2),
+    ColorSequenceKeypoint.new(1, accent),
+}) }, st)
+		local fill = N("Frame", { Size = UDim2.fromScale(1, 1), BackgroundColor3 = accent, BorderSizePixel = 0, ZIndex = 7 }, btn)
+		N("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.72), NumberSequenceKeypoint.new(1, 0.95) }) }, fill)
+		local bar = N("Frame", {
+			AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 0, 0.5, 0), Size = UDim2.fromOffset(3, 16),
+			BackgroundColor3 = accent, BorderSizePixel = 0, ZIndex = 9,
+		}, btn)
+		corner(bar, 2)
+		N("TextLabel", {
+			Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Text = texto, TextColor3 = C.text,
+			Font = Enum.Font.GothamBold, TextSize = 12, ZIndex = 10,
+		}, btn)
+		local shine = N("Frame", {
+			AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, -30, 0.5, 0), Size = UDim2.fromOffset(24, 90),
+			BackgroundColor3 = Color3.new(1, 1, 1), BackgroundTransparency = 0.9, BorderSizePixel = 0, Rotation = 20, ZIndex = 9,
+		}, btn)
+		local sc = N("UIScale", { Scale = 1 }, btn)
+		UI.addUpdater(function(t)
+			if btn.Parent then sg.Rotation = (t * 80) % 360 end
+		end)
+		hoverable(btn, function()
+			TW(btn, 0.2, { BackgroundColor3 = C.cardHi })
+			TW(sc, 0.2, { Scale = 1.015 }, BACK)
+			TW(bar, 0.25, { Size = UDim2.fromOffset(3, 26) }, BACK)
+			shine.Position = UDim2.new(0, -30, 0.5, 0)
+			TW(shine, 0.55, { Position = UDim2.new(1, 40, 0.5, 0) }, Enum.EasingStyle.Quad)
+		end, function()
+			TW(btn, 0.25, { BackgroundColor3 = C.card })
+			TW(sc, 0.2, { Scale = 1 })
+			TW(bar, 0.2, { Size = UDim2.fromOffset(3, 16) })
+		end)
+		btn.InputBegan:Connect(function(i)
+			if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+				TW(sc, 0.08, { Scale = 0.97 })
+			end
+		end)
+		btn.Activated:Connect(function()
+			TW(sc, 0.25, { Scale = 1.015 }, BACK)
+			ripple(btn, accent, 8, 300)
+			callback()
+		end)
+		return btn
+	end
+
+	---------------------------------------------------------------- slider
+	UserInputService.InputChanged:Connect(function(input)
+		if UI.drag and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+			UI.drag(input.Position.X)
+		end
+	end)
+	UserInputService.InputEnded:Connect(function(input)
+		if UI.drag and (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+			UI.drag = nil
+			if UI.dragEnd then
+				UI.dragEnd()
+				UI.dragEnd = nil
+			end
+		end
+	end)
+
+	crearSlider = function(padre, texto, min, max, inicial, callback)
+		local range = math.max(max - min, 1)
+		local frame = N("Frame", {
+			Size = UDim2.new(1, 0, 0, 54), BackgroundColor3 = C.card, BackgroundTransparency = 0.35, BorderSizePixel = 0, ZIndex = 7,
+		}, padre)
+		frame:SetAttribute("UZ", true)
+		corner(frame, 9)
+		local st = N("UIStroke", { Color = C.line, Thickness = 1, Transparency = 0.3 }, frame)
+		N("TextLabel", {
+			Position = UDim2.fromOffset(12, 6), Size = UDim2.new(1, -84, 0, 18), BackgroundTransparency = 1, Text = texto,
+			TextColor3 = C.text, Font = Enum.Font.GothamMedium, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8,
+		}, frame)
+		local pill = N("Frame", {
+			Position = UDim2.new(1, -66, 0, 6), Size = UDim2.fromOffset(54, 18), BackgroundColor3 = C.or1,
+			BackgroundTransparency = 0.82, BorderSizePixel = 0, ZIndex = 8,
+		}, frame)
+		corner(pill, 9)
+		N("UIStroke", { Color = C.or1, Thickness = 1, Transparency = 0.5 }, pill)
+		local valLbl = N("TextLabel", {
+			Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Text = tostring(inicial), TextColor3 = C.or2,
+			Font = Enum.Font.GothamBold, TextSize = 11, ZIndex = 9,
+		}, pill)
+
+		local frac0 = math.clamp((inicial - min) / range, 0, 1)
+		local track = N("Frame", {
+			Position = UDim2.new(0, 12, 0, 36), Size = UDim2.new(1, -24, 0, 6), BackgroundColor3 = C.off, BorderSizePixel = 0, ZIndex = 8,
+		}, frame)
+		corner(track, 3)
+		local fill = N("Frame", {
+			Size = UDim2.fromScale(frac0, 1), BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, ZIndex = 9,
+		}, track)
+		corner(fill, 3)
+		N("UIGradient", { Color = ColorSequence.new(C.or3, C.or2) }, fill)
+		local knob = dot(track, 16, Color3.new(1, 1, 1), 11)
+		knob.Position = UDim2.new(frac0, 0, 0.5, 0)
+		local kst = N("UIStroke", { Thickness = 2, Color = C.or1 }, knob)
+		local tip = N("Frame", {
+			AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(frac0, 0, 0, -8), Size = UDim2.fromOffset(38, 18),
+			BackgroundColor3 = C.or1, BackgroundTransparency = 1, BorderSizePixel = 0, ZIndex = 12,
+		}, track)
+		corner(tip, 6)
+		local tipLbl = N("TextLabel", {
+			Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Text = tostring(inicial), TextColor3 = C.bg,
+			Font = Enum.Font.GothamBold, TextSize = 10, TextTransparency = 1, ZIndex = 13,
+		}, tip)
+		local hit = N("TextButton", {
+			Position = UDim2.new(0, 6, 0, 26), Size = UDim2.new(1, -12, 0, 26), BackgroundTransparency = 1, Text = "", ZIndex = 14,
+		}, frame)
+
+		local valor = inicial
+		local function setFromX(x)
+			local posX = math.clamp((x - track.AbsolutePosition.X) / math.max(track.AbsoluteSize.X, 1), 0, 1)
+			local nv = math.floor(min + (max - min) * posX)
+			fill.Size = UDim2.fromScale(posX, 1)
+			knob.Position = UDim2.new(posX, 0, 0.5, 0)
+			tip.Position = UDim2.new(posX, 0, 0, -8)
+			if nv ~= valor then
+				valor = nv
+				valLbl.Text = tostring(nv)
+				tipLbl.Text = tostring(nv)
+				callback(nv)
+			end
+		end
+		hit.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				UI.drag = setFromX
+				if padre:IsA("ScrollingFrame") then padre.ScrollingEnabled = false end
+				TW(knob, 0.15, { Size = UDim2.fromOffset(22, 22) }, BACK)
+				TW(tip, 0.15, { BackgroundTransparency = 0 })
+				TW(tipLbl, 0.15, { TextTransparency = 0 })
+				TW(st, 0.15, { Color = C.or1 })
+				UI.dragEnd = function()
+					if padre:IsA("ScrollingFrame") then padre.ScrollingEnabled = true end
+					TW(knob, 0.2, { Size = UDim2.fromOffset(16, 16) }, BACK)
+					TW(tip, 0.2, { BackgroundTransparency = 1 })
+					TW(tipLbl, 0.2, { TextTransparency = 1 })
+					TW(st, 0.2, { Color = C.line })
+					TW(pill, 0.12, { BackgroundTransparency = 0.6 })
+					task.delay(0.12, function() TW(pill, 0.3, { BackgroundTransparency = 0.82 }) end)
+				end
+				setFromX(input.Position.X)
+			end
+		end)
+		return frame
+	end
+
+	---------------------------------------------------------------- selector (desplegable)
+	crearSelector = function(padre, titulo, opciones, callback)
+		local listH = math.min(#opciones * 28 + 8, 170)
+		local wrap = N("Frame", { Size = UDim2.new(1, 0, 0, 40), BackgroundTransparency = 1, ClipsDescendants = true, ZIndex = 7 }, padre)
+		wrap:SetAttribute("UZ", true)
+		local head2 = N("TextButton", {
+			Size = UDim2.new(1, 0, 0, 40), BackgroundColor3 = C.card, BackgroundTransparency = 0.35, Text = "",
+			AutoButtonColor = false, BorderSizePixel = 0, ZIndex = 8,
+		}, wrap)
+		corner(head2, 9)
+		local st = N("UIStroke", { Color = C.line, Thickness = 1, Transparency = 0.3 }, head2)
+		N("TextLabel", {
+			Position = UDim2.fromOffset(12, 0), Size = UDim2.new(0.5, -12, 1, 0), BackgroundTransparency = 1, Text = titulo,
+			TextColor3 = C.text, Font = Enum.Font.GothamMedium, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 9,
+		}, head2)
+		local valLbl = N("TextLabel", {
+			Position = UDim2.new(0.5, 0, 0, 0), Size = UDim2.new(0.5, -36, 1, 0), BackgroundTransparency = 1, Text = "",
+			TextColor3 = C.or2, Font = Enum.Font.GothamBold, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Right,
+			TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 9,
+		}, head2)
+		local chev = N("Frame", {
+			AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(1, -18, 0.5, 0), Size = UDim2.fromOffset(10, 10),
+			BackgroundTransparency = 1, ZIndex = 9,
+		}, head2)
+		setLine(line(chev, C.or2, 9), 1, 3, 5, 7, 2)
+		setLine(line(chev, C.or2, 9), 9, 3, 5, 7, 2)
+
+		local list = N("ScrollingFrame", {
+			Position = UDim2.fromOffset(0, 46), Size = UDim2.new(1, 0, 0, listH), BackgroundColor3 = C.card,
+			BackgroundTransparency = 0.25, BorderSizePixel = 0, ScrollBarThickness = 3, ScrollBarImageColor3 = C.or1,
+			CanvasSize = UDim2.new(), AutomaticCanvasSize = Enum.AutomaticSize.Y, ZIndex = 8,
+		}, wrap)
+		corner(list, 9)
+		N("UIStroke", { Color = C.or1, Thickness = 1, Transparency = 0.6 }, list)
+		N("UIListLayout", { Padding = UDim.new(0, 2) }, list)
+		N("UIPadding", { PaddingTop = UDim.new(0, 4), PaddingBottom = UDim.new(0, 4), PaddingLeft = UDim.new(0, 4), PaddingRight = UDim.new(0, 6) }, list)
+
+		local abierto = false
+		local function toggle()
+			abierto = not abierto
+			TW(wrap, 0.3, { Size = UDim2.new(1, 0, 0, abierto and (46 + listH + 4) or 40) })
+			TW(chev, 0.3, { Rotation = abierto and 180 or 0 }, BACK)
+			TW(st, 0.2, { Color = abierto and C.or1 or C.line })
+		end
+		head2.Activated:Connect(toggle)
+		hoverable(head2, function() TW(head2, 0.15, { BackgroundTransparency = 0.2 }) end, function() TW(head2, 0.2, { BackgroundTransparency = 0.35 }) end)
+
+		local seleccionado
+		for _, opcion in ipairs(opciones) do
+			local ob = N("TextButton", {
+				Size = UDim2.new(1, 0, 0, 26), BackgroundColor3 = C.pu3, BackgroundTransparency = 0.7, Text = opcion,
+				TextColor3 = C.text, Font = Enum.Font.GothamMedium, TextSize = 10, AutoButtonColor = false,
+				BorderSizePixel = 0, ZIndex = 9,
+			}, list)
+			corner(ob, 6)
+			hoverable(ob, function() TW(ob, 0.12, { BackgroundColor3 = C.or1, BackgroundTransparency = 0.5 }) end, function()
+				TW(ob, 0.15, { BackgroundColor3 = C.pu3, BackgroundTransparency = (seleccionado == ob) and 0.45 or 0.7 })
+			end)
+			ob.Activated:Connect(function()
+				if seleccionado then TW(seleccionado, 0.15, { BackgroundTransparency = 0.7 }) end
+				seleccionado = ob
+				TW(ob, 0.15, { BackgroundTransparency = 0.45 })
+				valLbl.Text = opcion
+				callback(opcion)
+				toggle()
+			end)
+		end
+		return wrap
+	end
+
+	---------------------------------------------------------------- tarjeta de informacion
+	crearTarjeta = function(padre, titulo, contenido, colorBorde)
+		local accent = colorBorde and accentOf(colorBorde) or C.or1
+		local fr = N("Frame", {
+			Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundColor3 = Color3.new(1, 1, 1),
+			BackgroundTransparency = 0.25, BorderSizePixel = 0, ZIndex = 7,
+		}, padre)
+		fr:SetAttribute("UZ", true)
+		corner(fr, 10)
+		N("UIGradient", { Rotation = 20, Color = ColorSequence.new(C.cardHi:Lerp(accent, 0.18), C.card) }, fr)
+		N("UIStroke", { Color = accent, Thickness = 1.2, Transparency = 0.45 }, fr)
+		N("UIListLayout", { Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder }, fr)
+		N("UIPadding", { PaddingTop = UDim.new(0, 10), PaddingBottom = UDim.new(0, 10), PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12) }, fr)
+		if titulo and titulo ~= "" then
+			local row = N("Frame", { Size = UDim2.new(1, 0, 0, 20), BackgroundTransparency = 1, LayoutOrder = 1, ZIndex = 8 }, fr)
+			local d = N("Frame", {
+				AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(5, 10), Size = UDim2.fromOffset(7, 7),
+				BackgroundColor3 = accent, BorderSizePixel = 0, Rotation = 45, ZIndex = 9,
+			}, row)
+			table.insert(UI.shimmers, { d, nil })
+			N("TextLabel", {
+				Position = UDim2.fromOffset(16, 0), Size = UDim2.new(1, -16, 1, 0), BackgroundTransparency = 1, Text = titulo,
+				TextColor3 = accent, Font = Enum.Font.GothamBold, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 9,
+			}, row)
+		end
+		N("TextLabel", {
+			Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, Text = contenido,
+			TextColor3 = C.text, Font = Enum.Font.GothamMedium, TextSize = 11, TextWrapped = true,
+			TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, LayoutOrder = 2, ZIndex = 8,
+		}, fr)
+		return fr
+	end
+
+	---------------------------------------------------------------- secciones
+	UI.shimmers = UI.shimmers or {}
+	UI.decorarSeccion = function(fr)
+		local d = N("Frame", {
+			AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(10, 14), Size = UDim2.fromOffset(8, 8),
+			BackgroundColor3 = C.or1, BorderSizePixel = 0, Rotation = 45, ZIndex = 4,
+		}, fr)
+		local ln = N("Frame", {
+			Position = UDim2.new(0, 0, 1, -2), Size = UDim2.new(1, 0, 0, 1), BackgroundColor3 = C.or1, BorderSizePixel = 0, ZIndex = 3,
+		}, fr)
+		N("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.1), NumberSequenceKeypoint.new(1, 1) }) }, ln)
+		table.insert(UI.shimmers, { d, nil })
+	end
+	UI.addUpdater(function(t)
+		for i = #UI.shimmers, 1, -1 do
+			local d = UI.shimmers[i][1]
+			if d.Parent then
+				d.Rotation = 45 + math.sin(t * 1.6 + i) * 25
+				d.BackgroundTransparency = 0.1 + 0.3 * (0.5 + 0.5 * math.sin(t * 2.2 + i))
+			else
+				table.remove(UI.shimmers, i)
+			end
+		end
+	end)
+
+	_G.crearSeccion = function(padre, texto)
+		local fr = N("Frame", { Size = UDim2.new(1, 0, 0, 30), BackgroundTransparency = 1, BorderSizePixel = 0, ZIndex = 7 }, padre)
+		fr:SetAttribute("UZ", true)
+		N("TextLabel", {
+			Position = UDim2.fromOffset(24, 0), Size = UDim2.new(1, -30, 1, -2), BackgroundTransparency = 1, Text = texto,
+			TextColor3 = C.or2, Font = Enum.Font.GothamBlack, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 5,
+		}, fr)
+		UI.decorarSeccion(fr)
+		return fr
+	end
+
+	---------------------------------------------------------------- limpiador de emojis + skins automaticos
+	local MAPA = {
+		[0x2713] = "•", [0x25B6] = ">", [0x25C0] = "<", [0x23F8] = "||", [0x23F9] = "[]",
+	}
+	local RANGOS = {
+		{ 0x1F000, 0x1F1E5 }, { 0x1F200, 0x1FAFF }, { 0x2190, 0x21FF }, { 0x2300, 0x23FF }, { 0x25A0, 0x25FF },
+		{ 0x2600, 0x27BF }, { 0x2B00, 0x2BFF }, { 0xFE00, 0xFE0F }, { 0x200D, 0x200D }, { 0x20E3, 0x20E3 },
+	}
+	local function soltar(cp)
+		for _, r in ipairs(RANGOS) do
+			if cp >= r[1] and cp <= r[2] then return true end
+		end
+		return false
+	end
+	local function limpiar(s)
+		if type(s) ~= "string" or s == "" then return s end
+		local ok, res = pcall(function()
+			local out = {}
+			for _, cp in utf8.codes(s) do
+				if MAPA[cp] then
+					out[#out + 1] = MAPA[cp]
+				elseif not soltar(cp) then
+					out[#out + 1] = utf8.char(cp)
+				end
+			end
+			return table.concat(out)
+		end)
+		if not ok then return s end
+		res = res:gsub("^%?%? ", "")
+		res = res:gsub("[ \t]+\n", "\n")
+		res = res:gsub("\n[ \t]+", "\n")
+		res = res:gsub("  +", " ")
+		res = res:gsub("^%s+", "")
+		res = res:gsub("%s+$", "")
+		return res
+	end
+
+	local CP_LOCK, CP_UNLOCK = utf8.char(0x1F512), utf8.char(0x1F513)
+	local CP_DOWN, CP_UP, CP_PUMPKIN = utf8.char(0x25BC), utf8.char(0x25B2), utf8.char(0x1F383)
+
+	-- candado dibujado (reemplaza los emojis de bloqueo)
+	UI.lockIcon = function(btn, locked)
+	local ic = btn:FindFirstChild("UZLock")
+	if not ic then
+		ic = N("Frame", {
+			Name = "UZLock", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(14, 14), BackgroundTransparency = 1, ZIndex = 2,
+		}, btn)
+		local sh = N("Frame", {
+			Name = "Sh", Position = UDim2.fromOffset(3, 0), Size = UDim2.fromOffset(8, 8),
+			BackgroundTransparency = 1, BorderSizePixel = 0,
+		}, ic)
+		corner(sh, 4)
+		N("UIStroke", { Thickness = 1.6, Color = C.text }, sh)
+		local body = N("Frame", {
+			Name = "Body", Position = UDim2.fromOffset(1, 6), Size = UDim2.fromOffset(12, 8),
+			BackgroundColor3 = C.text, BorderSizePixel = 0, ZIndex = 2,
+		}, ic)
+		corner(body, 2)
+		N("Frame", {
+			Position = UDim2.fromOffset(5, 2), Size = UDim2.fromOffset(2, 4),
+			BackgroundColor3 = C.dark, BorderSizePixel = 0, ZIndex = 3,
+		}, body)
+	end
+	local sh = ic:FindFirstChild("Sh")
+	if sh then
+		if locked then
+			TW(sh, 0.25, {
+				Position = UDim2.fromOffset(3, 0),
+				Size = UDim2.fromOffset(8, 8),
+			})
+		else
+			TW(sh, 0.25, {
+				Position = UDim2.fromOffset(4, -3),
+				Size = UDim2.fromOffset(6, 6),
+			})
+		end
+	end
 end
 
-local function crearPagina(nombre, icono, orden)
-    local boton = Instance.new("TextButton")
-    boton.Size = UDim2.new(1, -12, 0, 30)
-    boton.Position = UDim2.new(0, 0, 0, 0)
-    boton.LayoutOrder = orden
-    boton.BackgroundColor3 = COLORES.Sidebar
-    boton.BackgroundTransparency = 0.6
-    boton.Text = ""
-    boton.BorderSizePixel = 0
-    boton.ZIndex = 4
-    boton.ClipsDescendants = true
-    boton.Parent = SidebarScroll
+	UI.chev = function(btn)
+		if btn:FindFirstChild("UZChev") then return end
+		local c = N("Frame", {
+			Name = "UZChev", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(1, -16, 0.5, 0),
+			Size = UDim2.fromOffset(10, 10), BackgroundTransparency = 1, ZIndex = 3,
+		}, btn)
+		setLine(line(c, C.or2, 3), 1, 3, 5, 7, 2)
+		setLine(line(c, C.or2, 3), 9, 3, 5, 7, 2)
+	end
 
-    local c = Instance.new("UICorner")
-    c.CornerRadius = UDim.new(0, 7)
-    c.Parent = boton
+	UI.avatarIcon = function(lbl)
+		if lbl:FindFirstChild("UZAv") then return end
+		local box = N("Frame", {
+			Name = "UZAv", AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(24, 24), BackgroundTransparency = 1, ZIndex = 2,
+		}, lbl)
+		N("UIScale", { Scale = 2 }, box)
+		UI.icon("Crab", box, C.or2)
+	end
 
-    local stroke = Instance.new("UIStroke")
-    stroke.Color = COLORES.Naranja1
-    stroke.Thickness = 1
-    stroke.Transparency = 0.6
-    stroke.Parent = boton
+	local function procesarTexto(inst)
+		if inst:IsA("TextBox") then return end
+		local raw = inst.Text
+		if raw == "" then return end
+		if inst:IsA("TextButton") then
+			local locked = string.find(raw, CP_LOCK, 1, true) ~= nil
+			if locked or string.find(raw, CP_UNLOCK, 1, true) then UI.lockIcon(inst, locked) end
+			if (string.find(raw, CP_DOWN, 1, true) or string.find(raw, CP_UP, 1, true)) and not inst:GetAttribute("UZ") then UI.chev(inst) end
+		end
+		if inst:IsA("TextLabel") and raw == CP_PUMPKIN and inst.Size.X.Offset == 60 then UI.avatarIcon(inst) end
+		local clean = limpiar(raw)
+		if clean ~= raw then inst.Text = clean end
+	end
 
-    crearRipple(boton)
+	local function esPropio(inst)
+		local p = inst
+		while p and p ~= ScreenGui do
+			if p:GetAttribute("UZ") then return true end
+			p = p.Parent
+		end
+		return false
+	end
 
-    local iconLbl = Instance.new("TextLabel")
-    iconLbl.Size = UDim2.new(0, 24, 1, 0)
-    iconLbl.Position = UDim2.new(0, 6, 0, 0)
-    iconLbl.BackgroundTransparency = 1
-    iconLbl.Text = icono or "•"
-    iconLbl.TextColor3 = COLORES.Naranja2
-    iconLbl.TextSize = 14
-    iconLbl.Font = Enum.Font.GothamBold
-    iconLbl.ZIndex = 5
-    iconLbl.Parent = boton
+	local function enPagina(inst)
+		local pg = inst:FindFirstAncestorWhichIsA("ScrollingFrame")
+		return pg ~= nil and string.sub(pg.Name, 1, 7) == "Pagina_"
+	end
 
-    local texto = Instance.new("TextLabel")
-    texto.Size = UDim2.new(1, -34, 1, 0)
-    texto.Position = UDim2.new(0, 30, 0, 0)
-    texto.BackgroundTransparency = 1
-    texto.Text = nombre
-    texto.TextColor3 = COLORES.Texto
-    texto.Font = Enum.Font.GothamMedium
-    texto.TextSize = 11
-    texto.TextXAlignment = Enum.TextXAlignment.Left
-    texto.ZIndex = 5
-    texto.Parent = boton
+	local function skinBoton(btn)
+		if btn:GetAttribute("UZsk") then return end
+		btn:SetAttribute("UZsk", true)
+		btn.ClipsDescendants = true
+		if not btn:FindFirstChildOfClass("UICorner") then corner(btn, 8) end
+		local st = btn:FindFirstChildOfClass("UIStroke")
+		local base = btn.BackgroundTransparency
+		local sc = N("UIScale", { Scale = 1 }, btn)
+		hoverable(btn, function()
+			TW(btn, 0.15, { BackgroundTransparency = math.max(base - 0.15, 0) })
+			TW(sc, 0.15, { Scale = 1.015 }, BACK)
+		end, function()
+			TW(btn, 0.2, { BackgroundTransparency = base })
+			TW(sc, 0.2, { Scale = 1 })
+		end)
+		btn.InputBegan:Connect(function(i)
+			if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then TW(sc, 0.08, { Scale = 0.97 }) end
+		end)
+		btn.Activated:Connect(function()
+			TW(sc, 0.25, { Scale = 1.015 }, BACK)
+			ripple(btn, C.or2, 12, 240)
+		end)
+	end
 
-    task.spawn(function()
-        while task.wait() do
-            local t = tick() + orden
-            local a = (math.sin(t * 2) + 1) / 2
-            stroke.Color = COLORES.Naranja3:Lerp(COLORES.Morado2, a)
-            stroke.Transparency = 0.6 - a * 0.3
-        end
-    end)
+	local function skinTextBox(tb)
+		if tb:GetAttribute("UZsk") then return end
+		tb:SetAttribute("UZsk", true)
+		tb.Focused:Connect(function()
+			local s = tb:FindFirstChildOfClass("UIStroke")
+			if s then TW(s, 0.2, { Color = C.or2, Transparency = 0 }) end
+		end)
+		tb.FocusLost:Connect(function()
+			local s = tb:FindFirstChildOfClass("UIStroke")
+			if s then TW(s, 0.25, { Color = C.or1, Transparency = 0.4 }) end
+		end)
+	end
 
-    local pagina = Instance.new("ScrollingFrame")
-    pagina.Size = UDim2.new(1, -145, 1, -20)
-    pagina.Position = UDim2.new(0, 135, 0, 10)
-    pagina.BackgroundTransparency = 1
-    pagina.BorderSizePixel = 0
-    pagina.ScrollBarThickness = 4
-    pagina.ScrollBarImageColor3 = COLORES.Naranja1
-    pagina.ScrollBarImageTransparency = 0.3
-    pagina.CanvasSize = UDim2.new(0, 0, 0, 0)
-    pagina.AutomaticCanvasSize = Enum.AutomaticSize.Y
-    pagina.ScrollingDirection = Enum.ScrollingDirection.Y
-    pagina.ScrollingEnabled = true
-    pagina.Active = true
-    pagina.ClipsDescendants = true
-    pagina.ElasticBehavior = Enum.ElasticBehavior.WhenScrollable
-    pagina.Visible = false
-    pagina.ZIndex = 2
-    pagina.Parent = Panel
+	local function skinSeccionManual(fr)
+		if fr:GetAttribute("UZsk") or not fr.Parent then return end
+		fr:SetAttribute("UZsk", true)
+		fr.BackgroundTransparency = 1
+		local s = fr:FindFirstChildOfClass("UIStroke")
+		if s then s.Transparency = 1 end
+		local lbl = fr:FindFirstChildOfClass("TextLabel")
+		if lbl then
+			lbl.Position = UDim2.fromOffset(24, 0)
+			lbl.Size = UDim2.new(1, -30, 1, -2)
+		end
+		UI.decorarSeccion(fr)
+	end
 
-    local layout = Instance.new("UIListLayout")
-    layout.Padding = UDim.new(0, 6)
-    layout.SortOrder = Enum.SortOrder.LayoutOrder
-    layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    layout.Parent = pagina
+	local function skinHud(btn)
+		if btn == orb or btn:GetAttribute("UZsk") then return end
+		btn:SetAttribute("UZsk", true)
+		local sc = N("UIScale", { Scale = 1 }, btn)
+		btn.MouseEnter:Connect(function() TW(sc, 0.15, { Scale = 1.04 }, BACK) end)
+		btn.MouseLeave:Connect(function() TW(sc, 0.2, { Scale = 1 }) end)
+		btn.InputBegan:Connect(function(i)
+			if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then TW(sc, 0.08, { Scale = 0.94 }) end
+		end)
+		btn.InputEnded:Connect(function(i)
+			if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then TW(sc, 0.25, { Scale = 1 }, BACK) end
+		end)
+	end
 
-    local padding = Instance.new("UIPadding")
-    padding.PaddingTop = UDim.new(0, 8)
-    padding.PaddingBottom = UDim.new(0, 40)
-    padding.PaddingLeft = UDim.new(0, 8)
-    padding.PaddingRight = UDim.new(0, 8)
-    padding.Parent = pagina
-
-    table.insert(Paginas, {boton, pagina, texto, iconLbl})
-
-    boton.MouseButton1Click:Connect(function()
-        for _, p in ipairs(Paginas) do
-            p[2].Visible = false
-            p[1].BackgroundTransparency = 0.6
-        end
-        pagina.Visible = true
-        boton.BackgroundTransparency = 0.3
-    end)
-
-    return pagina
-end
-
-local function crearToggle(padre, texto, estadoInicial, callback)
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, 0, 0, 38)
-    frame.BackgroundColor3 = COLORES.Morado3
-    frame.BackgroundTransparency = 0.5
-    frame.BorderSizePixel = 0
-    frame.ZIndex = 2
-    frame.Parent = padre
-
-    local c = Instance.new("UICorner")
-    c.CornerRadius = UDim.new(0, 9)
-    c.Parent = frame
-
-    local stroke = Instance.new("UIStroke")
-    stroke.Color = COLORES.Naranja1
-    stroke.Thickness = 1
-    stroke.Transparency = 0.4
-    stroke.Parent = frame
-
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(0.7, 0, 1, 0)
-    label.Position = UDim2.new(0, 12, 0, 0)
-    label.BackgroundTransparency = 1
-    label.Text = texto
-    label.TextColor3 = COLORES.Texto
-    label.Font = Enum.Font.GothamMedium
-    label.TextSize = 11
-    label.TextXAlignment = Enum.TextXAlignment.Left
-    label.ZIndex = 2
-    label.Parent = frame
-
-    local switch = Instance.new("TextButton")
-    switch.Size = UDim2.new(0, 42, 0, 20)
-    switch.Position = UDim2.new(1, -54, 0.5, -10)
-    switch.BackgroundColor3 = estadoInicial and COLORES.Naranja1 or Color3.fromRGB(50, 40, 60)
-    switch.Text = ""
-    switch.BorderSizePixel = 0
-    switch.ZIndex = 2
-    switch.Parent = frame
-
-    local c2 = Instance.new("UICorner")
-    c2.CornerRadius = UDim.new(1, 0)
-    c2.Parent = switch
-
-    local circulo = Instance.new("Frame")
-    circulo.Size = UDim2.new(0, 14, 0, 14)
-    circulo.Position = estadoInicial and UDim2.new(1, -16, 0.5, -7) or UDim2.new(0, 2, 0.5, -7)
-    circulo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    circulo.BorderSizePixel = 0
-    circulo.ZIndex = 3
-    circulo.Parent = switch
-
-    local c3 = Instance.new("UICorner")
-    c3.CornerRadius = UDim.new(1, 0)
-    c3.Parent = circulo
-
-    local estado = estadoInicial
-
-    switch.MouseButton1Click:Connect(function()
-        estado = not estado
-        switch.BackgroundColor3 = estado and COLORES.Naranja1 or Color3.fromRGB(50, 40, 60)
-        TweenService:Create(circulo, TweenInfo.new(0.2), {
-            Position = estado and UDim2.new(1, -16, 0.5, -7) or UDim2.new(0, 2, 0.5, -7)
-        }):Play()
-        callback(estado)
-    end)
-end
-
-local function crearBoton(padre, texto, callback, color)
-    local boton = Instance.new("TextButton")
-    boton.Size = UDim2.new(1, 0, 0, 42)
-    boton.BackgroundColor3 = color or COLORES.Morado1
-    boton.BackgroundTransparency = 0.5
-    boton.Text = texto
-    boton.TextColor3 = COLORES.Texto
-    boton.Font = Enum.Font.GothamBold
-    boton.TextSize = 12
-    boton.BorderSizePixel = 0
-    boton.ClipsDescendants = true
-    boton.ZIndex = 2
-    boton.Parent = padre
-
-    local c = Instance.new("UICorner")
-    c.CornerRadius = UDim.new(0, 9)
-    c.Parent = boton
-
-    local stroke = Instance.new("UIStroke")
-    stroke.Color = color or COLORES.Naranja1
-    stroke.Thickness = 1.5
-    stroke.Transparency = 0.2
-    stroke.Parent = boton
-
-    task.spawn(function()
-        while task.wait() do
-            local t = tick()
-            local a = (math.sin(t * 1.5) + 1) / 2
-            stroke.Color = (color or COLORES.Naranja3):Lerp(COLORES.Morado2, a)
-            stroke.Transparency = 0.4 - a * 0.3
-        end
-    end)
-
-    crearRipple(boton)
-
-    boton.MouseEnter:Connect(function()
-        TweenService:Create(boton, TweenInfo.new(0.2), {
-            BackgroundTransparency = 0.3,
-        }):Play()
-    end)
-
-    boton.MouseLeave:Connect(function()
-        TweenService:Create(boton, TweenInfo.new(0.2), {
-            BackgroundTransparency = 0.5,
-        }):Play()
-    end)
-
-    boton.MouseButton1Click:Connect(callback)
-    return boton
-end
-
-local function crearSlider(padre, texto, min, max, inicial, callback)
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, 0, 0, 50)
-    frame.BackgroundColor3 = COLORES.Morado3
-    frame.BackgroundTransparency = 0.5
-    frame.BorderSizePixel = 0
-    frame.ZIndex = 2
-    frame.Parent = padre
-
-    local c = Instance.new("UICorner")
-    c.CornerRadius = UDim.new(0, 9)
-    c.Parent = frame
-
-    local stroke = Instance.new("UIStroke")
-    stroke.Color = COLORES.Naranja1
-    stroke.Thickness = 1
-    stroke.Transparency = 0.4
-    stroke.Parent = frame
-
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(1, -20, 0, 18)
-    label.Position = UDim2.new(0, 10, 0, 5)
-    label.BackgroundTransparency = 1
-    label.Text = texto .. ": " .. inicial
-    label.TextColor3 = COLORES.Texto
-    label.Font = Enum.Font.GothamMedium
-    label.TextSize = 10
-    label.TextXAlignment = Enum.TextXAlignment.Left
-    label.ZIndex = 2
-    label.Parent = frame
-
-    local barra = Instance.new("Frame")
-    barra.Size = UDim2.new(1, -20, 0, 8)
-    barra.Position = UDim2.new(0, 10, 0, 30)
-    barra.BackgroundColor3 = Color3.fromRGB(30, 20, 40)
-    barra.BorderSizePixel = 0
-    barra.ZIndex = 2
-    barra.Parent = frame
-
-    local c2 = Instance.new("UICorner")
-    c2.CornerRadius = UDim.new(1, 0)
-    c2.Parent = barra
-
-    local relleno = Instance.new("Frame")
-    relleno.Size = UDim2.new((inicial - min) / (max - min), 0, 1, 0)
-    relleno.BackgroundColor3 = COLORES.Naranja1
-    relleno.BorderSizePixel = 0
-    relleno.ZIndex = 3
-    relleno.Parent = barra
-
-    local c3 = Instance.new("UICorner")
-    c3.CornerRadius = UDim.new(1, 0)
-    c3.Parent = relleno
-
-    local valor = inicial
-    local arrastrando = false
-
-    barra.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            arrastrando = true
-            if Panel then Panel.Draggable = false end
-        end
-    end)
-
-    UserInputService.InputChanged:Connect(function(input)
-        if arrastrando and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-            local posX = math.clamp((input.Position.X - barra.AbsolutePosition.X) / barra.AbsoluteSize.X, 0, 1)
-            valor = math.floor(min + (max - min) * posX)
-            relleno.Size = UDim2.new(posX, 0, 1, 0)
-            label.Text = texto .. ": " .. valor
-            callback(valor)
-        end
-    end)
-
-    UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            arrastrando = false
-            if Panel then Panel.Draggable = true end
-        end
-    end)
-end
-
-_G.crearSeccion = function(padre, texto)
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, 0, 0, 30)
-    frame.BackgroundColor3 = COLORES.Naranja1
-    frame.BackgroundTransparency = 0.7
-    frame.BorderSizePixel = 0
-    frame.ZIndex = 2
-    frame.Parent = padre
-
-    local c = Instance.new("UICorner")
-    c.CornerRadius = UDim.new(0, 7)
-    c.Parent = frame
-
-    local stroke = Instance.new("UIStroke")
-    stroke.Color = COLORES.Naranja1
-    stroke.Thickness = 1.5
-    stroke.Transparency = 0.2
-    stroke.Parent = frame
-
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(1, -20, 1, 0)
-    label.Position = UDim2.new(0, 10, 0, 0)
-    label.BackgroundTransparency = 1
-    label.Text = texto
-    label.TextColor3 = COLORES.Naranja2
-    label.Font = Enum.Font.GothamBlack
-    label.TextSize = 12
-    label.TextXAlignment = Enum.TextXAlignment.Left
-    label.ZIndex = 3
-    label.Parent = frame
+	local function alAgregar(inst)
+		if inst:IsA("TextLabel") or inst:IsA("TextButton") then
+			procesarTexto(inst)
+			inst:GetPropertyChangedSignal("Text"):Connect(function() procesarTexto(inst) end)
+		end
+		if inst:IsA("TextButton") then
+			if inst.Parent == ScreenGui then
+				skinHud(inst)
+			elseif not esPropio(inst) and enPagina(inst) then
+				skinBoton(inst)
+			end
+		elseif inst:IsA("TextBox") then
+			if not esPropio(inst) and enPagina(inst) then skinTextBox(inst) end
+		elseif inst:IsA("Frame") then
+			local p = inst.Parent
+			if p and p:IsA("ScrollingFrame") and inst.Size.Y.Offset == 30 and inst.Size.X.Scale == 1
+				and inst.BackgroundColor3 == Color3.fromRGB(20, 15, 25) then
+				task.defer(skinSeccionManual, inst)
+			end
+		end
+	end
+	ScreenGui.DescendantAdded:Connect(alAgregar)
 end
 
 print("🎃 Parte 2/10 cargada - Halloween UI")
 
-local PaginaVisual = crearPagina("Visual", "🎃", 1)
-local PaginaAim = crearPagina("Combat", "👻", 2)
-local PaginaAura = crearPagina("Crab", "💀", 3)
-local PaginaPlayer = crearPagina("Jugador", "🦇", 4)
-local PaginaBomb = crearPagina("Clutchs", "🔥", 7)
-local PaginaInfo = crearPagina("Info", "🍬", 10)
-local PaginaUpdate = crearPagina("Update", "📜", 11)
-local PaginaAvisos = crearPagina("Avisos", "⚠️", 12)
-local PaginaCreador = crearPagina("Creador", "👑", 13)
+-- ============================================
+-- 🌾 AUTO FARM COINS (sistema god6767 - adaptado)
+-- ============================================
+
+_G.FARM_ON = false
+_G.FARM_AFK = false
+_G.FARM_NOCLIP = true
+_G.FARM_ANTIVOID = true
+_G.FARM_SPEED = 23
+_G.FARM_MAXDIST = 1000
+_G.FARM_RESET_DELAY = 5.0
+
+_G.FARM_ESTADO = "idle"
+_G.FARM_BAG_FULL = false
+_G.FARM_WAITING = false
+_G.FARM_ACTIVE_COINS = {}
+_G.FARM_BLACKLIST = {}
+_G.FARM_CURRENT = nil
+_G.FARM_NOCOINS_TIME = nil
+_G.FARM_COLLECTED = false
+
+_G.FARM_LV = nil
+_G.FARM_ATTACH = nil
+_G.FARM_CONNECTIONS = {}
+_G.FARM_CHAR_CONN = nil
+_G.FARM_TARGET_THREAD = nil
+
+_G.FARM_CHAR = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+_G.FARM_ROOT = _G.FARM_CHAR:WaitForChild("HumanoidRootPart")
+_G.FARM_HUM = _G.FARM_CHAR:WaitForChild("Humanoid")
+
+_G.FARM_ADD_CONN = function(conn)
+    table.insert(_G.FARM_CONNECTIONS, conn)
+end
+
+_G.FARM_CLEAN_CONNS = function()
+    for _, conn in ipairs(_G.FARM_CONNECTIONS) do
+        pcall(function() conn:Disconnect() end)
+    end
+    _G.FARM_CONNECTIONS = {}
+end
+
+_G.FARM_STOP_MOVE = function()
+    if _G.FARM_LV then
+        _G.FARM_LV.VectorVelocity = Vector3.zero
+        _G.FARM_LV.Enabled = false
+    end
+    if _G.FARM_ROOT then
+        _G.FARM_ROOT.AssemblyLinearVelocity = Vector3.zero
+        _G.FARM_ROOT.AssemblyAngularVelocity = Vector3.zero
+    end
+end
+
+_G.FARM_SETUP_VEL = function()
+    if not _G.FARM_ROOT then return end
+    
+    _G.FARM_ATTACH = _G.FARM_ROOT:FindFirstChild("FarmAttachment")
+    if not _G.FARM_ATTACH then
+        _G.FARM_ATTACH = Instance.new("Attachment")
+        _G.FARM_ATTACH.Name = "FarmAttachment"
+        _G.FARM_ATTACH.Parent = _G.FARM_ROOT
+    end
+    
+    _G.FARM_LV = _G.FARM_ROOT:FindFirstChild("FarmLinearVelocity")
+    if not _G.FARM_LV then
+        _G.FARM_LV = Instance.new("LinearVelocity")
+        _G.FARM_LV.Name = "FarmLinearVelocity"
+        _G.FARM_LV.Attachment0 = _G.FARM_ATTACH
+        _G.FARM_LV.VelocityConstraintMode = Enum.VelocityConstraintMode.Vector
+        _G.FARM_LV.RelativeTo = Enum.ActuatorRelativeTo.World
+        _G.FARM_LV.VectorVelocity = Vector3.zero
+        _G.FARM_LV.Enabled = false
+        _G.FARM_LV.ForceLimitMode = Enum.ForceLimitMode.PerAxis
+        _G.FARM_LV.MaxAxesForce = Vector3.new(100000, 100000, 100000)
+        _G.FARM_LV.Parent = _G.FARM_ROOT
+    end
+end
+
+_G.FARM_REMOVE_VEL = function()
+    if _G.FARM_LV then _G.FARM_LV:Destroy() _G.FARM_LV = nil end
+    if _G.FARM_ATTACH then _G.FARM_ATTACH:Destroy() _G.FARM_ATTACH = nil end
+end
+
+_G.FARM_IS_COIN = function(part)
+    if not part:IsA("BasePart") or _G.FARM_BLACKLIST[part] then return false end
+    local name = part.Name:lower()
+    return name:find("coin") or name:find("cash") or name:find("money") or name:find("collect")
+end
+
+_G.FARM_CHECK_FULL = function()
+    local pg = LocalPlayer:FindFirstChild("PlayerGui")
+    if not pg then return false end
+    for _, gui in ipairs(pg:GetChildren()) do
+        if gui:IsA("ScreenGui") and gui.Name ~= "UzivertHub" and gui.Name ~= "UzivertSelectorNew" then
+            local cont = gui:FindFirstChild("Container", true)
+            if cont then
+                for _, fr in ipairs(cont:GetChildren()) do
+                    if fr:IsA("Frame") and fr.Visible then
+                        local ico = fr:FindFirstChild("FullBagIcon", true)
+                        local txt = fr:FindFirstChild("Full", true)
+                        if (ico and ico.Visible) or (txt and txt.Visible) then
+                            return true
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return false
+end
+
+_G.FARM_TRIGGER_RESET = function()
+    if _G.FARM_BAG_FULL then return end
+    _G.FARM_BAG_FULL = true
+    _G.FARM_STOP_MOVE()
+    task.wait(0.2)
+    if _G.FARM_HUM and _G.FARM_HUM.Health > 0 then
+        _G.FARM_HUM.Health = 0
+    end
+end
+
+_G.FARM_TRACK = function(part)
+    if _G.FARM_IS_COIN(part) then
+        _G.FARM_ACTIVE_COINS[part] = true
+    end
+end
+
+_G.FARM_UNTRACK = function(part)
+    _G.FARM_ACTIVE_COINS[part] = nil
+    if _G.FARM_CURRENT == part then _G.FARM_CURRENT = nil end
+end
+
+_G.FARM_INIT_COINS = function()
+    _G.FARM_ACTIVE_COINS = {}
+    for _, v in ipairs(Workspace:GetDescendants()) do
+        if _G.FARM_IS_COIN(v) then _G.FARM_ACTIVE_COINS[v] = true end
+    end
+    _G.FARM_ADD_CONN(Workspace.DescendantAdded:Connect(_G.FARM_TRACK))
+    _G.FARM_ADD_CONN(Workspace.DescendantRemoving:Connect(_G.FARM_UNTRACK))
+    
+    local remotes = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
+    local gameplay = remotes and remotes:FindFirstChild("Gameplay")
+    if gameplay then
+        local coinsStarted = gameplay:FindFirstChild("CoinsStarted")
+        local coinCollected = gameplay:FindFirstChild("CoinCollected")
+        if coinsStarted then
+            _G.FARM_ADD_CONN(coinsStarted.OnClientEvent:Connect(function()
+                _G.FARM_WAITING = true
+                _G.FARM_STOP_MOVE()
+                _G.FARM_CURRENT = nil
+                _G.FARM_ACTIVE_COINS = {}
+                _G.FARM_BLACKLIST = {}
+                _G.FARM_BAG_FULL = false
+                task.wait(1.5)
+                for _, v in ipairs(Workspace:GetDescendants()) do
+                    if _G.FARM_IS_COIN(v) then _G.FARM_ACTIVE_COINS[v] = true end
+                end
+                _G.FARM_WAITING = false
+            end))
+        end
+        if coinCollected then
+            _G.FARM_ADD_CONN(coinCollected.OnClientEvent:Connect(function(_, cur, max)
+                local c = tonumber(cur)
+                local m = tonumber(max)
+                if c and m and c >= m then _G.FARM_TRIGGER_RESET() end
+            end))
+        end
+    end
+end
+
+_G.FARM_FINDER = function()
+    if _G.FARM_TARGET_THREAD then task.cancel(_G.FARM_TARGET_THREAD) end
+    _G.FARM_TARGET_THREAD = task.spawn(function()
+        while true do
+            task.wait(0.1)
+            if not _G.FARM_ON then break end
+            
+            if _G.FARM_ON and not _G.FARM_BAG_FULL and _G.FARM_CHECK_FULL() then
+                _G.FARM_TRIGGER_RESET()
+            end
+            
+            if _G.FARM_ON and not _G.FARM_BAG_FULL and not _G.FARM_WAITING and _G.FARM_ROOT then
+                local pos = _G.FARM_ROOT.Position
+                local nearest = nil
+                local nearestDist = _G.FARM_MAXDIST + 1
+                for coin, _ in pairs(_G.FARM_ACTIVE_COINS) do
+                    if coin and coin.Parent and not _G.FARM_BLACKLIST[coin] then
+                        local d = (coin.Position - pos).Magnitude
+                        if d < nearestDist then nearestDist = d nearest = coin end
+                    else
+                        _G.FARM_ACTIVE_COINS[coin] = nil
+                    end
+                end
+                if nearest and not nearest:FindFirstChild("CoinVisual") then
+                    _G.FARM_ACTIVE_COINS[nearest] = nil
+                    nearest = nil
+                end
+                _G.FARM_CURRENT = nearest
+            end
+        end
+    end)
+end
+
+_G.FARM_AFK_LOOP = function()
+    while _G.FARM_AFK and _G.FARM_ON do
+        task.wait(30)
+        if not _G.FARM_AFK or not _G.FARM_ON then break end
+        pcall(function()
+            VirtualUser:CaptureController()
+            VirtualUser:ClickButton2(Vector2.new())
+        end)
+    end
+end
+
+_G.FARM_ENGINE = function()
+    _G.FARM_CLEAN_CONNS()
+    _G.FARM_SETUP_VEL()
+    _G.FARM_INIT_COINS()
+    _G.FARM_NOCOINS_TIME = nil
+    
+    _G.FARM_ADD_CONN(RunService.Heartbeat:Connect(function()
+        if not _G.FARM_ON or _G.FARM_BAG_FULL or _G.FARM_WAITING or not _G.FARM_ROOT or not _G.FARM_ROOT.Parent or not _G.FARM_HUM or _G.FARM_HUM.Health <= 0 then
+            _G.FARM_STOP_MOVE()
+            return
+        end
+        
+        if _G.FARM_CURRENT and _G.FARM_CURRENT.Parent and not _G.FARM_BLACKLIST[_G.FARM_CURRENT] then
+            _G.FARM_NOCOINS_TIME = nil
+            local targetPos = _G.FARM_CURRENT.Position
+            local rootPos = _G.FARM_ROOT.Position
+            local dist = (targetPos - rootPos).Magnitude
+            if dist <= 1.2 then
+                _G.FARM_ROOT.CFrame = CFrame.new(targetPos)
+                _G.FARM_STOP_MOVE()
+                _G.FARM_COLLECTED = true
+                _G.FARM_BLACKLIST[_G.FARM_CURRENT] = true
+                _G.FARM_ACTIVE_COINS[_G.FARM_CURRENT] = nil
+                _G.FARM_CURRENT = nil
+            else
+                if _G.FARM_LV then
+                    _G.FARM_LV.Enabled = true
+                    _G.FARM_LV.VectorVelocity = (targetPos - rootPos).Unit * _G.FARM_SPEED
+                end
+            end
+        else
+            _G.FARM_STOP_MOVE()
+            if _G.FARM_COLLECTED then
+                if not _G.FARM_NOCOINS_TIME then
+                    _G.FARM_NOCOINS_TIME = os.clock()
+                elseif os.clock() - _G.FARM_NOCOINS_TIME >= _G.FARM_RESET_DELAY then
+                    _G.FARM_NOCOINS_TIME = nil
+                    _G.FARM_CLEAN_CONNS()
+                    if _G.FARM_HUM then _G.FARM_HUM.Health = 0 end
+                end
+            else
+                _G.FARM_NOCOINS_TIME = nil
+            end
+        end
+    end))
+end
+
+-- Anti-Void
+_G.FARM_ANTIVOID_APPLY = function()
+    if _G.FARM_ANTIVOID then
+        Workspace.FallenPartsDestroyHeight = 0/0
+    end
+end
+
+-- Noclip
+_G.FARM_NOCLIP_CONN = nil
+_G.FARM_NOCLIP_START = function()
+    if _G.FARM_NOCLIP_CONN then return end
+    _G.FARM_NOCLIP_CONN = RunService.Stepped:Connect(function()
+        if not _G.FARM_ON or not _G.FARM_NOCLIP then return end
+        local char = LocalPlayer.Character
+        if char then
+            for _, p in ipairs(char:GetDescendants()) do
+                if p:IsA("BasePart") then p.CanCollide = false end
+            end
+        end
+    end)
+end
+
+_G.FARM_NOCLIP_STOP = function()
+    if _G.FARM_NOCLIP_CONN then
+        _G.FARM_NOCLIP_CONN:Disconnect()
+        _G.FARM_NOCLIP_CONN = nil
+    end
+    local char = LocalPlayer.Character
+    if char then
+        for _, p in ipairs(char:GetDescendants()) do
+            if p:IsA("BasePart") then p.CanCollide = true end
+        end
+    end
+end
+
+-- Iniciar / Parar
+_G.FARM_LOAD = function()
+    _G.FARM_BAG_FULL = false
+    _G.FARM_WAITING = false
+    _G.FARM_COLLECTED = false
+    _G.FARM_BLACKLIST = {}
+    _G.FARM_NOCOINS_TIME = nil
+    
+    _G.FARM_CHAR = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    _G.FARM_ROOT = _G.FARM_CHAR:WaitForChild("HumanoidRootPart")
+    _G.FARM_HUM = _G.FARM_CHAR:WaitForChild("Humanoid")
+    
+    _G.FARM_ANTIVOID_APPLY()
+    _G.FARM_NOCLIP_START()
+    _G.FARM_FINDER()
+    _G.FARM_ENGINE()
+    
+    if _G.FARM_CHAR_CONN then _G.FARM_CHAR_CONN:Disconnect() end
+    _G.FARM_CHAR_CONN = LocalPlayer.CharacterAdded:Connect(function(newChar)
+        _G.FARM_CLEAN_CONNS()
+        _G.FARM_REMOVE_VEL()
+        _G.FARM_CHAR = newChar
+        _G.FARM_ROOT = newChar:WaitForChild("HumanoidRootPart")
+        _G.FARM_HUM = newChar:WaitForChild("Humanoid")
+        _G.FARM_BAG_FULL = false
+        _G.FARM_WAITING = false
+        _G.FARM_COLLECTED = false
+        _G.FARM_BLACKLIST = {}
+        task.wait(1.5)
+        if _G.FARM_ON then _G.FARM_ENGINE() end
+    end)
+end
+
+_G.FARM_UNLOAD = function()
+    _G.FARM_ON = false
+    _G.FARM_CLEAN_CONNS()
+    _G.FARM_NOCLIP_STOP()
+    _G.FARM_REMOVE_VEL()
+    if _G.FARM_TARGET_THREAD then
+        task.cancel(_G.FARM_TARGET_THREAD)
+        _G.FARM_TARGET_THREAD = nil
+    end
+    if _G.FARM_CHAR_CONN then
+        _G.FARM_CHAR_CONN:Disconnect()
+        _G.FARM_CHAR_CONN = nil
+    end
+    _G.FARM_ACTIVE_COINS = {}
+    _G.FARM_BLACKLIST = {}
+    _G.FARM_CURRENT = nil
+end
+
+local PaginaVisual = crearPagina("Visual", "Visual", 1)
+local PaginaAim = crearPagina("Combat", "Combat", 2)
+local PaginaAura = crearPagina("Crab", "Crab", 3)
+local PaginaPlayer = crearPagina("Jugador", "Jugador", 4)
+local PaginaBomb = crearPagina("Clutchs", "Clutchs", 7)
+local PaginaAutoFarm = crearPagina("Auto Farm", "AutoFarm", 10)
+local PaginaInfo = crearPagina("Info", "Info", 11)
+local PaginaUpdate = crearPagina("Update", "Update", 12)
+local PaginaAvisos = crearPagina("Avisos", "Avisos", 13)
+local PaginaCreador = crearPagina("Creador", "Creador", 14)
 
 -- Pestañas solo de GAMA ALTA
 if not _G.UZIVERT_GAMA_BAJA then
-    PaginaFling = crearPagina("Fling", "🕷️", 5)
-    PaginaAnims = crearPagina("Anims", "🕸️", 6)
-    PaginaUtilidades = crearPagina("Utilidades", "🧰", 8)
-    PaginaRend = crearPagina("Apariencia", "⚰️", 9)
+    PaginaFling = crearPagina("Fling", "Fling", 5)
+    PaginaAnims = crearPagina("Anims", "Anims", 6)
+    PaginaUtilidades = crearPagina("Utilidades", "Utilidades", 8)
+    PaginaRend = crearPagina("Apariencia", "Apariencia", 9)
 end
 
 Paginas[1][2].Visible = true
 Paginas[1][1].BackgroundTransparency = 0.3
+
+-- Controles del Auto Farm
+crearToggle(PaginaAutoFarm, "🌾 Auto Farm", false, function(v)
+    _G.FARM_ON = v
+    if v then
+        _G.FARM_LOAD()
+        if _G.FARM_AFK then task.spawn(_G.FARM_AFK_LOOP) end
+    else
+        _G.FARM_UNLOAD()
+    end
+end)
+
+crearToggle(PaginaAutoFarm, "🌙 Anti-AFK", false, function(v)
+    _G.FARM_AFK = v
+    if v and _G.FARM_ON then task.spawn(_G.FARM_AFK_LOOP) end
+end)
+
+crearToggle(PaginaAutoFarm, "👻 Noclip", true, function(v)
+    _G.FARM_NOCLIP = v
+    if v and _G.FARM_ON then
+        _G.FARM_NOCLIP_START()
+    else
+        _G.FARM_NOCLIP_STOP()
+    end
+end)
+
+crearToggle(PaginaAutoFarm, "🛡️ Anti-Void", true, function(v)
+    _G.FARM_ANTIVOID = v
+    _G.FARM_ANTIVOID_APPLY()
+end)
+
+crearSlider(PaginaAutoFarm, "🚶 Velocidad", 10, 30, 23, function(v)
+    _G.FARM_SPEED = v
+end)
+
+crearSlider(PaginaAutoFarm, "📏 Distancia Máx", 100, 2000, 1000, function(v)
+    _G.FARM_MAXDIST = v
+end)
 
 -- ============================================
 -- 🧰 UTILIDADES: INVENTORY UNLIMITER + AUTO GET TOOLS
@@ -3401,7 +4513,7 @@ _G.UZIVERT_AGARRAR_GUN = function()
 end
 
 _G.UZIVERT_AUTO_GET_GUN_LOOP = task.spawn(function()
-    while task.wait(1) do  -- ⬅️ antes 0.5, ahora 1 (menos lag)
+    while task.wait(0.10) do  -- ⬅️ antes 0.5, ahora 1 (menos lag)
         if not _G.UZIVERT_AUTO_GET_GUN_ON then continue end
         _G.UZIVERT_AGARRAR_GUN()
     end
@@ -4346,6 +5458,19 @@ local function obtenerOriginArma(gun)
     return Camera.CFrame
 end
 
+-- ============================================
+-- 🎯 SHOOT MURDERER v8 (Jmods Style)
+-- Offset adelante + Ping Multiplier + Ráfaga
+-- ============================================
+
+_G.UZIVERT_SHOOT_RAFAGA = 15
+_G.UZIVERT_SHOOT_DELAY = 0.01
+_G.UZIVERT_SHOOT_DISP = 0.3
+_G.UZIVERT_SHOOT_OFFSET = 2.8
+_G.UZIVERT_SHOOT_PING_MULT = 1.0
+_G.UZIVERT_SHOOT_RANGO_MAX = 2000
+_G.UZIVERT_SHOOT_Y = 1.5
+
 local function dispararV1()
     local gun = obtenerGun()
     if not gun then print("❌ No tenés Gun") return end
@@ -4353,123 +5478,67 @@ local function dispararV1()
     local murderer = detectarMurderer()
     if not murderer or not murderer.Character then print("❌ No hay Murderer") return end
     
-    local char = LocalPlayer.Character
-    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-    local targetChar = murderer.Character
-    local targetHrp = targetChar:FindFirstChild("HumanoidRootPart")
-    local hum = targetChar:FindFirstChildOfClass("Humanoid")
-    if not hrp or not targetHrp or not hum then return end
-    
-    local dist = (hrp.Position - targetHrp.Position).Magnitude
-    if dist > SHOOT_RANGO_MAX or dist < SHOOT_RANGO_MIN then return end
-    
     local shoot = obtenerShootRemote(gun)
     if not shoot then print("❌ No hay remote Shoot") return end
     
     local origin = obtenerOriginArma(gun)
+    
+    local char = LocalPlayer.Character
+    local hrp = char and char:FindFirstChild("HumanoidRootPart")
+    local targetChar = murderer.Character
+    local targetHrp = targetChar:FindFirstChild("HumanoidRootPart")
+    if not hrp or not targetHrp then return end
+    
+    local dist = (hrp.Position - targetHrp.Position).Magnitude
+    if dist > _G.UZIVERT_SHOOT_RANGO_MAX then return end
     
     -- Ping
     local ping = 0
     pcall(function()
         ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
     end)
+    if ping > 0.25 then ping = 0.25 end
     
-    -- Tiempo de vuelo de la bala
-    local VELOCIDAD_BALA = 600
-    local tiempoVuelo = dist / VELOCIDAD_BALA
-    local tiempoTotal = tiempoVuelo + ping
-    
-    -- Torso del target
-    local torsoPart = targetChar:FindFirstChild("UpperTorso") 
-                   or targetChar:FindFirstChild("Torso") 
-                   or targetHrp
-    local basePos = torsoPart.Position
-    
-    -- Velocidad
+    -- Velocidad y dirección del murderer
+    local targetPos = targetHrp.Position
     local vel = targetHrp.AssemblyLinearVelocity
-    local velMag = vel.Magnitude
+    local velHoriz = Vector3.new(vel.X, 0, vel.Z)
+    local velMag = velHoriz.Magnitude
+    local velDir = velMag > 1 and velHoriz.Unit or Vector3.new(0, 0, -1)
     
-    local factor = 1.5
-    if velMag > 30 then
-        factor = factor * 1.2
-    elseif velMag < 5 then
-        factor = factor * 0.8
-    end
+    -- 🔥 FÓRMULA JMODS: Offset adelante + Ping multiplier
+    local offsetAhead = velDir * _G.UZIVERT_SHOOT_OFFSET
+    local pingPred = velDir * ping * _G.UZIVERT_SHOOT_PING_MULT * velMag
     
-    -- 🔥 PREDICCIÓN HORIZONTAL + VERTICAL
-    local prediccionXZ = Vector3.new(0, 0, 0)
-    local prediccionY = 0
+    local aimPos = targetPos + offsetAhead + pingPred + Vector3.new(0, _G.UZIVERT_SHOOT_Y, 0)
     
-    if velMag > 1 then
-        prediccionXZ = Vector3.new(vel.X, 0, vel.Z) * tiempoTotal * factor
-    elseif hum.MoveDirection.Magnitude > 0 then
-        prediccionXZ = Vector3.new(
-            hum.MoveDirection.X * hum.WalkSpeed * tiempoTotal * factor,
-            0,
-            hum.MoveDirection.Z * hum.WalkSpeed * tiempoTotal * factor
-        )
-    end
-    
-    -- 🚀 PREDICCIÓN VERTICAL (la clave para el jump spam)
-    local estado = hum:GetState()
-    local estaEnAire = (estado == Enum.HumanoidStateType.Jumping or estado == Enum.HumanoidStateType.Freefall)
-    
-    if estaEnAire then
-        local g = workspace.Gravity
-        -- Predice la posición Y basada en gravedad
-        prediccionY = vel.Y * tiempoTotal - 0.5 * g * tiempoTotal * tiempoTotal
-        
-        -- 🔥 CLAVE: aplicar la predicción Y a la posición
-        basePos = basePos + Vector3.new(0, prediccionY, 0)
-        
-        -- 🔥 IMPORTANTE: ajustar según cuánto tiempo lleva saltando
-        -- Si acaba de saltar → la velocidad Y es positiva (subiendo) → dispara más arriba
-        -- Si está cayendo → la velocidad Y es negativa → dispara más abajo
-        -- Esto YA lo hace la fórmula de arriba
-    end
-    
-    basePos = basePos + prediccionXZ
-    
-    -- Límite de seguridad (evita predicciones locas)
-    if basePos.X ~= basePos.X then return end
-    if (basePos - torsoPart.Position).Magnitude > 100 then return end
-    
-    -- 🔥 Ajuste vertical adicional para jump spam
-    -- Si el murderer está saltando mucho, bajamos un toque el punto de aim
-    if estaEnAire and vel.Y > 5 then
-        -- Está subiendo → apuntamos al centro del cuerpo (no a la cabeza)
-        basePos = basePos + Vector3.new(0, -0.5, 0)
-    end
-    
-    -- 🔥 Múltiples puntos (aumenta chance de impactar)
-    local puntos = {
-        basePos,                                       -- centro
-        basePos + Vector3.new(0, 0.6, 0),              -- arriba
-        basePos + Vector3.new(0, -0.3, 0),             -- abajo
-        basePos + Vector3.new(1.0, 0, 0),              -- derecha
-        basePos + Vector3.new(-1.0, 0, 0),             -- izquierda
-    }
-    
-    -- Si está saltando, agregar puntos extra verticales
-    if estaEnAire then
-        table.insert(puntos, basePos + Vector3.new(0, 1.0, 0))
-        table.insert(puntos, basePos + Vector3.new(0, -0.8, 0))
-    end
-    
-    for i, punto in ipairs(puntos) do
+    -- Disparo inmediato si está cerca
+    if dist < 15 then
         pcall(function()
-            shoot:FireServer(origin, CFrame.new(punto))
+            shoot:FireServer(origin, CFrame.new(aimPos))
         end)
-        task.wait(0.025)
     end
     
-    print(string.format("🎯 Shoot → %s | Dist: %d | VelY: %.1f | Aire: %s | Puntos: %d",
-        murderer.Name,
-        math.floor(dist),
-        vel.Y,
-        tostring(estaEnAire),
-        #puntos
-    ))
+    -- Ráfaga estilo YARHM
+    for i = 1, _G.UZIVERT_SHOOT_RAFAGA do
+        local disp = Vector3.new(
+            (math.random() - 0.5) * _G.UZIVERT_SHOOT_DISP,
+            (math.random() - 0.5) * _G.UZIVERT_SHOOT_DISP,
+            (math.random() - 0.5) * _G.UZIVERT_SHOOT_DISP
+        )
+        local final = aimPos + disp
+        
+        pcall(function()
+            shoot:FireServer(origin, CFrame.new(final))
+        end)
+        
+        if _G.UZIVERT_SHOOT_DELAY > 0 then
+            task.wait(_G.UZIVERT_SHOOT_DELAY)
+        end
+    end
+    
+    print(string.format("💥 Shoot → %s | Dist: %d | Vel: %d | Offset: %.1f",
+        murderer.Name, math.floor(dist), math.floor(velMag), _G.UZIVERT_SHOOT_OFFSET))
 end
 
 local function dispararV2()
@@ -4716,47 +5785,7 @@ task.spawn(function()
     end
 end)
 
-local BotonCandadoShoot = Instance.new("TextButton")
-BotonCandadoShoot.Size = UDim2.new(0, 22, 0, 22)
-BotonCandadoShoot.Position = UDim2.new(1, -24, 0, 2)
-BotonCandadoShoot.BackgroundColor3 = COLORES.Morado3
-BotonCandadoShoot.BackgroundTransparency = 0.3
-BotonCandadoShoot.Text = "🔓"
-BotonCandadoShoot.TextColor3 = COLORES.Texto
-BotonCandadoShoot.Font = Enum.Font.GothamBold
-BotonCandadoShoot.TextSize = 12
-BotonCandadoShoot.BorderSizePixel = 0
-BotonCandadoShoot.ZIndex = 999
-BotonCandadoShoot.Parent = BotonShoot
 
-local cLockShoot = Instance.new("UICorner")
-cLockShoot.CornerRadius = UDim.new(1, 0)
-cLockShoot.Parent = BotonCandadoShoot
-
-local BLOQUEADO_SHOOT = CONFIG.ShootLock or false
-
-local function actualizarCandadoShoot()
-    if BLOQUEADO_SHOOT then
-        BotonShoot.Draggable = false
-        BotonCandadoShoot.Text = "🔒"
-        BotonCandadoShoot.BackgroundColor3 = COLORES.Rojo
-        BotonCandadoShoot.BackgroundTransparency = 0.3
-    else
-        BotonShoot.Draggable = true
-        BotonCandadoShoot.Text = "🔓"
-        BotonCandadoShoot.BackgroundColor3 = COLORES.Morado3
-        BotonCandadoShoot.BackgroundTransparency = 0.3
-    end
-end
-
-actualizarCandadoShoot()
-
-BotonCandadoShoot.MouseButton1Click:Connect(function()
-    BLOQUEADO_SHOOT = not BLOQUEADO_SHOOT
-    CONFIG.ShootLock = BLOQUEADO_SHOOT
-    actualizarCandadoShoot()
-    guardarConfig()
-end)
 
 if CONFIG.ShootPos then
     local p = CONFIG.ShootPos
@@ -7130,99 +8159,8 @@ end
 
 print("🎃 Parte 7/10 cargada - Páginas Aim/Aura/Player/Fling")
 
-local function crearSelector(padre, titulo, opciones, callback)
-    local labelFrame = Instance.new("Frame")
-    labelFrame.Size = UDim2.new(1, 0, 0, 30)
-    labelFrame.BackgroundColor3 = COLORES.Morado3
-    labelFrame.BackgroundTransparency = 0.5
-    labelFrame.BorderSizePixel = 0
-    labelFrame.Active = true
-    labelFrame.ZIndex = 2
-    labelFrame.Parent = padre
 
-    local cLF = Instance.new("UICorner")
-    cLF.CornerRadius = UDim.new(0, 8)
-    cLF.Parent = labelFrame
-
-    local sLF = Instance.new("UIStroke")
-    sLF.Color = COLORES.Naranja1
-    sLF.Thickness = 1
-    sLF.Transparency = 0.4
-    sLF.Parent = labelFrame
-
-    local lbl = Instance.new("TextLabel")
-    lbl.Size = UDim2.new(1, -10, 1, 0)
-    lbl.Position = UDim2.new(0, 10, 0, 0)
-    lbl.BackgroundTransparency = 1
-    lbl.Text = titulo .. " ▼"
-    lbl.TextColor3 = COLORES.Texto
-    lbl.Font = Enum.Font.GothamBold
-    lbl.TextSize = 11
-    lbl.TextXAlignment = Enum.TextXAlignment.Left
-    lbl.ZIndex = 3
-    lbl.Parent = labelFrame
-
-    local botonToggle = Instance.new("TextButton")
-    botonToggle.Size = UDim2.new(1, 0, 1, 0)
-    botonToggle.BackgroundTransparency = 1
-    botonToggle.Text = ""
-    botonToggle.ZIndex = 4
-    botonToggle.Parent = labelFrame
-
-    local contenedor = Instance.new("Frame")
-    contenedor.Size = UDim2.new(1, 0, 0, #opciones * 28 + 8)
-    contenedor.BackgroundColor3 = COLORES.Morado3
-    contenedor.BackgroundTransparency = 0.5
-    contenedor.BorderSizePixel = 0
-    contenedor.Visible = false
-    contenedor.ZIndex = 2
-    contenedor.Parent = padre
-
-    local cCont = Instance.new("UICorner")
-    cCont.CornerRadius = UDim.new(0, 8)
-    cCont.Parent = contenedor
-
-    local layoutCont = Instance.new("UIListLayout")
-    layoutCont.Padding = UDim.new(0, 3)
-    layoutCont.Parent = contenedor
-
-    local paddingCont = Instance.new("UIPadding")
-    paddingCont.PaddingTop = UDim.new(0, 4)
-    paddingCont.PaddingBottom = UDim.new(0, 4)
-    paddingCont.PaddingLeft = UDim.new(0, 4)
-    paddingCont.PaddingRight = UDim.new(0, 4)
-    paddingCont.Parent = contenedor
-
-    botonToggle.MouseButton1Click:Connect(function()
-        contenedor.Visible = not contenedor.Visible
-        if contenedor.Visible then lbl.Text = titulo .. " ▲"
-        else lbl.Text = titulo .. " ▼" end
-    end)
-
-    for _, opcion in ipairs(opciones) do
-        local boton = Instance.new("TextButton")
-        boton.Size = UDim2.new(1, 0, 0, 25)
-        boton.BackgroundColor3 = COLORES.Morado3
-        boton.BackgroundTransparency = 0.4
-        boton.Text = opcion
-        boton.TextColor3 = COLORES.Texto
-        boton.Font = Enum.Font.GothamBold
-        boton.TextSize = 10
-        boton.BorderSizePixel = 0
-        boton.ZIndex = 3
-        boton.Parent = contenedor
-
-        local cB = Instance.new("UICorner")
-        cB.CornerRadius = UDim.new(0, 5)
-        cB.Parent = boton
-
-        boton.MouseButton1Click:Connect(function()
-            callback(opcion)
-            contenedor.Visible = false
-            lbl.Text = titulo .. ": " .. opcion .. " ▼"
-        end)
-    end
-end
+    
 
 if not _G.UZIVERT_GAMA_BAJA then
 
@@ -8347,103 +9285,52 @@ crearBoton(PaginaInfo, "💬 Copiar Discord", function()
     print("Discord copiado.")
 end, Color3.fromRGB(80, 100, 200))
 
-local function crearTarjeta(padre, titulo, contenido, colorBorde)
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, 0, 0, 0)
-    frame.AutomaticSize = Enum.AutomaticSize.Y
-    frame.BackgroundColor3 = Color3.fromRGB(30, 15, 40)
-    frame.BackgroundTransparency = 0.35
-    frame.BorderSizePixel = 0
-    frame.ZIndex = 2
-    frame.Parent = padre
 
-    local c = Instance.new("UICorner")
-    c.CornerRadius = UDim.new(0, 10)
-    c.Parent = frame
+crearTarjeta(PaginaUpdate, "📅 Última actualización: 14/10/2026", "Uzivert Hub v4.7.5 HALLOWEEN", COLORES.Naranja2)
 
-    local s = Instance.new("UIStroke")
-    s.Color = colorBorde or COLORES.Naranja1
-    s.Thickness = 1.5
-    s.Transparency = 0.3
-    s.Parent = frame
+crearTarjeta(PaginaUpdate, "🟢 NUEVO EN v4.7.5",
+    "🌾 AUTO FARM COINS (NUEVO)\n" ..
+    "• Recolecta monedas automáticamente\n" ..
+    "• Sistema LinearVelocity (estable, sin caídas)\n" ..
+    "• Anti-AFK incluido\n" ..
+    "• Noclip mientras farmea\n" ..
+    "• Anti-Void (no cae al vacío)\n" ..
+    "• Auto-Reset cuando llena la mochila\n" ..
+    "• Velocidad configurable (10-30)\n" ..
+    "• Distancia máxima configurable\n\n" ..
+    "🎨 UI NUEVA (REDISEÑO COMPLETO)\n" ..
+    "• Sistema de íconos dibujados con frames\n" ..
+    "• Sin emojis (todo vectorial)\n" ..
+    "• Luna + telarañas + murciélagos animados\n" ..
+    "• Borde animado RGB\n" ..
+    "• Optimizado para gama alta y baja\n\n" ..
+    "🎯 AIMLOCK V2 MEJORADO\n" ..
+    "• Smoothing ajustable\n" ..
+    "• FOV Check con círculo en pantalla\n" ..
+    "• Select Player (elegís a quién lockear)\n" ..
+    "• Wall Check multi-punto\n" ..
+    "• Horizontal Prediction\n" ..
+    "• Botón flotante AIM con ON/OFF\n" ..
+    "• Guarda la posición del botón",
+    COLORES.Verde)
 
-    local layout = Instance.new("UIListLayout")
-    layout.Padding = UDim.new(0, 4)
-    layout.SortOrder = Enum.SortOrder.LayoutOrder
-    layout.Parent = frame
-
-    local padding = Instance.new("UIPadding")
-    padding.PaddingTop = UDim.new(0, 10)
-    padding.PaddingBottom = UDim.new(0, 10)
-    padding.PaddingLeft = UDim.new(0, 12)
-    padding.PaddingRight = UDim.new(0, 12)
-    padding.Parent = frame
-
-    if titulo and titulo ~= "" then
-        local tituloLbl = Instance.new("TextLabel")
-        tituloLbl.Size = UDim2.new(1, 0, 0, 20)
-        tituloLbl.BackgroundTransparency = 1
-        tituloLbl.Text = titulo
-        tituloLbl.TextColor3 = colorBorde or COLORES.Naranja2
-        tituloLbl.Font = Enum.Font.GothamBold
-        tituloLbl.TextSize = 12
-        tituloLbl.TextXAlignment = Enum.TextXAlignment.Left
-        tituloLbl.LayoutOrder = 1
-        tituloLbl.Parent = frame
-    end
-
-    local contenidoLbl = Instance.new("TextLabel")
-    contenidoLbl.Size = UDim2.new(1, 0, 0, 0)
-    contenidoLbl.AutomaticSize = Enum.AutomaticSize.Y
-    contenidoLbl.BackgroundTransparency = 1
-    contenidoLbl.Text = contenido
-    contenidoLbl.TextColor3 = COLORES.Texto
-    contenidoLbl.Font = Enum.Font.GothamMedium
-    contenidoLbl.TextSize = 11
-    contenidoLbl.TextWrapped = true
-    contenidoLbl.TextXAlignment = Enum.TextXAlignment.Left
-    contenidoLbl.TextYAlignment = Enum.TextYAlignment.Top
-    contenidoLbl.LayoutOrder = 2
-    contenidoLbl.Parent = frame
-
-    return frame
-end
-
-crearTarjeta(PaginaUpdate, "📅 Última actualización: 13/10/2026", "Uzivert Hub v4.7.4 HALLOWEEN", COLORES.Naranja2)
-
-crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.4",
-    "🎯 AIMLOCK V2 (NUEVO)\n" ..
-    "• 🌀 Smoothing → cámara suave al lockear\n" ..
-    "• 🎯 FOV Check → círculo en pantalla\n" ..
-    "• 👤 Select Player → elegí a quién lockear\n" ..
-    "• 🧱 Wall Check mejorado (multi-punto)\n" ..
-    "• ↔️ Horizontal Prediction (toggle)\n" ..
-    "• 📱 Botón flotante AIM con ON/OFF\n" ..
-    "• 💾 Guarda la posición del botón\n\n" ..
+crearTarjeta(PaginaUpdate, "🟢 NUEVO EN v4.7.4",
+    "🎯 AIMLOCK V2\n" ..
+    "• Smoothing + FOV Check\n" ..
+    "• Select Player + Wall Check mejorado\n" ..
+    "• Botón flotante AIM\n\n" ..
     "🎬 23 ANIMACIONES NUEVAS\n" ..
-    "• Mage, Ghost, Elder, Levitation\n" ..
-    "• Sneaky, Toy, Knight, Confident\n" ..
-    "• Popstar, Princess, Cowboy, Patrol\n" ..
-    "• Zombie FE, Amazon Unboxed, Bubbly\n" ..
-    "• Adidas Comm, KATSEYE, Wicked Popular\n" ..
-    "• Dizzy, WDTL, Billie Eilish\n" ..
-    "• Cute Bouncy, Cute\n" ..
-    "• Total: 51 animaciones 🔥\n\n" ..
+    "• Total: 51 animaciones\n\n" ..
     "🎯 SILENT AIM MEJORADO\n" ..
-    "• 📡 Auto Ping adaptativo\n" ..
-    "• 🎯 Multi-Point (7 tiros)\n" ..
-    "• 🛡️ Anti-Hack (vuelo/tp)\n" ..
-    "• 🌀 Velocidad suavizada\n" ..
-    "• ⚡ Predicción adaptativa\n\n" ..
+    "• Auto Ping adaptativo\n" ..
+    "• Multi-Point (7 tiros)\n" ..
+    "• Anti-Hack (vuelo/tp)\n\n" ..
     "🔫 SHOOT TELEPORT\n" ..
-    "• Teletransporte detrás del murderer\n" ..
-    "• Dispara + vuelve a tu posición\n" ..
-    "• Botón flotante STP bindable\n\n" ..
-    "🏷️ By Uzivert 🇵🇾 en el sidebar\n" ..
+    "• Teletransporte detrás del murderer\n\n" ..
     "💀 FE HEADLESS (3 versiones)",
     COLORES.Verde)
 
-crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.3",
+crearTarjeta(PaginaUpdate, "🟢 NUEVO EN v4.7.3",
     "🎮 SELECTOR DE GAMA\n" ..
     "• Elegís GAMA ALTA o GAMA BAJA al iniciar\n" ..
     "• GAMA BAJA → solo lo esencial (menos lag)\n" ..
@@ -8460,27 +9347,26 @@ crearTarjeta(PaginaUpdate, "🟢 Nuevo en v4.7.3",
     "• 🔥 Clutchs (antes Bomb Jump)",
     COLORES.Verde)
 
-crearTarjeta(PaginaUpdate, "🐛 BUGS ARREGLADOS EN v4.7.4",
-    "✓ Aimlock ahora tiene Smoothing (cámara suave)\n" ..
-    "✓ Silent Aim mejorado (menos fallos)\n" ..
-    "✓ Silent Aim ya no rompe el hub\n" ..
-    "✓ ESP ahora se ve bien en DPI alto\n" ..
-    "✓ Auto Get Tools al respawnear\n" ..
-    "✓ Firefly Clutch funciona OK\n" ..
-    "✓ Selector de Gama ya no rompe\n" ..
-    "✓ Anti-Aim pausa con Ignore List\n" ..
-    "✓ Toggle ESP no borra highlights\n" ..
-    "✓ Fling detecta al Hero\n" ..
-    "✓ Gun Aura sin lag\n" ..
-    "✓ Shoot TP + bindable STP\n" ..
-    "✓ Botón AIM guarda la posición",
+crearTarjeta(PaginaUpdate, "🐛 BUGS ARREGLADOS EN v4.7.5",
+    "✓ Candado ya no se ve redondo al abrir/cerrar\n" ..
+    "✓ Orbe ya no se mueve si tocás con otro dedo\n" ..
+    "✓ Auto Farm estable (no se va al piso)\n" ..
+    "✓ Auto Farm ya no se queda quieto\n" ..
+    "✓ Ícono de Auto Farm dibujado (bolsa + moneda)\n" ..
+    "✓ UI nueva sin emojis (todo vectorial)\n" ..
+    "✓ ColorSequence arreglado (keypoints)\n" ..
+    "✓ ReplicatedStorage en Auto Farm\n" ..
+    "✓ ESP en DPI alto\n" ..
+    "✓ Firefly Clutch OK\n" ..
+    "✓ Anti-Aim pausa con Ignore List",
     COLORES.Verde)
 
-crearTarjeta(PaginaUpdate, "🔴 Descartado",
+crearTarjeta(PaginaUpdate, "🔴 DESCARTADO",
     "- Silent Aim con Mouse.Hit\n" ..
     "- Silent Aim con Camera\n" ..
-    "- Silent Aim v4.0 completo (rompía el script)\n" ..
-    "- Speed Glitch (manual)\n" ..
+    "- Shoot Murderer con FireServer directo\n" ..
+    "- Shoot Murderer con Camera Snap\n" ..
+    "- Speed Glitch manual\n" ..
     "- Headless / Korblox con ID viejo\n" ..
     "- Dual Wield\n" ..
     "- ESP Skeleton\n" ..
@@ -8491,18 +9377,18 @@ crearTarjeta(PaginaUpdate, "🔴 Descartado",
 
 crearTarjeta(PaginaUpdate, "🎯 ROADMAP PRÓXIMAS VERSIONES",
     "🔜 Próximamente:\n\n" ..
-    "• 🔪 Throwing Knife Aura\n" ..
-    "• 🌌 Sky Changer (20 cielos)\n" ..
-    "• 🎬 RTX (efectos visuales pro)\n" ..
-    "• 🌫️ Motion Blur\n" ..
-    "• 🔒 Privacy (Hide Name + Avatar)\n" ..
-    "• 🎨 Font Changer\n" ..
-    "• 🎭 Fake Knife + Fake Dual\n" ..
-    "• 🎯 Tools Outline (rainbow)\n" ..
-    "• 🎡 Auto 360 Trickshot\n" ..
-    "• 🧱 Wallhop\n" ..
-    "• 🔫 Gun Sound Changer\n" ..
-    "• 📊 Performance Optimization\n\n" ..
+    "• 🛡️ God Mode\n" ..
+    "• ✈️ Fly con slider\n" ..
+    "• 🦘 Infinity Jump\n" ..
+    "• 📦 Hitbox Expander\n" ..
+    "• 🌀 TP Enemies (Imán)\n" ..
+    "• 💬 Exponer Roles en Chat\n" ..
+    "• 🔔 Gun Drop Sound\n" ..
+    "• 👻 Spoof Name + Tag + Arcoíris\n" ..
+    "• 💾 Gestor de Configs\n" ..
+    "• 🔒 Lock por UserId\n" ..
+    "• 📢 Aviso de update en pantalla\n" ..
+    "• 📊 Contador de usuarios en pantalla\n\n" ..
     "💬 Sugerencias → Discord oficial",
     COLORES.Naranja2)
 
@@ -8629,7 +9515,7 @@ print("👻 Niebla animada")
 print("🎃 Iconos temáticos")
 print("💀 Colores de Halloween")
 print("====================================")
-print("Nuevo en v4.7.4:")
+print("Nuevo en v4.7.5:")
 print("  🎮 Selector de Gama (Alta/Baja)")
 print("  🎯 Anti-Aim")
 print("  ⚡ Speed Glitch")
