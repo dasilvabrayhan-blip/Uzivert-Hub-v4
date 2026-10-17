@@ -1,5 +1,5 @@
 -- ============================================
--- UZIVERT HUB | v4.7.5 HALLOWEEN 🎃
+-- UZIVERT HUB | v4.7.7 HALLOWEEN 🎃
 -- Proyecto inicial por Uzivert
 -- Con ayuda explicativa de Nexvyr
 -- ============================================
@@ -15,7 +15,7 @@ local Lighting = game:GetService("Lighting")
 local HttpService = game:GetService("HttpService")
 local Debris = game:GetService("Debris")
 
-local VERSION = "v4.7.5 HALLOWEEN"
+local VERSION = "v4.7.7 HALLOWEEN"
 
 -- ============================================
 -- UZIVERT HUB - HALLOWEEN DEVICE SELECTOR (v2)
@@ -25,12 +25,12 @@ _G.UZIVERT_GAMA_BAJA = false
 _G.UZIVERT_SELECCIONADO = false
 
 _G.UZ_SEL_CONFIG = {
-    LAUGH_SOUND = "rbxassetid://30588394",
-    TEETH_SOUND = "rbxassetid://8047405326",
+    LAUGH_SOUND = "rbxassetid://8047405326",
+    TEETH_SOUND = "rbxassetid://1846999567",
     CREATOR_NAME = "Uzivert",
     TIKTOK = "@Uzivert550",
     INSTAGRAM = "@hxuntedluv77",
-    VERSION = "v4.7.5",
+    VERSION = "v4.7.7",
 }
 
 _G.UZ_SEL_Players = game:GetService("Players")
@@ -1406,13 +1406,7 @@ local CONFIG_DEFAULT = {
     GunAura = false,
     GunAuraRango = 25,
     SilentAim = false,
-    SilentOffX = -0.04,
-    SilentOffY = -0.06,
-    SilentOffZ = 0,
-    SilentPredH = 1.49,
-    SilentPredV = 1.44,
-    SilentMaxSim = 0.050,
-    SilentPredPing = 0.085,
+    SilentPred = 0.10,
     AntiAim = false,
     AntiAimIgnore = true,
     AntiAimSlot1 = "None",
@@ -2474,19 +2468,29 @@ end
 
 	---------------------------------------------------------------- slider
 	UserInputService.InputChanged:Connect(function(input)
-		if UI.drag and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-			UI.drag(input.Position.X)
+	if UI.sliderDragHandlers then
+		for _, fn in ipairs(UI.sliderDragHandlers) do
+			pcall(fn, input)
 		end
-	end)
-	UserInputService.InputEnded:Connect(function(input)
-		if UI.drag and (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
-			UI.drag = nil
-			if UI.dragEnd then
-				UI.dragEnd()
-				UI.dragEnd = nil
-			end
+	end
+	if UI.drag and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		UI.drag(input.Position.X)
+	end
+end)
+UserInputService.InputEnded:Connect(function(input)
+	if UI.sliderDragEndHandlers then
+		for _, fn in ipairs(UI.sliderDragEndHandlers) do
+			pcall(fn, input)
 		end
-	end)
+	end
+	if UI.drag and (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+		UI.drag = nil
+		if UI.dragEnd then
+			UI.dragEnd()
+			UI.dragEnd = nil
+		end
+	end
+end)
 
 	crearSlider = function(padre, texto, min, max, inicial, callback)
 		local range = math.max(max - min, 1)
@@ -2551,29 +2555,66 @@ end
 				callback(nv)
 			end
 		end
-		hit.InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-				UI.drag = setFromX
-				if padre:IsA("ScrollingFrame") then padre.ScrollingEnabled = false end
-				TW(knob, 0.15, { Size = UDim2.fromOffset(22, 22) }, BACK)
-				TW(tip, 0.15, { BackgroundTransparency = 0 })
-				TW(tipLbl, 0.15, { TextTransparency = 0 })
-				TW(st, 0.15, { Color = C.or1 })
-				UI.dragEnd = function()
-					if padre:IsA("ScrollingFrame") then padre.ScrollingEnabled = true end
-					TW(knob, 0.2, { Size = UDim2.fromOffset(16, 16) }, BACK)
-					TW(tip, 0.2, { BackgroundTransparency = 1 })
-					TW(tipLbl, 0.2, { TextTransparency = 1 })
-					TW(st, 0.2, { Color = C.line })
-					TW(pill, 0.12, { BackgroundTransparency = 0.6 })
-					task.delay(0.12, function() TW(pill, 0.3, { BackgroundTransparency = 0.82 }) end)
-				end
-				setFromX(input.Position.X)
-			end
-		end)
-		return frame
-	end
 
+	local dragStartPos = nil
+	local isHorizontal = nil
+	local dragDeadzone = 8
+	local dragging = false
+
+	hit.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStartPos = input.Position
+			isHorizontal = nil
+			UI.drag = nil
+			UI.dragEnd = nil
+		end
+	end)
+
+	UI.sliderDragHandlers = UI.sliderDragHandlers or {}
+	table.insert(UI.sliderDragHandlers, function(input)
+		if not dragging then return end
+		if input.UserInputType ~= Enum.UserInputType.Touch and input.UserInputType ~= Enum.UserInputType.MouseMovement then return end
+		if isHorizontal == nil then
+			local delta = input.Position - dragStartPos
+			if delta.Magnitude > dragDeadzone then
+				if math.abs(delta.X) > math.abs(delta.Y) then
+					isHorizontal = true
+					UI.drag = setFromX
+					if padre:IsA("ScrollingFrame") then padre.ScrollingEnabled = false end
+					TW(knob, 0.15, { Size = UDim2.fromOffset(22, 22) }, BACK)
+					TW(tip, 0.15, { BackgroundTransparency = 0 })
+					TW(tipLbl, 0.15, { TextTransparency = 0 })
+					TW(st, 0.15, { Color = C.or1 })
+					UI.dragEnd = function()
+						if padre:IsA("ScrollingFrame") then padre.ScrollingEnabled = true end
+						TW(knob, 0.2, { Size = UDim2.fromOffset(16, 16) }, BACK)
+						TW(tip, 0.2, { BackgroundTransparency = 1 })
+						TW(tipLbl, 0.2, { TextTransparency = 1 })
+						TW(st, 0.2, { Color = C.line })
+						TW(pill, 0.12, { BackgroundTransparency = 0.6 })
+						task.delay(0.12, function() TW(pill, 0.3, { BackgroundTransparency = 0.82 }) end)
+					end
+				else
+					isHorizontal = false
+					dragging = false
+				end
+			end
+		elseif isHorizontal then
+			setFromX(input.Position.X)
+		end
+	end)
+
+	UI.sliderDragEndHandlers = UI.sliderDragEndHandlers or {}
+	table.insert(UI.sliderDragEndHandlers, function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = false
+			isHorizontal = nil
+		end
+	end)
+
+	return frame
+end
 	---------------------------------------------------------------- selector (desplegable)
 	crearSelector = function(padre, titulo, opciones, callback)
 		local listH = math.min(#opciones * 28 + 8, 170)
@@ -4600,10 +4641,231 @@ _G.UZIVERT_SA_PRED_PING = CONFIG.SilentPredPing or 0.060
 _G.UZIVERT_SA_TARGET = nil
 _G.UZIVERT_SA_ORIGIN = nil
 _G.UZIVERT_SA_REMOTE = nil
-_G.UZIVERT_SA_ULTIMA = 0
-_G.UZIVERT_SA_INTERVALO = 0.030
-_G.UZIVERT_SA_VEL_SUAV = Vector3.new(0, 0, 0)
 
+-- ============================================
+-- 🎯 SILENT AIM v5.0 — MOTOR NOIR (Predicción completa)
+-- ============================================
+
+-- Ping Profiles del NOIR (interpolados por ping)
+local UZNOIR_PingProfiles = {
+    { Ping = 20,  Sim = 52,  Interval = 70, H = 156, V = 146, X = -5,  Y = -14, Z = 0 },
+    { Ping = 50,  Sim = 60,  Interval = 66, H = 166, V = 156, X = -6,  Y = -14, Z = 0 },
+    { Ping = 100, Sim = 72,  Interval = 60, H = 180, V = 170, X = -8,  Y = -15, Z = 0 },
+    { Ping = 150, Sim = 82,  Interval = 64, H = 188, V = 176, X = -9,  Y = -12, Z = 0 },
+    { Ping = 200, Sim = 94,  Interval = 70, H = 198, V = 184, X = -10, Y = -11, Z = 0 },
+    { Ping = 250, Sim = 104, Interval = 74, H = 206, V = 192, X = -11, Y = -10, Z = 0 },
+    { Ping = 300, Sim = 114, Interval = 78, H = 214, V = 200, X = -12, Y = -9,  Z = 0 },
+    { Ping = 350, Sim = 124, Interval = 82, H = 222, V = 206, X = -13, Y = -8,  Z = 0 },
+    { Ping = 450, Sim = 138, Interval = 86, H = 232, V = 214, X = -14, Y = -7,  Z = 0 },
+}
+
+-- Config interno del motor NOIR (usa las variables del v4.0)
+_G.UZNOIR_CFG = {
+    adaptive = true,
+    fixedLead = 0.075,
+    extraLead = _G.UZIVERT_SA_PRED or 0.02,  -- el slider lo controla
+    prioritizePing = _G.UZIVERT_SA_AUTO_PING ~= false,
+    predictJump = true,
+    predictLag = true,
+    maxSimulationMs = math.floor((_G.UZIVERT_SA_MAX_SIM or 0.180) * 1000),
+    predictionIntervalMs = 72,
+    manualPingMs = 80,
+    offsetX = 0,
+    offsetY = 0,
+    offsetZ = 0,
+    horizontalMultiplier = 100,
+    verticalMultiplier = 100,
+    hitPart = "Head",
+}
+
+-- cachedPing EXACTO del NOIR (solo Data Ping, cada 0.5s, 0.7/0.3)
+_G.UZNOIR_cachedPing = 0.05
+_G.UZNOIR_lastAutoTune = 0
+
+local function UZNOIR_updatePing()
+    pcall(function()
+        local network = Stats:FindFirstChild("Network")
+        local items = network and network:FindFirstChild("ServerStatsItem")
+        local pingItem = items and items:FindFirstChild("Data Ping")
+        if pingItem then
+            local measured = pingItem:GetValue() / 1000
+            if measured > 0 and measured < 2 then
+                _G.UZNOIR_cachedPing = _G.UZNOIR_cachedPing * 0.7 + measured * 0.3
+            end
+        end
+    end)
+end
+
+local function UZNOIR_GetPingMs()
+    return math.clamp(math.floor(_G.UZNOIR_cachedPing * 1000 + 0.5), 5, 1000)
+end
+
+-- getConfig EXACTO (interpola perfil por ping)
+local function UZNOIR_getConfig(ping)
+    local first, second, blend
+    first, second = UZNOIR_PingProfiles[1], UZNOIR_PingProfiles[1]
+    if ping >= UZNOIR_PingProfiles[#UZNOIR_PingProfiles].Ping then
+        first, second = UZNOIR_PingProfiles[#UZNOIR_PingProfiles], UZNOIR_PingProfiles[#UZNOIR_PingProfiles]
+    elseif ping > first.Ping then
+        for i = 1, #UZNOIR_PingProfiles - 1 do
+            if ping <= UZNOIR_PingProfiles[i + 1].Ping then
+                first, second = UZNOIR_PingProfiles[i], UZNOIR_PingProfiles[i + 1]
+                blend = (ping - first.Ping) / (second.Ping - first.Ping)
+                blend = blend * blend * (3 - 2 * blend)
+                break
+            end
+        end
+    end
+    blend = blend or 0
+    local function mix(key)
+        return math.floor(first[key] + (second[key] - first[key]) * blend + 0.5)
+    end
+    return {
+        Sim = mix("Sim"), Interval = mix("Interval"),
+        H = mix("H"), V = mix("V"),
+        X = mix("X"), Y = mix("Y"), Z = mix("Z"),
+    }
+end
+
+-- autoTuneForPing EXACTO
+local function UZNOIR_autoTune()
+    local now = os.clock()
+    if now - _G.UZNOIR_lastAutoTune < 0.4 then return end
+    _G.UZNOIR_lastAutoTune = now
+    local pingMs = UZNOIR_GetPingMs()
+    local p = UZNOIR_getConfig(pingMs)
+    local cfg = _G.UZNOIR_CFG
+    cfg.maxSimulationMs = p.Sim
+    cfg.predictionIntervalMs = p.Interval
+    cfg.offsetX, cfg.offsetY, cfg.offsetZ = p.X, p.Y, p.Z
+    cfg.horizontalMultiplier, cfg.verticalMultiplier = p.H, p.V
+    cfg.manualPingMs = pingMs
+end
+
+-- leadTime EXACTO
+local function UZNOIR_leadTime()
+    local cfg = _G.UZNOIR_CFG
+    local observedPing = cfg.prioritizePing and _G.UZNOIR_cachedPing or (cfg.manualPingMs / 1000)
+    local prediction
+    if cfg.adaptive then
+        prediction = observedPing + cfg.extraLead + observedPing * 0.06
+        if cfg.predictLag then
+            local samplingDelay = math.clamp(cfg.predictionIntervalMs / 2000, 0, 0.05)
+            prediction = prediction + samplingDelay + math.max(0, observedPing - 0.10) * 0.22
+        end
+    else
+        prediction = cfg.fixedLead
+    end
+    local simulationCap = cfg.maxSimulationMs / 1000
+    if cfg.adaptive then
+        simulationCap = math.min(0.52, simulationCap + math.clamp(observedPing - 0.10, 0, 0.40) * 0.62)
+    end
+    return math.clamp(prediction, 0.02, simulationCap)
+end
+
+-- sampleMotion EXACTO (buffer de 8)
+local UZNOIR_motionPart = nil
+local UZNOIR_motionSamples = {}
+local UZNOIR_measuredVelocity = Vector3.zero
+local UZNOIR_estimatedAcceleration = Vector3.zero
+
+local function UZNOIR_sampleMotion(part, settings)
+    settings = settings or _G.UZNOIR_CFG
+    local now = os.clock()
+    if UZNOIR_motionPart ~= part then
+        UZNOIR_motionPart = part
+        UZNOIR_motionSamples = {}
+        UZNOIR_measuredVelocity = part.AssemblyLinearVelocity
+        UZNOIR_estimatedAcceleration = Vector3.zero
+    end
+    local last = UZNOIR_motionSamples[#UZNOIR_motionSamples]
+    if not last or now - last.time >= math.max(0.016, settings.predictionIntervalMs / 1000) then
+        UZNOIR_motionSamples[#UZNOIR_motionSamples + 1] = { position = part.Position, time = now }
+        while #UZNOIR_motionSamples > 8 or (#UZNOIR_motionSamples > 2 and now - UZNOIR_motionSamples[1].time > 0.35) do
+            table.remove(UZNOIR_motionSamples, 1)
+        end
+        if #UZNOIR_motionSamples >= 2 then
+            local first = UZNOIR_motionSamples[1]
+            local newest = UZNOIR_motionSamples[#UZNOIR_motionSamples]
+            local delta = newest.time - first.time
+            if delta > 0.015 then
+                local sampled = (newest.position - first.position) / delta
+                if sampled.Magnitude < 150 then
+                    local oldVelocity = UZNOIR_measuredVelocity
+                    UZNOIR_measuredVelocity = UZNOIR_measuredVelocity:Lerp(sampled, 0.55)
+                    local sampleDelta = last and math.max(now - last.time, 0.016) or delta
+                    local accel = (UZNOIR_measuredVelocity - oldVelocity) / sampleDelta
+                    if accel.Magnitude < 120 then
+                        UZNOIR_estimatedAcceleration = UZNOIR_estimatedAcceleration:Lerp(accel, 0.25)
+                    else
+                        UZNOIR_estimatedAcceleration = Vector3.zero
+                    end
+                end
+            end
+        end
+    end
+end
+
+-- calculateAim EXACTO
+local function UZNOIR_calculateAim(part)
+    UZNOIR_sampleMotion(part)
+    local cfg = _G.UZNOIR_CFG
+    local assembly = part.AssemblyLinearVelocity
+    local velocity = assembly
+    local acceleration = Vector3.zero
+
+    if cfg.predictLag and UZNOIR_motionPart == part and #UZNOIR_motionSamples >= 2 then
+        local disagreement = (assembly - UZNOIR_measuredVelocity).Magnitude
+        local measuredWeight = math.clamp(0.75 - disagreement / 120, 0.35, 0.75)
+        velocity = assembly:Lerp(UZNOIR_measuredVelocity, measuredWeight)
+        acceleration = UZNOIR_estimatedAcceleration
+    end
+
+    local horizontal = cfg.horizontalMultiplier / 100
+    local vertical = cfg.verticalMultiplier / 100
+    local time = UZNOIR_leadTime()
+
+    local displacement = Vector3.new(velocity.X * horizontal * time, 0, velocity.Z * horizontal * time)
+
+    if cfg.predictLag then
+        local ha = Vector3.new(acceleration.X, 0, acceleration.Z)
+        displacement = displacement + ha * (0.5 * time * time)
+    end
+
+    if cfg.predictJump then
+        local verticalTime = time * vertical
+        local verticalDisplacement = velocity.Y * verticalTime
+        local humanoid = part.Parent and part.Parent:FindFirstChildWhichIsA("Humanoid")
+        local isAir = false
+        if humanoid then
+            local state = humanoid:GetState()
+            isAir = humanoid.FloorMaterial == Enum.Material.Air
+                or state == Enum.HumanoidStateType.Freefall
+                or state == Enum.HumanoidStateType.Jumping
+                or math.abs(velocity.Y) > 6
+        else
+            isAir = math.abs(velocity.Y) > 6
+        end
+        if isAir then
+            verticalDisplacement = verticalDisplacement - 0.5 * Workspace.Gravity * verticalTime * verticalTime
+        end
+        displacement = displacement + Vector3.new(0, verticalDisplacement, 0)
+    end
+
+    if displacement.Magnitude > 26 then
+        displacement = displacement.Unit * 26
+    end
+
+    local offset = Vector3.new(
+        part.Size.X * cfg.offsetX / 100,
+        part.Size.Y * cfg.offsetY / 100,
+        part.Size.Z * cfg.offsetZ / 100
+    )
+
+    return part.Position + displacement + offset
+end
+
+-- FIND (target) — usa RoleCache igual que antes
 _G.UZIVERT_SA_FIND = function()
     for plrName, role in pairs(RoleCache) do
         if role == "Murderer" then
@@ -4613,6 +4875,7 @@ _G.UZIVERT_SA_FIND = function()
     return nil
 end
 
+-- GET_REMOTE — igual que antes
 _G.UZIVERT_SA_GET_REMOTE = function()
     local char = LocalPlayer.Character
     if not char then return nil end
@@ -4632,124 +4895,114 @@ _G.UZIVERT_SA_GET_REMOTE = function()
     return nil
 end
 
-_G.UZIVERT_SA_GET_PING = function()
-    local ping = 0
-    pcall(function()
-        ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
-    end)
-    if ping > 1 then ping = 1 end
-    return ping
-end
-
-_G.UZIVERT_SA_ES_HACKER = function(hrp, char)
-    local vel = hrp.AssemblyLinearVelocity
-    if math.abs(vel.Y) > 100 then return true end
-    if vel.Magnitude > 150 then return true end
-    local rp = RaycastParams.new()
-    rp.FilterDescendantsInstances = {char}
-    rp.FilterType = Enum.RaycastFilterType.Exclude
-    local ray = workspace:Raycast(hrp.Position, Vector3.new(0, -100, 0), rp)
-    if not ray then return true end
-    local alt = hrp.Position.Y - ray.Position.Y
-    if alt > 30 then return true end
-    return false
-end
-
+-- Loop que actualiza ping y calcula el aim (RenderStepped)
 _G.UZIVERT_SA_LOOP = RunService.RenderStepped:Connect(function(dt)
     if not _G.UZIVERT_SA_ON then return end
-    
-    local ahora = tick()
-    if ahora - _G.UZIVERT_SA_ULTIMA < _G.UZIVERT_SA_INTERVALO then return end
-    local deltaTiempo = ahora - _G.UZIVERT_SA_ULTIMA
-    _G.UZIVERT_SA_ULTIMA = ahora
-    
+
     _G.UZIVERT_SA_REMOTE = _G.UZIVERT_SA_GET_REMOTE()
-    
+
     local char = LocalPlayer.Character
     if char then
         local miHrp = char:FindFirstChild("HumanoidRootPart")
         if miHrp then _G.UZIVERT_SA_ORIGIN = miHrp.CFrame end
     end
-    
+
     local murderer = _G.UZIVERT_SA_FIND()
     if not murderer or not murderer.Character then
         _G.UZIVERT_SA_TARGET = nil
         return
     end
-    
+
     local targetChar = murderer.Character
     local targetHum = targetChar:FindFirstChildOfClass("Humanoid")
-    local targetHead = targetChar:FindFirstChild("Head")
-    local targetHrp = targetChar:FindFirstChild("HumanoidRootPart")
-    
-    if not targetHead or not targetHum or not targetHrp then
+    if not targetHum or targetHum.Health <= 0 then
         _G.UZIVERT_SA_TARGET = nil
         return
     end
-    
-    local pingReal = _G.UZIVERT_SA_GET_PING()
-    local pingTotal = pingReal * 1.5 + _G.UZIVERT_SA_PRED_PING
-    if not _G.UZIVERT_SA_AUTO_PING then
-        pingTotal = pingReal + _G.UZIVERT_SA_PRED_PING
+
+    local aimPart
+    if _G.UZNOIR_CFG.hitPart == "Head" then
+        aimPart = targetChar:FindFirstChild("Head") or targetChar:FindFirstChild("HumanoidRootPart")
+    else
+        aimPart = targetChar:FindFirstChild("HumanoidRootPart") or targetChar:FindFirstChild("Head")
     end
-    if pingTotal > _G.UZIVERT_SA_MAX_SIM then pingTotal = _G.UZIVERT_SA_MAX_SIM end
-    
-    local tiempoVuelo = pingTotal + deltaTiempo
-    
-    local velActual = targetHrp.AssemblyLinearVelocity
-    _G.UZIVERT_SA_VEL_SUAV = _G.UZIVERT_SA_VEL_SUAV * 0.3 + velActual * 0.7
-    local vel = _G.UZIVERT_SA_VEL_SUAV
-    local velHoriz = Vector3.new(vel.X, 0, vel.Z)
-    
-    local estado = targetHum:GetState()
-    local enAire = (estado == Enum.HumanoidStateType.Jumping or estado == Enum.HumanoidStateType.Freefall)
-    local corriendoYSaltando = enAire and velHoriz.Magnitude > 5
-    
-    local hacker = false
-    if _G.UZIVERT_SA_ANTIHACK then
-        hacker = _G.UZIVERT_SA_ES_HACKER(targetHrp, targetChar)
+    if not aimPart then
+        _G.UZIVERT_SA_TARGET = nil
+        return
     end
-    
-    local predH = _G.UZIVERT_SA_PRED_H
-    if corriendoYSaltando then
-        predH = _G.UZIVERT_SA_PRED_H * 1.3
-    end
-    local predHoriz = velHoriz * tiempoVuelo * predH
-    
-    local predVert = 0
-    if enAire and not hacker then
-        local g = workspace.Gravity
-        predVert = 0.5 * (-g) * (tiempoVuelo * tiempoVuelo)
-        if predVert > 1.2 then predVert = 1.2 end
-        if predVert < -1.2 then predVert = -1.2 end
-    end
-    
-    local altura = targetHead.Position.Y - targetHrp.Position.Y + 1
-    local offsetX = _G.UZIVERT_SA_OFF_X * altura
-    local offsetY = _G.UZIVERT_SA_OFF_Y * altura
-    local offsetZ = _G.UZIVERT_SA_OFF_Z * altura
-    
-    local posFinal = targetHrp.Position 
-        + Vector3.new(0, altura * 0.4, 0)
-        + predHoriz 
-        + Vector3.new(0, predVert, 0)
-        + Vector3.new(offsetX, offsetY, offsetZ)
-    
+
+    local aimPos = UZNOIR_calculateAim(aimPart)
+
     if _G.UZIVERT_SA_MULTI then
-        local tight = hacker and 0.6 or 0.25
+        local t = 0.25
         _G.UZIVERT_SA_TARGET = {
-            CFrame.new(posFinal),
-            CFrame.new(posFinal + Vector3.new(0, tight, 0)),
-            CFrame.new(posFinal + Vector3.new(0, -tight, 0)),
-            CFrame.new(posFinal + Vector3.new(tight, 0, 0)),
-            CFrame.new(posFinal + Vector3.new(-tight, 0, 0)),
-            CFrame.new(posFinal + Vector3.new(0, 0, tight)),
-            CFrame.new(posFinal + Vector3.new(0, 0, -tight)),
+            CFrame.new(aimPos),
+            CFrame.new(aimPos + Vector3.new(0, t, 0)),
+            CFrame.new(aimPos + Vector3.new(0, -t, 0)),
+            CFrame.new(aimPos + Vector3.new(t, 0, 0)),
+            CFrame.new(aimPos + Vector3.new(-t, 0, 0)),
+            CFrame.new(aimPos + Vector3.new(0, 0, t)),
+            CFrame.new(aimPos + Vector3.new(0, 0, -t)),
         }
     else
-        _G.UZIVERT_SA_TARGET = {CFrame.new(posFinal)}
+        _G.UZIVERT_SA_TARGET = { CFrame.new(aimPos) }
     end
 end)
+
+-- Worker de ping (cada 0.5s como el NOIR)
+task.spawn(function()
+    while task.wait(0.5) do
+        UZNOIR_updatePing()
+        UZNOIR_autoTune()
+    end
+end)
+
+-- ============================================
+-- 🎯 HOOK UNIFICADO (Gun SA + Knife SA)
+-- ============================================
+_G.UZIVERT_KNIFE_REMOTE = nil
+_G.UZIVERT_KNIFE_AIM = nil
+_G.UZIVERT_KNIFE_ORIGIN = nil
+_G.UZIVERT_KNIFE_INSTANT_LAST = 0
+
+-- Actualiza el remote del knife cada 0.25s
+task.spawn(function()
+    while task.wait(0.25) do
+        local char = LocalPlayer.Character
+        local knife
+        if char then
+            knife = char:FindFirstChild("Knife")
+        end
+        if not knife then
+            local bp = LocalPlayer:FindFirstChild("Backpack")
+            knife = bp and bp:FindFirstChild("Knife")
+        end
+        if knife then
+            local remote
+            for _, obj in ipairs(knife:GetDescendants()) do
+                if obj:IsA("RemoteEvent") and obj.Name == "KnifeThrown" then
+                    remote = obj
+                    break
+                end
+            end
+            _G.UZIVERT_KNIFE_REMOTE = remote
+        else
+            _G.UZIVERT_KNIFE_REMOTE = nil
+        end
+    end
+end)
+
+-- swallowKnifeRemote (bloquea doble throw)
+local function UZNOIR_swallowKnife(self)
+    if typeof(self) ~= "Instance" then return false end
+    if self.ClassName ~= "RemoteEvent" then return false end
+    if not (_G.UZIVERT_KNIFE_INSTANT or _G.UZIVERT_KNIFE_FAST) then return false end
+    local now = tick()
+    if now - _G.UZIVERT_KNIFE_INSTANT_LAST < 0.48 then
+        return true
+    end
+    return false
+end
 
 if not _G.UZIVERT_SA_HOOKED then
     _G.UZIVERT_SA_HOOKED = true
@@ -4757,30 +5010,51 @@ if not _G.UZIVERT_SA_HOOKED then
         local mt = getrawmetatable(game)
         local oldNamecall = mt.__namecall
         setreadonly(mt, false)
-        
+
         mt.__namecall = newcclosure(function(self, ...)
             local method = getnamecallmethod()
-            if _G.UZIVERT_SA_ON and _G.UZIVERT_SA_REMOTE and self == _G.UZIVERT_SA_REMOTE and method == "FireServer" then
-                if not _G.UZIVERT_SA_TARGET or not _G.UZIVERT_SA_ORIGIN then
-                    return oldNamecall(self, ...)
+
+            if method == "FireServer" then
+                -- 🗡️ SWALLOW: bloquea doble throw del knife
+                if UZNOIR_swallowKnife(self) then
+                    return
                 end
-                
-                local args = {...}
-                args[1] = _G.UZIVERT_SA_ORIGIN
-                
-                for _, punto in ipairs(_G.UZIVERT_SA_TARGET) do
-                    args[2] = punto
-                    oldNamecall(self, unpack(args))
+
+                -- 🎯 GUN SILENT AIM
+                if _G.UZIVERT_SA_ON and _G.UZIVERT_SA_REMOTE and self == _G.UZIVERT_SA_REMOTE then
+                    if not _G.UZIVERT_SA_TARGET or not _G.UZIVERT_SA_TARGET[1] then
+                        return oldNamecall(self, ...)
+                    end
+                    local args = {...}
+                    if #args >= 2 then
+                        for _, punto in ipairs(_G.UZIVERT_SA_TARGET) do
+                            args[2] = punto
+                            oldNamecall(self, unpack(args))
+                        end
+                    end
+                    return
                 end
-                
-                return
+
+                -- 🗡️ KNIFE SILENT AIM
+                if _G.UZIVERT_KNIFE_SA and _G.UZIVERT_KNIFE_REMOTE and self == _G.UZIVERT_KNIFE_REMOTE then
+                    if not _G.UZIVERT_KNIFE_AIM or not _G.UZIVERT_KNIFE_ORIGIN then
+                        return oldNamecall(self, ...)
+                    end
+                    local args = {...}
+                    if #args >= 2 and typeof(args[1]) == "CFrame" then
+                        args[1] = CFrame.lookAt(_G.UZIVERT_KNIFE_ORIGIN, _G.UZIVERT_KNIFE_AIM)
+                        args[2] = CFrame.new(_G.UZIVERT_KNIFE_AIM)
+                    end
+                    return oldNamecall(self, unpack(args))
+                end
             end
+
             return oldNamecall(self, ...)
         end)
-        
+
         setreadonly(mt, true)
     end)
-    print("🎯 [SILENT AIM v4.0] Hook activado")
+    print("🎯 [HOOK UNIFICADO Gun+Knife] activado")
 end
 
 local function aplicarGunESP(obj, esTirada)
@@ -5459,166 +5733,307 @@ local function obtenerOriginArma(gun)
 end
 
 -- ============================================
--- 🎯 SHOOT MURDERER v8 (Jmods Style)
--- Offset adelante + Ping Multiplier + Ráfaga
+-- 🎯 SHOOT MURDERER v9 — PREDICCIÓN NOIR COMPLETA
 -- ============================================
 
-_G.UZIVERT_SHOOT_RAFAGA = 15
-_G.UZIVERT_SHOOT_DELAY = 0.01
-_G.UZIVERT_SHOOT_DISP = 0.3
-_G.UZIVERT_SHOOT_OFFSET = 2.8
-_G.UZIVERT_SHOOT_PING_MULT = 1.0
-_G.UZIVERT_SHOOT_RANGO_MAX = 2000
-_G.UZIVERT_SHOOT_Y = 1.5
+_G.UZSHOOT_PingProfiles = _G.UZSHOOT_PingProfiles or {
+    { Ping = 20,  Sim = 48, Interval = 70, H = 154, V = 144, X = -5,  Y = -14, Z = 0 },
+    { Ping = 50,  Sim = 54, Interval = 66, H = 162, V = 152, X = -6,  Y = -14, Z = 0 },
+    { Ping = 100, Sim = 68, Interval = 60, H = 176, V = 166, X = -8,  Y = -15, Z = 0 },
+    { Ping = 150, Sim = 72, Interval = 64, H = 182, V = 170, X = -9,  Y = -12, Z = 0 },
+    { Ping = 200, Sim = 76, Interval = 70, H = 188, V = 174, X = -10, Y = -11, Z = 0 },
+    { Ping = 300, Sim = 82, Interval = 76, H = 196, V = 180, X = -12, Y = -10, Z = 0 },
+}
 
-local function dispararV1()
-    local gun = obtenerGun()
-    if not gun then print("❌ No tenés Gun") return end
-    
-    local murderer = detectarMurderer()
-    if not murderer or not murderer.Character then print("❌ No hay Murderer") return end
-    
-    local shoot = obtenerShootRemote(gun)
-    if not shoot then print("❌ No hay remote Shoot") return end
-    
-    local origin = obtenerOriginArma(gun)
-    
-    local char = LocalPlayer.Character
-    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-    local targetChar = murderer.Character
-    local targetHrp = targetChar:FindFirstChild("HumanoidRootPart")
-    if not hrp or not targetHrp then return end
-    
-    local dist = (hrp.Position - targetHrp.Position).Magnitude
-    if dist > _G.UZIVERT_SHOOT_RANGO_MAX then return end
-    
-    -- Ping
-    local ping = 0
-    pcall(function()
-        ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
-    end)
-    if ping > 0.25 then ping = 0.25 end
-    
-    -- Velocidad y dirección del murderer
-    local targetPos = targetHrp.Position
-    local vel = targetHrp.AssemblyLinearVelocity
-    local velHoriz = Vector3.new(vel.X, 0, vel.Z)
-    local velMag = velHoriz.Magnitude
-    local velDir = velMag > 1 and velHoriz.Unit or Vector3.new(0, 0, -1)
-    
-    -- 🔥 FÓRMULA JMODS: Offset adelante + Ping multiplier
-    local offsetAhead = velDir * _G.UZIVERT_SHOOT_OFFSET
-    local pingPred = velDir * ping * _G.UZIVERT_SHOOT_PING_MULT * velMag
-    
-    local aimPos = targetPos + offsetAhead + pingPred + Vector3.new(0, _G.UZIVERT_SHOOT_Y, 0)
-    
-    -- Disparo inmediato si está cerca
-    if dist < 15 then
-        pcall(function()
-            shoot:FireServer(origin, CFrame.new(aimPos))
-        end)
-    end
-    
-    -- Ráfaga estilo YARHM
-    for i = 1, _G.UZIVERT_SHOOT_RAFAGA do
-        local disp = Vector3.new(
-            (math.random() - 0.5) * _G.UZIVERT_SHOOT_DISP,
-            (math.random() - 0.5) * _G.UZIVERT_SHOOT_DISP,
-            (math.random() - 0.5) * _G.UZIVERT_SHOOT_DISP
-        )
-        local final = aimPos + disp
-        
-        pcall(function()
-            shoot:FireServer(origin, CFrame.new(final))
-        end)
-        
-        if _G.UZIVERT_SHOOT_DELAY > 0 then
-            task.wait(_G.UZIVERT_SHOOT_DELAY)
+_G.UZSHOOT_CFG = _G.UZSHOOT_CFG or {
+    adaptive = true,
+    fixedLead = 0.075,
+    extraLead = 0.02,
+    maxLead = 0.18,
+    prioritizePing = true,
+    predictJump = false,
+    predictLag = true,
+    maxSimulationMs = 180,
+    predictionIntervalMs = 72,
+    manualPingMs = 80,
+    offsetX = 0, offsetY = 0, offsetZ = 0,
+    horizontalMultiplier = 100,
+    verticalMultiplier = 100,
+    wallCheck = false,
+    autoUnequip = true,
+    cooldown = 0.2,
+}
+
+_G.UZSHOOT_motionPart = nil
+_G.UZSHOOT_motionSamples = {}
+_G.UZSHOOT_measuredVel = Vector3.new(0, 0, 0)
+_G.UZSHOOT_previousVel = Vector3.new(0, 0, 0)
+_G.UZSHOOT_accel = Vector3.new(0, 0, 0)
+_G.UZSHOOT_shootBusy = false
+
+_G.UZSHOOT_interpProfile = function(ping)
+    local arr = _G.UZSHOOT_PingProfiles
+    local a, b = arr[1], arr[1]
+    if ping >= arr[#arr].Ping then
+        a = arr[#arr]
+        b = arr[#arr]
+    else
+        for i = 1, #arr - 1 do
+            if ping >= arr[i].Ping and ping <= arr[i + 1].Ping then
+                a = arr[i]
+                b = arr[i + 1]
+                break
+            end
         end
     end
-    
-    print(string.format("💥 Shoot → %s | Dist: %d | Vel: %d | Offset: %.1f",
-        murderer.Name, math.floor(dist), math.floor(velMag), _G.UZIVERT_SHOOT_OFFSET))
-end
-
-local function dispararV2()
-    local gun = obtenerGun()
-    if not gun then print("❌ No tienes Gun") return end
-    local murderer = detectarMurderer()
-    if not murderer or not murderer.Character then print("❌ No hay Murderer") return end
-    local char = LocalPlayer.Character
-    local hrp = char and char:FindFirstChild("HumanoidRootPart")
-    local targetHrp = murderer.Character:FindFirstChild("HumanoidRootPart")
-    local hum = murderer.Character:FindFirstChildOfClass("Humanoid")
-    if not hrp or not targetHrp or not hum then return end
-    local dist = (hrp.Position - targetHrp.Position).Magnitude
-    if dist > SHOOT_RANGO_MAX or dist < SHOOT_RANGO_MIN then return end
-    local shoot = obtenerShootRemote(gun)
-    if not shoot then print("❌ No hay remote Shoot") return end
-    local origin = obtenerOriginArma(gun)
-    
-    local basePos = targetHrp.Position + Vector3.new(0, SHOOT_ALTURA, 0)
-    
-    local ping = 0
-    pcall(function()
-        ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
-    end)
-    
-    local tiempoVuelo = dist / 1000
-    local tiempoTotal = tiempoVuelo + ping
-    
-    local vel = targetHrp.AssemblyLinearVelocity
-    local velMag = vel.Magnitude
-    
-    local predFactorDinamico = 1.5
-    if velMag > 30 then
-        predFactorDinamico = 1.5 * 1.2
-    elseif velMag < 5 then
-        predFactorDinamico = 1.5 * 0.8
-    end
-    
-    if velMag > 1 then
-        basePos = basePos + (vel * tiempoTotal * predFactorDinamico)
-    elseif hum.MoveDirection.Magnitude > 0 then
-        basePos = basePos + (hum.MoveDirection * hum.WalkSpeed * tiempoTotal * predFactorDinamico)
-    end
-    
-    local estado = hum:GetState()
-    if estado == Enum.HumanoidStateType.Jumping or estado == Enum.HumanoidStateType.Freefall then
-        local g = workspace.Gravity
-        local yExtra = vel.Y * tiempoTotal + 0.5 * (-g) * tiempoTotal * tiempoTotal
-        basePos = basePos + Vector3.new(0, yExtra, 0)
-    end
-    
-    local dirMov
-    if velMag > 1 then
-        dirMov = vel.Unit
-    else
-        dirMov = hum.MoveDirection.Unit
-    end
-    
-    local puntos = {
-        basePos,
-        basePos + Vector3.new(0, 1.0, 0),
-        basePos + Vector3.new(0, -0.5, 0),
-        basePos + (dirMov * 1.5),
-        basePos - (dirMov * 1.5),
-        basePos + Vector3.new(1.5, 0, 0),
-        basePos + Vector3.new(-1.5, 0, 0),
+    local span = b.Ping - a.Ping
+    local alpha = span > 0 and math.clamp((ping - a.Ping) / span, 0, 1) or 0
+    alpha = alpha * alpha * (3 - 2 * alpha)
+    local function mix(k) return a[k] + (b[k] - a[k]) * alpha end
+    return {
+        Sim = math.floor(mix("Sim") + 0.5),
+        Interval = math.floor(mix("Interval") + 0.5),
+        H = math.floor(mix("H") + 0.5),
+        V = math.floor(mix("V") + 0.5),
+        X = math.floor(mix("X") + 0.5),
+        Y = math.floor(mix("Y") + 0.5),
+        Z = math.floor(mix("Z") + 0.5),
     }
-    
-    for i, punto in ipairs(puntos) do
-        pcall(function() shoot:FireServer(origin, CFrame.new(punto)) end)
-        task.wait(0.025)
-    end
-    
-    print("🎯 Shoot Avz → " .. murderer.Name .. " | 7 tiros | Dist: " .. math.floor(dist))
 end
 
+_G.UZSHOOT_leadTime = function()
+    local cfg = _G.UZSHOOT_CFG
+    local prediction
+    if cfg.adaptive then
+        local ping = cfg.prioritizePing and (_G.UZNOIR_cachedPing or 0.08) or (cfg.manualPingMs / 1000)
+        prediction = ping + cfg.extraLead
+        if cfg.predictLag then
+            local samplingDelay = math.clamp(cfg.predictionIntervalMs / 2000, 0, 0.05)
+            prediction = prediction + samplingDelay + math.max(0, ping - 0.10) * 0.15
+        end
+    else
+        prediction = cfg.fixedLead
+    end
+    return math.clamp(prediction, 0.02, math.min(cfg.maxLead, cfg.maxSimulationMs / 1000))
+end
+
+_G.UZSHOOT_sampleMotion = function(part)
+    local cfg = _G.UZSHOOT_CFG
+    local now = os.clock()
+    if _G.UZSHOOT_motionPart ~= part then
+        _G.UZSHOOT_motionPart = part
+        _G.UZSHOOT_motionSamples = {}
+        _G.UZSHOOT_measuredVel = part.AssemblyLinearVelocity
+        _G.UZSHOOT_previousVel = _G.UZSHOOT_measuredVel
+        _G.UZSHOOT_accel = Vector3.new(0, 0, 0)
+    end
+    local samples = _G.UZSHOOT_motionSamples
+    local last = samples[#samples]
+    if not last or now - last.time >= math.max(0.016, cfg.predictionIntervalMs / 1000) then
+        table.insert(samples, { position = part.Position, time = now })
+        while #samples > 8 or (#samples > 2 and now - samples[1].time > 0.35) do
+            table.remove(samples, 1)
+        end
+        if #samples >= 2 then
+            local first = samples[1]
+            local newest = samples[#samples]
+            local delta = newest.time - first.time
+            if delta > 0.015 then
+                local sampled = (newest.position - first.position) / delta
+                if sampled.Magnitude < 150 then
+                    local oldVel = _G.UZSHOOT_measuredVel
+                    _G.UZSHOOT_measuredVel = _G.UZSHOOT_measuredVel:Lerp(sampled, 0.55)
+                    local sampleDelta = last and math.max(now - last.time, 0.016) or delta
+                    local accel = (_G.UZSHOOT_measuredVel - oldVel) / sampleDelta
+                    if accel.Magnitude < 120 then
+                        _G.UZSHOOT_accel = _G.UZSHOOT_accel:Lerp(accel, 0.25)
+                    else
+                        _G.UZSHOOT_accel = Vector3.new(0, 0, 0)
+                    end
+                    _G.UZSHOOT_previousVel = oldVel
+                end
+            end
+        end
+    end
+end
+
+_G.UZSHOOT_calculateAim = function(part)
+    local cfg = _G.UZSHOOT_CFG
+    _G.UZSHOOT_sampleMotion(part)
+    local assembly = part.AssemblyLinearVelocity
+    local velocity = assembly
+    local accel = Vector3.new(0, 0, 0)
+    if cfg.predictLag and _G.UZSHOOT_motionPart == part and #_G.UZSHOOT_motionSamples >= 2 then
+        local dis = (assembly - _G.UZSHOOT_measuredVel).Magnitude
+        local w = math.clamp(0.75 - dis / 120, 0.35, 0.75)
+        velocity = assembly:Lerp(_G.UZSHOOT_measuredVel, w)
+        accel = _G.UZSHOOT_accel
+    end
+    local h = cfg.horizontalMultiplier / 100
+    local v = cfg.verticalMultiplier / 100
+    local yVel = cfg.predictJump and velocity.Y * v or 0
+    local predictedVel = Vector3.new(velocity.X * h, yVel, velocity.Z * h)
+    local time = _G.UZSHOOT_leadTime()
+    local displacement = predictedVel * time
+    if cfg.predictLag then
+        local hAccel = Vector3.new(accel.X, 0, accel.Z)
+        displacement = displacement + hAccel * (0.5 * time * time)
+    end
+    if cfg.predictJump then
+        local humanoid = part.Parent and part.Parent:FindFirstChildWhichIsA("Humanoid")
+        if humanoid and humanoid.FloorMaterial == Enum.Material.Air then
+            displacement = displacement + Vector3.new(0, -0.5 * workspace.Gravity * time * time, 0)
+        end
+    end
+    if displacement.Magnitude > 18 then
+        displacement = displacement.Unit * 18
+    end
+    local offset = Vector3.new(
+        part.Size.X * cfg.offsetX / 100,
+        part.Size.Y * cfg.offsetY / 100,
+        part.Size.Z * cfg.offsetZ / 100
+    )
+    return part.Position + displacement + offset
+end
+
+_G.UZSHOOT_getAimPart = function(player)
+    local char = player and player.Character
+    if not char then return nil end
+    return char:FindFirstChild("Head") or char:FindFirstChild("HumanoidRootPart")
+end
+
+_G.UZSHOOT_targetVisible = function(part)
+    if not _G.UZSHOOT_CFG.wallCheck then return true end
+    local char = LocalPlayer.Character
+    local origin = char and (char:FindFirstChild("Head") or char:FindFirstChild("HumanoidRootPart"))
+    if not origin or not part then return false end
+    local rp = RaycastParams.new()
+    rp.FilterType = Enum.RaycastFilterType.Exclude
+    rp.FilterDescendantsInstances = { char }
+    local result = workspace:Raycast(origin.Position, part.Position - origin.Position, rp)
+    return result == nil or result.Instance:IsDescendantOf(part.Parent)
+end
+
+_G.UZSHOOT_getGun = function()
+    local char = LocalPlayer.Character
+    if not char then return nil end
+    local gun = char:FindFirstChild("Gun") or char:FindFirstChild("Revolver")
+    if gun then return gun end
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    if backpack then
+        gun = backpack:FindFirstChild("Gun") or backpack:FindFirstChild("Revolver")
+    end
+    return gun
+end
+
+_G.UZSHOOT_findGunRemote = function()
+    local gun = _G.UZSHOOT_getGun()
+    if not gun then return nil end
+    local best, bestScore
+    for _, obj in ipairs(gun:GetDescendants()) do
+        if obj:IsA("RemoteEvent") then
+            local name = obj.Name
+            local score = #name
+            if name == "Shoot" then score += 50 end
+            if name == "GunFired" or name == "KnifeThrown" then score = -1 end
+            if score >= (bestScore or 0) then
+                best, bestScore = obj, score
+            end
+        end
+    end
+    return best
+end
+
+_G.UZSHOOT_getHandle = function(gun)
+    if not gun then return nil end
+    local h = gun:FindFirstChild("Handle", true)
+    if h and h:IsA("BasePart") then return h end
+    return nil
+end
+
+_G.UZSHOOT_fireGunAt = function(player)
+    if _G.UZSHOOT_shootBusy then return false end
+    _G.UZSHOOT_shootBusy = true
+    local success = false
+
+    pcall(function()
+        if not player or not player.Character then return end
+        local part = _G.UZSHOOT_getAimPart(player)
+        local char = LocalPlayer.Character
+        local humanoid = char and char:FindFirstChildWhichIsA("Humanoid")
+        local backpack = LocalPlayer:FindFirstChildOfClass("Backpack")
+        if not part or not char or not humanoid then return end
+        if _G.UZSHOOT_CFG.wallCheck and not _G.UZSHOOT_targetVisible(part) then return end
+
+        local autoEquipped = false
+        local gun = char:FindFirstChild("Gun") or char:FindFirstChild("Revolver")
+        if not gun and backpack then
+            gun = backpack:FindFirstChild("Gun") or backpack:FindFirstChild("Revolver")
+            if gun then
+                humanoid:EquipTool(gun)
+                autoEquipped = true
+                task.wait(0.12)
+            end
+        end
+        if not gun or not gun:IsA("Tool") then
+            if autoEquipped and humanoid.Parent then humanoid:UnequipTools() end
+            return
+        end
+        local remote = _G.UZSHOOT_findGunRemote()
+        local handle = _G.UZSHOOT_getHandle(gun)
+        if not remote or not handle then
+            if autoEquipped and humanoid.Parent then humanoid:UnequipTools() end
+            return
+        end
+        local aim = _G.UZSHOOT_calculateAim(part)
+        local origin = handle.Position
+        success = pcall(function()
+            remote:FireServer(CFrame.lookAt(origin, aim), CFrame.new(aim))
+        end)
+        task.wait(0.16)
+        if autoEquipped and _G.UZSHOOT_CFG.autoUnequip and humanoid.Parent then
+            task.wait(0.08)
+            humanoid:UnequipTools()
+        end
+    end)
+
+    task.wait(_G.UZSHOOT_CFG.cooldown)
+    _G.UZSHOOT_shootBusy = false
+    return success
+end
+
+-- Loop de sampleMotion 30Hz
+task.spawn(function()
+    while task.wait(1 / 30) do
+        local murderer = detectarMurderer()
+        if murderer and murderer.Character then
+            local part = _G.UZSHOOT_getAimPart(murderer)
+            if part then _G.UZSHOOT_sampleMotion(part) end
+        end
+    end
+end)
+
+-- Función dispararV1 (reemplaza la vieja)
+local function dispararV1()
+    if _G.UZSHOOT_shootBusy then return end
+    if _G.UZIVERT_SHOOT_ULTIMA and tick() - _G.UZIVERT_SHOOT_ULTIMA < 0.15 then return end
+    _G.UZIVERT_SHOOT_ULTIMA = tick()
+
+    local murderer = detectarMurderer()
+    if not murderer or not murderer.Character then
+        print("❌ Sin murderer")
+        return
+    end
+
+    task.spawn(function()
+        local ok = _G.UZSHOOT_fireGunAt(murderer)
+        print(ok and ("💥 Disparo a " .. murderer.Name) or "❌ Fallo")
+    end)
+end
 
 task.spawn(function()
-    while task.wait(0.15) do
-        if SHOOT_AUTO then pcall(dispararV2) end
+    while task.wait(0.3) do
+        if SHOOT_AUTO then pcall(dispararV1) end
     end
 end)
 
@@ -5807,111 +6222,6 @@ BotonShoot.MouseButton1Click:Connect(function()
     dispararV1()
     BotonShoot.Text = "FIRE!"
     task.delay(0.5, function() BotonShoot.Text = "SHOOT MURDERER" end)
-end)
-
--- ============================================
--- 👻 BOTÓN SHOOT AVANZADO (RGB)
--- ============================================
-local BotonAvz = Instance.new("TextButton")
-BotonAvz.Name = "UzivertShootAvz"
-BotonAvz.Size = UDim2.new(0, 160, 0, 50)
-BotonAvz.Position = UDim2.new(0, 30, 0.5, 170)
-BotonAvz.BackgroundColor3 = COLORES.Fondo
-BotonAvz.BackgroundTransparency = 0.3
-BotonAvz.Text = "SHOOT AVANZADO"
-BotonAvz.TextColor3 = COLORES.Texto
-BotonAvz.Font = Enum.Font.GothamBold
-BotonAvz.TextSize = 13
-BotonAvz.BorderSizePixel = 0
-BotonAvz.Active = true
-BotonAvz.Draggable = true
-BotonAvz.Visible = false
-BotonAvz.ZIndex = 998
-BotonAvz.ClipsDescendants = true
-BotonAvz.Parent = ScreenGui
-
-local cAvz = Instance.new("UICorner")
-cAvz.CornerRadius = UDim.new(0, 10)
-cAvz.Parent = BotonAvz
-
-local sAvz = Instance.new("UIStroke")
-sAvz.Color = COLORES.Naranja1
-sAvz.Thickness = 2
-sAvz.Transparency = 0.2
-sAvz.Parent = BotonAvz
-
-task.spawn(function()
-    while BotonAvz.Parent do
-        local t = tick()
-        local a = (math.sin(t * 1.5) + 1) / 2
-        sAvz.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
-        sAvz.Transparency = 0.4 - a * 0.3
-        task.wait(0.05)
-    end
-end)
-
-local BotonCandadoAvz = Instance.new("TextButton")
-BotonCandadoAvz.Size = UDim2.new(0, 22, 0, 22)
-BotonCandadoAvz.Position = UDim2.new(1, -24, 0, 2)
-BotonCandadoAvz.BackgroundColor3 = COLORES.Morado3
-BotonCandadoAvz.BackgroundTransparency = 0.3
-BotonCandadoAvz.Text = "🔓"
-BotonCandadoAvz.TextColor3 = COLORES.Texto
-BotonCandadoAvz.Font = Enum.Font.GothamBold
-BotonCandadoAvz.TextSize = 12
-BotonCandadoAvz.BorderSizePixel = 0
-BotonCandadoAvz.ZIndex = 999
-BotonCandadoAvz.Parent = BotonAvz
-
-local cLockAvz = Instance.new("UICorner")
-cLockAvz.CornerRadius = UDim.new(1, 0)
-cLockAvz.Parent = BotonCandadoAvz
-
-local BLOQUEADO_AVZ = CONFIG.ShootAvzLock or false
-
-local function actualizarCandadoAvz()
-    if BLOQUEADO_AVZ then
-        BotonAvz.Draggable = false
-        BotonCandadoAvz.Text = "🔒"
-        BotonCandadoAvz.BackgroundColor3 = COLORES.Rojo
-        BotonCandadoAvz.BackgroundTransparency = 0.3
-    else
-        BotonAvz.Draggable = true
-        BotonCandadoAvz.Text = "🔓"
-        BotonCandadoAvz.BackgroundColor3 = COLORES.Morado3
-        BotonCandadoAvz.BackgroundTransparency = 0.3
-    end
-end
-
-actualizarCandadoAvz()
-
-BotonCandadoAvz.MouseButton1Click:Connect(function()
-    BLOQUEADO_AVZ = not BLOQUEADO_AVZ
-    CONFIG.ShootAvzLock = BLOQUEADO_AVZ
-    actualizarCandadoAvz()
-    guardarConfig()
-end)
-
-if CONFIG.ShootAvzPos then
-    local p = CONFIG.ShootAvzPos
-    pcall(function() BotonAvz.Position = UDim2.new(p[1], p[2], p[3], p[4]) end)
-end
-
-task.spawn(function()
-    while task.wait(2) do
-        if not BLOQUEADO_AVZ then
-            pcall(function()
-                CONFIG.ShootAvzPos = {BotonAvz.Position.X.Scale, BotonAvz.Position.X.Offset, BotonAvz.Position.Y.Scale, BotonAvz.Position.Y.Offset}
-                guardarConfig()
-            end)
-        end
-    end
-end)
-
-BotonAvz.MouseButton1Click:Connect(function()
-    dispararV2()
-    BotonAvz.Text = "FIRE!"
-    task.delay(0.5, function() BotonAvz.Text = "SHOOT AVANZADO" end)
 end)
 
 -- ============================================
@@ -6489,7 +6799,7 @@ _G.lblSecAim1 = Instance.new("TextLabel")
 _G.lblSecAim1.Size = UDim2.new(1, -20, 1, 0)
 _G.lblSecAim1.Position = UDim2.new(0, 10, 0, 0)
 _G.lblSecAim1.BackgroundTransparency = 1
-_G.lblSecAim1.Text = "🎯 SHOOT MURDERER"
+_G.lblSecAim1.Text = "🎯 SHOOT MURDERER (Inestable)"
 _G.lblSecAim1.TextColor3 = COLORES.Naranja2
 _G.lblSecAim1.Font = Enum.Font.GothamBlack
 _G.lblSecAim1.TextSize = 12
@@ -6511,14 +6821,6 @@ crearToggle(PaginaAim, "🎯 Mostrar boton SHOOT MURDERER", CONFIG.ShootMostrar 
     guardarConfig()
     if BotonShoot then BotonShoot.Visible = e end
 end)
-
-if not _G.UZIVERT_GAMA_BAJA then
-    crearToggle(PaginaAim, "👻 Mostrar boton SHOOT AVANZADO", CONFIG.ShootAvzMostrar or false, function(e)
-        CONFIG.ShootAvzMostrar = e
-        guardarConfig()
-        if BotonAvz then BotonAvz.Visible = e end
-    end)
-end
 
 -- 🎯 SECCIÓN: AIMLOCK V2
 _G.secAim2 = Instance.new("Frame")
@@ -6787,7 +7089,7 @@ if CONFIG.AimFOV then
     _G.AIM_UPDATE_FOV()
 end
 
--- 🎯 SECCIÓN: SILENT AIM v2
+-- 🎯 SECCIÓN: SILENT AIM v4
 _G.secSA = Instance.new("Frame")
 _G.secSA.Size = UDim2.new(1, 0, 0, 30)
 _G.secSA.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
@@ -6810,7 +7112,7 @@ _G.lblSecSA = Instance.new("TextLabel")
 _G.lblSecSA.Size = UDim2.new(1, -20, 1, 0)
 _G.lblSecSA.Position = UDim2.new(0, 10, 0, 0)
 _G.lblSecSA.BackgroundTransparency = 1
-_G.lblSecSA.Text = "🎯 SILENT AIM v2"
+_G.lblSecSA.Text = "🎯 SILENT AIM v4 (Inestable)"
 _G.lblSecSA.TextColor3 = COLORES.Naranja2
 _G.lblSecSA.Font = Enum.Font.GothamBlack
 _G.lblSecSA.TextSize = 12
@@ -6824,11 +7126,7 @@ crearToggle(PaginaAim, "🎯 Silent Aim", CONFIG.SilentAim or false, function(e)
     guardarConfig()
 end)
 
-crearToggle(PaginaAim, "📡 Auto Ping (adaptativo)", CONFIG.SilentAutoPing ~= false, function(e)
-    _G.UZIVERT_SA_AUTO_PING = e
-    CONFIG.SilentAutoPing = e
-    guardarConfig()
-end)
+
 
 crearToggle(PaginaAim, "🎯 Multi-Point (7 tiros)", CONFIG.SilentMultiPoint ~= false, function(e)
     _G.UZIVERT_SA_MULTI = e
@@ -6836,74 +7134,78 @@ crearToggle(PaginaAim, "🎯 Multi-Point (7 tiros)", CONFIG.SilentMultiPoint ~= 
     guardarConfig()
 end)
 
-crearToggle(PaginaAim, "🛡️ Anti-Hack (vuelo/tp)", CONFIG.SilentAntiHack ~= false, function(e)
-    _G.UZIVERT_SA_ANTIHACK = e
-    CONFIG.SilentAntiHack = e
+crearSlider(PaginaAim, "🎯 Extra Lead (x1000)", 0, 100, math.floor((CONFIG.SilentPred or 0.02) * 1000), function(v)
+    _G.UZIVERT_SA_PRED = v / 1000
+    CONFIG.SilentPred = v / 1000
+    if _G.UZNOIR_CFG then
+        _G.UZNOIR_CFG.extraLead = v / 1000
+    end
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "X Offset (%)", -50, 50, math.floor((CONFIG.SilentOffX or 0) * 100), function(v)
-    _G.UZIVERT_SA_OFF_X = v / 100
-    CONFIG.SilentOffX = v / 100
+crearToggle(PaginaAim, "🦘 Predict Jump", CONFIG.SilentPredictJump ~= false, function(e)
+    CONFIG.SilentPredictJump = e
+    if _G.UZNOIR_CFG then _G.UZNOIR_CFG.predictJump = e end
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Y Offset (%)", -50, 50, math.floor((CONFIG.SilentOffY or -0.10) * 100), function(v)
-    _G.UZIVERT_SA_OFF_Y = v / 100
-    CONFIG.SilentOffY = v / 100
+crearToggle(PaginaAim, "🏃 Predict Lag", CONFIG.SilentPredictLag ~= false, function(e)
+    CONFIG.SilentPredictLag = e
+    if _G.UZNOIR_CFG then _G.UZNOIR_CFG.predictLag = e end
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Z Offset (%)", -50, 50, math.floor((CONFIG.SilentOffZ or 0) * 100), function(v)
-    _G.UZIVERT_SA_OFF_Z = v / 100
-    CONFIG.SilentOffZ = v / 100
+crearSlider(PaginaAim, "⚙️ Max Simulation (ms)", 50, 500, CONFIG.SilentMaxSimMs or 180, function(v)
+    CONFIG.SilentMaxSimMs = v
+    if _G.UZNOIR_CFG then _G.UZNOIR_CFG.maxSimulationMs = v end
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Pred Horizontal (%)", 0, 300, math.floor((CONFIG.SilentPredH or 1.5) * 100), function(v)
-    _G.UZIVERT_SA_PRED_H = v / 100
-    CONFIG.SilentPredH = v / 100
+crearSlider(PaginaAim, "↔️ Horizontal Mult (%)", 50, 250, CONFIG.SilentHMult or 100, function(v)
+    CONFIG.SilentHMult = v
+    if _G.UZNOIR_CFG then _G.UZNOIR_CFG.horizontalMultiplier = v end
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Pred Vertical (%)", 0, 300, math.floor((CONFIG.SilentPredV or 0.5) * 100), function(v)
-    _G.UZIVERT_SA_PRED_V = v / 100
-    CONFIG.SilentPredV = v / 100
+crearSlider(PaginaAim, "↕️ Vertical Mult (%)", 50, 250, CONFIG.SilentVMult or 100, function(v)
+    CONFIG.SilentVMult = v
+    if _G.UZNOIR_CFG then _G.UZNOIR_CFG.verticalMultiplier = v end
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Max Sim Time (ms)", 10, 200, math.floor((CONFIG.SilentMaxSim or 0.080) * 1000), function(v)
-    _G.UZIVERT_SA_MAX_SIM = v / 1000
-    CONFIG.SilentMaxSim = v / 1000
+crearSlider(PaginaAim, "🎯 Prediction Interval (ms)", 30, 200, CONFIG.SilentPredInterval or 72, function(v)
+    CONFIG.SilentPredInterval = v
+    if _G.UZNOIR_CFG then _G.UZNOIR_CFG.predictionIntervalMs = v end
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Pred Ping (ms)", 0, 200, math.floor((CONFIG.SilentPredPing or 0.060) * 1000), function(v)
-    _G.UZIVERT_SA_PRED_PING = v / 1000
-    CONFIG.SilentPredPing = v / 1000
-    guardarConfig()
-end)
+_G.UZNOIR_PING_LABEL = Instance.new("TextLabel")
+_G.UZNOIR_PING_LABEL.Size = UDim2.new(1, 0, 0, 30)
+_G.UZNOIR_PING_LABEL.BackgroundColor3 = COLORES.Morado3
+_G.UZNOIR_PING_LABEL.BackgroundTransparency = 0.5
+_G.UZNOIR_PING_LABEL.Text = "📡 Ping: -- ms"
+_G.UZNOIR_PING_LABEL.TextColor3 = COLORES.Texto
+_G.UZNOIR_PING_LABEL.Font = Enum.Font.GothamBold
+_G.UZNOIR_PING_LABEL.TextSize = 11
+_G.UZNOIR_PING_LABEL.BorderSizePixel = 0
+_G.UZNOIR_PING_LABEL.ZIndex = 2
+_G.UZNOIR_PING_LABEL.Parent = PaginaAim
 
-crearBoton(PaginaAim, "🔄 Resetear a Overdrive", function()
-    _G.UZIVERT_SA_OFF_X = 0
-    _G.UZIVERT_SA_OFF_Y = -0.10
-    _G.UZIVERT_SA_OFF_Z = 0
-    _G.UZIVERT_SA_PRED_H = 1.5
-    _G.UZIVERT_SA_PRED_V = 0.5
-    _G.UZIVERT_SA_MAX_SIM = 0.080
-    _G.UZIVERT_SA_PRED_PING = 0.060
-    
-    CONFIG.SilentOffX = 0
-    CONFIG.SilentOffY = -0.10
-    CONFIG.SilentOffZ = 0
-    CONFIG.SilentPredH = 1.5
-    CONFIG.SilentPredV = 0.5
-    CONFIG.SilentMaxSim = 0.080
-    CONFIG.SilentPredPing = 0.060
-    guardarConfig()
-    
-    print("🔄 Silent Aim reseteado a valores Overdrive v4.0")
-end, COLORES.Naranja1)
+local _cUZNOIRPingLbl = Instance.new("UICorner")
+_cUZNOIRPingLbl.CornerRadius = UDim.new(0, 8)
+_cUZNOIRPingLbl.Parent = _G.UZNOIR_PING_LABEL
+
+task.spawn(function()
+    while task.wait(0.5) do
+        if _G.UZNOIR_PING_LABEL and _G.UZNOIR_PING_LABEL.Parent then
+            local pingMs = 0
+            pcall(function()
+                pingMs = math.floor((_G.UZNOIR_cachedPing or 0.08) * 1000 + 0.5)
+            end)
+            _G.UZNOIR_PING_LABEL.Text = string.format("📡 Ping: %d ms | Lead: %.3f", pingMs, (_G.UZNOIR_CFG and _G.UZNOIR_CFG.extraLead) or 0.02)
+        end
+    end
+end)
 
 if not _G.UZIVERT_GAMA_BAJA then
 
@@ -6980,28 +7282,78 @@ _G.lblSecAim4.TextXAlignment = Enum.TextXAlignment.Left
 _G.lblSecAim4.ZIndex = 3
 _G.lblSecAim4.Parent = _G.secAim4
 
-crearSlider(PaginaAim, "Burst Tiros", 1, 10, SHOOT_BURST, function(v)
-    SHOOT_BURST = v
-    CONFIG.ShootBurst = v
+crearToggle(PaginaAim, "🏃 Predict Lag", CONFIG.ShootPredictLag ~= false, function(e)
+    _G.UZSHOOT_CFG.predictLag = e
+    CONFIG.ShootPredictLag = e
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Burst Delay x1000", 10, 200, math.floor(SHOOT_BURST_DELAY * 1000), function(v)
-    SHOOT_BURST_DELAY = v / 1000
-    CONFIG.ShootBurstDelay = SHOOT_BURST_DELAY
+crearToggle(PaginaAim, "🦘 Predict Jump", CONFIG.ShootPredictJump or false, function(e)
+    _G.UZSHOOT_CFG.predictJump = e
+    CONFIG.ShootPredictJump = e
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Rango Maximo", 50, 1000, SHOOT_RANGO_MAX, function(v)
-    SHOOT_RANGO_MAX = v
-    CONFIG.ShootRangoMax = v
+crearToggle(PaginaAim, "📡 Prioritize Ping", CONFIG.ShootPrioritizePing ~= false, function(e)
+    _G.UZSHOOT_CFG.prioritizePing = e
+    CONFIG.ShootPrioritizePing = e
     guardarConfig()
 end)
 
-crearSlider(PaginaAim, "Rango Minimo", 0, 50, SHOOT_RANGO_MIN, function(v)
-    SHOOT_RANGO_MIN = v
-    CONFIG.ShootRangoMin = v
+crearToggle(PaginaAim, "🧱 Wall Check", CONFIG.ShootWallCheck ~= false, function(e)
+    _G.UZSHOOT_CFG.wallCheck = e
+    CONFIG.ShootWallCheck = e
     guardarConfig()
+end)
+
+crearToggle(PaginaAim, "🔫 Auto-unequip", CONFIG.ShootAutoUnequip ~= false, function(e)
+    _G.UZSHOOT_CFG.autoUnequip = e
+    CONFIG.ShootAutoUnequip = e
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "🎯 Extra Lead (x1000)", 0, 100, math.floor((CONFIG.ShootExtraLead or 0.02) * 1000), function(v)
+    _G.UZSHOOT_CFG.extraLead = v / 1000
+    CONFIG.ShootExtraLead = v / 1000
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "⚙️ Max Sim (ms)", 50, 500, CONFIG.ShootMaxSim or 180, function(v)
+    _G.UZSHOOT_CFG.maxSimulationMs = v
+    CONFIG.ShootMaxSim = v
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "🎯 Pred Interval (ms)", 30, 200, CONFIG.ShootPredInterval or 72, function(v)
+    _G.UZSHOOT_CFG.predictionIntervalMs = v
+    CONFIG.ShootPredInterval = v
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "↔️ H Mult (%)", 50, 250, CONFIG.ShootHMult or 100, function(v)
+    _G.UZSHOOT_CFG.horizontalMultiplier = v
+    CONFIG.ShootHMult = v
+    guardarConfig()
+end)
+
+crearSlider(PaginaAim, "↕️ V Mult (%)", 50, 250, CONFIG.ShootVMult or 100, function(v)
+    _G.UZSHOOT_CFG.verticalMultiplier = v
+    CONFIG.ShootVMult = v
+    guardarConfig()
+end)
+
+-- Aplicar config guardada al arrancar
+task.defer(function()
+    _G.UZSHOOT_CFG.predictLag = CONFIG.ShootPredictLag ~= false
+    _G.UZSHOOT_CFG.predictJump = CONFIG.ShootPredictJump or false
+    _G.UZSHOOT_CFG.prioritizePing = CONFIG.ShootPrioritizePing ~= false
+    _G.UZSHOOT_CFG.wallCheck = CONFIG.ShootWallCheck ~= false
+    _G.UZSHOOT_CFG.autoUnequip = CONFIG.ShootAutoUnequip ~= false
+    _G.UZSHOOT_CFG.extraLead = CONFIG.ShootExtraLead or 0.02
+    _G.UZSHOOT_CFG.maxSimulationMs = CONFIG.ShootMaxSim or 180
+    _G.UZSHOOT_CFG.predictionIntervalMs = CONFIG.ShootPredInterval or 72
+    _G.UZSHOOT_CFG.horizontalMultiplier = CONFIG.ShootHMult or 100
+    _G.UZSHOOT_CFG.verticalMultiplier = CONFIG.ShootVMult or 100
 end)
 
 end
@@ -9271,7 +9623,7 @@ sMI.Transparency = 0.4
 sMI.Parent = mantInfo
 
 crearBoton(PaginaInfo, "🐛 Reportar Bug", function()
-    local texto = "REPORTE DE BUG - UZIVERT HUB v4.6\nJugador: " .. LocalPlayer.Name .. "\nFecha: " .. os.date("%d/%m/%Y %H:%M") .. "\nVersion: " .. VERSION
+    local texto = "REPORTE DE BUG - UZIVERT HUB v4.7.7\nJugador: " .. LocalPlayer.Name .. "\nFecha: " .. os.date("%d/%m/%Y %H:%M") .. "\nVersion: " .. VERSION
     pcall(function()
         if setclipboard then setclipboard(texto) end
     end)
@@ -9285,31 +9637,77 @@ crearBoton(PaginaInfo, "💬 Copiar Discord", function()
     print("Discord copiado.")
 end, Color3.fromRGB(80, 100, 200))
 
+crearTarjeta(PaginaUpdate, "📅 Última actualización: 17/10/2026", "Uzivert Hub v4.7.7 HALLOWEEN", COLORES.Naranja2)
 
-crearTarjeta(PaginaUpdate, "📅 Última actualización: 14/10/2026", "Uzivert Hub v4.7.5 HALLOWEEN", COLORES.Naranja2)
+crearTarjeta(PaginaUpdate, "🟢 NUEVO EN v4.7.7",
+    "🎯 SHOOT MURDERER v9 (Motor NOIR Completo)\n" ..
+    "• PingProfiles interpolados por ping (20ms a 300ms)\n" ..
+    "• sampleMotion con buffer de 8 posiciones\n" ..
+    "• estimatedAcceleration (predicción de lag)\n" ..
+    "• leadTime con samplingDelay (más preciso)\n" ..
+    "• predictLag con peso dinámico\n" ..
+    "• predictJump con gravedad real del juego\n" ..
+    "• Loop 30Hz alimentando sampleMotion\n" ..
+    "• Wall Check integrado\n" ..
+    "• Auto-equip / Auto-unequip\n\n" ..
+    
+    "🎯 SILENT AIM v4 NOIR\n" ..
+    "• Motor completo del NOIR integrado\n" ..
+    "• Hook __namecall unificado (Gun + Knife)\n" ..
+    "• Predicción completa con PingProfiles\n" ..
+    "• cachedPing EXACTO (0.7/0.3 cada 0.5s)\n" ..
+    "• Multi-Point (7 tiros) opcional\n" ..
+    "• Sliders: Extra Lead, Max Sim, Pred Interval, H Mult, V Mult\n" ..
+    "• Toggles: Predict Jump, Predict Lag\n" ..
+    "• Label de Ping en vivo",
+    COLORES.Verde)
+
+crearTarjeta(PaginaUpdate, "🗡️ NOVEDADES DEL KNIFE Y LIMPIEZA",
+    "⚙️ NUEVOS CONTROLES DE PREDICCIÓN\n" ..
+    "• 5 toggles: Predict Lag/Jump, Prioritize Ping, Wall Check, Auto-unequip\n" ..
+    "• 5 sliders: Extra Lead, Max Sim, Pred Interval, H Mult, V Mult\n" ..
+    "• Todo guarda config con guardarConfig()\n\n" ..
+    
+    "🗡️ KNIFE NOIR COMPLETO\n" ..
+    "• Knife Silent Aim integrado al hook\n" ..
+    "• Predicción con travelTime (distancia/110)\n" ..
+    "• SwallowKnifeRemote (bloquea doble throw)\n" ..
+    "• Instant Throw / Fast Throw\n" ..
+    "• Auto Throw + Auto Kill Everyone / Sheriff\n" ..
+    "• Kill Player (dropdown)\n" ..
+    "• Knife Throw Aura + Sheriff Bind Button\n\n" ..
+    
+    "🔥 LIMPIEZA DE CÓDIGO\n" ..
+    "• SHOOT AVANZADO (V2) eliminado por completo\n" ..
+    "• Auto Shoot ahora usa el motor NOIR\n" ..
+    "• Menos código, menos lag, más estable",
+    COLORES.Verde)
+
+crearTarjeta(PaginaUpdate, "🐛 BUGS ARREGLADOS EN v4.7.7",
+    "✓ Error de sintaxis (end)i en Knife que mataba el script\n" ..
+    "✓ Orden de funciones en dispararV1 (ya no crashea)\n" ..
+    "✓ Motor NOIR integrado correctamente\n" ..
+    "✓ Sección 4 reemplazada sin errores\n" ..
+    "✓ Botón SHOOT MURDERER funcionando con motor nuevo\n" ..
+    "✓ Config del Shoot guardada y restaurada al arrancar\n" ..
+    "✓ Hook __namecall manejando Gun y Knife a la vez\n" ..
+    "✓ Predicción del Knife con travelTime real",
+    COLORES.Verde)
 
 crearTarjeta(PaginaUpdate, "🟢 NUEVO EN v4.7.5",
-    "🌾 AUTO FARM COINS (NUEVO)\n" ..
+    "🌾 AUTO FARM COINS\n" ..
     "• Recolecta monedas automáticamente\n" ..
-    "• Sistema LinearVelocity (estable, sin caídas)\n" ..
-    "• Anti-AFK incluido\n" ..
-    "• Noclip mientras farmea\n" ..
-    "• Anti-Void (no cae al vacío)\n" ..
-    "• Auto-Reset cuando llena la mochila\n" ..
-    "• Velocidad configurable (10-30)\n" ..
-    "• Distancia máxima configurable\n\n" ..
-    "🎨 UI NUEVA (REDISEÑO COMPLETO)\n" ..
+    "• Sistema LinearVelocity (estable)\n" ..
+    "• Anti-AFK + Noclip + Anti-Void\n" ..
+    "• Auto-Reset cuando llena la mochila\n\n" ..
+    "🎨 UI HALLOWEEN (REDISEÑO)\n" ..
     "• Sistema de íconos dibujados con frames\n" ..
-    "• Sin emojis (todo vectorial)\n" ..
     "• Luna + telarañas + murciélagos animados\n" ..
     "• Borde animado RGB\n" ..
     "• Optimizado para gama alta y baja\n\n" ..
-    "🎯 AIMLOCK V2 MEJORADO\n" ..
-    "• Smoothing ajustable\n" ..
-    "• FOV Check con círculo en pantalla\n" ..
-    "• Select Player (elegís a quién lockear)\n" ..
-    "• Wall Check multi-punto\n" ..
-    "• Horizontal Prediction\n" ..
+    "🎯 AIMLOCK V2\n" ..
+    "• Smoothing ajustable + FOV Check\n" ..
+    "• Select Player + Wall Check mejorado\n" ..
     "• Botón flotante AIM con ON/OFF\n" ..
     "• Guarda la posición del botón",
     COLORES.Verde)
@@ -9347,24 +9745,9 @@ crearTarjeta(PaginaUpdate, "🟢 NUEVO EN v4.7.3",
     "• 🔥 Clutchs (antes Bomb Jump)",
     COLORES.Verde)
 
-crearTarjeta(PaginaUpdate, "🐛 BUGS ARREGLADOS EN v4.7.5",
-    "✓ Candado ya no se ve redondo al abrir/cerrar\n" ..
-    "✓ Orbe ya no se mueve si tocás con otro dedo\n" ..
-    "✓ Auto Farm estable (no se va al piso)\n" ..
-    "✓ Auto Farm ya no se queda quieto\n" ..
-    "✓ Ícono de Auto Farm dibujado (bolsa + moneda)\n" ..
-    "✓ UI nueva sin emojis (todo vectorial)\n" ..
-    "✓ ColorSequence arreglado (keypoints)\n" ..
-    "✓ ReplicatedStorage en Auto Farm\n" ..
-    "✓ ESP en DPI alto\n" ..
-    "✓ Firefly Clutch OK\n" ..
-    "✓ Anti-Aim pausa con Ignore List",
-    COLORES.Verde)
-
 crearTarjeta(PaginaUpdate, "🔴 DESCARTADO",
     "- Silent Aim con Mouse.Hit\n" ..
     "- Silent Aim con Camera\n" ..
-    "- Shoot Murderer con FireServer directo\n" ..
     "- Shoot Murderer con Camera Snap\n" ..
     "- Speed Glitch manual\n" ..
     "- Headless / Korblox con ID viejo\n" ..
@@ -9372,7 +9755,8 @@ crearTarjeta(PaginaUpdate, "🔴 DESCARTADO",
     "- ESP Skeleton\n" ..
     "- Skin Copier\n" ..
     "- Anti Silent Aim\n" ..
-    "- Herobrine",
+    "- Herobrine\n" ..
+    "- SHOOT AVANZADO (V2) → Descontinuado en v4.7.7\n",
     COLORES.Rojo)
 
 crearTarjeta(PaginaUpdate, "🎯 ROADMAP PRÓXIMAS VERSIONES",
@@ -9388,7 +9772,9 @@ crearTarjeta(PaginaUpdate, "🎯 ROADMAP PRÓXIMAS VERSIONES",
     "• 💾 Gestor de Configs\n" ..
     "• 🔒 Lock por UserId\n" ..
     "• 📢 Aviso de update en pantalla\n" ..
-    "• 📊 Contador de usuarios en pantalla\n\n" ..
+    "• 📊 Contador de usuarios en pantalla\n" ..
+    "• 🎯 Target Modes (Sheriff/Nearest/Crosshair)\n" ..
+    "• 👁️ ESP Tracer / Chams / Box\n\n" ..
     "💬 Sugerencias → Discord oficial",
     COLORES.Naranja2)
 
@@ -9484,8 +9870,8 @@ crearTarjeta(PaginaCreador, "💬 Mensaje del Creador",
     "Seguimos actualizando, mejorando y agregando funciones nuevas. El objetivo es que tengas la mejor experiencia posible en MM2.\n\n" ..
     "Si te gusta el hub → compartilo con tus amigos. Si encontrás bugs → reportalos en el Discord. Si tenés ideas → decímelas.\n\n" ..
     "📱 Redes sociales:\n" ..
-    "• TikTok: @Uzivert550\n" ..
-    "• Instagram: @hxuntedluv77\n\n" ..
+    "• TikTok: Uzivert550\n" ..
+    "• Instagram: hxuntedluv77\n\n" ..
     "💬 Discord oficial: discord.gg/vHhERWcbXe\n\n" ..
     "¡Gracias por usar Uzivert Hub! 🎃\n\n" ..
     "— Uzivert",
@@ -9514,16 +9900,6 @@ print("🕸️ Telarañas en esquinas")
 print("👻 Niebla animada")
 print("🎃 Iconos temáticos")
 print("💀 Colores de Halloween")
-print("====================================")
-print("Nuevo en v4.7.5:")
-print("  🎮 Selector de Gama (Alta/Baja)")
-print("  🎯 Anti-Aim")
-print("  ⚡ Speed Glitch")
-print("  💀 Headless + 🦵 Korblox")
-print("  🎒 Inventory Unlimiter + Auto Get Tools")
-print("  🔥 Firefly Clutch")
-print("  🧰 Nueva pestaña Utilidades")
-print("  🔥 Pestaña Clutchs")
 print("====================================")
 
 print("🎃 Parte 10/10 cargada - SCRIPT COMPLETO v4.7.4")
@@ -9803,3 +10179,786 @@ end
 if CONFIG.InventoryMaxItems then
     _G.UZIVERT_INV_LIMIT = CONFIG.InventoryMaxItems
 end
+
+-- ============================================
+-- 🗡️ KNIFE NOIR COMPLETO (Motor + UI) — TODO _G.
+-- ============================================
+
+-- ============================================
+-- VARIABLES GLOBALES
+-- ============================================
+_G.UZIVERT_KNIFE_SA = false
+_G.UZIVERT_KNIFE_WALL_CHECK = false
+_G.UZIVERT_KNIFE_PRIORITIZE_SHERIFF = false
+_G.UZIVERT_KNIFE_PREDICT_JUMP = true
+_G.UZIVERT_KNIFE_PREDICT_LAG = true
+_G.UZIVERT_KNIFE_EXTRA_LEAD = 0.02
+_G.UZIVERT_KNIFE_FIXED_LEAD = 0.075
+_G.UZIVERT_KNIFE_MANUAL_PING = 80
+_G.UZIVERT_KNIFE_PRIORITIZE_PING = true
+_G.UZIVERT_KNIFE_ADAPTIVE = true
+_G.UZIVERT_KNIFE_MAX_SIM = 180
+_G.UZIVERT_KNIFE_PRED_INTERVAL = 72
+_G.UZIVERT_KNIFE_H_MULT = 100
+_G.UZIVERT_KNIFE_V_MULT = 100
+_G.UZIVERT_KNIFE_OFF_X = 0
+_G.UZIVERT_KNIFE_OFF_Y = 0
+_G.UZIVERT_KNIFE_OFF_Z = 0
+_G.UZIVERT_KNIFE_HIT_PART = "Head"
+
+_G.UZIVERT_KNIFE_INSTANT = false
+_G.UZIVERT_KNIFE_FAST = false
+_G.UZIVERT_KNIFE_AUTO_THROW = false
+_G.UZIVERT_KNIFE_AUTO_THROW_RADIUS = 25
+
+_G.UZIVERT_KNIFE_AUTO_KILL_ALL = false
+_G.UZIVERT_KNIFE_AUTO_KILL_SHERIFF = false
+_G.UZIVERT_KNIFE_KILL_PLAYER = "None"
+
+_G.UZIVERT_KNIFE_THROWN_AURA = false
+_G.UZIVERT_KNIFE_RADIUS = 15
+
+_G.UZIVERT_KNIFE_SHERIFF_BIND = false
+_G.UZIVERT_KNIFE_SHERIFF_BIND_SHAPE = "Circle"
+
+_G.UZIVERT_KNIFE_REMOTE = nil
+_G.UZIVERT_KNIFE_AIM = nil
+_G.UZIVERT_KNIFE_ORIGIN = nil
+_G.UZIVERT_KNIFE_INSTANT_LAST = 0
+_G.UZIVERT_KNIFE_LAST_THROW = 0
+_G.UZIVERT_KNIFE_MOTION_PART = nil
+_G.UZIVERT_KNIFE_MOTION_SAMPLES = {}
+_G.UZIVERT_KNIFE_MEASURED_VEL = Vector3.zero
+_G.UZIVERT_KNIFE_ACTIVE = {}
+_G.UZIVERT_KNIFE_BIND_GUI = nil
+_G.UZIVERT_KNIFE_BIND_BTN = nil
+_G.UZIVERT_KNIFE_BIND_CONNS = {}
+_G.UZIVERT_KNIFE_BIND_POS = UDim2.new(0.7, 0, 0.72, 0)
+_G.UZIVERT_KNIFE_PROFILE = { Sim = 180, Interval = 72, H = 100, V = 100 }
+_G.UZIVERT_KNIFE_LAST_TUNE = 0
+
+_G.UZIVERT_KNIFE_PingProfiles = {
+    { Ping = 20,  Sim = 52,  Interval = 70, H = 156, V = 146, X = -5,  Y = -14, Z = 0 },
+    { Ping = 50,  Sim = 60,  Interval = 66, H = 166, V = 156, X = -6,  Y = -14, Z = 0 },
+    { Ping = 100, Sim = 72,  Interval = 60, H = 180, V = 170, X = -8,  Y = -15, Z = 0 },
+    { Ping = 150, Sim = 82,  Interval = 64, H = 188, V = 176, X = -9,  Y = -12, Z = 0 },
+    { Ping = 200, Sim = 94,  Interval = 70, H = 198, V = 184, X = -10, Y = -11, Z = 0 },
+    { Ping = 250, Sim = 104, Interval = 74, H = 206, V = 192, X = -11, Y = -10, Z = 0 },
+    { Ping = 300, Sim = 114, Interval = 78, H = 214, V = 200, X = -12, Y = -9,  Z = 0 },
+    { Ping = 350, Sim = 124, Interval = 82, H = 222, V = 206, X = -13, Y = -8,  Z = 0 },
+    { Ping = 450, Sim = 138, Interval = 86, H = 232, V = 214, X = -14, Y = -7,  Z = 0 },
+}
+
+_G.UZKNIFE_interpProfile = function(ping)
+    local arr = _G.UZIVERT_KNIFE_PingProfiles
+    local a, b = arr[1], arr[1]
+    if ping >= arr[#arr].Ping then
+        a, b = arr[#arr], arr[#arr]
+    elseif ping > a.Ping then
+        for i = 1, #arr - 1 do
+            if ping <= arr[i+1].Ping then
+                a, b = arr[i], arr[i+1]
+                break
+            end
+        end
+    end
+    local span = b.Ping - a.Ping
+    local alpha = span > 0 and math.clamp((ping - a.Ping) / span, 0, 1) or 0
+    alpha = alpha * alpha * (3 - 2 * alpha)
+    local function mix(k) return math.floor(a[k] + (b[k] - a[k]) * alpha + 0.5) end
+    return { Sim = mix("Sim"), Interval = mix("Interval"), H = mix("H"), V = mix("V") }
+end
+
+_G.UZKNIFE_autoTune = function()
+    local now = os.clock()
+    if now - _G.UZIVERT_KNIFE_LAST_TUNE < 0.4 then return end
+    _G.UZIVERT_KNIFE_LAST_TUNE = now
+    local p = _G.UZKNIFE_interpProfile(math.clamp(math.floor((_G.UZNOIR_cachedPing or 0.08) * 1000 + 0.5), 5, 1000))
+    _G.UZIVERT_KNIFE_PROFILE.Sim = p.Sim
+    _G.UZIVERT_KNIFE_PROFILE.Interval = p.Interval
+    _G.UZIVERT_KNIFE_PROFILE.H = p.H
+    _G.UZIVERT_KNIFE_PROFILE.V = p.V
+end
+
+_G.UZKNIFE_lead = function()
+    local observedPing = _G.UZIVERT_KNIFE_PRIORITIZE_PING and (_G.UZNOIR_cachedPing or 0.08) or (_G.UZIVERT_KNIFE_MANUAL_PING / 1000)
+    local prediction
+    if _G.UZIVERT_KNIFE_ADAPTIVE then
+        prediction = observedPing + _G.UZIVERT_KNIFE_EXTRA_LEAD + observedPing * 0.06
+        if _G.UZIVERT_KNIFE_PREDICT_LAG then
+            local s = math.clamp(_G.UZIVERT_KNIFE_PRED_INTERVAL / 2000, 0, 0.05)
+            prediction = prediction + s + math.max(0, observedPing - 0.10) * 0.22
+        end
+    else
+        prediction = _G.UZIVERT_KNIFE_FIXED_LEAD
+    end
+    local cap = _G.UZIVERT_KNIFE_MAX_SIM / 1000
+    if _G.UZIVERT_KNIFE_ADAPTIVE then
+        cap = math.min(0.52, cap + math.clamp(observedPing - 0.10, 0, 0.40) * 0.62)
+    end
+    return math.clamp(prediction, 0.02, cap)
+end
+
+_G.UZKNIFE_sampleMotion = function(part)
+    local now = os.clock()
+    if _G.UZIVERT_KNIFE_MOTION_PART ~= part then
+        _G.UZIVERT_KNIFE_MOTION_PART = part
+        _G.UZIVERT_KNIFE_MOTION_SAMPLES = {}
+        _G.UZIVERT_KNIFE_MEASURED_VEL = part.AssemblyLinearVelocity
+    end
+    local samples = _G.UZIVERT_KNIFE_MOTION_SAMPLES
+    local last = samples[#samples]
+    local interval = _G.UZIVERT_KNIFE_PRED_INTERVAL / 1000
+    if not last or now - last.time >= math.max(0.016, interval) then
+        samples[#samples + 1] = { position = part.Position, time = now }
+        while #samples > 8 or (#samples > 2 and now - samples[1].time > 0.35) do
+            table.remove(samples, 1)
+        end
+        if #samples >= 2 then
+            local first = samples[1]
+            local newest = samples[#samples]
+            local delta = newest.time - first.time
+            if delta > 0.015 then
+                local sampled = (newest.position - first.position) / delta
+                if sampled.Magnitude < 150 then
+                    _G.UZIVERT_KNIFE_MEASURED_VEL = _G.UZIVERT_KNIFE_MEASURED_VEL:Lerp(sampled, 0.55)
+                end
+            end
+        end
+    end
+end
+
+_G.UZKNIFE_calculateAim = function(part, origin)
+    _G.UZKNIFE_sampleMotion(part)
+    local assembly = part.AssemblyLinearVelocity
+    local velocity = assembly
+    if _G.UZIVERT_KNIFE_PREDICT_LAG and _G.UZIVERT_KNIFE_MOTION_PART == part and #_G.UZIVERT_KNIFE_MOTION_SAMPLES >= 2 then
+        local dis = (assembly - _G.UZIVERT_KNIFE_MEASURED_VEL).Magnitude
+        local w = math.clamp(0.75 - dis / 120, 0.35, 0.75)
+        velocity = assembly:Lerp(_G.UZIVERT_KNIFE_MEASURED_VEL, w)
+    end
+    local h = _G.UZIVERT_KNIFE_H_MULT / 100
+    local v = _G.UZIVERT_KNIFE_V_MULT / 100
+    local pv = Vector3.new(
+        velocity.X * h,
+        _G.UZIVERT_KNIFE_PREDICT_JUMP and velocity.Y * v or 0,
+        velocity.Z * h
+    )
+    local distance = (part.Position - origin).Magnitude
+    local travelTime = math.clamp(distance / 110, 0, 0.65)
+    local time = math.clamp(_G.UZKNIFE_lead() + travelTime, 0.03, 0.7)
+    local offset = Vector3.new(
+        part.Size.X * _G.UZIVERT_KNIFE_OFF_X / 100,
+        part.Size.Y * _G.UZIVERT_KNIFE_OFF_Y / 100,
+        part.Size.Z * _G.UZIVERT_KNIFE_OFF_Z / 100
+    )
+    return part.Position + pv * time + offset
+end
+
+_G.UZKNIFE_wallParams = RaycastParams.new()
+_G.UZKNIFE_wallParams.FilterType = Enum.RaycastFilterType.Exclude
+_G.UZKNIFE_wallParams.IgnoreWater = true
+
+_G.UZKNIFE_targetVisible = function(part)
+    if not _G.UZIVERT_KNIFE_WALL_CHECK then return true end
+    local char = LocalPlayer.Character
+    if not char then return false end
+    local o = char:FindFirstChild("Head") or char:FindFirstChild("HumanoidRootPart")
+    if not o or not part then return false end
+    _G.UZKNIFE_wallParams.FilterDescendantsInstances = { char }
+    local r = Workspace:Raycast(o.Position, part.Position - o.Position, _G.UZKNIFE_wallParams)
+    return r == nil or r.Instance:IsDescendantOf(part.Parent)
+end
+
+_G.UZKNIFE_getKnife = function()
+    local char = LocalPlayer.Character
+    if not char then return nil, nil end
+    local k = char:FindFirstChild("Knife")
+    if k then return k, "equipada" end
+    local bp = LocalPlayer:FindFirstChild("Backpack")
+    if bp then
+        k = bp:FindFirstChild("Knife")
+        if k then return k, "backpack" end
+    end
+    return nil, nil
+end
+
+_G.UZKNIFE_equip = function()
+    local k, w = _G.UZKNIFE_getKnife()
+    if k and w == "backpack" then
+        local char = LocalPlayer.Character
+        local hum = char and char:FindFirstChildOfClass("Humanoid")
+        if hum then pcall(function() hum:EquipTool(k) end) end
+        task.wait(0.1)
+    end
+    return _G.UZKNIFE_getKnife()
+end
+
+_G.UZKNIFE_getRemote = function(knife)
+    if not knife then return nil end
+    for _, obj in ipairs(knife:GetDescendants()) do
+        if obj:IsA("RemoteEvent") and obj.Name == "KnifeThrown" then return obj end
+    end
+end
+
+_G.UZKNIFE_getAimPart = function(p)
+    if not p or not p.Character then return nil end
+    if _G.UZIVERT_KNIFE_HIT_PART == "Head" then
+        return p.Character:FindFirstChild("Head") or p.Character:FindFirstChild("HumanoidRootPart")
+    end
+    return p.Character:FindFirstChild("HumanoidRootPart") or p.Character:FindFirstChild("Head")
+end
+
+_G.UZKNIFE_findNearest = function(radius)
+    local char = LocalPlayer.Character
+    local root = char and char:FindFirstChild("HumanoidRootPart")
+    if not root then return nil end
+    local best, bestD = nil, radius or math.huge
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and p.Character then
+            local h = p.Character:FindFirstChildOfClass("Humanoid")
+            local r = p.Character:FindFirstChild("HumanoidRootPart")
+            if h and h.Health > 0 and r then
+                local d = (r.Position - root.Position).Magnitude
+                if d < bestD then bestD = d best = p end
+            end
+        end
+    end
+    return best
+end
+
+_G.UZKNIFE_selectTarget = function()
+    if _G.UZIVERT_KNIFE_PRIORITIZE_SHERIFF then
+        local s = detectarSheriff()
+        if s and s.Character then
+            local h = s.Character:FindFirstChildOfClass("Humanoid")
+            if h and h.Health > 0 then return s end
+        end
+    end
+    return _G.UZKNIFE_findNearest()
+end
+
+_G.UZKNIFE_throwAt = function(p)
+    if not p or not p.Character then return false end
+    local knife = _G.UZKNIFE_equip()
+    if not knife then return false end
+    local remote = _G.UZKNIFE_getRemote(knife)
+    if not remote then return false end
+    local handle = knife:FindFirstChild("Handle")
+    if not handle then return false end
+    local part = _G.UZKNIFE_getAimPart(p)
+    if not part then return false end
+    if not _G.UZKNIFE_targetVisible(part) then return false end
+
+    local cd = 0.38
+    if _G.UZIVERT_KNIFE_INSTANT then cd = 0.05
+    elseif _G.UZIVERT_KNIFE_FAST then cd = 0.12 end
+
+    local now = tick()
+    if now - _G.UZIVERT_KNIFE_LAST_THROW < cd then return false end
+    _G.UZIVERT_KNIFE_LAST_THROW = now
+    if _G.UZIVERT_KNIFE_INSTANT then _G.UZIVERT_KNIFE_INSTANT_LAST = now end
+
+    local origin = handle.Position
+    local aim = _G.UZKNIFE_calculateAim(part, origin)
+    local look = CFrame.lookAt(origin, aim)
+    local hit = CFrame.new(aim)
+    pcall(function() remote:FireServer(look, hit) end)
+    return true
+end
+
+-- LOOP ACTUALIZA REMOTE
+task.spawn(function()
+    while task.wait(0.25) do
+        local knife = _G.UZKNIFE_getKnife()
+        _G.UZIVERT_KNIFE_REMOTE = knife and _G.UZKNIFE_getRemote(knife) or nil
+    end
+end)
+
+-- LOOP AUTO KILL
+task.spawn(function()
+    while task.wait(0.15) do
+        if not soyMurderer() then task.wait(0.5) continue end
+        if _G.UZIVERT_KNIFE_AUTO_KILL_ALL then
+            for _, p in ipairs(Players:GetPlayers()) do
+                if p ~= LocalPlayer and p.Character then
+                    local h = p.Character:FindFirstChildOfClass("Humanoid")
+                    if h and h.Health > 0 then
+                        if _G.UZKNIFE_throwAt(p) then task.wait(0.4) end
+                    end
+                end
+            end
+        elseif _G.UZIVERT_KNIFE_AUTO_KILL_SHERIFF then
+            local s = detectarSheriff()
+            if s then _G.UZKNIFE_throwAt(s) end
+        elseif _G.UZIVERT_KNIFE_KILL_PLAYER ~= "None" then
+            local t = Players:FindFirstChild(_G.UZIVERT_KNIFE_KILL_PLAYER)
+            if t then _G.UZKNIFE_throwAt(t) end
+        end
+    end
+end)
+
+-- LOOP AUTO THROW
+task.spawn(function()
+    while task.wait(0.2) do
+        if not _G.UZIVERT_KNIFE_AUTO_THROW then continue end
+        if not soyMurderer() then continue end
+        if _G.UZIVERT_KNIFE_AUTO_KILL_ALL or _G.UZIVERT_KNIFE_AUTO_KILL_SHERIFF or _G.UZIVERT_KNIFE_KILL_PLAYER ~= "None" then continue end
+        local target = _G.UZKNIFE_findNearest(_G.UZIVERT_KNIFE_AUTO_THROW_RADIUS)
+        if target then _G.UZKNIFE_throwAt(target) end
+    end
+end)
+
+-- LOOP SILENT AIM KNIFE
+RunService.RenderStepped:Connect(function()
+    if not _G.UZIVERT_KNIFE_SA or not soyMurderer() then
+        _G.UZIVERT_KNIFE_AIM = nil
+        return
+    end
+    local target = _G.UZKNIFE_selectTarget()
+    if not target then _G.UZIVERT_KNIFE_AIM = nil return end
+    local part = _G.UZKNIFE_getAimPart(target)
+    if not part then _G.UZIVERT_KNIFE_AIM = nil return end
+    if not _G.UZKNIFE_targetVisible(part) then _G.UZIVERT_KNIFE_AIM = nil return end
+    local knife = _G.UZKNIFE_getKnife()
+    if not knife then _G.UZIVERT_KNIFE_AIM = nil return end
+    local handle = knife:FindFirstChild("Handle")
+    if not handle then _G.UZIVERT_KNIFE_AIM = nil return end
+    _G.UZIVERT_KNIFE_ORIGIN = handle.Position
+    _G.UZIVERT_KNIFE_AIM = _G.UZKNIFE_calculateAim(part, _G.UZIVERT_KNIFE_ORIGIN)
+end)
+
+-- LOOP AUTOTUNE
+task.spawn(function()
+    while task.wait(0.5) do
+        _G.UZKNIFE_autoTune()
+    end
+end)
+
+-- THROW AURA
+_G.UZKNIFE_knifePos = function(knife)
+    if not knife or not knife.Parent then return nil end
+    local b = knife:FindFirstChild("BladePosition")
+    if b and b:IsA("BasePart") then return b.Position end
+    if b and b:IsA("Attachment") then return b.WorldPosition end
+    local v = knife:FindFirstChild("KnifeVisual")
+    if v and v:IsA("BasePart") then return v.Position end
+    if knife:IsA("BasePart") then return knife.Position end
+    local p = knife:FindFirstChildWhichIsA("BasePart", true)
+    return p and p.Position or nil
+end
+
+_G.UZKNIFE_isOwn = function(knife)
+    local link = knife:FindFirstChild("HandleLink")
+    local char = LocalPlayer.Character
+    local bp = LocalPlayer:FindFirstChild("Backpack")
+    if link and link:IsA("ObjectValue") and link.Value then
+        if char and link.Value:IsDescendantOf(char) then return true end
+        if bp and link.Value:IsDescendantOf(bp) then return true end
+    end
+    return false
+end
+
+_G.UZKNIFE_touchPair = function(a, b)
+    if type(firetouchinterest) ~= "function" then return end
+    if not a or not b or not a.Parent or not b.Parent then return end
+    pcall(firetouchinterest, a, b, 0)
+    task.wait()
+    pcall(firetouchinterest, a, b, 1)
+end
+
+_G.UZKNIFE_strike = function(knife, part)
+    local tool = _G.UZKNIFE_getKnife()
+    local handle = tool and tool:FindFirstChild("Handle", true)
+    local blade = knife:FindFirstChild("BladePosition")
+    if not (blade and blade:IsA("BasePart")) then
+        blade = knife:IsA("BasePart") and knife or knife:FindFirstChildWhichIsA("BasePart", true)
+    end
+    _G.UZKNIFE_touchPair(blade, part)
+    if handle and handle:IsA("BasePart") and handle ~= blade then
+        _G.UZKNIFE_touchPair(handle, part)
+    end
+    if tool then
+        local t = tool:FindFirstChild("HandleTouched", true)
+        if t and t:IsA("RemoteEvent") then pcall(function() t:FireServer(part) end) end
+        local s = tool:FindFirstChild("KnifeStabbed", true)
+        if s and s:IsA("RemoteEvent") then pcall(function() s:FireServer() end) end
+    end
+end
+
+_G.UZKNIFE_track = function(knife)
+    if _G.UZIVERT_KNIFE_ACTIVE[knife] or not _G.UZIVERT_KNIFE_THROWN_AURA then return end
+    local isK = knife.Name == "ThrowingKnife" or knife:HasTag("ThrowingKnife")
+              or knife:FindFirstChild("HandleLink") ~= nil
+              or knife:FindFirstChild("BladePosition") ~= nil
+    if not isK then return end
+    if not _G.UZKNIFE_isOwn(knife) then
+        knife:WaitForChild("HandleLink", 0.1)
+        if not _G.UZKNIFE_isOwn(knife) then return end
+    end
+    _G.UZIVERT_KNIFE_ACTIVE[knife] = { started = os.clock(), hit = {} }
+end
+
+game:GetService("CollectionService"):GetInstanceAddedSignal("ThrowingKnife"):Connect(function(k) task.defer(_G.UZKNIFE_track, k) end)
+Workspace.ChildAdded:Connect(function(c)
+    if c.Name == "ThrowingKnife" or c:HasTag("ThrowingKnife") then task.defer(_G.UZKNIFE_track, c) end
+end)
+
+RunService.Heartbeat:Connect(function()
+    if not _G.UZIVERT_KNIFE_THROWN_AURA then _G.UZIVERT_KNIFE_ACTIVE = {} return end
+    local now = os.clock()
+    for k, d in pairs(_G.UZIVERT_KNIFE_ACTIVE) do
+        if not k.Parent or now - d.started > 3.5 then
+            _G.UZIVERT_KNIFE_ACTIVE[k] = nil
+        else
+            local kp = _G.UZKNIFE_knifePos(k)
+            if kp then
+                for _, p in ipairs(Players:GetPlayers()) do
+                    if p ~= LocalPlayer and p.Character then
+                        local r = p.Character:FindFirstChild("HumanoidRootPart")
+                        local h = p.Character:FindFirstChildOfClass("Humanoid")
+                        if r and h and h.Health > 0 then
+                            if (r.Position - kp).Magnitude <= _G.UZIVERT_KNIFE_RADIUS then
+                                if now - (d.hit[p] or 0) >= 0.08 then
+                                    d.hit[p] = now
+                                    _G.UZKNIFE_strike(k, r)
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+-- SHERIFF BIND
+_G.UZKNIFE_destroyBind = function()
+    for _, c in ipairs(_G.UZIVERT_KNIFE_BIND_CONNS) do pcall(function() c:Disconnect() end) end
+    _G.UZIVERT_KNIFE_BIND_CONNS = {}
+    if _G.UZIVERT_KNIFE_BIND_GUI then _G.UZIVERT_KNIFE_BIND_GUI:Destroy() end
+    _G.UZIVERT_KNIFE_BIND_GUI, _G.UZIVERT_KNIFE_BIND_BTN = nil, nil
+end
+
+_G.UZKNIFE_createBind = function()
+    if _G.UZIVERT_KNIFE_BIND_BTN then return end
+    local pg = LocalPlayer:FindFirstChild("PlayerGui")
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "UzivertKnifeSheriffBind"
+    gui.ResetOnSpawn = false
+    gui.IgnoreGuiInset = true
+    gui.DisplayOrder = 90
+    gui.Parent = pg
+    local btn = Instance.new("ImageButton")
+    btn.AnchorPoint = Vector2.new(0.5, 0.5)
+    btn.Position = _G.UZIVERT_KNIFE_BIND_POS
+    btn.Size = UDim2.fromOffset(64, 64)
+    btn.BackgroundColor3 = Color3.fromRGB(8, 8, 10)
+    btn.BackgroundTransparency = 0.28
+    btn.BorderSizePixel = 0
+    btn.AutoButtonColor = false
+    btn.Image = ""
+    btn.Parent = gui
+    local corner = Instance.new("UICorner")
+    corner.Name = "KnifeShape"
+    corner.CornerRadius = _G.UZIVERT_KNIFE_SHERIFF_BIND_SHAPE == "Circle" and UDim.new(1, 0) or UDim.new(0, 12)
+    corner.Parent = btn
+    local st = Instance.new("UIStroke")
+    st.Color = Color3.fromRGB(255, 255, 255)
+    st.Thickness = 2
+    st.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    st.Parent = btn
+    local lbl = Instance.new("TextLabel")
+    lbl.AnchorPoint = Vector2.new(0.5, 0.5)
+    lbl.Position = UDim2.fromScale(0.5, 0.5)
+    lbl.Size = UDim2.fromScale(0.85, 0.85)
+    lbl.BackgroundTransparency = 1
+    lbl.Text = "Kill\nSheriff"
+    lbl.TextColor3 = Color3.new(1, 1, 1)
+    lbl.TextSize = 10
+    lbl.TextWrapped = true
+    lbl.Font = Enum.Font.GothamBold
+    lbl.Parent = btn
+
+    local dragging, moved, dragStart, startPos, dragInput = false, false, nil, nil, nil
+    _G.UZIVERT_KNIFE_BIND_CONNS[#_G.UZIVERT_KNIFE_BIND_CONNS+1] = btn.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging, moved = true, false
+            dragStart, startPos = input.Position, btn.Position
+        end
+    end)
+    _G.UZIVERT_KNIFE_BIND_CONNS[#_G.UZIVERT_KNIFE_BIND_CONNS+1] = btn.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+    _G.UZIVERT_KNIFE_BIND_CONNS[#_G.UZIVERT_KNIFE_BIND_CONNS+1] = UserInputService.InputChanged:Connect(function(input)
+        if not dragging or input ~= dragInput then return end
+        local d = input.Position - dragStart
+        if d.Magnitude > 7 then moved = true end
+        btn.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+    end)
+    _G.UZIVERT_KNIFE_BIND_CONNS[#_G.UZIVERT_KNIFE_BIND_CONNS+1] = UserInputService.InputEnded:Connect(function(input)
+        if not dragging then return end
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = false
+            _G.UZIVERT_KNIFE_BIND_POS = btn.Position
+            if not moved then
+                local s = detectarSheriff()
+                if s then _G.UZKNIFE_throwAt(s) end
+            end
+        end
+    end)
+    _G.UZIVERT_KNIFE_BIND_GUI, _G.UZIVERT_KNIFE_BIND_BTN = gui, btn
+end
+
+_G.UZKNIFE_updateBindShape = function()
+    if _G.UZIVERT_KNIFE_BIND_BTN then
+        local sh = _G.UZIVERT_KNIFE_BIND_BTN:FindFirstChild("KnifeShape")
+        if sh then
+            sh.CornerRadius = _G.UZIVERT_KNIFE_SHERIFF_BIND_SHAPE == "Circle" and UDim.new(1, 0) or UDim.new(0, 12)
+        end
+    end
+end
+
+-- ============================================
+-- SECCIÓN UI EN PESTAÑA CRAB
+-- ============================================
+_G.secKnifeNoir = Instance.new("Frame")
+_G.secKnifeNoir.Size = UDim2.new(1, 0, 0, 30)
+_G.secKnifeNoir.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
+_G.secKnifeNoir.BackgroundTransparency = 0.3
+_G.secKnifeNoir.BorderSizePixel = 0
+_G.secKnifeNoir.ZIndex = 2
+_G.secKnifeNoir.Parent = PaginaAura
+
+_G.cKnifeNoir = Instance.new("UICorner")
+_G.cKnifeNoir.CornerRadius = UDim.new(0, 7)
+_G.cKnifeNoir.Parent = _G.secKnifeNoir
+
+_G.sKnifeNoir = Instance.new("UIStroke")
+_G.sKnifeNoir.Color = COLORES.Morado3
+_G.sKnifeNoir.Thickness = 1.5
+_G.sKnifeNoir.Transparency = 0.2
+_G.sKnifeNoir.Parent = _G.secKnifeNoir
+
+_G.lblKnifeNoir = Instance.new("TextLabel")
+_G.lblKnifeNoir.Size = UDim2.new(1, -20, 1, 0)
+_G.lblKnifeNoir.Position = UDim2.new(0, 10, 0, 0)
+_G.lblKnifeNoir.BackgroundTransparency = 1
+_G.lblKnifeNoir.Text = "🗡️ KNIFE NOIR (Completo)"
+_G.lblKnifeNoir.TextColor3 = COLORES.Naranja2
+_G.lblKnifeNoir.Font = Enum.Font.GothamBlack
+_G.lblKnifeNoir.TextSize = 12
+_G.lblKnifeNoir.TextXAlignment = Enum.TextXAlignment.Left
+_G.lblKnifeNoir.ZIndex = 3
+_G.lblKnifeNoir.Parent = _G.secKnifeNoir
+
+crearToggle(PaginaAura, "🗡️ Knife Silent Aim", CONFIG.UZKNIFE_SA or false, function(e)
+    _G.UZIVERT_KNIFE_SA = e
+    CONFIG.UZKNIFE_SA = e
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "🧱 Knife Wall Check", CONFIG.UZKNIFE_WallCheck or false, function(e)
+    _G.UZIVERT_KNIFE_WALL_CHECK = e
+    CONFIG.UZKNIFE_WallCheck = e
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "🎯 Prioritize Sheriff", CONFIG.UZKNIFE_PrioritizeSheriff or false, function(e)
+    _G.UZIVERT_KNIFE_PRIORITIZE_SHERIFF = e
+    CONFIG.UZKNIFE_PrioritizeSheriff = e
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "🦘 Predict Jump", CONFIG.UZKNIFE_PredictJump ~= false, function(e)
+    _G.UZIVERT_KNIFE_PREDICT_JUMP = e
+    CONFIG.UZKNIFE_PredictJump = e
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "🏃 Predict Lag", CONFIG.UZKNIFE_PredictLag ~= false, function(e)
+    _G.UZIVERT_KNIFE_PREDICT_LAG = e
+    CONFIG.UZKNIFE_PredictLag = e
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "📡 Prioritize Ping", CONFIG.UZKNIFE_PrioritizePing ~= false, function(e)
+    _G.UZIVERT_KNIFE_PRIORITIZE_PING = e
+    CONFIG.UZKNIFE_PrioritizePing = e
+    guardarConfig()
+end)
+crearSlider(PaginaAura, "🎯 Extra Lead (x1000)", 0, 100, math.floor((CONFIG.UZKNIFE_ExtraLead or 0.02) * 1000), function(v)
+    _G.UZIVERT_KNIFE_EXTRA_LEAD = v / 1000
+    CONFIG.UZKNIFE_ExtraLead = v / 1000
+    guardarConfig()
+end)
+crearSlider(PaginaAura, "⚙️ Max Sim (ms)", 50, 500, CONFIG.UZKNIFE_MaxSim or 180, function(v)
+    _G.UZIVERT_KNIFE_MAX_SIM = v
+    CONFIG.UZKNIFE_MaxSim = v
+    guardarConfig()
+end)
+crearSlider(PaginaAura, "🎯 Pred Interval (ms)", 30, 200, CONFIG.UZKNIFE_PredInterval or 72, function(v)
+    _G.UZIVERT_KNIFE_PRED_INTERVAL = v
+    CONFIG.UZKNIFE_PredInterval = v
+    guardarConfig()
+end)
+crearSlider(PaginaAura, "↔️ H Mult (%)", 50, 250, CONFIG.UZKNIFE_HMult or 100, function(v)
+    _G.UZIVERT_KNIFE_H_MULT = v
+    CONFIG.UZKNIFE_HMult = v
+    guardarConfig()
+end)
+crearSlider(PaginaAura, "↕️ V Mult (%)", 50, 250, CONFIG.UZKNIFE_VMult or 100, function(v)
+    _G.UZIVERT_KNIFE_V_MULT = v
+    CONFIG.UZKNIFE_VMult = v
+    guardarConfig()
+end)
+crearSlider(PaginaAura, "⬅️ Offset X (%)", -100, 100, CONFIG.UZKNIFE_OffX or 0, function(v)
+    _G.UZIVERT_KNIFE_OFF_X = v
+    CONFIG.UZKNIFE_OffX = v
+    guardarConfig()
+end)
+crearSlider(PaginaAura, "⬆️ Offset Y (%)", -100, 100, CONFIG.UZKNIFE_OffY or 0, function(v)
+    _G.UZIVERT_KNIFE_OFF_Y = v
+    CONFIG.UZKNIFE_OffY = v
+    guardarConfig()
+end)
+crearSlider(PaginaAura, "↗️ Offset Z (%)", -100, 100, CONFIG.UZKNIFE_OffZ or 0, function(v)
+    _G.UZIVERT_KNIFE_OFF_Z = v
+    CONFIG.UZKNIFE_OffZ = v
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "⚡ Instant Throw", CONFIG.UZKNIFE_InstantThrow or false, function(e)
+    _G.UZIVERT_KNIFE_INSTANT = e
+    CONFIG.UZKNIFE_InstantThrow = e
+    if e then
+        _G.UZIVERT_KNIFE_FAST = false
+        CONFIG.UZKNIFE_FastThrow = false
+    end
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "🏃 Fast Throw", CONFIG.UZKNIFE_FastThrow or false, function(e)
+    _G.UZIVERT_KNIFE_FAST = e
+    CONFIG.UZKNIFE_FastThrow = e
+    if e then
+        _G.UZIVERT_KNIFE_INSTANT = false
+        CONFIG.UZKNIFE_InstantThrow = false
+    end
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "🎯 Auto Throw (cerca)", CONFIG.UZKNIFE_AutoThrow or false, function(e)
+    _G.UZIVERT_KNIFE_AUTO_THROW = e
+    CONFIG.UZKNIFE_AutoThrow = e
+    guardarConfig()
+end)
+crearSlider(PaginaAura, "Rango Auto Throw", 5, 100, CONFIG.UZKNIFE_AutoThrowRadius or 25, function(v)
+    _G.UZIVERT_KNIFE_AUTO_THROW_RADIUS = v
+    CONFIG.UZKNIFE_AutoThrowRadius = v
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "💥 Auto Kill Everyone", CONFIG.UZKNIFE_AutoKillAll or false, function(e)
+    _G.UZIVERT_KNIFE_AUTO_KILL_ALL = e
+    CONFIG.UZKNIFE_AutoKillAll = e
+    if e then
+        _G.UZIVERT_KNIFE_AUTO_KILL_SHERIFF = false
+        CONFIG.UZKNIFE_AutoKillSheriff = false
+        _G.UZIVERT_KNIFE_KILL_PLAYER = "None"
+        CONFIG.UZKNIFE_KillPlayer = "None"
+    end
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "💥 Auto Kill Sheriff", CONFIG.UZKNIFE_AutoKillSheriff or false, function(e)
+    _G.UZIVERT_KNIFE_AUTO_KILL_SHERIFF = e
+    CONFIG.UZKNIFE_AutoKillSheriff = e
+    if e then
+        _G.UZIVERT_KNIFE_AUTO_KILL_ALL = false
+        CONFIG.UZKNIFE_AutoKillAll = false
+        _G.UZIVERT_KNIFE_KILL_PLAYER = "None"
+        CONFIG.UZKNIFE_KillPlayer = "None"
+    end
+    guardarConfig()
+end)
+
+_G.lblKnifeKillPlayer = Instance.new("TextButton")
+_G.lblKnifeKillPlayer.Size = UDim2.new(1, 0, 0, 38)
+_G.lblKnifeKillPlayer.BackgroundColor3 = COLORES.Morado3
+_G.lblKnifeKillPlayer.BackgroundTransparency = 0.5
+_G.lblKnifeKillPlayer.Text = "Kill Player: " .. (_G.UZIVERT_KNIFE_KILL_PLAYER or "None")
+_G.lblKnifeKillPlayer.TextColor3 = COLORES.Texto
+_G.lblKnifeKillPlayer.Font = Enum.Font.GothamBold
+_G.lblKnifeKillPlayer.TextSize = 11
+_G.lblKnifeKillPlayer.BorderSizePixel = 0
+_G.lblKnifeKillPlayer.ZIndex = 2
+_G.lblKnifeKillPlayer.Parent = PaginaAura
+_G.ckp = Instance.new("UICorner")
+_G.ckp.CornerRadius = UDim.new(0, 8)
+_G.ckp.Parent = _G.lblKnifeKillPlayer
+_G.lblKnifeKillPlayer.MouseButton1Click:Connect(function()
+    local names = {"None"}
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer then names[#names+1] = p.Name end
+    end
+    local idx = table.find(names, _G.UZIVERT_KNIFE_KILL_PLAYER) or 1
+    idx = idx % #names + 1
+    _G.UZIVERT_KNIFE_KILL_PLAYER = names[idx]
+    CONFIG.UZKNIFE_KillPlayer = names[idx]
+    _G.lblKnifeKillPlayer.Text = "Kill Player: " .. names[idx]
+    if names[idx] ~= "None" then
+        _G.UZIVERT_KNIFE_AUTO_KILL_ALL = false
+        _G.UZIVERT_KNIFE_AUTO_KILL_SHERIFF = false
+        CONFIG.UZKNIFE_AutoKillAll = false
+        CONFIG.UZKNIFE_AutoKillSheriff = false
+    end
+    guardarConfig()
+end)
+
+crearToggle(PaginaAura, "🗡️ Knife Throw Aura", CONFIG.UZKNIFE_ThrowAura or false, function(e)
+    _G.UZIVERT_KNIFE_THROWN_AURA = e
+    CONFIG.UZKNIFE_ThrowAura = e
+    guardarConfig()
+end)
+crearSlider(PaginaAura, "Aura Radius", 5, 40, CONFIG.UZKNIFE_AuraRadius or 15, function(v)
+    _G.UZIVERT_KNIFE_RADIUS = v
+    CONFIG.UZKNIFE_AuraRadius = v
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "🎯 Sheriff Bind Button", CONFIG.UZKNIFE_SheriffBind or false, function(e)
+    _G.UZIVERT_KNIFE_SHERIFF_BIND = e
+    CONFIG.UZKNIFE_SheriffBind = e
+    if e then _G.UZKNIFE_createBind() else _G.UZKNIFE_destroyBind() end
+    guardarConfig()
+end)
+crearToggle(PaginaAura, "Shape: Circle", (CONFIG.UZKNIFE_SheriffBindShape or "Circle") == "Circle", function(e)
+    _G.UZIVERT_KNIFE_SHERIFF_BIND_SHAPE = e and "Circle" or "Square"
+    CONFIG.UZKNIFE_SheriffBindShape = _G.UZIVERT_KNIFE_SHERIFF_BIND_SHAPE
+    _G.UZKNIFE_updateBindShape()
+    guardarConfig()
+end)
+
+-- Aplicar config guardada al arrancar
+task.defer(function()
+    _G.UZIVERT_KNIFE_SA = CONFIG.UZKNIFE_SA or false
+    _G.UZIVERT_KNIFE_WALL_CHECK = CONFIG.UZKNIFE_WallCheck or false
+    _G.UZIVERT_KNIFE_PRIORITIZE_SHERIFF = CONFIG.UZKNIFE_PrioritizeSheriff or false
+    _G.UZIVERT_KNIFE_PREDICT_JUMP = CONFIG.UZKNIFE_PredictJump ~= false
+    _G.UZIVERT_KNIFE_PREDICT_LAG = CONFIG.UZKNIFE_PredictLag ~= false
+    _G.UZIVERT_KNIFE_PRIORITIZE_PING = CONFIG.UZKNIFE_PrioritizePing ~= false
+    _G.UZIVERT_KNIFE_EXTRA_LEAD = CONFIG.UZKNIFE_ExtraLead or 0.02
+    _G.UZIVERT_KNIFE_MAX_SIM = CONFIG.UZKNIFE_MaxSim or 180
+    _G.UZIVERT_KNIFE_PRED_INTERVAL = CONFIG.UZKNIFE_PredInterval or 72
+    _G.UZIVERT_KNIFE_H_MULT = CONFIG.UZKNIFE_HMult or 100
+    _G.UZIVERT_KNIFE_V_MULT = CONFIG.UZKNIFE_VMult or 100
+    _G.UZIVERT_KNIFE_OFF_X = CONFIG.UZKNIFE_OffX or 0
+    _G.UZIVERT_KNIFE_OFF_Y = CONFIG.UZKNIFE_OffY or 0
+    _G.UZIVERT_KNIFE_OFF_Z = CONFIG.UZKNIFE_OffZ or 0
+    _G.UZIVERT_KNIFE_INSTANT = CONFIG.UZKNIFE_InstantThrow or false
+    _G.UZIVERT_KNIFE_FAST = CONFIG.UZKNIFE_FastThrow or false
+    _G.UZIVERT_KNIFE_AUTO_THROW = CONFIG.UZKNIFE_AutoThrow or false
+    _G.UZIVERT_KNIFE_AUTO_THROW_RADIUS = CONFIG.UZKNIFE_AutoThrowRadius or 25
+    _G.UZIVERT_KNIFE_AUTO_KILL_ALL = CONFIG.UZKNIFE_AutoKillAll or false
+    _G.UZIVERT_KNIFE_AUTO_KILL_SHERIFF = CONFIG.UZKNIFE_AutoKillSheriff or false
+    _G.UZIVERT_KNIFE_KILL_PLAYER = CONFIG.UZKNIFE_KillPlayer or "None"
+    _G.UZIVERT_KNIFE_THROWN_AURA = CONFIG.UZKNIFE_ThrowAura or false
+    _G.UZIVERT_KNIFE_RADIUS = CONFIG.UZKNIFE_AuraRadius or 15
+    _G.UZIVERT_KNIFE_SHERIFF_BIND = CONFIG.UZKNIFE_SheriffBind or false
+    _G.UZIVERT_KNIFE_SHERIFF_BIND_SHAPE = CONFIG.UZKNIFE_SheriffBindShape or "Circle"
+    if _G.UZIVERT_KNIFE_SHERIFF_BIND then _G.UZKNIFE_createBind() end
+end)
+
+print("🗡️ [KNIFE NOIR] Cargado en pestaña Crab")
