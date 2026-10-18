@@ -3343,7 +3343,7 @@ Paginas[1][2].Visible = true
 Paginas[1][1].BackgroundTransparency = 0.3
 
 -- Controles del Auto Farm
-crearToggle(PaginaAutoFarm, "🌾 Auto Farm", false, function(v)
+crearToggle(PaginaAutoFarm, "🌾 Auto Farm (No subas la velocidad a más de 25)", false, function(v)
     _G.FARM_ON = v
     if v then
         _G.FARM_LOAD()
