@@ -1,4 +1,4 @@
- -- ═══════════════════════════════════════════════════════════
+-- ═══════════════════════════════════════════════════════════
 -- UZIVERT HUB AUTO FARM - ESPECIAL EDITION (HALLOWEEN 2026)
 -- Lógica original + interfaz propia (sin WindUI)
 -- Edición limitada: disponible hasta el 16 de noviembre de 2026
@@ -1143,16 +1143,25 @@ _G.FARM_LOAD_CONFIG = function()
             _G.FARM_AUTO_REJOIN = config.AutoRejoin -- 🔥 Nuevo
             _G.FARM_NOCLIP = config.Noclip 
             
-            if config.FarmON then
+                        if config.FarmON then
                 _G.FARM_ON = true
+
+                -- 🔥 Sincronizamos el Toggle visual
+                task.defer(function()
+                    if _G.FARM_TOGGLE_UI then
+                        _G.FARM_TOGGLE_UI:Set(true)
+                    end
+                end)
+
+                -- Iniciamos el motor del farm
                 task.defer(function()
                     if _G.FARM_LOAD then _G.FARM_LOAD() end
                 end)
             end
-            print("✅ Configuración JSON cargada (incluyendo Auto-Rejoin).")
-        end
-    end
-end
+                        print("✅ Configuración JSON cargada (incluyendo Auto-Rejoin).")
+        end -- Cierra el if success
+    end -- Cierra el if data ~= ""
+end -- Cierra la función
 
 -- ═══════════════════════════════════════════════════════════
 -- TU LÓGICA ORIGINAL (Intacta)
@@ -1463,14 +1472,14 @@ _G.FARM_BOOT = function()
 end
 
 -- 1. Toggle Auto Farm
-FarmTab:Toggle({ 
+_G.FARM_TOGGLE_UI = FarmTab:Toggle({ 
     Title = "Auto Farm", 
     Value = _G.FARM_ON, 
     Callback = function(v)
         _G.FARM_ON = v
         _G.FARM_SAVE()
         if v then 
-            _G.FARM_LOAD() -- 🔥 ACÁ LLAMAMOS A LA FUNCIÓN DE LA LÍNEA 311
+            _G.FARM_LOAD()
         else 
             _G.FARM_UNLOAD() 
         end
@@ -1548,34 +1557,41 @@ SettingsTab:Slider({
 })
 
 -- ═══════════════════════════════════════════════════════════
--- AUTO REJOIN INTELIGENTE
+-- AUTO REJOIN (DETECTOR DE CARTEL ROJO)
 -- ═══════════════════════════════════════════════════════════
 local TeleportService = game:GetService("TeleportService")
-local Stats = game:GetService("Stats")
-local FARM_LOADER_LINK = "https://tinyurl.com/EspecialEdition"
+local GuiService = game:GetService("GuiService")
+
+-- 🔥 ACÁ PONÉS EL LINK RAW O EL TINYURL DE TU SCRIPT
+local FARM_LOADER_LINK = "https://tinyurl.com/EspecialEdition" 
+
+local isRejoining = false
 
 _G.DoFarmRejoin = function()
+    if isRejoining then return end
+    isRejoining = true
+    
+    -- 1. Guardamos la config
     if _G.FARM_SAVE then _G.FARM_SAVE() end
+    
+    -- 2. Preparamos el Loader para que se ejecute al volver
     pcall(function()
         queue_on_teleport('loadstring(game:HttpGet("' .. FARM_LOADER_LINK .. '"))()')
     end)
+    
+    -- 3. Esperamos un toque y nos teletransportamos
     task.wait(1)
     pcall(function()
         TeleportService:Teleport(game.PlaceId, LP)
     end)
 end
 
-task.spawn(function()
-    while task.wait(3) do
-        -- 🔥 Solo actúa si el Farm está ON y el Auto-Rejoin está habilitado
-        if _G.FARM_ON and _G.FARM_AUTO_REJOIN then
-            local ping = Stats.Network.ServerStatsItem["Data Ping"]:GetValue()
-            if ping >= 5000 or ping ~= ping then
-                print("⚠️ Kick detectado. Haciendo Rejoin...")
-                _G.DoFarmRejoin()
-                break
-            end
-        end
+-- 🚨 DETECTOR DE CARTEL ROJO (Kick / Desconexión)
+GuiService.ErrorMessageChanged:Connect(function()
+    -- Si aparece el cartel de error, y el Auto-Rejoin está prendido
+    if _G.FARM_ON and _G.FARM_AUTO_REJOIN then
+        print("⚠️ Cartel de Kick detectado. Haciendo Auto-Rejoin...")
+        _G.DoFarmRejoin()
     end
 end)
 
