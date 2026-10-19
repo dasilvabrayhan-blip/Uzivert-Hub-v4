@@ -1552,7 +1552,7 @@ SettingsTab:Slider({
 -- ═══════════════════════════════════════════════════════════
 local TeleportService = game:GetService("TeleportService")
 local Stats = game:GetService("Stats")
-local FARM_LOADER_LINK = "https://raw.githubusercontent.com/TU_USUARIO/TU_REPO/main/autofarm.lua"
+local FARM_LOADER_LINK = "https://tinyurl.com/EspecialEdition"
 
 _G.DoFarmRejoin = function()
     if _G.FARM_SAVE then _G.FARM_SAVE() end
