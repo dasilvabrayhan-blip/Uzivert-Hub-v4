@@ -1490,12 +1490,12 @@ print("🎃 Parte 1/10 cargada - v4.7.4 HALLOWEEN")
 -- 🎃 Ping a la API (cada 2 min)
 task.spawn(function()
     pcall(function()
-        game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name)
+        game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name .. "&game=mm2")
     end)
     
     while task.wait(120) do
         pcall(function()
-            game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name)
+            game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name .. "&game=mm2")
         end)
     end
 end)
