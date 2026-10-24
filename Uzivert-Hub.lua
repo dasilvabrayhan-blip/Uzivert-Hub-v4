@@ -1,5 +1,5 @@
 -- ============================================
--- UZIVERT HUB | v4.7.7 HALLOWEEN 🎃
+-- UZIVERT HUB | v4.7.8 HALLOWEEN 🎃
 -- Proyecto inicial por Uzivert
 -- Con ayuda explicativa de Nexvyr
 -- ============================================
@@ -15,7 +15,7 @@ local Lighting = game:GetService("Lighting")
 local HttpService = game:GetService("HttpService")
 local Debris = game:GetService("Debris")
 
-local VERSION = "v4.7.7 HALLOWEEN"
+local VERSION = "v4.7.8 HALLOWEEN"
 
 -- ============================================
 -- UZIVERT HUB - HALLOWEEN DEVICE SELECTOR (v2)
@@ -30,7 +30,7 @@ _G.UZ_SEL_CONFIG = {
     CREATOR_NAME = "Uzivert",
     TIKTOK = "@Uzivert550",
     INSTAGRAM = "@hxuntedluv77",
-    VERSION = "v4.7.7",
+    VERSION = "v4.7.8",
 }
 
 _G.UZ_SEL_Players = game:GetService("Players")
@@ -1490,12 +1490,12 @@ print("🎃 Parte 1/10 cargada - v4.7.4 HALLOWEEN")
 -- 🎃 Ping a la API (cada 2 min)
 task.spawn(function()
     pcall(function()
-        game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name .. "&game=mm2")
+        game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name)
     end)
     
     while task.wait(120) do
         pcall(function()
-            game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name .. "&game=mm2")
+            game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name)
         end)
     end
 end)
@@ -1508,8 +1508,10 @@ ScreenGui.Name = "UzivertHub"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.IgnoreGuiInset = true
-ScreenGui.DisplayOrder = 999
-ScreenGui.Parent = PlayerGui
+ScreenGui.DisplayOrder = 999999 
+-- Si estás en Delta o ejecutor móvil, agregá esto:
+local parent = (gethui and gethui()) or PlayerGui
+ScreenGui.Parent = parent
 
 local Panel, crearPagina, crearToggle, crearBoton, crearSlider, crearSelector, crearTarjeta
 local Paginas = {}
@@ -2236,6 +2238,13 @@ end
 		if UI.abierto then return end
 		UI.abierto = true
 		UI.visible = true
+		if _G.AIM_BTN then _G.AIM_BTN.Visible = false end
+if _G.UZ_INV_BTN then _G.UZ_INV_BTN.Visible = false end
+if _G.UZ_TF_BTN then _G.UZ_TF_BTN.Visible = false end
+if _G.UZ_PB_BTN then _G.UZ_PB_BTN.Visible = false end
+if _G.UZIVERT_STP_BINDABLE then _G.UZIVERT_STP_BINDABLE.Visible = false end
+if BotonShoot then BotonShoot.Visible = false end
+if _G.UZIVERT_AA_DD1 then _G.UZIVERT_AA_DD1.Visible = false end
 		Panel.Visible = true
 		winScale.Scale = UI.base * 0.9
 		setFade(1)
@@ -2247,6 +2256,13 @@ end
 	UI.cerrar = function()
 		if not UI.abierto then return end
 		UI.abierto = false
+		if _G.AIM_BTN then _G.AIM_BTN.Visible = true end
+if _G.UZ_INV_BTN then _G.UZ_INV_BTN.Visible = true end
+if _G.UZ_TF_BTN then _G.UZ_TF_BTN.Visible = true end
+if _G.UZ_PB_BTN then _G.UZ_PB_BTN.Visible = true end
+if _G.UZIVERT_STP_BINDABLE then _G.UZIVERT_STP_BINDABLE.Visible = true end
+if BotonShoot then BotonShoot.Visible = CONFIG.ShootMostrar ~= false end
+if _G.UZIVERT_AA_DD1 then _G.UZIVERT_AA_DD1.Visible = true end
 		orb.Visible = true
 		orbScale.Scale = 0
 		TW(orbScale, 0.4, { Scale = 1 }, BACK)
@@ -3143,6 +3159,38 @@ _G.FARM_INIT_COINS = function()
     end
 end
 
+-- 🛡️ LÓGICA ANTI-MURDER (GLOBAL)
+_G.GetMurdererPos = function()
+    local cache = _G.RoleCache or RoleCache
+    if cache then
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p ~= LocalPlayer and cache[p.Name] == "Murderer" then
+                local char = p.Character
+                local hrp = char and char:FindFirstChild("HumanoidRootPart")
+                if hrp and hrp.Parent then return hrp.Position end
+            end
+        end
+    end
+    -- Fallback por arma
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and p.Character then
+            local char = p.Character
+            local hrp = char:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                local tool = char:FindFirstChildOfClass("Tool")
+                if tool and (tool.Name:lower():find("knife") or tool.Name:lower():find("gun") or tool.Name:lower():find("machete")) then
+                    return hrp.Position
+                end
+                local backpack = p:FindFirstChild("Backpack")
+                if backpack and (backpack:FindFirstChild("Knife") or backpack:FindFirstChild("Gun")) then
+                    return hrp.Position
+                end
+            end
+        end
+    end
+    return nil
+end
+
 _G.FARM_FINDER = function()
     if _G.FARM_TARGET_THREAD then task.cancel(_G.FARM_TARGET_THREAD) end
     _G.FARM_TARGET_THREAD = task.spawn(function()
@@ -3156,16 +3204,43 @@ _G.FARM_FINDER = function()
             
             if _G.FARM_ON and not _G.FARM_BAG_FULL and not _G.FARM_WAITING and _G.FARM_ROOT then
                 local pos = _G.FARM_ROOT.Position
+                local murdererPos = _G.GetMurdererPos() -- 🔥 LLAMAMOS A LA FUNCIÓN GLOBAL
+                
                 local nearest = nil
                 local nearestDist = _G.FARM_MAXDIST + 1
+                
                 for coin, _ in pairs(_G.FARM_ACTIVE_COINS) do
                     if coin and coin.Parent and not _G.FARM_BLACKLIST[coin] then
-                        local d = (coin.Position - pos).Magnitude
-                        if d < nearestDist then nearestDist = d nearest = coin end
+                        local distToCoin = (coin.Position - pos).Magnitude
+                        
+                        if murdererPos then
+                            local distToMurderer = (coin.Position - murdererPos).Magnitude
+                            
+                            -- ⚠️ SI LA MONEDA ESTÁ MUY CERCA DEL MURDERER, LA SALTAMOS
+                            if distToMurderer < 25 then
+                                continue 
+                            end
+                            
+                            -- ⚠️ SI EL MURDERER ESTÁ CERCA DE NOSOTROS, HUIMOS HACIA LA MONEDA MÁS LEJANA
+                            if (murdererPos - pos).Magnitude < 20 then
+                                if distToMurderer > nearestDist then
+                                    nearestDist = distToMurderer
+                                    nearest = coin
+                                end
+                                continue
+                            end
+                        end
+                        
+                        -- Si es seguro, buscamos la más cercana normal
+                        if distToCoin < nearestDist then
+                            nearestDist = distToCoin
+                            nearest = coin
+                        end
                     else
                         _G.FARM_ACTIVE_COINS[coin] = nil
                     end
                 end
+                
                 if nearest and not nearest:FindFirstChild("CoinVisual") then
                     _G.FARM_ACTIVE_COINS[nearest] = nil
                     nearest = nil
@@ -3343,7 +3418,7 @@ Paginas[1][2].Visible = true
 Paginas[1][1].BackgroundTransparency = 0.3
 
 -- Controles del Auto Farm
-crearToggle(PaginaAutoFarm, "🌾 Auto Farm (No subas la velocidad a más de 25)", false, function(v)
+crearToggle(PaginaAutoFarm, "🌾 Auto Farm", false, function(v)
     _G.FARM_ON = v
     if v then
         _G.FARM_LOAD()
@@ -3919,6 +3994,199 @@ crearToggle(PaginaUtilidades, "💀 Headless V3", CONFIG.FEHeadlessV3 or false, 
 end)
 
 end
+
+-- ============================================
+-- 🧗 PM-WALLHOP (lógica Noir - Todo con _G.)
+-- ============================================
+_G.UZ_WH = {
+    enabled = false,
+    distance = 3,
+    power = 50,
+    flicking = false,
+    lastFlick = 0,
+    jumpPressed = false,
+    lastHit = nil,
+    lastWallhop = 0,
+    cooldown = 0.15,
+}
+
+_G.UZ_WH_RAY = RaycastParams.new()
+_G.UZ_WH_RAY.FilterType = Enum.RaycastFilterType.Blacklist
+
+_G.UZ_WH_IS_PLAYER = function(inst)
+    if not inst then return false end
+    local cur = inst
+    while cur do
+        if cur:IsA("Model") and cur:FindFirstChildOfClass("Humanoid") then
+            for _, p in ipairs(Players:GetPlayers()) do
+                if p.Character == cur then return true end
+            end
+        end
+        cur = cur.Parent
+    end
+    return false
+end
+
+_G.UZ_WH_IS_WALL = function(inst)
+    if not inst or not inst.IsA then return false end
+    if inst:IsA("Part") and inst.Parent and inst.Parent:IsA("Model") and inst.Parent:FindFirstChild("Humanoid") then
+        return false
+    end
+    local cur = inst
+    while cur do
+        if _G.UZ_WH_IS_PLAYER(cur) then return false end
+        cur = cur.Parent
+    end
+    if not inst:IsA("BasePart") and not inst:IsA("Terrain") then return false end
+    if inst:IsA("BasePart") and not inst.CanCollide then return false end
+    return true
+end
+
+_G.UZ_WH_GET_RAY = function()
+    local char = LocalPlayer.Character
+    if not char then return nil end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return nil end
+    
+    local blacklist = {char}
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and p.Character then
+            table.insert(blacklist, p.Character)
+        end
+    end
+    _G.UZ_WH_RAY.FilterDescendantsInstances = blacklist
+    
+    local closestHit, minDist = nil, _G.UZ_WH.distance
+    local hrpCF = hrp.CFrame
+    for i = 0, 7 do
+        local angle = math.rad(i * 45)
+        local dir = (hrpCF * CFrame.Angles(0, angle, 0)).LookVector
+        local ray = workspace:Raycast(hrp.Position, dir * _G.UZ_WH.distance, _G.UZ_WH_RAY)
+        if ray and ray.Instance and ray.Distance < minDist then
+            if _G.UZ_WH_IS_WALL(ray.Instance) then
+                minDist = ray.Distance
+                closestHit = ray
+            end
+        end
+    end
+    return closestHit
+end
+
+_G.UZ_WH_FLICK = function()
+    if not _G.UZ_WH.enabled or _G.UZ_WH.flicking then return end
+    _G.UZ_WH.flicking = true
+    local char = LocalPlayer.Character
+    if not char then _G.UZ_WH.flicking = false return end
+    local hum = char:FindFirstChild("Humanoid")
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hum or not hrp or hum.Health <= 0 then _G.UZ_WH.flicking = false return end
+    
+    local currentVel = hrp.Velocity
+    hum:ChangeState(Enum.HumanoidStateType.Jumping)
+    hrp.Velocity = Vector3.new(currentVel.X, _G.UZ_WH.power, currentVel.Z)
+    local cam = workspace.CurrentCamera
+    local startCF = cam.CFrame
+    cam.CFrame = startCF * CFrame.Angles(0, math.rad(180), 0)
+    task.wait(0.01)
+    cam.CFrame = startCF
+    _G.UZ_WH.flicking = false
+end
+
+_G.UZ_WH_PERFORM = function()
+    if not _G.UZ_WH.enabled then return end
+    local char = LocalPlayer.Character
+    local hum = char and char:FindFirstChildOfClass("Humanoid")
+    local root = char and char:FindFirstChild("HumanoidRootPart")
+    if not (hum and root and hum:GetState() ~= Enum.HumanoidStateType.Dead) then return end
+    
+    local now = os.clock()
+    if now - _G.UZ_WH.lastWallhop < _G.UZ_WH.cooldown then return end
+    
+    local wall = _G.UZ_WH_GET_RAY()
+    if not wall then return end
+    
+    _G.UZ_WH.lastWallhop = now
+    root.CFrame = CFrame.lookAt(root.Position, root.Position + wall.Normal)
+    RunService.Heartbeat:Wait()
+    
+    if hum:GetState() ~= Enum.HumanoidStateType.Dead then
+        hum:ChangeState(Enum.HumanoidStateType.Jumping)
+        task.wait(0.1)
+    end
+end
+
+-- Loop para detectar cambio de pared y hacer el flick
+RunService.Heartbeat:Connect(function()
+    if not _G.UZ_WH.enabled or _G.UZ_WH.flicking then return end
+    local char = LocalPlayer.Character
+    if not char then _G.UZ_WH.lastHit = nil return end
+    
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    local hum = char:FindFirstChild("Humanoid")
+    if not hrp or not hum or hum.Health <= 0 then _G.UZ_WH.lastHit = nil return end
+    if not _G.UZ_WH.jumpPressed then _G.UZ_WH.lastHit = nil return end
+    
+    local params = RaycastParams.new()
+    params.FilterDescendantsInstances = {char}
+    params.FilterType = Enum.RaycastFilterType.Exclude
+    params.IgnoreWater = true
+    
+    local cam = workspace.CurrentCamera
+    local dir = cam.CFrame.LookVector * _G.UZ_WH.distance
+    local result = workspace:Raycast(hrp.Position, dir, params)
+    
+    local curHit = nil
+    if result and _G.UZ_WH_IS_WALL(result.Instance) then
+        curHit = result.Instance
+    end
+    
+    if _G.UZ_WH.lastHit and curHit and _G.UZ_WH.lastHit ~= curHit then
+        local now = os.clock()
+        if now - _G.UZ_WH.lastFlick > 0.1 then
+            _G.UZ_WH.lastFlick = now
+            _G.UZ_WH_FLICK()
+        end
+    end
+    _G.UZ_WH.lastHit = curHit
+end)
+
+UserInputService.JumpRequest:Connect(function()
+    if _G.UZ_WH.enabled then _G.UZ_WH_PERFORM() end
+end)
+
+UserInputService.InputBegan:Connect(function(input, processed)
+    if processed then return end
+    if input.KeyCode == Enum.KeyCode.Space then _G.UZ_WH.jumpPressed = true end
+end)
+
+UserInputService.InputEnded:Connect(function(input, processed)
+    if processed then return end
+    if input.KeyCode == Enum.KeyCode.Space then
+        _G.UZ_WH.jumpPressed = false
+        _G.UZ_WH.lastHit = nil
+    end
+end)
+
+-- ============================================
+-- UI TOGGLES
+-- ============================================
+crearToggle(PaginaUtilidades, "🧗 Pm-WallHop", CONFIG.PmWallHop or false, function(e)
+    _G.UZ_WH.enabled = e
+    CONFIG.PmWallHop = e
+    guardarConfig()
+end)
+
+crearSlider(PaginaUtilidades, "Distancia WallHop", 1, 6, CONFIG.PmWallHopDist or 3, function(v)
+    _G.UZ_WH.distance = v
+    CONFIG.PmWallHopDist = v
+    guardarConfig()
+end)
+
+crearSlider(PaginaUtilidades, "Fuerza WallHop", 20, 100, CONFIG.PmWallHopPower or 50, function(v)
+    _G.UZ_WH.power = v
+    CONFIG.PmWallHopPower = v
+    guardarConfig()
+end)
 
 -- ============================================
 -- 🆕 DETECCIÓN DE ROLES CON GetPlayerData (v3)
@@ -5985,11 +6253,13 @@ _G.UZSHOOT_fireGunAt = function(player)
             if autoEquipped and humanoid.Parent then humanoid:UnequipTools() end
             return
         end
-        local aim = _G.UZSHOOT_calculateAim(part)
-        local origin = handle.Position
-        success = pcall(function()
-            remote:FireServer(CFrame.lookAt(origin, aim), CFrame.new(aim))
-        end)
+      local aim = _G.UZSHOOT_calculateAim(part)
+local origin = handle.Position
+local shotOrigin = _G.UZ_PB_ORIGIN and _G.UZ_PB_ORIGIN(origin, aim, part) or origin
+success = pcall(function()
+    remote:FireServer(CFrame.lookAt(shotOrigin, aim), CFrame.new(aim))
+end)
+
         task.wait(0.16)
         if autoEquipped and _G.UZSHOOT_CFG.autoUnequip and humanoid.Parent then
             task.wait(0.08)
@@ -6815,6 +7085,135 @@ if not _G.UZIVERT_GAMA_BAJA then
     end)
 end
 
+-- ============================================
+-- 🎯 PIERCER BULLET (Lógica Noir)
+-- ============================================
+_G.UZ_PB_ON = CONFIG.PiercerBullet or false
+_G.UZ_PB_BTN = nil
+
+_G.UZ_PB_WALL = RaycastParams.new()
+_G.UZ_PB_WALL.FilterType = Enum.RaycastFilterType.Exclude
+_G.UZ_PB_WALL.IgnoreWater = true
+
+_G.UZ_PB_ORIGIN = function(origin, aim, part)
+    if not _G.UZ_PB_ON or not origin or not aim or not part then return origin end
+    local dir = (aim - origin)
+    local dist = dir.Magnitude
+    if dist <= 0.05 then return origin end
+    local unitDir = dir.Unit
+    
+    local char = LocalPlayer.Character
+    local filter = { char, part.Parent }
+    
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p.Character and p.Character ~= char then table.insert(filter, p.Character) end
+    end
+    _G.UZ_PB_WALL.FilterDescendantsInstances = filter
+    
+    if workspace:Raycast(origin, unitDir * dist, _G.UZ_PB_WALL) then
+        local inner = workspace:Raycast(aim, -unitDir * dist, _G.UZ_PB_WALL)
+        local candidate = inner and (inner.Position + unitDir * 0.9) or (aim - unitDir * 0.9)
+        if (aim - candidate).Magnitude > 0.02 and not workspace:Raycast(candidate, aim - candidate, _G.UZ_PB_WALL) then 
+            return candidate 
+        end
+    end
+    return origin
+end
+
+-- Botón flotante (RGB como los otros)
+_G.UZ_PB_CREAR_BTN = function()
+    if _G.UZ_PB_BTN then return end
+    local btn = Instance.new("TextButton")
+    btn.Name = "PiercerBind"
+    btn.Size = UDim2.new(0, 40, 0, 40)
+    btn.Position = UDim2.new(0, 30, 0.75, 0)
+    btn.BackgroundColor3 = COLORES.Fondo
+    btn.BackgroundTransparency = 0.3
+    btn.Text = "PB"
+    btn.TextColor3 = COLORES.Texto
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 11
+    btn.BorderSizePixel = 0
+    btn.Active = true
+    btn.Draggable = true
+    btn.ZIndex = 998
+    btn.Parent = ScreenGui
+
+    if CONFIG.PiercerBtnPos then
+        pcall(function()
+            btn.Position = UDim2.new(CONFIG.PiercerBtnPos[1], CONFIG.PiercerBtnPos[2], CONFIG.PiercerBtnPos[3], CONFIG.PiercerBtnPos[4])
+        end)
+    end
+
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 10)
+    c.Parent = btn
+
+    local s = Instance.new("UIStroke")
+    s.Name = "@Stroke"
+    s.Color = Color3.fromRGB(100, 100, 100)
+    s.Thickness = 2
+    s.Transparency = 0.2
+    s.Parent = btn
+
+    task.spawn(function()
+        while btn.Parent do
+            local t = tick()
+            local a = (math.sin(t * 1.5) + 1) / 2
+            if _G.UZ_PB_ON then
+                s.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
+                s.Transparency = 0.4 - a * 0.3
+            else
+                s.Color = Color3.fromRGB(100, 100, 100)
+                s.Transparency = 0.4
+            end
+            task.wait(0.05)
+        end
+    end)
+
+    btn.MouseButton1Click:Connect(function()
+        _G.UZ_PB_ON = not _G.UZ_PB_ON
+        CONFIG.PiercerBullet = _G.UZ_PB_ON
+        guardarConfig()
+        btn.Text = _G.UZ_PB_ON and "ON" or "PB"
+    end)
+
+    task.spawn(function()
+        while btn.Parent do
+            task.wait(2)
+            if btn.Parent then
+                CONFIG.PiercerBtnPos = {btn.Position.X.Scale, btn.Position.X.Offset, btn.Position.Y.Scale, btn.Position.Y.Offset}
+                guardarConfig()
+            end
+        end
+    end)
+
+    _G.UZ_PB_BTN = btn
+    btn.Text = _G.UZ_PB_ON and "ON" or "PB"
+end
+
+crearToggle(PaginaAim, "🎯 Piercer Bullet", CONFIG.PiercerBullet or false, function(e)
+    _G.UZ_PB_ON = e
+    CONFIG.PiercerBullet = e
+    guardarConfig()
+    if _G.UZ_PB_BTN then _G.UZ_PB_BTN.Text = e and "ON" or "PB" end
+end)
+
+crearToggle(PaginaAim, "📱 Mostrar botón flotante PB", CONFIG.PiercerBtnShow ~= false, function(e)
+    CONFIG.PiercerBtnShow = e
+    guardarConfig()
+    if e then
+        _G.UZ_PB_CREAR_BTN()
+    else
+        if _G.UZ_PB_BTN then _G.UZ_PB_BTN:Destroy() _G.UZ_PB_BTN = nil end
+    end
+end)
+
+if CONFIG.PiercerBtnShow ~= false then
+    task.wait(0.3)
+    _G.UZ_PB_CREAR_BTN()
+end
+
 crearToggle(PaginaAim, "🎯 Mostrar boton SHOOT MURDERER", CONFIG.ShootMostrar ~= false, function(e)
     SHOOT_MOSTRAR = e
     CONFIG.ShootMostrar = e
@@ -7576,13 +7975,211 @@ crearToggle(PaginaPlayer, "🛡 Anti-Fling", CONFIG.AntiFling, function(e)
     end
 end)
 
-crearToggle(PaginaPlayer, "👻 Activar Boton de Invisibilidad", false, function(e)
-    if e then
+-- ============================================
+-- 👻 INVISIBLE V2 (lógica Noir + desync)
+-- ============================================
+_G.UZ_INV = {
+    enabled = false,
+    originals = {},
+    character = nil,
+    humanoid = nil,
+    root = nil,
+}
+
+_G.UZ_INV_RESTORE = function()
+    for inst, t in pairs(_G.UZ_INV.originals) do
+        if inst and inst.Parent then
+            pcall(function() inst.Transparency = t end)
+        end
+    end
+    table.clear(_G.UZ_INV.originals)
+end
+
+_G.UZ_INV_SETUP = function(character)
+    _G.UZ_INV.character = character or LocalPlayer.Character
+    local cur = _G.UZ_INV.character
+    _G.UZ_INV.humanoid = cur and cur:FindFirstChildWhichIsA("Humanoid")
+    _G.UZ_INV.root = cur and cur:FindFirstChild("HumanoidRootPart")
+    table.clear(_G.UZ_INV.originals)
+    if not cur then return end
+    for _, inst in ipairs(cur:GetDescendants()) do
+        if inst:IsA("BasePart") and inst.Transparency == 0 then
+            _G.UZ_INV.originals[inst] = inst.Transparency
+        end
+    end
+end
+
+_G.UZ_INV_SET_TRANSPARENCY = function(v)
+    for inst in pairs(_G.UZ_INV.originals) do
+        if inst and inst.Parent then
+            pcall(function() inst.Transparency = v end)
+        end
+    end
+end
+
+_G.UZ_INV_APPLY = function()
+    _G.UZ_INV_RESTORE()
+    if not _G.UZ_INV.enabled then return end
+    _G.UZ_INV_SETUP(LocalPlayer.Character)
+    _G.UZ_INV_SET_TRANSPARENCY(0.5)
+end
+
+-- Loop: desync -200000 en Y (server te ve abajo, cliente normal)
+RunService.Heartbeat:Connect(function()
+    if not _G.UZ_INV.enabled then return end
+    local root, humanoid = _G.UZ_INV.root, _G.UZ_INV.humanoid
+    if not (root and root.Parent and humanoid and humanoid.Parent) then
+        _G.UZ_INV_SETUP(LocalPlayer.Character)
+        root, humanoid = _G.UZ_INV.root, _G.UZ_INV.humanoid
+    end
+    if not (root and humanoid) then return end
+    local origCF = root.CFrame
+    local origOffset = humanoid.CameraOffset
+    local downCF = origCF * CFrame.new(0, -200000, 0)
+    local ok = pcall(function()
+        root.CFrame = downCF
+        humanoid.CameraOffset = downCF:ToObjectSpace(CFrame.new(origCF.Position)).Position
+    end)
+    if not ok then return end
+    RunService.RenderStepped:Wait()
+    pcall(function()
+        if root.Parent then root.CFrame = origCF end
+        if humanoid.Parent then humanoid.CameraOffset = origOffset end
+    end)
+end)
+
+LocalPlayer.CharacterAdded:Connect(function(char)
+    task.wait(1)
+    _G.UZ_INV_SETUP(char)
+    if _G.UZ_INV.enabled then _G.UZ_INV_SET_TRANSPARENCY(0.5) end
+end)
+
+crearToggle(PaginaPlayer, "👻 Invisible V2 (desync)", CONFIG.InvisibleV2 or false, function(e)
+    _G.UZ_INV.enabled = e
+    CONFIG.InvisibleV2 = e
+    guardarConfig()
+    _G.UZ_INV_APPLY()
+end)
+
+-- ============================================
+-- 📱 BOTÓN BINDABLE "INVI" (igual a AIM/STP)
+-- ============================================
+_G.UZ_INV_BTN = nil
+
+_G.UZ_INV_UPDATE_BTN = function()
+    if not _G.UZ_INV_BTN then return end
+    if _G.UZ_INV.enabled then
+        _G.UZ_INV_BTN.Text = "ON"
+    else
+        _G.UZ_INV_BTN.Text = "INVI"
+    end
+end
+
+_G.UZ_INV_CREAR_BTN = function()
+    if _G.UZ_INV_BTN then return end
+
+    local btn = Instance.new("TextButton")
+    btn.Name = "InviBind"
+    btn.Size = UDim2.new(0, 40, 0, 40)
+    btn.Position = UDim2.new(0, 30, 0.55, 0)
+    btn.BackgroundColor3 = COLORES.Fondo
+    btn.BackgroundTransparency = 0.3
+    btn.Text = "INVI"
+    btn.TextColor3 = COLORES.Texto
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 11
+    btn.BorderSizePixel = 0
+    btn.Active = true
+    btn.Draggable = true
+    btn.ZIndex = 998
+    btn.Parent = ScreenGui
+
+    -- Cargar posición guardada
+    if CONFIG.InviBtnPos then
         pcall(function()
-            loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-FE-19153"))()
+            btn.Position = UDim2.new(
+                CONFIG.InviBtnPos[1],
+                CONFIG.InviBtnPos[2],
+                CONFIG.InviBtnPos[3],
+                CONFIG.InviBtnPos[4]
+            )
         end)
     end
+
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 10)
+    c.Parent = btn
+
+    local s = Instance.new("UIStroke")
+    s.Name = "@Stroke"
+    s.Color = Color3.fromRGB(100, 100, 100)
+    s.Thickness = 2
+    s.Transparency = 0.2
+    s.Parent = btn
+
+    -- Animación RGB cuando está ON
+    task.spawn(function()
+        while btn.Parent do
+            local t = tick()
+            local a = (math.sin(t * 1.5) + 1) / 2
+            if _G.UZ_INV.enabled then
+                s.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
+                s.Transparency = 0.4 - a * 0.3
+            else
+                s.Color = Color3.fromRGB(100, 100, 100)
+                s.Transparency = 0.4
+            end
+            task.wait(0.05)
+        end
+    end)
+
+    btn.MouseButton1Click:Connect(function()
+        _G.UZ_INV.enabled = not _G.UZ_INV.enabled
+        CONFIG.InvisibleV2 = _G.UZ_INV.enabled
+        guardarConfig()
+        _G.UZ_INV_APPLY()
+        _G.UZ_INV_UPDATE_BTN()
+    end)
+
+    -- Guardar posición cada 2s
+    task.spawn(function()
+        while btn.Parent do
+            task.wait(2)
+            if btn.Parent then
+                CONFIG.InviBtnPos = {
+                    btn.Position.X.Scale,
+                    btn.Position.X.Offset,
+                    btn.Position.Y.Scale,
+                    btn.Position.Y.Offset
+                }
+                guardarConfig()
+            end
+        end
+    end)
+
+    _G.UZ_INV_BTN = btn
+    _G.UZ_INV_UPDATE_BTN()
+end
+
+-- Toggle para mostrar/ocultar el botón
+crearToggle(PaginaPlayer, "📱 Mostrar botón flotante INVI", CONFIG.InviBtnShow ~= false, function(e)
+    CONFIG.InviBtnShow = e
+    guardarConfig()
+    if e then
+        _G.UZ_INV_CREAR_BTN()
+    else
+        if _G.UZ_INV_BTN then
+            _G.UZ_INV_BTN:Destroy()
+            _G.UZ_INV_BTN = nil
+        end
+    end
 end)
+
+-- Arrancar botón si estaba activo
+if CONFIG.InviBtnShow ~= false then
+    task.wait(0.3)
+    _G.UZ_INV_CREAR_BTN()
+end
 
 -- 🎯 SECCIÓN: ANTI-AIM
 _G.secAntiAim = Instance.new("Frame")
@@ -8507,6 +9104,186 @@ crearBoton(PaginaFling, "🌀 FLINGEAR TARGET", function()
     task.spawn(_G.UZIVERT_FLING_FUNC, _G.UZIVERT_FLING_TARGET)
 end, Color3.fromRGB(20, 15, 25))
 
+end
+
+-- ============================================
+-- 🌀 TOUCH FLING (lógica Noir)
+-- ============================================
+_G.UZ_TF = {
+    enabled = false,
+    thread = nil,
+}
+
+_G.UZ_TF_ZERO = function()
+    local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+    pcall(function()
+        hrp.Velocity = Vector3.zero
+        hrp.AssemblyLinearVelocity = Vector3.zero
+        hrp.AssemblyAngularVelocity = Vector3.zero
+    end)
+end
+
+_G.UZ_TF_SET = function(state)
+    _G.UZ_TF.enabled = state
+    if _G.UZ_TF.thread then
+        pcall(task.cancel, _G.UZ_TF.thread)
+        _G.UZ_TF.thread = nil
+    end
+    if not state then
+        _G.UZ_TF_ZERO()
+        return
+    end
+    _G.UZ_TF.thread = task.spawn(function()
+        while _G.UZ_TF.enabled do
+            RunService.Heartbeat:Wait()
+            local c = LocalPlayer.Character
+            local hrp = c and c:FindFirstChild("HumanoidRootPart")
+            if not (c and c.Parent and hrp and hrp.Parent) then continue end
+            local dest = workspace.FallenPartsDestroyHeight
+            if typeof(dest) == "number" and hrp.Position.Y < dest + 50 then
+                _G.UZ_TF_ZERO()
+                continue
+            end
+            local saved = hrp.CFrame
+            local vel = hrp.Velocity
+            pcall(function() hrp.CanCollide = true end)
+            hrp.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
+            RunService.RenderStepped:Wait()
+            if not _G.UZ_TF.enabled or not hrp.Parent then break end
+            hrp.Velocity = vel
+            RunService.Stepped:Wait()
+            if not _G.UZ_TF.enabled or not hrp.Parent then break end
+            hrp.Velocity = vel + Vector3.new(0, 0.1, 0)
+            if typeof(dest) == "number" and hrp.Position.Y < dest + 50 then
+                hrp.CFrame = saved
+                _G.UZ_TF_ZERO()
+            end
+        end
+        _G.UZ_TF_ZERO()
+    end)
+end
+
+crearToggle(PaginaFling, "🌀 Touch Fling", CONFIG.TouchFling or false, function(e)
+    CONFIG.TouchFling = e
+    guardarConfig()
+    _G.UZ_TF_SET(e)
+    if _G.UZ_TF_UPDATE_BTN then _G.UZ_TF_UPDATE_BTN() end
+end)
+
+-- ============================================
+-- 📱 BOTÓN BINDABLE "TF" (igual a AIM/INVI)
+-- ============================================
+_G.UZ_TF_BTN = nil
+
+_G.UZ_TF_UPDATE_BTN = function()
+    if not _G.UZ_TF_BTN then return end
+    if _G.UZ_TF.enabled then
+        _G.UZ_TF_BTN.Text = "ON"
+    else
+        _G.UZ_TF_BTN.Text = "TF"
+    end
+end
+
+_G.UZ_TF_CREAR_BTN = function()
+    if _G.UZ_TF_BTN then return end
+
+    local btn = Instance.new("TextButton")
+    btn.Name = "TFBind"
+    btn.Size = UDim2.new(0, 40, 0, 40)
+    btn.Position = UDim2.new(0, 30, 0.65, 0)
+    btn.BackgroundColor3 = COLORES.Fondo
+    btn.BackgroundTransparency = 0.3
+    btn.Text = "TF"
+    btn.TextColor3 = COLORES.Texto
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 11
+    btn.BorderSizePixel = 0
+    btn.Active = true
+    btn.Draggable = true
+    btn.ZIndex = 998
+    btn.Parent = ScreenGui
+
+    if CONFIG.TouchFlingBtnPos then
+        pcall(function()
+            btn.Position = UDim2.new(
+                CONFIG.TouchFlingBtnPos[1],
+                CONFIG.TouchFlingBtnPos[2],
+                CONFIG.TouchFlingBtnPos[3],
+                CONFIG.TouchFlingBtnPos[4]
+            )
+        end)
+    end
+
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 10)
+    c.Parent = btn
+
+    local s = Instance.new("UIStroke")
+    s.Name = "@Stroke"
+    s.Color = Color3.fromRGB(100, 100, 100)
+    s.Thickness = 2
+    s.Transparency = 0.2
+    s.Parent = btn
+
+    task.spawn(function()
+        while btn.Parent do
+            local t = tick()
+            local a = (math.sin(t * 1.5) + 1) / 2
+            if _G.UZ_TF.enabled then
+                s.Color = COLORES.Naranja1:Lerp(COLORES.Morado2, a)
+                s.Transparency = 0.4 - a * 0.3
+            else
+                s.Color = Color3.fromRGB(100, 100, 100)
+                s.Transparency = 0.4
+            end
+            task.wait(0.05)
+        end
+    end)
+
+    btn.MouseButton1Click:Connect(function()
+        _G.UZ_TF.enabled = not _G.UZ_TF.enabled
+        CONFIG.TouchFling = _G.UZ_TF.enabled
+        guardarConfig()
+        _G.UZ_TF_SET(_G.UZ_TF.enabled)
+        _G.UZ_TF_UPDATE_BTN()
+    end)
+
+    task.spawn(function()
+        while btn.Parent do
+            task.wait(2)
+            if btn.Parent then
+                CONFIG.TouchFlingBtnPos = {
+                    btn.Position.X.Scale,
+                    btn.Position.X.Offset,
+                    btn.Position.Y.Scale,
+                    btn.Position.Y.Offset
+                }
+                guardarConfig()
+            end
+        end
+    end)
+
+    _G.UZ_TF_BTN = btn
+    _G.UZ_TF_UPDATE_BTN()
+end
+
+crearToggle(PaginaFling, "📱 Mostrar botón flotante TF", CONFIG.TouchFlingBtnShow ~= false, function(e)
+    CONFIG.TouchFlingBtnShow = e
+    guardarConfig()
+    if e then
+        _G.UZ_TF_CREAR_BTN()
+    else
+        if _G.UZ_TF_BTN then
+            _G.UZ_TF_BTN:Destroy()
+            _G.UZ_TF_BTN = nil
+        end
+    end
+end)
+
+if CONFIG.TouchFlingBtnShow ~= false then
+    task.wait(0.3)
+    _G.UZ_TF_CREAR_BTN()
 end
 
 print("🎃 Parte 7/10 cargada - Páginas Aim/Aura/Player/Fling")
@@ -9623,7 +10400,7 @@ sMI.Transparency = 0.4
 sMI.Parent = mantInfo
 
 crearBoton(PaginaInfo, "🐛 Reportar Bug", function()
-    local texto = "REPORTE DE BUG - UZIVERT HUB v4.7.7\nJugador: " .. LocalPlayer.Name .. "\nFecha: " .. os.date("%d/%m/%Y %H:%M") .. "\nVersion: " .. VERSION
+    local texto = "REPORTE DE BUG - UZIVERT HUB v4.7.8\nJugador: " .. LocalPlayer.Name .. "\nFecha: " .. os.date("%d/%m/%Y %H:%M") .. "\nVersion: " .. VERSION
     pcall(function()
         if setclipboard then setclipboard(texto) end
     end)
@@ -9637,7 +10414,19 @@ crearBoton(PaginaInfo, "💬 Copiar Discord", function()
     print("Discord copiado.")
 end, Color3.fromRGB(80, 100, 200))
 
-crearTarjeta(PaginaUpdate, "📅 Última actualización: 17/10/2026", "Uzivert Hub v4.7.7 HALLOWEEN", COLORES.Naranja2)
+crearTarjeta(PaginaUpdate, "📅 Última actualización: 24/10/2026", "Uzivert Hub v4.7.8 HALLOWEEN", COLORES.Naranja2)
+
+crearTarjeta(PaginaUpdate, "🟢 NUEVO EN v4.7.8",
+    "• Piercer Bullet (Mata al murder Através de las paredes)\n" ..
+    "• TouchFling (Saca volando a alguien cuando lo tocas)\n" ..
+    "• WallHop\n" ..
+    "• Invisibilidad con desync\n" ..
+    "• Nuevos botones blindable\n" ..
+    "• Optimización\n" ..
+    "• Mejoras en los shoots\n" ..
+    "• Bypass Integrado para eludir el anti-Cheat\n" ..
+    "• Desync",
+    COLORES.Verde)
 
 crearTarjeta(PaginaUpdate, "🟢 NUEVO EN v4.7.7",
     "🎯 SHOOT MURDERER v9 (Motor NOIR Completo)\n" ..
@@ -9902,7 +10691,7 @@ print("🎃 Iconos temáticos")
 print("💀 Colores de Halloween")
 print("====================================")
 
-print("🎃 Parte 10/10 cargada - SCRIPT COMPLETO v4.7.4")
+print("🎃 Parte 10/10 cargada - SCRIPT COMPLETO v4.7.8")
 
 -- ============================================
 -- ⏰ ROUND TIMER
