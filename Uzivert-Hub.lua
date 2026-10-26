@@ -1487,16 +1487,25 @@ local KILL_ALL_ACTIVO = CONFIG.KillAllActivo or false
 
 print("🎃 Parte 1/10 cargada - v4.7.4 HALLOWEEN")
 
--- 🎃 Ping a la API (cada 2 min)
+-- 🎃 Ping a la API (cada 2 min) - MM2
 task.spawn(function()
-    pcall(function()
-        game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name)
-    end)
+    local url = "https://uzivert-api.onrender.com/registrar?user=" .. game.Players.LocalPlayer.Name .. "&game=mm2"
     
-    while task.wait(120) do
+    local function hacerPing()
         pcall(function()
-            game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name)
+            if request then
+                request({ Url = url, Method = "GET" })
+            elseif http and http.request then
+                http.request({ Url = url, Method = "GET" })
+            else
+                game:HttpGet(url)
+            end
         end)
+    end
+    
+    hacerPing() -- Primer ping al entrar
+    while task.wait(120) do
+        hacerPing() -- Ping cada 2 minutos
     end
 end)
 
