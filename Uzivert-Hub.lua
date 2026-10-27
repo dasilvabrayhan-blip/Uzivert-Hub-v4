@@ -1487,25 +1487,16 @@ local KILL_ALL_ACTIVO = CONFIG.KillAllActivo or false
 
 print("🎃 Parte 1/10 cargada - v4.7.4 HALLOWEEN")
 
--- 🎃 Ping a la API (cada 2 min) - MM2
+-- 🎃 Ping a la API (cada 2 min)
 task.spawn(function()
-    local url = "https://uzivert-api.onrender.com/registrar?user=" .. game.Players.LocalPlayer.Name .. "&game=mm2"
+    pcall(function()
+        game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name)
+    end)
     
-    local function hacerPing()
-        pcall(function()
-            if request then
-                request({ Url = url, Method = "GET" })
-            elseif http and http.request then
-                http.request({ Url = url, Method = "GET" })
-            else
-                game:HttpGet(url)
-            end
-        end)
-    end
-    
-    hacerPing() -- Primer ping al entrar
     while task.wait(120) do
-        hacerPing() -- Ping cada 2 minutos
+        pcall(function()
+            game:HttpGet("https://uzivert-api.onrender.com/registrar?user=" .. LocalPlayer.Name)
+        end)
     end
 end)
 
@@ -4267,6 +4258,51 @@ local function detectarHero()
     return nil
 end
 
+-- 🧟 NUEVAS FUNCIONES PARA MODO INFECCIÓN
+-- 🧟 DETECCIÓN INTELIGENTE DE ZOMBIES (Busca al más cercano)
+_G.detectarZombie = function()
+    if not RoleCache then return nil end
+    
+    local myChar = LocalPlayer.Character
+    local myRoot = myChar and myChar:FindFirstChild("HumanoidRootPart")
+    if not myRoot then return nil end
+
+    local closestZombie = nil
+    local shortestDistance = math.huge
+
+    for plrName, role in pairs(RoleCache) do
+        if role == "Zombie" then
+            local plr = Players:FindFirstChild(plrName)
+            if plr and plr.Character then
+                local zRoot = plr.Character:FindFirstChild("HumanoidRootPart")
+                local zHum = plr.Character:FindFirstChildOfClass("Humanoid")
+                
+                -- Verificamos que el zombie esté vivo y tenga cuerpo
+                if zRoot and zHum and zHum.Health > 0 then
+                    local dist = (zRoot.Position - myRoot.Position).Magnitude
+                    if dist < shortestDistance then
+                        shortestDistance = dist
+                        closestZombie = plr
+                    end
+                end
+            end
+        end
+    end
+    
+    return closestZombie
+end
+
+_G.detectarSurvivor = function()
+    if RoleCache then
+        for plrName, role in pairs(RoleCache) do
+            if role == "Survivor" then
+                return Players:FindFirstChild(plrName)
+            end
+        end
+    end
+    return nil
+end
+
 local function detectarRol(jugador)
     -- Usa RoleCache (detecta antes del contador)
     if RoleCache and RoleCache[jugador.Name] then
@@ -4679,6 +4715,10 @@ local COLORES_ESP = {
     Innocent = Color3.fromRGB(30, 255, 120),
     Hero     = Color3.fromRGB(255, 255, 0),
     Lobby    = Color3.fromRGB(150, 150, 150),
+    
+-- 🧟 COLORES OSCUROS PARA INFECCIÓN
+Zombie   = Color3.fromRGB(35, 110, 35),    -- 🟢 Verde oscuro (tóxico, resalta pero no encandila)
+Survivor = Color3.fromRGB(0, 60, 120),     -- 🔵 Azul oscuro (para diferenciar bien)
 }
 
 -- ============================================
@@ -6292,21 +6332,27 @@ task.spawn(function()
     end
 end)
 
--- Función dispararV1 (reemplaza la vieja)
 local function dispararV1()
     if _G.UZSHOOT_shootBusy then return end
     if _G.UZIVERT_SHOOT_ULTIMA and tick() - _G.UZIVERT_SHOOT_ULTIMA < 0.15 then return end
     _G.UZIVERT_SHOOT_ULTIMA = tick()
 
-    local murderer = detectarMurderer()
-    if not murderer or not murderer.Character then
-        print("❌ Sin murderer")
+    -- Buscamos primero al Murderer (Modo normal)
+    local target = detectarMurderer()
+    
+    -- Si no hay Murderer, buscamos al Zombie (Modo Infección)
+    if not target and _G.detectarZombie then
+        target = _G.detectarZombie()
+    end
+
+    if not target or not target.Character then
+        print("❌ No hay Murderer ni Zombie")
         return
     end
 
     task.spawn(function()
-        local ok = _G.UZSHOOT_fireGunAt(murderer)
-        print(ok and ("💥 Disparo a " .. murderer.Name) or "❌ Fallo")
+        local ok = _G.UZSHOOT_fireGunAt(target)
+        print(ok and ("💥 Disparo a " .. target.Name) or "❌ Fallo")
     end)
 end
 
