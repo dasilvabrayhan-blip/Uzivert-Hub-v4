@@ -69,7 +69,7 @@ BC.Parent = Boton
 
 Boton.MouseButton1Click:Connect(function()
     if setclipboard then
-        setclipboard("https://discord.gg/vhHERWcbXe")
+        setclipboard("https://discord.gg/vHhERWcbXe")
         Boton.Text = "¡LINK COPIADO! Andá a Discord"
         Boton.BackgroundColor3 = Color3.fromRGB(0, 200, 0) -- Se pone verde al copiar
         task.wait(3)
