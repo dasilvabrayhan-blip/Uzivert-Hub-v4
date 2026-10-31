@@ -1,5 +1,5 @@
 -- ============================================
--- UZIVERT HUB | v4.7.9
+-- UZIVERT HUB | v4.7.9.1
 -- Proyecto inicial por Uzivert
 -- Con ayuda explicativa de Nexvyr
 -- ============================================
@@ -15,7 +15,7 @@ local Lighting = game:GetService("Lighting")
 local HttpService = game:GetService("HttpService")
 local Debris = game:GetService("Debris")
 
-local VERSION = "v4.7.9"
+local VERSION = "v4.7.9.1"
 
 -- ============================================
 -- SONIDO DE CLICK (solo botones del hub)
@@ -103,7 +103,7 @@ _G.UZ_SEL_CONFIG = {
     CREATOR_NAME = "Uzivert",
     TIKTOK = "@Uzivert550",
     INSTAGRAM = "@hxuntedluv77",
-    VERSION = "v4.7.9",
+    VERSION = "v4.7.9.1",
 }
 
 _G.UZ_SEL_Players = game:GetService("Players")
@@ -4722,7 +4722,7 @@ _G.UZIVERT_AGARRAR_GUN = function()
 end
 
 _G.UZIVERT_AUTO_GET_GUN_LOOP = task.spawn(function()
-    while task.wait(0.10) do  -- ⬅️ antes 0.5, ahora 1 (menos lag)
+    while task.wait(0.5) do  -- ⬅️ antes 0.5, ahora 1 (menos lag)
         if not _G.UZIVERT_AUTO_GET_GUN_ON then continue end
         _G.UZIVERT_AGARRAR_GUN()
     end
@@ -6183,27 +6183,21 @@ task.spawn(function()
     end
 end)
 
+-- Función dispararV1 (reemplaza la vieja)
 local function dispararV1()
     if _G.UZSHOOT_shootBusy then return end
     if _G.UZIVERT_SHOOT_ULTIMA and tick() - _G.UZIVERT_SHOOT_ULTIMA < 0.15 then return end
     _G.UZIVERT_SHOOT_ULTIMA = tick()
 
-    -- Buscamos primero al Murderer (Modo normal)
-    local target = detectarMurderer()
-    
-    -- Si no hay Murderer, buscamos al Zombie (Modo Infección)
-    if not target and _G.detectarZombie then
-        target = _G.detectarZombie()
-    end
-
-    if not target or not target.Character then
-        print("❌ No hay Murderer ni Zombie")
+    local murderer = detectarMurderer()
+    if not murderer or not murderer.Character then
+        print("❌ Sin murderer")
         return
     end
 
     task.spawn(function()
-        local ok = _G.UZSHOOT_fireGunAt(target)
-        print(ok and ("💥 Disparo a " .. target.Name) or "❌ Fallo")
+        local ok = _G.UZSHOOT_fireGunAt(murderer)
+        print(ok and ("💥 Disparo a " .. murderer.Name) or "❌ Fallo")
     end)
 end
 
@@ -10508,7 +10502,7 @@ crearBoton(PaginaInfo, "💬 Copiar Discord", function()
     print("Discord copiado.")
 end, Color3.fromRGB(70, 78, 104))
 
-crearTarjeta(PaginaUpdate, "📅 Última actualización: 30/10/2026", "Uzivert Hub v4.7.9 — The White Update", COLORES.Naranja2)
+crearTarjeta(PaginaUpdate, "📅 Última actualización: 31/10/2026", "Uzivert Hub v4.7.9.1 — The White Update", COLORES.Naranja2)
 
 crearTarjeta(PaginaUpdate, "🟢 NUEVO EN v4.7.9",
     "• 🖱️ Cursor Custom (Diseños y colores)\n" ..
@@ -10810,7 +10804,7 @@ print("Estrellas titilantes")
 print("UI sin tematica")
 print("====================================")
 
-print("Parte 10/10 cargada - SCRIPT COMPLETO v4.7.9")
+print("Parte 10/10 cargada - SCRIPT COMPLETO v4.7.9.1")
 
 -- ============================================
 -- ⏰ ROUND TIMER
