@@ -176,32 +176,60 @@ end)
 btn.MouseEnter:Connect(function() TweenService:Create(bs, TweenInfo.new(0.15), { Scale = 1.03 }):Play() end)
 btn.MouseLeave:Connect(function() TweenService:Create(bs, TweenInfo.new(0.15), { Scale = 1 }):Play() end)
 
--- Abrir Discord: navegador directo, app de Discord, y copia como respaldo
+-- Abrir Discord: prueba todos los metodos que usan los ejecutores (Delta incluido)
 local function abrirDiscord()
-    local req = (syn and syn.request) or (http and http.request) or http_request or request
-    local ok = false
-    if setclipboard then pcall(setclipboard, LINK) end
-    -- 1) app de Discord instalada (RPC local)
+    local genv = (getgenv and getgenv()) or _G
+    local env = (getfenv and getfenv()) or {}
+    local function fn(name)
+        local f = rawget(genv, name) or genv[name] or env[name]
+        if type(f) ~= "function" then
+            local ok, v = pcall(function() return getfenv(0)[name] end)
+            if ok and type(v) == "function" then f = v end
+        end
+        return type(f) == "function" and f or nil
+    end
+
+    if setclipboard or toclipboard then pcall(setclipboard or toclipboard, LINK) end
+
+    -- 1) funciones nativas del ejecutor para abrir links
+    for _, name in ipairs({ "openurl", "open_url", "OpenURL", "openbrowser", "open_browser", "browser_open", "openlink", "open_link" }) do
+        local f = fn(name)
+        if f then task.spawn(function() pcall(f, LINK) end) end
+    end
+    local d = rawget(genv, "Delta") or genv.Delta
+    if type(d) == "table" then
+        for _, name in ipairs({ "OpenURL", "openurl", "OpenUrl", "OpenBrowser" }) do
+            if type(d[name]) == "function" then task.spawn(function() pcall(d[name], LINK) end) end
+        end
+    end
+
+    -- 2) Roblox: navegador / overlay nativo
+    task.spawn(function() pcall(function() GuiService:OpenBrowserWindow(LINK) end) end)
+    task.spawn(function() pcall(function() GuiService:OpenNativeOverlay("Discord", LINK) end) end)
+
+    -- 3) PC: app de Discord por RPC local (en celular no aplica)
+    local req = fn("request") or fn("http_request") or (syn and syn.request) or (http and http.request)
     if req then
-        ok = pcall(function()
-            req({
-                Url = "http://127.0.0.1:6463/rpc?v=1",
-                Method = "POST",
-                Headers = { ["Content-Type"] = "application/json", ["Origin"] = "https://discord.com" },
-                Body = HttpService:JSONEncode({
-                    cmd = "INVITE_BROWSER",
-                    args = { code = INVITE_CODE },
-                    nonce = HttpService:GenerateGUID(false),
-                }),
-            })
+        task.spawn(function()
+            pcall(function()
+                req({
+                    Url = "http://127.0.0.1:6463/rpc?v=1",
+                    Method = "POST",
+                    Headers = { ["Content-Type"] = "application/json", ["Origin"] = "https://discord.com" },
+                    Body = HttpService:JSONEncode({
+                        cmd = "INVITE_BROWSER",
+                        args = { code = INVITE_CODE },
+                        nonce = HttpService:GenerateGUID(false),
+                    }),
+                })
+            end)
         end)
     end
-    -- 2) navegador
-    pcall(function() GuiService:OpenBrowserWindow(LINK) end)
-    pcall(function() game:GetService("GuiService"):OpenBrowserWindow(LINK) end)
+
     btn.Text = "ABRIENDO DISCORD..."
+    nota.Text = "Si no se abre, el link ya esta copiado: pegalo en tu navegador"
     TweenService:Create(btn, TweenInfo.new(0.2), { BackgroundColor3 = Color3.fromRGB(46, 190, 110) }):Play()
-    task.delay(3, function()
+    task.delay(3.5, function()
         if not gui.Parent then return end
         btn.Text = "ABRIR DISCORD"
         TweenService:Create(btn, TweenInfo.new(0.2), { BackgroundColor3 = Color3.fromRGB(88, 101, 242) }):Play()
