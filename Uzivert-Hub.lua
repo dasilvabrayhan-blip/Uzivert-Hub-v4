@@ -4377,7 +4377,7 @@ _G.UZIVERT_aim_loop = function(dt)
     end
     _G.AIM_LAST_POS = aimPos
 
-    cam.CFrame = CFrame.lookAt(cam.CFrame.Position, aimPos, Vector3.new(0, 1, 0))
+cam.CFrame = CFrame.lookAt(cam.CFrame.Position, aimPos, Vector3.new(0, 1, 0))
 end
 
 _G.UZIVERT_aim_con = RunService.RenderStepped:Connect(function(dt)
@@ -4722,7 +4722,7 @@ _G.UZIVERT_AGARRAR_GUN = function()
 end
 
 _G.UZIVERT_AUTO_GET_GUN_LOOP = task.spawn(function()
-    while task.wait(0.5) do  -- ⬅️ antes 0.5, ahora 1 (menos lag)
+    while task.wait(0.10) do  -- ⬅️ antes 0.5, ahora 1 (menos lag)
         if not _G.UZIVERT_AUTO_GET_GUN_ON then continue end
         _G.UZIVERT_AGARRAR_GUN()
     end
@@ -10487,13 +10487,468 @@ sMI.Thickness = 1
 sMI.Transparency = 0.4
 sMI.Parent = mantInfo
 
-crearBoton(PaginaInfo, "🐛 Reportar Bug", function()
-    local texto = "REPORTE DE BUG - UZIVERT HUB v4.7.8\nJugador: " .. LocalPlayer.Name .. "\nFecha: " .. os.date("%d/%m/%Y %H:%M") .. "\nVersion: " .. VERSION
-    pcall(function()
-        if setclipboard then setclipboard(texto) end
+-- ============================================
+-- 🐛 SISTEMA DE REPORTES (INTEGRADO AL HUB)
+-- ============================================
+_G.UZ_ABRIR_REPORTE = function()
+    if _G.UZ_REPORT_GUI and _G.UZ_REPORT_GUI.Parent then _G.UZ_REPORT_GUI:Destroy() end
+
+    local player = game:GetService("Players").LocalPlayer
+    local pg = player:WaitForChild("PlayerGui")
+    local HttpService = game:GetService("HttpService")
+    local TweenService = game:GetService("TweenService")
+    local RunService = game:GetService("RunService")
+    local UIS = game:GetService("UserInputService")
+    local Debris = game:GetService("Debris")
+
+    local WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTU2NjEzOTc5NzEzNzc5MzEwNC9QUm9CZHdoamZnT1ZnNUw4eTNPaUxLLVRqZlhhQWpoeWpMQnR3c0duUTNIZFJqT2ZWNUQtZG9oM1NDRTlUSVBjUVd1VQ=="
+    local function b64decode(data)
+        local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+        local map = {}
+        for i = 1, #chars do map[string.sub(chars, i, i)] = i - 1 end
+        data = string.gsub(data, "[^%w%+/=]", "")
+        local out, buf, bits = {}, 0, 0
+        for i = 1, #data do
+            local c = string.sub(data, i, i)
+            if c == "=" then break end
+            buf = buf * 64 + map[c]
+            bits = bits + 6
+            if bits >= 8 then
+                bits = bits - 8
+                local byte = math.floor(buf / 2 ^ bits)
+                buf = buf - byte * 2 ^ bits
+                out[#out + 1] = string.char(byte)
+            end
+        end
+        return table.concat(out)
+    end
+    local WEBHOOK_URL = b64decode(WEBHOOK_B64)
+    local COOLDOWN, MAXLEN = 30, 500
+
+    local function mk(class, props, parent)
+        local o = Instance.new(class)
+        for k, v in pairs(props) do o[k] = v end
+        o.Parent = parent
+        return o
+    end
+    local function tw(o, t, goal, style, dir)
+        local tween = TweenService:Create(o, TweenInfo.new(t, style or Enum.EasingStyle.Quint, dir or Enum.EasingDirection.Out), goal)
+        tween:Play()
+        return tween
+    end
+    local function corner(p, r) return mk("UICorner", { CornerRadius = UDim.new(0, r) }, p) end
+    local function setLine(f, x1, y1, x2, y2, th)
+        local dx, dy = x2 - x1, y2 - y1
+        f.Size = UDim2.fromOffset(math.sqrt(dx * dx + dy * dy), th)
+        f.Position = UDim2.fromOffset((x1 + x2) / 2, (y1 + y2) / 2)
+        f.Rotation = math.deg(math.atan2(dy, dx))
+    end
+    local function line(p, color, z)
+        return mk("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), BackgroundColor3 = color, BorderSizePixel = 0, ZIndex = z or 1 }, p)
+    end
+
+    local INK = Color3.fromRGB(18, 20, 30)
+    local SUB = Color3.fromRGB(96, 102, 124)
+    local GRAPH = Color3.fromRGB(40, 44, 62)
+    local GRAPH2 = Color3.fromRGB(72, 78, 104)
+    local SILVER = Color3.fromRGB(176, 186, 214)
+    local PAPER = Color3.fromRGB(244, 245, 250)
+    local RED = Color3.fromRGB(205, 45, 50)
+    local GREEN = Color3.fromRGB(20, 150, 85)
+
+    -- se abre ENCIMA de la UI principal: mismo contenedor (gethui/PlayerGui) y DisplayOrder mayor
+    local ScreenGui = mk("ScreenGui", {
+        Name = "UzivertReportGui", ResetOnSpawn = false, IgnoreGuiInset = true,
+        DisplayOrder = 1000001, ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+    })
+    do
+        local okH, hui = pcall(function() return gethui and gethui() end)
+        if not pcall(function() ScreenGui.Parent = (okH and hui) or pg end) then ScreenGui.Parent = pg end
+    end
+    _G.UZ_REPORT_GUI = ScreenGui
+
+    -- fondo oscurecido que bloquea clicks a la UI principal
+    local Dim = mk("TextButton", {
+        Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.fromRGB(10, 12, 20), BackgroundTransparency = 1,
+        Text = "", AutoButtonColor = false, BorderSizePixel = 0, ZIndex = 1,
+    }, ScreenGui)
+    tw(Dim, 0.3, { BackgroundTransparency = 0.55 })
+
+    local PW, PH = 340, 318
+    local Panel = mk("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5),
+        Size = UDim2.fromOffset(PW, PH), BackgroundTransparency = 1, Active = true, ZIndex = 2,
+    }, ScreenGui)
+    local cam = workspace.CurrentCamera
+    local vp = cam and cam.ViewportSize or Vector2.new(1280, 720)
+    local base = math.clamp(math.min(vp.X / (PW + 30), vp.Y / (PH + 30)), 0.55, 1.2)
+    local pop = mk("UIScale", { Scale = base * 0.85 }, Panel)
+    tw(pop, 0.45, { Scale = base }, Enum.EasingStyle.Back)
+
+    local glowA = mk("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.new(1, 46, 1, 46),
+        BackgroundColor3 = Color3.new(1, 1, 1), BackgroundTransparency = 0.85, BorderSizePixel = 0, ZIndex = 1,
+    }, Panel)
+    corner(glowA, 30)
+    local glowB = mk("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.new(1, 16, 1, 16),
+        BackgroundColor3 = Color3.fromRGB(218, 225, 243), BackgroundTransparency = 0.6, BorderSizePixel = 0, ZIndex = 2,
+    }, Panel)
+    corner(glowB, 20)
+
+    local Surface = mk("CanvasGroup", {
+        Size = UDim2.fromScale(1, 1), BackgroundColor3 = PAPER, BorderSizePixel = 0, ZIndex = 3, GroupTransparency = 1,
+    }, Panel)
+    corner(Surface, 14)
+    tw(Surface, 0.3, { GroupTransparency = 0 })
+
+    local bg = mk("Frame", { Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, ZIndex = 1 }, Surface)
+    mk("UIGradient", {
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+            ColorSequenceKeypoint.new(0.7, Color3.fromRGB(240, 243, 250)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(222, 228, 243)),
+        }), Rotation = 35,
+    }, bg)
+    local blobs = {}
+    for i, d in ipairs({
+        { 150, Color3.fromRGB(186, 200, 238), 0.8, 290, 20, 0.23, 0.31 },
+        { 120, Color3.fromRGB(214, 202, 240), 0.84, 40, 290, 0.27, 0.21 },
+    }) do
+        local b = mk("Frame", {
+            AnchorPoint = Vector2.new(0.5, 0.5), Size = UDim2.fromOffset(d[1], d[1]), BackgroundColor3 = d[2],
+            BackgroundTransparency = d[3], BorderSizePixel = 0, ZIndex = 2,
+        }, Surface)
+        corner(b, 999)
+        blobs[i] = { b, d[4], d[5], d[6], d[7] }
+    end
+    local sparks = {}
+    for i = 1, 10 do
+        local s = mk("Frame", {
+            AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(math.random(), math.random()),
+            Size = UDim2.fromOffset(2, 2), BackgroundColor3 = Color3.fromRGB(120, 130, 170), BorderSizePixel = 0, ZIndex = 2,
+        }, Surface)
+        corner(s, 999)
+        sparks[i] = { s, math.random() * 6.28, 0.8 + math.random() * 1.6 }
+    end
+
+    local border = mk("Frame", { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 40 }, Panel)
+    corner(border, 14)
+    local bStroke = mk("UIStroke", { Thickness = 1.8, Color = Color3.new(1, 1, 1), ApplyStrokeMode = Enum.ApplyStrokeMode.Border }, border)
+    local bGrad = mk("UIGradient", {
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, GRAPH), ColorSequenceKeypoint.new(0.3, SILVER), ColorSequenceKeypoint.new(0.5, Color3.new(1, 1, 1)),
+            ColorSequenceKeypoint.new(0.75, GRAPH2), ColorSequenceKeypoint.new(1, GRAPH),
+        }),
+    }, bStroke)
+
+    -- ===== cabecera: icono de bug dibujado + titulo =====
+    local head = mk("Frame", { Size = UDim2.new(1, 0, 0, 64), BackgroundTransparency = 1, ZIndex = 10 }, Surface)
+    local tile = mk("Frame", {
+        Position = UDim2.fromOffset(16, 14), Size = UDim2.fromOffset(38, 38), BackgroundColor3 = GRAPH, BorderSizePixel = 0, ZIndex = 11,
+    }, head)
+    corner(tile, 10)
+    local bug = mk("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(26, 26), BackgroundTransparency = 1, ZIndex = 12 }, tile)
+    local bugBody = mk("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(13, 15), Size = UDim2.fromOffset(12, 15), BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, ZIndex = 13 }, bug)
+    corner(bugBody, 6)
+    local bugHead = mk("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(13, 6), Size = UDim2.fromOffset(8, 7), BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, ZIndex = 13 }, bug)
+    corner(bugHead, 4)
+    mk("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromOffset(13, 15), Size = UDim2.fromOffset(1, 13), BackgroundColor3 = GRAPH, BorderSizePixel = 0, ZIndex = 14 }, bug)
+    local legs = {}
+    for _, p in ipairs({ { 8, 11, 2, 8 }, { 8, 15, 1, 15 }, { 8, 19, 2, 23 }, { 18, 11, 24, 8 }, { 18, 15, 25, 15 }, { 18, 19, 24, 23 } }) do
+        local l = line(bug, Color3.new(1, 1, 1), 13)
+        setLine(l, p[1], p[2], p[3], p[4], 1.6)
+        legs[#legs + 1] = l
+    end
+    local ant1, ant2 = line(bug, Color3.new(1, 1, 1), 13), line(bug, Color3.new(1, 1, 1), 13)
+    mk("TextLabel", {
+        Position = UDim2.fromOffset(64, 12), Size = UDim2.new(1, -110, 0, 22), BackgroundTransparency = 1, Text = "Reportar bug",
+        Font = Enum.Font.GothamBold, TextSize = 17, TextColor3 = INK, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 11,
+    }, head)
+    mk("TextLabel", {
+        Position = UDim2.fromOffset(64, 34), Size = UDim2.new(1, -110, 0, 16), BackgroundTransparency = 1, Text = "Contanos que paso y lo revisamos",
+        Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = SUB, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 11,
+    }, head)
+    local sep = mk("Frame", { Position = UDim2.fromOffset(16, 63), Size = UDim2.new(1, -32, 0, 1), BackgroundColor3 = GRAPH, BorderSizePixel = 0, ZIndex = 10 }, Surface)
+    mk("UIGradient", { Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.25, 0.5), NumberSequenceKeypoint.new(0.75, 0.5), NumberSequenceKeypoint.new(1, 1) }) }, sep)
+
+    -- cerrar (X)
+    local closing = false
+    local function cerrar()
+        if closing then return end
+        closing = true
+        tw(Dim, 0.25, { BackgroundTransparency = 1 })
+        tw(Surface, 0.2, { GroupTransparency = 1 })
+        tw(pop, 0.22, { Scale = base * 0.88 }, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+        task.delay(0.3, function() if ScreenGui.Parent then ScreenGui:Destroy() end end)
+    end
+    local X = mk("TextButton", {
+        AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -12, 0, 16), Size = UDim2.fromOffset(26, 26),
+        BackgroundColor3 = Color3.new(1, 1, 1), BackgroundTransparency = 0.1, Text = "", AutoButtonColor = false, BorderSizePixel = 0, ZIndex = 20,
+    }, Surface)
+    corner(X, 7)
+    local xs = mk("UIStroke", { Thickness = 1, Color = SILVER, Transparency = 0.2 }, X)
+    local xbars = {}
+    for _, rot in ipairs({ 45, -45 }) do
+        xbars[#xbars + 1] = mk("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(12, 2), BackgroundColor3 = SUB, BorderSizePixel = 0, Rotation = rot, ZIndex = 21 }, X)
+    end
+    X.MouseEnter:Connect(function()
+        tw(xs, 0.15, { Color = RED, Transparency = 0 })
+        for _, b in ipairs(xbars) do tw(b, 0.15, { BackgroundColor3 = RED }) end
     end)
-    print("Reporte copiado.")
-end, Color3.fromRGB(200, 100, 60))
+    X.MouseLeave:Connect(function()
+        tw(xs, 0.15, { Color = SILVER, Transparency = 0.2 })
+        for _, b in ipairs(xbars) do tw(b, 0.15, { BackgroundColor3 = SUB }) end
+    end)
+    X.Activated:Connect(cerrar)
+
+    -- ===== categorias =====
+    mk("TextLabel", {
+        Position = UDim2.fromOffset(16, 74), Size = UDim2.fromOffset(200, 14), BackgroundTransparency = 1, Text = "TIPO DE PROBLEMA",
+        Font = Enum.Font.GothamBold, TextSize = 9, TextColor3 = SUB, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 10,
+    }, Surface)
+    local cats = { "Error", "No funciona", "Lag / Crash", "Otro" }
+    local catSel = 1
+    local chips = {}
+    local cw = (PW - 32 - 6 * 3) / 4
+    local function pintarChips()
+        for i, c in ipairs(chips) do
+            local on = (i == catSel)
+            tw(c.f, 0.2, { BackgroundColor3 = on and GRAPH or Color3.new(1, 1, 1) })
+            tw(c.l, 0.2, { TextColor3 = on and Color3.new(1, 1, 1) or SUB })
+            tw(c.s, 0.2, { Transparency = on and 1 or 0.2 })
+        end
+    end
+    for i, name in ipairs(cats) do
+        local f = mk("TextButton", {
+            Position = UDim2.fromOffset(16 + (i - 1) * (cw + 6), 92), Size = UDim2.fromOffset(cw, 26),
+            BackgroundColor3 = Color3.new(1, 1, 1), Text = "", AutoButtonColor = false, BorderSizePixel = 0, ZIndex = 10,
+        }, Surface)
+        corner(f, 8)
+        local s = mk("UIStroke", { Thickness = 1, Color = SILVER, Transparency = 0.2 }, f)
+        local l = mk("TextLabel", {
+            Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Text = name, Font = Enum.Font.GothamBold, TextSize = 10,
+            TextColor3 = SUB, ZIndex = 11,
+        }, f)
+        local sc = mk("UIScale", { Scale = 1 }, f)
+        chips[i] = { f = f, l = l, s = s }
+        f.MouseEnter:Connect(function() tw(sc, 0.12, { Scale = 1.04 }, Enum.EasingStyle.Back) end)
+        f.MouseLeave:Connect(function() tw(sc, 0.12, { Scale = 1 }) end)
+        f.Activated:Connect(function()
+            catSel = i
+            pintarChips()
+            tw(sc, 0.08, { Scale = 0.95 })
+            task.delay(0.08, function() tw(sc, 0.15, { Scale = 1 }, Enum.EasingStyle.Back) end)
+        end)
+    end
+    pintarChips()
+
+    -- ===== caja de texto =====
+    mk("TextLabel", {
+        Position = UDim2.fromOffset(16, 128), Size = UDim2.fromOffset(200, 14), BackgroundTransparency = 1, Text = "DESCRIPCION",
+        Font = Enum.Font.GothamBold, TextSize = 9, TextColor3 = SUB, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 10,
+    }, Surface)
+    local boxWrap = mk("Frame", {
+        Position = UDim2.fromOffset(16, 146), Size = UDim2.new(1, -32, 0, 84), BackgroundColor3 = Color3.new(1, 1, 1), BorderSizePixel = 0, ZIndex = 10,
+    }, Surface)
+    corner(boxWrap, 10)
+    local boxStroke = mk("UIStroke", { Thickness = 1.2, Color = SILVER, Transparency = 0.1 }, boxWrap)
+    local Box = mk("TextBox", {
+        Position = UDim2.fromOffset(10, 6), Size = UDim2.new(1, -20, 1, -22), BackgroundTransparency = 1, Text = "",
+        PlaceholderText = "Describi el bug con detalles: que hiciste, que paso y que esperabas...", PlaceholderColor3 = Color3.fromRGB(150, 156, 176),
+        TextColor3 = INK, Font = Enum.Font.Gotham, TextSize = 12, TextWrapped = true, MultiLine = true, ClearTextOnFocus = false,
+        TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, ZIndex = 11,
+    }, boxWrap)
+    local counter = mk("TextLabel", {
+        AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, -10, 1, -4), Size = UDim2.fromOffset(80, 12), BackgroundTransparency = 1,
+        Text = "0/" .. MAXLEN, Font = Enum.Font.GothamMedium, TextSize = 9, TextColor3 = SUB, TextXAlignment = Enum.TextXAlignment.Right, ZIndex = 11,
+    }, boxWrap)
+    Box.Focused:Connect(function() tw(boxStroke, 0.15, { Color = GRAPH, Transparency = 0 }) end)
+    Box.FocusLost:Connect(function() tw(boxStroke, 0.2, { Color = SILVER, Transparency = 0.1 }) end)
+    Box:GetPropertyChangedSignal("Text"):Connect(function()
+        if #Box.Text > MAXLEN then Box.Text = string.sub(Box.Text, 1, MAXLEN) return end
+        counter.Text = #Box.Text .. "/" .. MAXLEN
+        counter.TextColor3 = (#Box.Text > MAXLEN - 40) and RED or SUB
+    end)
+
+    -- ===== botones =====
+    local Enviar = mk("TextButton", {
+        Position = UDim2.fromOffset(16, 242), Size = UDim2.new(1, -32, 0, 38), BackgroundColor3 = GRAPH, Text = "",
+        AutoButtonColor = false, BorderSizePixel = 0, ClipsDescendants = true, ZIndex = 10,
+    }, Surface)
+    corner(Enviar, 10)
+    local envScale = mk("UIScale", { Scale = 1 }, Enviar)
+    local envLbl = mk("TextLabel", {
+        Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, Text = "ENVIAR REPORTE", Font = Enum.Font.GothamBold, TextSize = 13,
+        TextColor3 = Color3.new(1, 1, 1), ZIndex = 12,
+    }, Enviar)
+    local shine = mk("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.new(0, -30, 0.5, 0), Size = UDim2.fromOffset(26, 90),
+        BackgroundColor3 = Color3.new(1, 1, 1), BackgroundTransparency = 0.8, BorderSizePixel = 0, Rotation = 20, ZIndex = 11,
+    }, Enviar)
+    local function pasarBrillo()
+        shine.Position = UDim2.new(0, -30, 0.5, 0)
+        tw(shine, 0.7, { Position = UDim2.new(1, 30, 0.5, 0) }, Enum.EasingStyle.Quad)
+    end
+    task.spawn(function()
+        task.wait(1.2)
+        while ScreenGui.Parent do pasarBrillo() task.wait(3.2) end
+    end)
+    -- barra de carga (se ve mientras envia)
+    local loadBar = mk("Frame", { Position = UDim2.new(0, 0, 1, -3), Size = UDim2.new(1, 0, 0, 3), BackgroundTransparency = 1, BorderSizePixel = 0, ClipsDescendants = true, ZIndex = 13 }, Enviar)
+    local loadFill = mk("Frame", { Position = UDim2.fromScale(-0.4, 0), Size = UDim2.fromScale(0.4, 1), BackgroundColor3 = Color3.new(1, 1, 1), BackgroundTransparency = 1, BorderSizePixel = 0, ZIndex = 14 }, loadBar)
+    -- check dibujado (exito)
+    local check = mk("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(24, 24), BackgroundTransparency = 1, Visible = false, ZIndex = 13 }, Enviar)
+    setLine(line(check, Color3.new(1, 1, 1), 13), 5, 13, 10, 18, 3)
+    setLine(line(check, Color3.new(1, 1, 1), 13), 10, 18, 19, 7, 3)
+
+    Enviar.MouseEnter:Connect(function()
+        tw(envScale, 0.15, { Scale = 1.02 }, Enum.EasingStyle.Back)
+        pasarBrillo()
+    end)
+    Enviar.MouseLeave:Connect(function() tw(envScale, 0.15, { Scale = 1 }) end)
+
+    local Cancelar = mk("TextButton", {
+        Position = UDim2.fromOffset(16, 286), Size = UDim2.new(1, -32, 0, 22), BackgroundTransparency = 1, Text = "Cancelar",
+        Font = Enum.Font.GothamMedium, TextSize = 11, TextColor3 = SUB, AutoButtonColor = false, ZIndex = 10,
+    }, Surface)
+    Cancelar.MouseEnter:Connect(function() tw(Cancelar, 0.15, { TextColor3 = INK }) end)
+    Cancelar.MouseLeave:Connect(function() tw(Cancelar, 0.15, { TextColor3 = SUB }) end)
+    Cancelar.Activated:Connect(cerrar)
+
+    local busy = false
+    local function estado(txt, color)
+        envLbl.Text = txt
+        tw(Enviar, 0.2, { BackgroundColor3 = color or GRAPH })
+    end
+    Enviar.Activated:Connect(function()
+        if busy or closing then return end
+        local texto = Box.Text
+        if string.gsub(texto, "%s", "") == "" then
+            busy = true
+            estado("Escribi algo primero", RED)
+            tw(boxStroke, 0.15, { Color = RED, Transparency = 0 })
+            for _ = 1, 3 do
+                tw(boxWrap, 0.05, { Position = UDim2.fromOffset(10, 146) })
+                task.wait(0.05)
+                tw(boxWrap, 0.05, { Position = UDim2.fromOffset(22, 146) })
+                task.wait(0.05)
+            end
+            tw(boxWrap, 0.08, { Position = UDim2.fromOffset(16, 146) })
+            task.wait(1.1)
+            tw(boxStroke, 0.2, { Color = SILVER, Transparency = 0.1 })
+            estado("ENVIAR REPORTE")
+            busy = false
+            return
+        end
+        local last = _G.UZ_REPORT_LAST
+        if last and os.clock() - last < COOLDOWN then
+            busy = true
+            estado("Espera " .. math.ceil(COOLDOWN - (os.clock() - last)) .. "s para enviar otro", GRAPH2)
+            task.wait(1.6)
+            estado("ENVIAR REPORTE")
+            busy = false
+            return
+        end
+
+        busy = true
+        estado("Enviando...", GRAPH2)
+        loadFill.BackgroundTransparency = 0.2
+        local ld = TweenService:Create(loadFill, TweenInfo.new(0.9, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1), { Position = UDim2.fromScale(1, 0) })
+        ld:Play()
+
+        local payload = {
+            username = "𝑼𝒛𝒊𝒗𝒆𝒓𝒕 𝑯𝒖𝒃 | 𝑩𝒖𝒈𝒔",
+            embeds = {
+                {
+                    title = "🐛 NUEVO REPORTE DE BUG",
+                    description = "**Mensaje del usuario:**\n" .. texto,
+                    color = 16711680,
+                    fields = {
+                        { name = "👤 Usuario", value = player.Name, inline = true },
+                        { name = "🏷️ Tipo", value = cats[catSel], inline = true },
+                        { name = "📌 Versión", value = tostring(VERSION or "v4.7.9.1"), inline = true },
+                        { name = "🎮 Juego", value = tostring(game.PlaceId), inline = true }
+                    },
+                    footer = { text = "Uzivert Hub - Reportes" }
+                }
+            }
+        }
+
+        local req = (syn and syn.request) or http_request or request
+        local success, err = pcall(function()
+            return req({
+                Url = WEBHOOK_URL,
+                Method = "POST",
+                Headers = { ["Content-Type"] = "application/json" },
+                Body = HttpService:JSONEncode(payload)
+            })
+        end)
+
+        ld:Cancel()
+        loadFill.BackgroundTransparency = 1
+        if success then
+            _G.UZ_REPORT_LAST = os.clock()
+            envLbl.Text = ""
+            check.Visible = true
+            check.Size = UDim2.fromOffset(4, 4)
+            tw(check, 0.35, { Size = UDim2.fromOffset(24, 24) }, Enum.EasingStyle.Back)
+            tw(Enviar, 0.25, { BackgroundColor3 = GREEN })
+            task.wait(1.3)
+            cerrar()
+        else
+            warn("Error Webhook: " .. tostring(err))
+            estado("Error al enviar", RED)
+            task.wait(2)
+            estado("ENVIAR REPORTE")
+            busy = false
+        end
+    end)
+
+    -- ===== arrastrar por la cabecera =====
+    do
+        local dragging, dragStart, startPos
+        head.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                dragging, dragStart, startPos = true, input.Position, Panel.Position
+                input.Changed:Connect(function()
+                    if input.UserInputState == Enum.UserInputState.End then dragging = false end
+                end)
+            end
+        end)
+        UIS.InputChanged:Connect(function(input)
+            if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+                local d = (input.Position - dragStart) / math.max(pop.Scale, 0.1)
+                Panel.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + d.X, startPos.Y.Scale, startPos.Y.Offset + d.Y)
+            end
+        end)
+    end
+
+    -- ===== animaciones (un solo Heartbeat) =====
+    local T0, conn = os.clock(), nil
+    conn = RunService.Heartbeat:Connect(function()
+        if not ScreenGui.Parent then conn:Disconnect() return end
+        local t = os.clock() - T0
+        bGrad.Rotation = (t * 45) % 360
+        glowA.BackgroundTransparency = 0.86 + 0.04 * math.sin(t * 1.3)
+        glowB.BackgroundTransparency = 0.62 + 0.06 * math.sin(t * 2.0 + 1)
+        for i, b in ipairs(blobs) do
+            b[1].Position = UDim2.fromOffset(b[2] + math.sin(t * b[4] + i) * 24, b[3] + math.cos(t * b[5] + i * 2) * 16)
+        end
+        for _, s in ipairs(sparks) do
+            s[1].BackgroundTransparency = 0.15 + 0.8 * (0.5 + 0.5 * math.sin(t * s[3] + s[2]))
+        end
+        -- el bug mueve las patas y las antenas
+        local w = math.sin(t * 9)
+        setLine(ant1, 11, 3, 8 - w, 0, 1.4)
+        setLine(ant2, 15, 3, 18 + w, 0, 1.4)
+        bug.Position = UDim2.new(0.5, 0, 0.5, math.sin(t * 2.2) * 1)
+    end)
+end
+
+crearBoton(PaginaInfo, "🐛 Reportar Bug (Webhook)", function()
+    _G.UZ_ABRIR_REPORTE()
+end, COLORES.Naranja1)
 
 crearBoton(PaginaInfo, "💬 Copiar Discord", function()
     pcall(function()
