@@ -14,115 +14,156 @@
 --]]
 
 task.spawn(function()
-	local Y = game:GetService("Players");
-	local z = Y.LocalPlayer;
-	local function u()
+	local L = game:GetService("Players");
+	local e = L.LocalPlayer;
+	local function A()
 		pcall(function()
-			local Y = "https://uzivert-api.onrender.com/registrar?user=" .. (z.Name .. "&game=duelos");
-			game:HttpGet(Y);
+			local L = "https://uzivert-api.onrender.com/registrar?user=" .. (e.Name .. "&game=duelos");
+			game:HttpGet(L);
 		end);
 	end;
-	u();
+	A();
 	while task.wait(120) do
-		u();
+		A();
 	end;
 end);
-local Y = game:GetService("Players");
-local z = game:GetService("RunService");
-local u = game:GetService("UserInputService");
-local T = game:GetService("ReplicatedStorage");
-local X = game:GetService("HttpService");
-local K = game:GetService("Workspace");
-local j = game:GetService("SoundService");
-local y = Y.LocalPlayer;
-while not y do
+local L = game:GetService("Players");
+local e = game:GetService("RunService");
+local A = game:GetService("UserInputService");
+local j = game:GetService("ReplicatedStorage");
+local g = game:GetService("HttpService");
+local d = game:GetService("Workspace");
+local H = game:GetService("SoundService");
+local K = L.LocalPlayer;
+while not K do
 	task.wait();
-	y = Y.LocalPlayer;
+	K = L.LocalPlayer;
 end;
-local B = K.CurrentCamera;
-local S = false;
-local l = 120;
-local v = false;
-local x = false;
-local c = "Cabeza";
-local V = false;
-local N = false;
-local n = "Cabeza";
-local P = true;
-local t = false;
-local o = Color3.fromRGB(255, 255, 255);
-local J = { Glow = true };
-local s = false;
+local a = d.CurrentCamera;
+local I = false;
+local w = 120;
+local Q = false;
+local Z = false;
+local t = "Cabeza";
+local M = false;
+local R = false;
+local X = "Cabeza";
+local i = true;
 local D = false;
-local p = false;
-local b = 3.5;
-local k = Color3.fromRGB(255, 0, 0);
-local g = false;
-local M = "Nombre falso";
-local r = false;
-local L = nil;
-local R = nil;
-local A = {};
-local w;
-local Q;
-local m;
-local E;
+local s = Color3.fromRGB(255, 255, 255);
+local k = { Glow = true };
+local n = false;
+local Y = false;
+local T = false;
+local P = 3.5;
+local S = Color3.fromRGB(255, 0, 0);
+local G = false;
+local E = "Nombre falso";
+local B = false;
+local O = nil;
+local p = nil;
+local C = {};
+local U;
 local h;
-local a;
-local Z;
-local O;
 local F;
-local W;
-local e = false;
-local f;
-local q = Instance.new("ScreenGui");
-q.Name = "UzivertHub_Overlays";
-q.ResetOnSpawn = false;
-q.IgnoreGuiInset = true;
-q.DisplayOrder = 999;
-q.Parent = y:WaitForChild("PlayerGui");
-local I = Instance.new("Folder");
-I.Name = "UzivertESPFolder";
-I.Parent = q;
-local C;
-local d = "1.6.66";
-local i = "WindUI_Cache_v" .. (d .. ".txt");
-local U = "WindUI_Cache_v" .. (d .. "_Time.txt");
-local H, G = pcall(function()
-		local Y = false;
-		if isfile and (isfile(U) and readfile) then
-			local z = tonumber(readfile(U));
-			if z and (os.time() - z) < 86400 then
-				Y = true;
+local c;
+local x;
+local v;
+local y;
+local l;
+local q;
+local z;
+local r = false;
+local u;
+local f = Instance.new("ScreenGui");
+f.Name = "UzivertHub_Overlays";
+f.ResetOnSpawn = false;
+f.IgnoreGuiInset = true;
+f.DisplayOrder = 999;
+f.Parent = K:WaitForChild("PlayerGui");
+local W = Instance.new("Folder");
+W.Name = "UzivertESPFolder";
+W.Parent = f;
+local J;
+local N = "1.6.66";
+local V = "WindUI_Cache_v" .. (N .. ".txt");
+local m = "WindUI_Cache_v" .. (N .. "_Time.txt");
+local o, b = pcall(function()
+		local L = false;
+		if isfile and (isfile(m) and readfile) then
+			local e = tonumber(readfile(m));
+			if e and (os.time() - e) < 86400 then
+				L = true;
 			end;
 		end;
-		if Y and (isfile and isfile(i)) then
-			local Y = readfile(i);
-			local z = loadstring(Y);
-			if z then
-				return z();
+		if L and (isfile and isfile(V)) then
+			local L = readfile(V);
+			local e = loadstring(L);
+			if e then
+				return e();
 			else
 				if delfile then
-					pcall(delfile, i);
-					pcall(delfile, U);
+					pcall(delfile, V);
+					pcall(delfile, m);
 				end;
 			end;
 		end;
-		local z = game:HttpGet("https://github.com/Footagesus/WindUI/releases/download/" .. (d .. "/main.lua"));
+		local e = game:HttpGet("https://github.com/Footagesus/WindUI/releases/download/" .. (N .. "/main.lua"));
 		if writefile then
-			writefile(i, z);
-			writefile(U, tostring(os.time()));
+			writefile(V, e);
+			writefile(m, tostring(os.time()));
 		end;
-		return (loadstring(z))();
+		return (loadstring(e))();
 	end);
-if H and (G and type(G) == "table") then
-	C = G;
+if o and (b and type(b) == "table") then
+	J = b;
 else
-	warn("Error al cargar WindUI: " .. tostring(G));
+	warn("Error al cargar WindUI: " .. tostring(b));
 	return;
 end;
-local Yc = C:CreateWindow({
-		Title = "UZIVERT HUB | DUELS <font color=\'#FFD700\'>[v2.0] </font>",
+local Lp = false;
+do
+	local function L(L)
+		return pcall(function()
+			local e, A = Color3.fromHex("#1c1e2c"), Color3.fromHex("#22253a");
+			if L then
+				e = J:Gradient({ ["0"] = { Color = Color3.fromHex("#252839"), Transparency = 0 }, ["100"] = { Color = Color3.fromHex("#14151f"), Transparency = 0 } }, { Rotation = 90 });
+				A = J:Gradient({ ["0"] = { Color = Color3.fromHex("#0e0f18"), Transparency = 0 }, ["50"] = { Color = Color3.fromHex("#1d2033"), Transparency = 0 }, ["100"] = { Color = Color3.fromHex("#33384f"), Transparency = 0 } }, { Rotation = 35 });
+			end;
+			J:AddTheme({
+				Name = "Uzivert",
+				Accent = e,
+				Background = A,
+				Dialog = Color3.fromHex("#171826"),
+				Outline = Color3.fromHex("#bec8e1"),
+				Text = Color3.fromHex("#f1f3fa"),
+				Placeholder = Color3.fromHex("#8a90a8"),
+				Button = Color3.fromHex("#4a4f6a"),
+				Icon = Color3.fromHex("#bec8e1"),
+				Toggle = Color3.fromHex("#9fb0e8"),
+				Slider = Color3.fromHex("#9fb0e8"),
+				Checkbox = Color3.fromHex("#9fb0e8"),
+				Primary = Color3.fromHex("#9fb0e8"),
+				PanelBackground = Color3.fromHex("#ffffff"),
+				PanelBackgroundTransparency = .94,
+			});
+		end);
+	end;
+	Lp = L(true) or L(false);
+end;
+local ep = "132390617819216";
+local Ap = "rbxassetid://" .. ep;
+pcall(function()
+	local L = (game:GetObjects("rbxassetid://" .. ep))[1];
+	if L and ((L:IsA("Decal") or L:IsA("Texture"))) then
+		local e = (tostring(L.Texture)):match("id=(%d+)") or (tostring(L.Texture)):match("rbxassetid://(%d+)");
+		if e then
+			Ap = "rbxassetid://" .. e;
+		end;
+	end;
+end);
+local jp = J:CreateWindow({
+		Title = "UZIVERT HUB | DUELS <font color=\'#FFD700\'>[v2.1] </font>",
 		Author = "By Uzivert \240\159\135\181\240\159\135\190",
 		Folder = "Uzivert_WindUI",
 		Acrylic = false,
@@ -131,7 +172,8 @@ local Yc = C:CreateWindow({
 		HideSearchBar = false,
 		ToggleKey = Enum.KeyCode.F15,
 		Icon = "moon",
-		Background = "rbxthumb://type=Asset&id=5191098772&w=420&h=420",
+		Theme = Lp and "Uzivert" or "Dark",
+		Background = Ap,
 		BackgroundImageTransparency = .35,
 		OpenButton = {
 			Title = "Uzivert Hub",
@@ -146,68 +188,114 @@ local Yc = C:CreateWindow({
 		},
 		Topbar = { Height = 44, ButtonsType = "Default" },
 	});
-local zc = Yc:Section({ Title = "Extras scripts", Opened = true });
-local uc = Yc:Section({ Title = "Combate principal", Opened = true });
-local Tc = Yc:Section({ Title = "Zona de farmeo", Opened = true });
-local Xc = Yc:Section({ Title = "Configuraciones", Opened = true });
-local Kc = Yc:Section({ Title = "Informaci\195\179n", Opened = true });
-local jc = {
-		Graficos = zc:Tab({ Title = "Gr\195\161ficos", Icon = "solar:palette-bold" }),
-		Aim = uc:Tab({ Title = "Aimbot", Icon = "solar:target-bold" }),
-		Vis = uc:Tab({ Title = "Visual", Icon = "solar:eye-bold" }),
-		KillAll = uc:Tab({ Title = "Kill All", Icon = "solar:danger-triangle-bold" }),
-		Invisible = uc:Tab({ Title = "Invisible", Icon = "solar:ghost-bold" }),
-		Tramposo = uc:Tab({ Title = "Movimiento", Icon = "solar:bolt-bold" }),
-		Farm = Tc:Tab({ Title = "Farmear evento", Icon = "solar:gift-bold" }),
-		RachaFarm = Tc:Tab({ Title = "Farmear racha", Icon = "solar:flame-bold" }),
-		Animaciones = Xc:Tab({ Title = "Animaciones", Icon = "solar:smile-circle-bold" }),
-		Sonidos = Xc:Tab({ Title = "Sonidos", Icon = "solar:speaker-bold" }),
-		Music = Xc:Tab({ Title = "M\195\186sica", Icon = "solar:music-note-2-bold" }),
-		Items = Xc:Tab({ Title = "Apariencia", Icon = "solar:crown-star-bold" }),
-		Guardado = Xc:Tab({ Title = "Guardado", Icon = "solar:diskette-bold" }),
-		Identidad = Xc:Tab({ Title = "Identidad", Icon = "solar:user-id-bold" }),
-		Updates = Kc:Tab({ Title = "Updates", Icon = "solar:bell-bing-bold" }),
-	};
-local yc, Bc, Sc;
-local lc, vc, xc, cc;
-do
-	local z = y:WaitForChild("PlayerGui");
-	local u;
-	local X;
-	local function j(Y)
-		if not Y then
+task.spawn(function()
+	pcall(function()
+		task.wait(.5);
+		local L;
+		pcall(function()
+			L = jp.UIElements and jp.UIElements.Main;
+		end);
+		if not ((L and L:IsA("GuiObject"))) then
+			L = nil;
+			local e = 0;
+			local A = J.ScreenGui or (gethui and gethui()) or game:GetService("CoreGui");
+			for A, j in ipairs(A:GetDescendants()) do
+				if j:IsA("Frame") and (j:FindFirstChildOfClass("UICorner") and (j.AbsoluteSize.X > 400 and j.AbsoluteSize.Y > 300)) then
+					local A = j.AbsoluteSize.X * j.AbsoluteSize.Y;
+					if A > e then
+						e, L = A, j;
+					end;
+				end;
+			end;
+		end;
+		if not L then
 			return;
 		end;
-		for z = #Y, 1, -1 do
-			local u = Y[z];
-			Y[z] = nil;
-			if u and u.Connected then
-				u:Disconnect();
+		local A = Instance.new("UIStroke");
+		A.Thickness = 2;
+		A.Color = Color3.new(1, 1, 1);
+		A.ApplyStrokeMode = Enum.ApplyStrokeMode.Border;
+		A.Parent = L;
+		local j = Instance.new("UIGradient");
+		j.Color = ColorSequence.new({
+				ColorSequenceKeypoint.new(0, Color3.fromRGB(110, 118, 142)),
+				ColorSequenceKeypoint.new(.25, Color3.fromRGB(255, 255, 255)),
+				ColorSequenceKeypoint.new(.5, Color3.fromRGB(190, 200, 225)),
+				ColorSequenceKeypoint.new(.75, Color3.fromRGB(255, 255, 255)),
+				ColorSequenceKeypoint.new(1, Color3.fromRGB(110, 118, 142)),
+			});
+		j.Parent = A;
+		local g;
+		g = e.Heartbeat:Connect(function()
+				if not A.Parent then
+					g:Disconnect();
+					return;
+				end;
+				j.Rotation = ((os.clock() * 120)) % 360;
+			end);
+	end);
+end);
+local gp = jp:Section({ Title = "Combate principal", Opened = true });
+local dp = jp:Section({ Title = "Zona de farmeo", Opened = true });
+local Hp = jp:Section({ Title = "Configuraciones", Opened = true });
+local Kp = jp:Section({ Title = "Informaci\195\179n", Opened = true });
+local ap = {
+		Graficos = jp:Tab({ Title = "Gr\195\161ficos", Icon = "solar:palette-bold" }),
+		Aim = gp:Tab({ Title = "Aimbot", Icon = "solar:target-bold" }),
+		Vis = gp:Tab({ Title = "Visual", Icon = "solar:eye-bold" }),
+		KillAll = gp:Tab({ Title = "Kill All", Icon = "solar:danger-triangle-bold" }),
+		Invisible = gp:Tab({ Title = "Invisible", Icon = "solar:ghost-bold" }),
+		Tramposo = gp:Tab({ Title = "Movimiento", Icon = "solar:bolt-bold" }),
+		Farm = dp:Tab({ Title = "Farmear evento", Icon = "solar:gift-bold" }),
+		RachaFarm = dp:Tab({ Title = "Farmear racha", Icon = "solar:flame-bold" }),
+		Animaciones = Hp:Tab({ Title = "Animaciones", Icon = "solar:smile-circle-bold" }),
+		Sonidos = Hp:Tab({ Title = "Sonidos", Icon = "solar:speaker-bold" }),
+		Music = Hp:Tab({ Title = "M\195\186sica", Icon = "solar:music-note-2-bold" }),
+		Items = Hp:Tab({ Title = "Apariencia", Icon = "solar:crown-star-bold" }),
+		Guardado = Hp:Tab({ Title = "Guardado", Icon = "solar:diskette-bold" }),
+		Identidad = Hp:Tab({ Title = "Identidad", Icon = "solar:user-id-bold" }),
+		Updates = Kp:Tab({ Title = "Updates", Icon = "solar:bell-bing-bold" }),
+	};
+local Ip, wp, Qp;
+local Zp, tp, Mp, Rp;
+do
+	local e = K:WaitForChild("PlayerGui");
+	local A;
+	local g;
+	local function H(L)
+		if not L then
+			return;
+		end;
+		for e = #L, 1, -1 do
+			local A = L[e];
+			L[e] = nil;
+			if A and A.Connected then
+				A:Disconnect();
 			end;
 		end;
 	end;
-	local B;
-	local function S(Y)
-		local z = Y;
-		if typeof(Y) == "Instance" and Y:IsA("Player") then
-			z = Y.Character;
+	local a;
+	local function I(L)
+		local e = L;
+		if typeof(L) == "Instance" and L:IsA("Player") then
+			e = L.Character;
 		end;
-		local u = z and z:FindFirstChildOfClass("Humanoid");
-		if not u or u.Health <= 0 then
+		local A = e and e:FindFirstChildOfClass("Humanoid");
+		if not A or A.Health <= 0 then
 			return false;
 		end;
-		if B and B() then
-			return z:GetAttribute("InfectionDowned") ~= true;
+		if a and a() then
+			return e:GetAttribute("InfectionDowned") ~= true;
 		end;
-		return u.Health >= 99;
+		return A.Health >= 99;
 	end;
-	local function l()
-		local Y = y:FindFirstChild("PlayerGui");
-		local z = Y and Y:FindFirstChild("Main");
-		local u = z and z:FindFirstChild("MainGameFrame");
-		return u and u:FindFirstChild("IngameScore") or nil;
+	local function w()
+		local L = K:FindFirstChild("PlayerGui");
+		local e = L and L:FindFirstChild("Main");
+		local A = e and e:FindFirstChild("MainGameFrame");
+		return A and A:FindFirstChild("IngameScore") or nil;
 	end;
-	local c = {
+	local t = {
 			Snapshot = {},
 			Scoreboard = nil,
 			InGame = false,
@@ -217,74 +305,74 @@ do
 			Dirty = true,
 			WatchConnections = {},
 		};
-	local function n()
-		c.Dirty = true;
+	local function X()
+		t.Dirty = true;
 	end;
-	local function P(Y)
-		local z = c;
-		if z.Scoreboard == Y then
+	local function i(L)
+		local e = t;
+		if e.Scoreboard == L then
 			return;
 		end;
-		j(z.WatchConnections);
-		z.Scoreboard = Y;
-		if not Y then
+		H(e.WatchConnections);
+		e.Scoreboard = L;
+		if not L then
 			return;
 		end;
-		local u;
-		u = function()
-				n();
-				j(z.WatchConnections);
-				z.WatchConnections[#z.WatchConnections + 1] = Y.ChildAdded:Connect(u);
-				z.WatchConnections[#z.WatchConnections + 1] = Y.ChildRemoved:Connect(u);
-				for u, T in ipairs({ "TeamRed", "TeamBlue" }) do
-					local X = Y:FindFirstChild(T);
-					if X then
-						z.WatchConnections[#z.WatchConnections + 1] = X.ChildAdded:Connect(n);
-						z.WatchConnections[#z.WatchConnections + 1] = X.ChildRemoved:Connect(n);
+		local A;
+		A = function()
+				X();
+				H(e.WatchConnections);
+				e.WatchConnections[#e.WatchConnections + 1] = L.ChildAdded:Connect(A);
+				e.WatchConnections[#e.WatchConnections + 1] = L.ChildRemoved:Connect(A);
+				for A, j in ipairs({ "TeamRed", "TeamBlue" }) do
+					local g = L:FindFirstChild(j);
+					if g then
+						e.WatchConnections[#e.WatchConnections + 1] = g.ChildAdded:Connect(X);
+						e.WatchConnections[#e.WatchConnections + 1] = g.ChildRemoved:Connect(X);
 					end;
 				end;
 			end;
-		u();
+		A();
 	end;
-	local function o(Y)
-		local z = c;
-		local u = os.clock();
-		local T = y:GetAttribute("Game");
-		if not Y and (not z.Dirty and (u - z.LastRefresh < z.RefreshInterval and (z.LocalGame == T and ((not z.Scoreboard or z.Scoreboard.Parent))))) then
-			return z.Snapshot;
+	local function s(L)
+		local e = t;
+		local A = os.clock();
+		local j = K:GetAttribute("Game");
+		if not L and (not e.Dirty and (A - e.LastRefresh < e.RefreshInterval and (e.LocalGame == j and ((not e.Scoreboard or e.Scoreboard.Parent))))) then
+			return e.Snapshot;
 		end;
-		z.LastRefresh = u;
-		z.LocalGame = T;
-		local X = {};
-		local K = l();
-		if K ~= z.Scoreboard then
-			P(K);
+		e.LastRefresh = A;
+		e.LocalGame = j;
+		local g = {};
+		local d = w();
+		if d ~= e.Scoreboard then
+			i(d);
 		end;
-		for Y, z in ipairs({ "TeamRed", "TeamBlue" }) do
-			local u = K and K:FindFirstChild(z);
-			if u then
-				local Y = z == "TeamRed" and "Red" or "Blue";
-				for z, u in ipairs(u:GetChildren()) do
-					if u:IsA("GuiObject") then
-						X[string.lower(u.Name)] = Y;
+		for L, e in ipairs({ "TeamRed", "TeamBlue" }) do
+			local A = d and d:FindFirstChild(e);
+			if A then
+				local L = e == "TeamRed" and "Red" or "Blue";
+				for e, A in ipairs(A:GetChildren()) do
+					if A:IsA("GuiObject") then
+						g[string.lower(A.Name)] = L;
 					end;
 				end;
 			end;
 		end;
-		z.Snapshot = X;
-		z.Dirty = false;
-		z.InGame = K ~= nil and X[string.lower(y.Name)] ~= nil;
-		return X;
+		e.Snapshot = g;
+		e.Dirty = false;
+		e.InGame = d ~= nil and g[string.lower(K.Name)] ~= nil;
+		return g;
 	end;
-	local p = {
+	local T = {
 			"InfectionInfected",
 			"IsInfected",
 			"Infected",
 			"IsZombie",
 			"Zombie",
 		};
-	local b = { "GameMode", "MatchMode", "Mode" };
-	local k = {
+	local P = { "GameMode", "MatchMode", "Mode" };
+	local S = {
 			Active = false,
 			LastRefresh = -math.huge,
 			RefreshInterval = .4,
@@ -300,590 +388,590 @@ do
 			HasMatchContext = false,
 			RoundEnded = false,
 		};
-	local function g(Y)
-		if not Y then
+	local function G(L)
+		if not L then
 			return nil;
 		end;
-		if Y:GetAttribute("InfectionPatientZero") == true then
+		if L:GetAttribute("InfectionPatientZero") == true then
 			return true;
 		end;
-		local z = false;
-		for u, T in ipairs(p) do
-			local X = Y:GetAttribute(T);
-			if typeof(X) == "boolean" then
-				if X then
+		local e = false;
+		for A, j in ipairs(T) do
+			local g = L:GetAttribute(j);
+			if typeof(g) == "boolean" then
+				if g then
 					return true;
 				end;
-				z = true;
-			elseif typeof(X) == "string" then
-				local Y = X:lower();
-				if Y == "infected" or Y == "infection" or Y == "zombie" or Y == "true" then
+				e = true;
+			elseif typeof(g) == "string" then
+				local L = g:lower();
+				if L == "infected" or L == "infection" or L == "zombie" or L == "true" then
 					return true;
 				end;
-				if Y == "survivor" or Y == "human" or Y == "false" then
-					z = true;
+				if L == "survivor" or L == "human" or L == "false" then
+					e = true;
 				end;
 			end;
 		end;
-		if z then
+		if e then
 			return false;
 		end;
 		return nil;
 	end;
-	local function M(Y)
-		if Y:GetAttribute("InfectionPatientZero") == true then
+	local function E(L)
+		if L:GetAttribute("InfectionPatientZero") == true then
 			return true;
 		end;
-		local z = Y.Character;
-		if not z then
+		local e = L.Character;
+		if not e then
 			return false;
 		end;
-		if z:GetAttribute("InfectionPatientZero") == true then
+		if e:GetAttribute("InfectionPatientZero") == true then
 			return true;
 		end;
-		local u = z:FindFirstChildOfClass("Humanoid");
-		return u ~= nil and u:GetAttribute("InfectionPatientZero") == true;
+		local A = e:FindFirstChildOfClass("Humanoid");
+		return A ~= nil and A:GetAttribute("InfectionPatientZero") == true;
 	end;
-	local function r(Y)
-		if not Y then
+	local function B(L)
+		if not L then
 			return nil;
 		end;
-		local z = Y.Character;
-		local u = g(z);
-		local T = g(Y);
-		local X = z and z:FindFirstChildOfClass("Humanoid");
-		local K = g(X);
-		if u == true or T == true or K == true then
+		local e = L.Character;
+		local A = G(e);
+		local j = G(L);
+		local g = e and e:FindFirstChildOfClass("Humanoid");
+		local d = G(g);
+		if A == true or j == true or d == true then
 			return true;
 		end;
-		if u == false or T == false or K == false then
+		if A == false or j == false or d == false then
 			return false;
 		end;
 		return nil;
 	end;
-	local function L(u)
-		local T = z:FindFirstChild("Main");
-		T = T and T:FindFirstChild("MainGameFrame");
-		if not T then
+	local function O(A)
+		local j = e:FindFirstChild("Main");
+		j = j and j:FindFirstChild("MainGameFrame");
+		if not j then
 			return;
 		end;
-		local X = T:FindFirstChild("PlayersFrame");
-		local K = T:FindFirstChild("IngameScore");
-		local j = {};
-		local y = {};
-		local B = {};
-		for Y, z in ipairs(Y:GetPlayers()) do
-			j[z.Name:lower()] = z;
-			j[tostring(z.UserId)] = z;
-			local u = z.DisplayName:lower();
-			if y[u] then
-				B[u] = true;
+		local g = j:FindFirstChild("PlayersFrame");
+		local d = j:FindFirstChild("IngameScore");
+		local H = {};
+		local K = {};
+		local a = {};
+		for L, e in ipairs(L:GetPlayers()) do
+			H[e.Name:lower()] = e;
+			H[tostring(e.UserId)] = e;
+			local A = e.DisplayName:lower();
+			if K[A] then
+				a[A] = true;
 			end;
-			y[u] = z;
+			K[A] = e;
 		end;
-		for Y, z in pairs(y) do
-			if not B[Y] and not j[Y] then
-				j[Y] = z;
+		for L, e in pairs(K) do
+			if not a[L] and not H[L] then
+				H[L] = e;
 			end;
 		end;
-		local function S(Y, z)
-			if not Y then
+		local function I(L, e)
+			if not L then
 				return;
 			end;
-			for Y, T in ipairs(Y:GetChildren()) do
-				if T:IsA("GuiObject") then
-					local Y = j[(T.Name:lower()):gsub("^@", "")];
-					if not Y then
-						local z = T:GetAttribute("UserId");
-						if z then
-							Y = j[tostring(z)];
+			for L, j in ipairs(L:GetChildren()) do
+				if j:IsA("GuiObject") then
+					local L = H[(j.Name:lower()):gsub("^@", "")];
+					if not L then
+						local e = j:GetAttribute("UserId");
+						if e then
+							L = H[tostring(e)];
 						end;
 					end;
-					if not Y then
-						for z, u in ipairs(T:GetDescendants()) do
-							if u:IsA("TextLabel") and ((u.Name == "PlayerName" or u.Name == "TextLabel")) then
-								Y = j[(u.Text:lower()):gsub("^@", "")];
-								if Y then
+					if not L then
+						for e, A in ipairs(j:GetDescendants()) do
+							if A:IsA("TextLabel") and ((A.Name == "PlayerName" or A.Name == "TextLabel")) then
+								L = H[(A.Text:lower()):gsub("^@", "")];
+								if L then
 									break;
 								end;
 							end;
 						end;
 					end;
-					if Y then
-						u[Y] = z;
+					if L then
+						A[L] = e;
 					end;
 				end;
 			end;
 		end;
-		if K then
-			S(K:FindFirstChild("TeamRed"), "Red");
-			S(K:FindFirstChild("TeamBlue"), "Blue");
+		if d then
+			I(d:FindFirstChild("TeamRed"), "Red");
+			I(d:FindFirstChild("TeamBlue"), "Blue");
 		end;
-		if X then
-			S(X:FindFirstChild("TeamRedFrame"), "Red");
-			S(X:FindFirstChild("TeamBlueFrame"), "Blue");
-		end;
-	end;
-	local function R(Y)
-		local z = k;
-		table.clear(z.Converted);
-		table.clear(z.ConvertedAt);
-		table.clear(z.Pending);
-		table.clear(z.LateJoiners);
-		table.clear(z.Inferred);
-		table.clear(z.Targets);
-		table.clear(z.RoleTeams);
-		z.Active = false;
-		z.RoundEnded = Y == true;
-		z.LastRefresh = -math.huge;
-		if u then
-			u();
+		if g then
+			I(g:FindFirstChild("TeamRedFrame"), "Red");
+			I(g:FindFirstChild("TeamBlueFrame"), "Blue");
 		end;
 	end;
-	local function A(z)
-		local T = k;
-		local X = os.clock();
-		local j = y:GetAttribute("Game");
-		local B = y:GetAttribute("MatchId");
-		if T.HasMatchContext and ((j ~= T.LastLocalGame or B ~= T.LastMatchId)) then
-			R(false);
+	local function p(L)
+		local e = S;
+		table.clear(e.Converted);
+		table.clear(e.ConvertedAt);
+		table.clear(e.Pending);
+		table.clear(e.LateJoiners);
+		table.clear(e.Inferred);
+		table.clear(e.Targets);
+		table.clear(e.RoleTeams);
+		e.Active = false;
+		e.RoundEnded = L == true;
+		e.LastRefresh = -math.huge;
+		if A then
+			A();
 		end;
-		T.HasMatchContext = true;
-		T.LastLocalGame = j;
-		T.LastMatchId = B;
-		if not z and X - T.LastRefresh < T.RefreshInterval then
-			return T;
+	end;
+	local function C(e)
+		local j = S;
+		local g = os.clock();
+		local H = K:GetAttribute("Game");
+		local a = K:GetAttribute("MatchId");
+		if j.HasMatchContext and ((H ~= j.LastLocalGame or a ~= j.LastMatchId)) then
+			p(false);
 		end;
-		T.LastRefresh = X;
-		local S = o(false);
-		local l = false;
-		local v = y.Character;
-		local x = v and v:FindFirstChild("HumanoidRootPart");
-		local V = Y:GetPlayers();
-		for Y, z in ipairs(V) do
-			if M(z) then
-				local Y = z == y;
-				if not Y then
-					Y = true;
-					local u = z:GetAttribute("Game");
-					local T = z:GetAttribute("MatchId");
-					if j ~= nil and (j ~= "" and (u ~= nil and (u ~= "" and j ~= u))) then
-						Y = false;
+		j.HasMatchContext = true;
+		j.LastLocalGame = H;
+		j.LastMatchId = a;
+		if not e and g - j.LastRefresh < j.RefreshInterval then
+			return j;
+		end;
+		j.LastRefresh = g;
+		local I = s(false);
+		local w = false;
+		local Q = K.Character;
+		local Z = Q and Q:FindFirstChild("HumanoidRootPart");
+		local M = L:GetPlayers();
+		for L, e in ipairs(M) do
+			if E(e) then
+				local L = e == K;
+				if not L then
+					L = true;
+					local A = e:GetAttribute("Game");
+					local j = e:GetAttribute("MatchId");
+					if H ~= nil and (H ~= "" and (A ~= nil and (A ~= "" and H ~= A))) then
+						L = false;
 					end;
-					if ((j == nil or j == "")) and (u ~= nil and u ~= "") then
-						Y = false;
+					if ((H == nil or H == "")) and (A ~= nil and A ~= "") then
+						L = false;
 					end;
-					if B ~= nil and (B ~= "" and (T ~= nil and (T ~= "" and B ~= T))) then
-						Y = false;
+					if a ~= nil and (a ~= "" and (j ~= nil and (j ~= "" and a ~= j))) then
+						L = false;
 					end;
-					local X = z.Character;
-					local K = X and X:FindFirstChild("HumanoidRootPart");
-					if x and (K and ((x.Position - K.Position)).Magnitude > 1200) then
-						Y = false;
+					local g = e.Character;
+					local d = g and g:FindFirstChild("HumanoidRootPart");
+					if Z and (d and ((Z.Position - d.Position)).Magnitude > 1200) then
+						L = false;
 					end;
 				end;
-				if Y then
-					l = true;
+				if L then
+					w = true;
 					break;
 				end;
 			end;
 		end;
-		local N;
-		for Y, z in ipairs(b) do
-			local u = y:GetAttribute(z);
-			if typeof(u) == "string" and u ~= "" then
-				N = u:lower();
+		local R;
+		for L, e in ipairs(P) do
+			local A = K:GetAttribute(e);
+			if typeof(A) == "string" and A ~= "" then
+				R = A:lower();
 				break;
 			end;
 		end;
-		if not N then
-			for Y, z in ipairs(b) do
-				local u = K:GetAttribute(z);
-				if typeof(u) == "string" and u ~= "" then
-					N = u:lower();
+		if not R then
+			for L, e in ipairs(P) do
+				local A = d:GetAttribute(e);
+				if typeof(A) == "string" and A ~= "" then
+					R = A:lower();
 					break;
 				end;
 			end;
 		end;
-		local n = not T.RoundEnded and ((N == "infection" or (not N and ((l or (T.Active and not c.InGame))))));
-		if not n then
-			if N and (N ~= "infection" and next(T.LateJoiners) ~= nil) then
-				table.clear(T.LateJoiners);
+		local X = not j.RoundEnded and ((R == "infection" or (not R and ((w or (j.Active and not t.InGame))))));
+		if not X then
+			if R and (R ~= "infection" and next(j.LateJoiners) ~= nil) then
+				table.clear(j.LateJoiners);
 			end;
-			if T.Active or next(T.Targets) ~= nil then
-				if N and N ~= "infection" then
-					R(false);
+			if j.Active or next(j.Targets) ~= nil then
+				if R and R ~= "infection" then
+					p(false);
 				else
-					T.Active = false;
-					table.clear(T.Targets);
-					table.clear(T.Inferred);
-					table.clear(T.RoleTeams);
-					if u then
-						u();
+					j.Active = false;
+					table.clear(j.Targets);
+					table.clear(j.Inferred);
+					table.clear(j.RoleTeams);
+					if A then
+						A();
 					end;
 				end;
 			end;
-			return T;
+			return j;
 		end;
-		T.Active = true;
-		local P = {};
-		L(P);
-		T.RoleTeams = P;
-		local t;
-		local J = false;
-		local s = {};
-		for Y, z in ipairs(V) do
-			local u = r(z);
-			s[z] = u;
-			if u == true or T.Converted[z] == true then
-				local Y = P[z];
-				if Y then
-					if t and t ~= Y then
-						J = true;
+		j.Active = true;
+		local i = {};
+		O(i);
+		j.RoleTeams = i;
+		local D;
+		local k = false;
+		local n = {};
+		for L, e in ipairs(M) do
+			local A = B(e);
+			n[e] = A;
+			if A == true or j.Converted[e] == true then
+				local L = i[e];
+				if L then
+					if D and D ~= L then
+						k = true;
 					end;
-					t = Y;
+					D = L;
 				end;
 			end;
 		end;
-		local D = {};
-		if t and not J then
-			for Y, z in pairs(P) do
-				if z == t and s[Y] ~= false then
-					D[Y] = true;
+		local Y = {};
+		if D and not k then
+			for L, e in pairs(i) do
+				if e == D and n[L] ~= false then
+					Y[L] = true;
 				end;
 			end;
 		end;
-		T.Inferred = D;
-		local function p()
-			local Y = {};
-			for z, u in ipairs(V) do
-				if s[u] == true or T.Converted[u] == true or (s[u] ~= false and D[u] == true) then
-					Y[u] = true;
+		j.Inferred = Y;
+		local function T()
+			local L = {};
+			for e, A in ipairs(M) do
+				if n[A] == true or j.Converted[A] == true or (n[A] ~= false and Y[A] == true) then
+					L[A] = true;
 				end;
 			end;
-			return Y;
+			return L;
 		end;
-		local g = p();
-		local A = {};
-		for Y in pairs(g) do
-			local z = Y.Character;
-			local u = z and z:FindFirstChild("HumanoidRootPart");
-			if u and u:IsA("BasePart") then
-				A[#A + 1] = u;
+		local G = T();
+		local C = {};
+		for L in pairs(G) do
+			local e = L.Character;
+			local A = e and e:FindFirstChild("HumanoidRootPart");
+			if A and A:IsA("BasePart") then
+				C[#C + 1] = A;
 			end;
 		end;
-		for Y, z in ipairs(V) do
-			if z ~= y and (T.LateJoiners[z] and (s[z] == nil and (not g[z] and z.Character))) then
-				local Y = P[z] or S[z.Name:lower()];
-				local u = z:GetAttribute("Game");
-				local X = z:GetAttribute("MatchId");
-				local K = j ~= nil and (j ~= "" and u == j);
-				local y = B ~= nil and (B ~= "" and X == B);
-				local l = j ~= nil and (j ~= "" and (u ~= nil and (u ~= "" and u ~= j)));
-				local v = B ~= nil and (B ~= "" and (X ~= nil and (X ~= "" and X ~= B)));
-				if not l and not v then
-					local u = false;
-					for Y in pairs(g) do
-						local X = Y.Team;
-						if X and (z.Team == X and ((s[Y] == true or T.Converted[Y] == true or D[Y] == true))) then
-							u = true;
+		for L, e in ipairs(M) do
+			if e ~= K and (j.LateJoiners[e] and (n[e] == nil and (not G[e] and e.Character))) then
+				local L = i[e] or I[e.Name:lower()];
+				local A = e:GetAttribute("Game");
+				local g = e:GetAttribute("MatchId");
+				local d = H ~= nil and (H ~= "" and A == H);
+				local K = a ~= nil and (a ~= "" and g == a);
+				local w = H ~= nil and (H ~= "" and (A ~= nil and (A ~= "" and A ~= H)));
+				local Q = a ~= nil and (a ~= "" and (g ~= nil and (g ~= "" and g ~= a)));
+				if not w and not Q then
+					local A = false;
+					for L in pairs(G) do
+						local g = L.Team;
+						if g and (e.Team == g and ((n[L] == true or j.Converted[L] == true or Y[L] == true))) then
+							A = true;
 							break;
 						end;
 					end;
-					local X = false;
-					if not Y and (not K and (not y and not u)) then
-						local Y = z.Character:FindFirstChild("HumanoidRootPart");
-						if Y and Y:IsA("BasePart") then
-							local z = Y.Position;
-							for Y, u in ipairs(A) do
-								if ((u.Position - z)).Magnitude <= 300 then
-									X = true;
+					local g = false;
+					if not L and (not d and (not K and not A)) then
+						local L = e.Character:FindFirstChild("HumanoidRootPart");
+						if L and L:IsA("BasePart") then
+							local e = L.Position;
+							for L, A in ipairs(C) do
+								if ((A.Position - e)).Magnitude <= 300 then
+									g = true;
 									break;
 								end;
 							end;
 						end;
 					end;
-					local j = Y ~= nil or K or y or u or X;
-					if j and ((not t or J or not Y or Y == t)) then
-						g[z] = true;
+					local H = L ~= nil or d or K or A or g;
+					if H and ((not D or k or not L or L == D)) then
+						G[e] = true;
 					end;
 				end;
 			end;
 		end;
-		local w = T.Pending;
-		local Q = true;
-		while Q do
-			Q = false;
-			for z = #w, 1, -1 do
-				local u = w[z];
-				if X - u.Time > 10 or u.Killer.Parent ~= Y or u.Victim.Parent ~= Y then
-					table.remove(w, z);
-				elseif g[u.Killer] and (not g[u.Victim] and ((not T.ConvertedAt[u.Killer] or T.ConvertedAt[u.Killer] <= u.Time))) then
-					T.Converted[u.Victim] = true;
-					T.ConvertedAt[u.Victim] = u.Time;
-					g[u.Victim] = true;
-					table.remove(w, z);
-					Q = true;
-				elseif g[u.Killer] then
-					table.remove(w, z);
+		local U = j.Pending;
+		local h = true;
+		while h do
+			h = false;
+			for e = #U, 1, -1 do
+				local A = U[e];
+				if g - A.Time > 10 or A.Killer.Parent ~= L or A.Victim.Parent ~= L then
+					table.remove(U, e);
+				elseif G[A.Killer] and (not G[A.Victim] and ((not j.ConvertedAt[A.Killer] or j.ConvertedAt[A.Killer] <= A.Time))) then
+					j.Converted[A.Victim] = true;
+					j.ConvertedAt[A.Victim] = A.Time;
+					G[A.Victim] = true;
+					table.remove(U, e);
+					h = true;
+				elseif G[A.Killer] then
+					table.remove(U, e);
 				end;
 			end;
 		end;
-		local m = T.Targets;
-		local E = false;
-		for Y in pairs(m) do
-			if not g[Y] then
-				E = true;
+		local F = j.Targets;
+		local c = false;
+		for L in pairs(F) do
+			if not G[L] then
+				c = true;
 				break;
 			end;
 		end;
-		if not E then
-			for Y in pairs(g) do
-				if not m[Y] then
-					E = true;
+		if not c then
+			for L in pairs(G) do
+				if not F[L] then
+					c = true;
 					break;
 				end;
 			end;
 		end;
-		T.Targets = g;
-		if E and u then
-			u();
+		j.Targets = G;
+		if c and A then
+			A();
 		end;
-		return T;
+		return j;
 	end;
-	B = function()
-			return (A(false)).Active;
+	a = function()
+			return (C(false)).Active;
 		end;
-	local function w(Y)
-		if not Y then
+	local function U(L)
+		if not L then
 			return false;
 		end;
-		local z = A(false);
-		return z.Active and z.Targets[Y] == true;
+		local e = C(false);
+		return e.Active and e.Targets[L] == true;
 	end;
-	local function m(Y, z)
-		if not Y or Y == y or not Y.Parent or (not z and not Y.Character) then
+	local function F(L, e)
+		if not L or L == K or not L.Parent or (not e and not L.Character) then
 			return false;
 		end;
-		local u = y:GetAttribute("Game");
-		local T = Y:GetAttribute("Game");
-		if u ~= nil and (u ~= "" and (T ~= nil and (T ~= "" and u ~= T))) then
+		local A = K:GetAttribute("Game");
+		local j = L:GetAttribute("Game");
+		if A ~= nil and (A ~= "" and (j ~= nil and (j ~= "" and A ~= j))) then
 			return false;
 		end;
-		if ((u == nil or u == "")) and (T ~= nil and T ~= "") then
+		if ((A == nil or A == "")) and (j ~= nil and j ~= "") then
 			return false;
 		end;
-		local X = y:GetAttribute("MatchId");
-		local K = Y:GetAttribute("MatchId");
-		if X ~= nil and (X ~= "" and (K ~= nil and (K ~= "" and X ~= K))) then
+		local g = K:GetAttribute("MatchId");
+		local d = L:GetAttribute("MatchId");
+		if g ~= nil and (g ~= "" and (d ~= nil and (d ~= "" and g ~= d))) then
 			return false;
 		end;
-		local j = y.Character and y.Character:FindFirstChild("HumanoidRootPart");
-		local B = Y.Character and Y.Character:FindFirstChild("HumanoidRootPart");
-		if j and (B and ((j.Position - B.Position)).Magnitude > 1200) then
+		local H = K.Character and K.Character:FindFirstChild("HumanoidRootPart");
+		local a = L.Character and L.Character:FindFirstChild("HumanoidRootPart");
+		if H and (a and ((H.Position - a.Position)).Magnitude > 1200) then
 			return false;
 		end;
 		return true;
 	end;
-	local function E()
-		k.LastRefresh = -math.huge;
+	local function c()
+		S.LastRefresh = -math.huge;
 	end;
-	local function h(Y, z)
-		if typeof(Y) ~= "Instance" or not Y:IsA("Player") or typeof(z) ~= "Instance" or not z:IsA("Player") or Y == z or not B() or (Y ~= y and not m(Y, true)) or (z ~= y and not m(z, true)) then
+	local function x(L, e)
+		if typeof(L) ~= "Instance" or not L:IsA("Player") or typeof(e) ~= "Instance" or not e:IsA("Player") or L == e or not a() or (L ~= K and not F(L, true)) or (e ~= K and not F(e, true)) then
 			return;
 		end;
-		local u = A(false);
-		if u.Targets[z] then
+		local A = C(false);
+		if A.Targets[e] then
 			return;
 		end;
-		if u.Targets[Y] then
-			u.Converted[z] = true;
-			u.ConvertedAt[z] = os.clock();
-			u.LastRefresh = -math.huge;
-			A(true);
+		if A.Targets[L] then
+			A.Converted[e] = true;
+			A.ConvertedAt[e] = os.clock();
+			A.LastRefresh = -math.huge;
+			C(true);
 		else
-			if #u.Pending >= 96 then
-				table.remove(u.Pending, 1);
+			if #A.Pending >= 96 then
+				table.remove(A.Pending, 1);
 			end;
-			u.Pending[#u.Pending + 1] = { Killer = Y, Victim = z, Time = os.clock() };
-			u.LastRefresh = -math.huge;
+			A.Pending[#A.Pending + 1] = { Killer = L, Victim = e, Time = os.clock() };
+			A.LastRefresh = -math.huge;
 		end;
 	end;
-	local a;
-	a = function(Y)
-			if not Y or Y == y or not Y.Parent then
+	local v;
+	v = function(L)
+			if not L or L == K or not L.Parent then
 				return false;
 			end;
-			if B() then
-				return m(Y) and w(Y);
+			if a() then
+				return F(L) and U(L);
 			end;
-			local z = o(false);
-			if not c.InGame or not z[string.lower(Y.Name)] then
+			local e = s(false);
+			if not t.InGame or not e[string.lower(L.Name)] then
 				return false;
 			end;
-			local u = y:GetAttribute("Game");
-			local T = Y:GetAttribute("Game");
-			if u ~= nil and (u ~= "" and (T ~= nil and T ~= "")) then
-				if u ~= T then
+			local A = K:GetAttribute("Game");
+			local j = L:GetAttribute("Game");
+			if A ~= nil and (A ~= "" and (j ~= nil and j ~= "")) then
+				if A ~= j then
 					return false;
 				end;
-			elseif ((u == nil or u == "")) and (T ~= nil and T ~= "") then
+			elseif ((A == nil or A == "")) and (j ~= nil and j ~= "") then
 				return false;
 			end;
-			local X = y:GetAttribute("MatchId");
-			local K = Y:GetAttribute("MatchId");
-			if X ~= nil and (X ~= "" and (K ~= nil and (K ~= "" and X ~= K))) then
+			local g = K:GetAttribute("MatchId");
+			local d = L:GetAttribute("MatchId");
+			if g ~= nil and (g ~= "" and (d ~= nil and (d ~= "" and g ~= d))) then
 				return false;
 			end;
 			return true;
 		end;
-	local function Z(Y)
-		if not Y then
+	local function y(L)
+		if not L then
 			return nil;
 		end;
-		local z = o(false);
-		local u = z[string.lower(Y.Name)];
-		if not u and Y.DisplayName then
-			u = z[string.lower(Y.DisplayName)];
+		local e = s(false);
+		local A = e[string.lower(L.Name)];
+		if not A and L.DisplayName then
+			A = e[string.lower(L.DisplayName)];
 		end;
-		if u then
-			return u;
+		if A then
+			return A;
 		end;
-		local T = Y:GetAttribute("Team") or Y:GetAttribute("team");
-		if T ~= nil and tostring(T) ~= "" then
-			return tostring(T);
+		local j = L:GetAttribute("Team") or L:GetAttribute("team");
+		if j ~= nil and tostring(j) ~= "" then
+			return tostring(j);
 		end;
-		if Y.Team then
-			return Y.Team.Name;
+		if L.Team then
+			return L.Team.Name;
 		end;
-		local X = Y.TeamColor;
-		if X and (X.Name ~= "White" and X.Name ~= "Medium stone grey") then
-			return "Color:" .. X.Name;
+		local g = L.TeamColor;
+		if g and (g.Name ~= "White" and g.Name ~= "Medium stone grey") then
+			return "Color:" .. g.Name;
 		end;
 		return nil;
 	end;
-	local function O(Y, z)
-		if not Y or not z or Y == z then
+	local function l(L, e)
+		if not L or not e or L == e then
 			return false;
 		end;
-		if B() then
-			return w(z);
+		if a() then
+			return U(e);
 		end;
-		local u = Z(Y);
-		local T = Z(z);
-		if u ~= nil and T ~= nil then
-			return u ~= T;
+		local A = y(L);
+		local j = y(e);
+		if A ~= nil and j ~= nil then
+			return A ~= j;
 		end;
 		return true;
 	end;
-	local function F()
-		n();
-		if u then
-			u();
+	local function q()
+		X();
+		if A then
+			A();
 		end;
 	end;
-	local function W()
-		n();
-		E();
-		if u then
-			u();
+	local function z()
+		X();
+		c();
+		if A then
+			A();
 		end;
 	end;
+	local u = {};
 	local f = {};
-	local q = {};
-	local function I(Y)
-		j(q[Y]);
-		q[Y] = nil;
-		local z = f[Y];
-		if z then
-			j(z);
-			f[Y] = nil;
+	local function W(L)
+		H(f[L]);
+		f[L] = nil;
+		local e = u[L];
+		if e then
+			H(e);
+			u[L] = nil;
 		end;
 	end;
-	local function C(Y, z)
-		j(q[Y]);
-		q[Y] = nil;
-		if not z then
+	local function J(L, e)
+		H(f[L]);
+		f[L] = nil;
+		if not e then
 			return;
 		end;
-		local u = {};
-		q[Y] = u;
-		local function T(Y)
-			if Y == "InfectionPatientZero" or Y == "InfectionInfected" or Y == "IsInfected" or Y == "Infected" or Y == "IsZombie" or Y == "Zombie" then
-				E();
-				W();
+		local A = {};
+		f[L] = A;
+		local function j(L)
+			if L == "InfectionPatientZero" or L == "InfectionInfected" or L == "IsInfected" or L == "Infected" or L == "IsZombie" or L == "Zombie" then
+				c();
+				z();
 			end;
 		end;
-		u[#u + 1] = z.AttributeChanged:Connect(T);
-		local function X(Y)
-			if Y and Y:IsA("Humanoid") then
-				u[#u + 1] = Y.AttributeChanged:Connect(T);
+		A[#A + 1] = e.AttributeChanged:Connect(j);
+		local function g(L)
+			if L and L:IsA("Humanoid") then
+				A[#A + 1] = L.AttributeChanged:Connect(j);
 			end;
 		end;
-		X(z:FindFirstChildOfClass("Humanoid"));
-		u[#u + 1] = z.ChildAdded:Connect(function(Y)
-				if Y:IsA("Humanoid") then
-					X(Y);
-					E();
+		g(e:FindFirstChildOfClass("Humanoid"));
+		A[#A + 1] = e.ChildAdded:Connect(function(L)
+				if L:IsA("Humanoid") then
+					g(L);
+					c();
 				end;
 			end);
 	end;
-	local function d(Y)
-		if not Y or Y == y or not Y.Parent then
+	local function N(L)
+		if not L or L == K or not L.Parent then
 			return;
 		end;
-		I(Y);
-		f[Y] = {
-				(Y:GetPropertyChangedSignal("Team")):Connect(W),
-				(Y:GetPropertyChangedSignal("TeamColor")):Connect(W),
-				(Y:GetAttributeChangedSignal("Team")):Connect(W),
-				(Y:GetAttributeChangedSignal("team")):Connect(W),
-				(Y:GetAttributeChangedSignal("Game")):Connect(W),
-				(Y:GetAttributeChangedSignal("MatchId")):Connect(W),
-				Y.AttributeChanged:Connect(function(Y)
-					if Y == "InfectionPatientZero" or Y == "InfectionInfected" or Y == "IsInfected" or Y == "Infected" or Y == "IsZombie" or Y == "Zombie" then
-						E();
-						W();
+		W(L);
+		u[L] = {
+				(L:GetPropertyChangedSignal("Team")):Connect(z),
+				(L:GetPropertyChangedSignal("TeamColor")):Connect(z),
+				(L:GetAttributeChangedSignal("Team")):Connect(z),
+				(L:GetAttributeChangedSignal("team")):Connect(z),
+				(L:GetAttributeChangedSignal("Game")):Connect(z),
+				(L:GetAttributeChangedSignal("MatchId")):Connect(z),
+				L.AttributeChanged:Connect(function(L)
+					if L == "InfectionPatientZero" or L == "InfectionInfected" or L == "IsInfected" or L == "Infected" or L == "IsZombie" or L == "Zombie" then
+						c();
+						z();
 					end;
 				end),
-				Y.CharacterAdded:Connect(function(z)
-					C(Y, z);
-					E();
-					W();
+				L.CharacterAdded:Connect(function(e)
+					J(L, e);
+					c();
+					z();
 				end),
-				Y.CharacterRemoving:Connect(function(z)
-					C(Y, nil);
-					E();
-					if X then
-						X(z);
+				L.CharacterRemoving:Connect(function(e)
+					J(L, nil);
+					c();
+					if g then
+						g(e);
 					end;
 				end),
 			};
-		C(Y, Y.Character);
-		W();
+		J(L, L.Character);
+		z();
 	end;
-	local i = {};
-	local U = false;
-	local H = 0;
-	local function G(Y)
-		i[#i + 1] = Y;
-		return Y;
+	local V = {};
+	local m = false;
+	local o = 0;
+	local function b(L)
+		V[#V + 1] = L;
+		return L;
 	end;
-	local function Yc()
-		if U then
+	local function Lp()
+		if m then
 			return;
 		end;
-		U = true;
-		H = H + (1);
-		local u = H;
-		local function X()
-			F();
-			E();
+		m = true;
+		o = o + (1);
+		local A = o;
+		local function g()
+			q();
+			c();
 		end;
-		for Y, z in ipairs({ "Team", "TeamColor" }) do
-			G((y:GetPropertyChangedSignal(z)):Connect(X));
+		for L, e in ipairs({ "Team", "TeamColor" }) do
+			b((K:GetPropertyChangedSignal(e)):Connect(g));
 		end;
-		for Y, z in ipairs({
+		for L, e in ipairs({
 			"Team",
 			"team",
 			"Game",
@@ -892,45 +980,45 @@ do
 			"MatchMode",
 			"Mode",
 		}) do
-			G((y:GetAttributeChangedSignal(z)):Connect(X));
+			b((K:GetAttributeChangedSignal(e)):Connect(g));
 		end;
-		G(y.AttributeChanged:Connect(function(Y)
-			if Y == "InfectionPatientZero" or Y == "InfectionInfected" or Y == "IsInfected" or Y == "Infected" or Y == "IsZombie" or Y == "Zombie" then
-				E();
+		b(K.AttributeChanged:Connect(function(L)
+			if L == "InfectionPatientZero" or L == "InfectionInfected" or L == "IsInfected" or L == "Infected" or L == "IsZombie" or L == "Zombie" then
+				c();
 			end;
 		end));
-		G(y.CharacterAdded:Connect(E));
-		G(z.DescendantAdded:Connect(function(Y)
-			if Y.Name == "IngameScore" or Y.Name == "TeamRed" or Y.Name == "TeamBlue" then
-				n();
-				E();
+		b(K.CharacterAdded:Connect(c));
+		b(e.DescendantAdded:Connect(function(L)
+			if L.Name == "IngameScore" or L.Name == "TeamRed" or L.Name == "TeamBlue" then
+				X();
+				c();
 			end;
 		end));
-		G(z.DescendantRemoving:Connect(function(Y)
-			if Y == c.Scoreboard or Y.Name == "IngameScore" or Y.Name == "TeamRed" or Y.Name == "TeamBlue" then
-				n();
-				E();
+		b(e.DescendantRemoving:Connect(function(L)
+			if L == t.Scoreboard or L.Name == "IngameScore" or L.Name == "TeamRed" or L.Name == "TeamBlue" then
+				X();
+				c();
 			end;
 		end));
-		for Y, z in ipairs(Y:GetPlayers()) do
-			if z ~= y then
-				d(z);
+		for L, e in ipairs(L:GetPlayers()) do
+			if e ~= K then
+				N(e);
 			end;
 		end;
-		G(Y.PlayerAdded:Connect(function(Y)
-			k.LateJoiners[Y] = true;
-			d(Y);
-			E();
+		b(L.PlayerAdded:Connect(function(L)
+			S.LateJoiners[L] = true;
+			N(L);
+			c();
 		end));
-		G(Y.PlayerRemoving:Connect(function(Y)
-			I(Y);
-			for z = #k.Pending, 1, -1 do
-				local u = k.Pending[z];
-				if u.Killer == Y or u.Victim == Y then
-					table.remove(k.Pending, z);
+		b(L.PlayerRemoving:Connect(function(L)
+			W(L);
+			for e = #S.Pending, 1, -1 do
+				local A = S.Pending[e];
+				if A.Killer == L or A.Victim == L then
+					table.remove(S.Pending, e);
 				end;
 			end;
-			for z, u in ipairs({
+			for e, A in ipairs({
 				"Converted",
 				"ConvertedAt",
 				"LateJoiners",
@@ -938,162 +1026,162 @@ do
 				"Targets",
 				"RoleTeams",
 			}) do
-				k[u][Y] = nil;
+				S[A][L] = nil;
 			end;
-			W();
+			z();
 		end));
-		n();
-		E();
+		X();
+		c();
 		task.spawn(function()
-			local Y = {};
-			local z = {
-					["RE/Combat/Killed"] = h,
-					["RE/Match/PlayerRespawned"] = E,
+			local L = {};
+			local e = {
+					["RE/Combat/Killed"] = x,
+					["RE/Match/PlayerRespawned"] = c,
 					["RE/Match/StartRoundGui"] = function()
-						R(false);
+						p(false);
 					end,
 					["RE/Match/MatchResults"] = function()
-						if k.Active then
-							R(true);
+						if S.Active then
+							p(true);
 						end;
 					end,
 				};
-			while U and u == H do
-				local u = T:FindFirstChild("Packages");
-				local X = u and u:FindFirstChild("Networking");
-				local K = true;
-				for z, u in pairs(z) do
-					if not Y[z] then
-						local T = X and X:FindFirstChild(z);
-						if T and T:IsA("RemoteEvent") then
-							G(T.OnClientEvent:Connect(u));
-							Y[z] = true;
+			while m and A == o do
+				local A = j:FindFirstChild("Packages");
+				local g = A and A:FindFirstChild("Networking");
+				local d = true;
+				for e, A in pairs(e) do
+					if not L[e] then
+						local j = g and g:FindFirstChild(e);
+						if j and j:IsA("RemoteEvent") then
+							b(j.OnClientEvent:Connect(A));
+							L[e] = true;
 						else
-							K = false;
+							d = false;
 						end;
 					end;
 				end;
-				if K then
+				if d then
 					break;
 				end;
 				task.wait(2);
 			end;
 		end);
 	end;
-	local function zc()
-		if not U then
+	local function ep()
+		if not m then
 			return;
 		end;
-		U = false;
-		H = H + (1);
-		j(i);
-		for Y in pairs(f) do
-			I(Y);
+		m = false;
+		o = o + (1);
+		H(V);
+		for L in pairs(u) do
+			W(L);
 		end;
-		j(c.WatchConnections);
-		c.Scoreboard = nil;
-		c.Snapshot = {};
-		c.InGame = false;
-		c.Dirty = true;
-		R(false);
+		H(t.WatchConnections);
+		t.Scoreboard = nil;
+		t.Snapshot = {};
+		t.InGame = false;
+		t.Dirty = true;
+		p(false);
 	end;
-	Q = function()
-			if v or x or V or N or e or (t and J.Glow) or D or s then
-				Yc();
+	h = function()
+			if Q or Z or M or R or r or (D and k.Glow) or Y or n then
+				Lp();
 			else
-				zc();
+				ep();
 			end;
 		end;
-	yc = function(Y)
-			if not a(Y) or not Y.Character then
+	Ip = function(L)
+			if not v(L) or not L.Character then
 				return false;
 			end;
-			if not S(Y) then
+			if not I(L) then
 				return false;
 			end;
-			return O(y, Y);
+			return l(K, L);
 		end;
-	lc = function(Y)
-			if not yc(Y) then
+	Zp = function(L)
+			if not Ip(L) then
 				return false;
 			end;
-			local z = Y.Character;
-			return z ~= nil and (not z:FindFirstChildOfClass("ForceField") and S(Y));
+			local e = L.Character;
+			return e ~= nil and (not e:FindFirstChildOfClass("ForceField") and I(L));
 		end;
-	local uc = { { Center = Vector3.new(-320.5, 280.82, 16), Radius = 500 }, { Center = Vector3.new(1564.14, -155.45, 40.04), Radius = 300 } };
-	Bc = function()
-			local Y = y.Character;
-			if not Y then
+	local Ap = { { Center = Vector3.new(-320.5, 280.82, 16), Radius = 500 }, { Center = Vector3.new(1564.14, -155.45, 40.04), Radius = 300 } };
+	wp = function()
+			local L = K.Character;
+			if not L then
 				return true;
 			end;
-			if Y:FindFirstChildOfClass("ForceField") then
+			if L:FindFirstChildOfClass("ForceField") then
 				return true;
 			end;
-			if y.Team then
-				local Y = y.Team.Name:lower();
-				if Y:find("lobby") or Y:find("spectat") or Y:find("espectador") or Y:find("menu") or Y:find("dead") then
+			if K.Team then
+				local L = K.Team.Name:lower();
+				if L:find("lobby") or L:find("spectat") or L:find("espectador") or L:find("menu") or L:find("dead") then
 					return true;
 				end;
 			end;
-			local z = Y:FindFirstChild("HumanoidRootPart");
-			if z then
-				for Y, u in ipairs(uc) do
-					if ((z.Position - u.Center)).Magnitude <= u.Radius then
+			local e = L:FindFirstChild("HumanoidRootPart");
+			if e then
+				for L, A in ipairs(Ap) do
+					if ((e.Position - A.Center)).Magnitude <= A.Radius then
 						return true;
 					end;
 				end;
 			end;
 			return false;
 		end;
-	Sc = function()
-			if Bc() then
+	Qp = function()
+			if wp() then
 				return false;
 			end;
-			o(false);
-			return c.InGame or B();
+			s(false);
+			return t.InGame or a();
 		end;
-	vc = function(Y)
-			if not Y or not Y:IsA("Tool") then
+	tp = function(L)
+			if not L or not L:IsA("Tool") then
 				return false;
 			end;
-			if Y:FindFirstChild("Slash") or Y:FindFirstChild("SlashStart") then
+			if L:FindFirstChild("Slash") or L:FindFirstChild("SlashStart") then
 				return true;
 			end;
-			local z = Y.Name:lower();
-			return z:find("knife", 1, true) ~= nil or z:find("cuchillo", 1, true) ~= nil or z:find("dagger", 1, true) ~= nil;
+			local e = L.Name:lower();
+			return e:find("knife", 1, true) ~= nil or e:find("cuchillo", 1, true) ~= nil or e:find("dagger", 1, true) ~= nil;
 		end;
-	xc = function(Y)
-			if not Y or not Y:IsA("Tool") then
+	Mp = function(L)
+			if not L or not L:IsA("Tool") then
 				return false;
 			end;
-			local z = Y:FindFirstChild("showBeam");
-			return z ~= nil and z:IsA("RemoteEvent");
+			local e = L:FindFirstChild("showBeam");
+			return e ~= nil and e:IsA("RemoteEvent");
 		end;
-	cc = function()
-			local Y = y.Character;
-			if Y then
-				for Y, z in ipairs(Y:GetChildren()) do
-					if xc(z) then
-						return z;
+	Rp = function()
+			local L = K.Character;
+			if L then
+				for L, e in ipairs(L:GetChildren()) do
+					if Mp(e) then
+						return e;
 					end;
 				end;
 			end;
-			local z = y:FindFirstChildOfClass("Backpack");
-			if z then
-				for Y, z in ipairs(z:GetChildren()) do
-					if xc(z) then
-						return z;
+			local e = K:FindFirstChildOfClass("Backpack");
+			if e then
+				for L, e in ipairs(e:GetChildren()) do
+					if Mp(e) then
+						return e;
 					end;
 				end;
 			end;
 			return nil;
 		end;
 end;
-local function Vc(Y)
-	if not Y or not Y:IsA("Tool") then
+local function Xp(L)
+	if not L or not L:IsA("Tool") then
 		return false;
 	end;
-	for z, u in ipairs({
+	for e, A in ipairs({
 		"Reloading",
 		"IsReloading",
 		"reloading",
@@ -1101,159 +1189,159 @@ local function Vc(Y)
 		"Reload",
 		"reload",
 	}) do
-		local T = Y:GetAttribute(u);
-		if T == true or T == "true" then
+		local j = L:GetAttribute(A);
+		if j == true or j == "true" then
 			return true;
 		end;
 	end;
-	for Y, z in ipairs(Y:GetChildren()) do
-		if z:IsA("BoolValue") and z.Value == true then
-			local Y = string.lower(z.Name);
-			if string.find(Y, "reload") or string.find(Y, "recarg") then
+	for L, e in ipairs(L:GetChildren()) do
+		if e:IsA("BoolValue") and e.Value == true then
+			local L = string.lower(e.Name);
+			if string.find(L, "reload") or string.find(L, "recarg") then
 				return true;
 			end;
 		end;
 	end;
-	local z = y.Character;
-	local u = z and z:FindFirstChildOfClass("Humanoid");
-	if u then
-		for Y, z in ipairs(u:GetPlayingAnimationTracks()) do
-			local u = z.Animation and z.Animation.AnimationId or "";
-			if string.find(string.lower(u), "reload") then
+	local e = K.Character;
+	local A = e and e:FindFirstChildOfClass("Humanoid");
+	if A then
+		for L, e in ipairs(A:GetPlayingAnimationTracks()) do
+			local A = e.Animation and e.Animation.AnimationId or "";
+			if string.find(string.lower(A), "reload") then
 				return true;
 			end;
 		end;
 	end;
-	for Y, z in ipairs(Y:GetDescendants()) do
-		if z:IsA("Sound") and z.Playing then
-			local Y = string.lower(z.Name);
-			if string.find(Y, "reload") or string.find(Y, "recarg") then
+	for L, e in ipairs(L:GetDescendants()) do
+		if e:IsA("Sound") and e.Playing then
+			local L = string.lower(e.Name);
+			if string.find(L, "reload") or string.find(L, "recarg") then
 				return true;
 			end;
 		end;
 	end;
 	return false;
 end;
-local Nc = {};
-Nc.__index = Nc;
-function Nc.new()
-	return setmetatable({ Items = {} }, Nc);
+local ip = {};
+ip.__index = ip;
+function ip.new()
+	return setmetatable({ Items = {} }, ip);
 end;
-function Nc.Add(z, Y)
-	z.Items[#z.Items + 1] = Y;
-	return Y;
+function ip.Add(e, L)
+	e.Items[#e.Items + 1] = L;
+	return L;
 end;
-function Nc.Cleanup(Y)
-	for z = #Y.Items, 1, -1 do
-		local u = Y.Items[z];
-		Y.Items[z] = nil;
-		local T = typeof(u);
-		if T == "RBXScriptConnection" then
+function ip.Cleanup(L)
+	for e = #L.Items, 1, -1 do
+		local A = L.Items[e];
+		L.Items[e] = nil;
+		local j = typeof(A);
+		if j == "RBXScriptConnection" then
 			pcall(function()
-				u:Disconnect();
+				A:Disconnect();
 			end);
-		elseif T == "Instance" then
+		elseif j == "Instance" then
 			pcall(function()
-				u:Destroy();
+				A:Destroy();
 			end);
-		elseif T == "function" then
-			pcall(u);
+		elseif j == "function" then
+			pcall(A);
 		end;
 	end;
 end;
-local function nc()
-	for Y, z in ipairs(Y:GetPlayers()) do
-		local u = z.Character;
-		if u then
-			local Y = u:FindFirstChild("GhostHitbox");
-			if Y then
-				Y:Destroy();
+local function Dp()
+	for L, e in ipairs(L:GetPlayers()) do
+		local A = e.Character;
+		if A then
+			local L = A:FindFirstChild("GhostHitbox");
+			if L then
+				L:Destroy();
 			end;
 		end;
 	end;
 end;
 do
-	local z = false;
-	O = function()
-			if z or not D then
+	local e = false;
+	l = function()
+			if e or not Y then
 				return;
 			end;
-			z = true;
+			e = true;
 			task.spawn(function()
-				while D do
+				while Y do
 					task.wait(.2);
-					if not D then
+					if not Y then
 						break;
 					end;
-					if not Sc() then
-						nc();
+					if not Qp() then
+						Dp();
 						continue;
 					end;
-					local z = Vector3.new(b, b, b);
-					local u = p and 1 or .6;
-					for Y, T in ipairs(Y:GetPlayers()) do
-						if T ~= y and yc(T) then
-							local Y = T.Character;
-							if Y then
-								local T = Y:FindFirstChild("HumanoidRootPart");
-								local X = Y:FindFirstChildOfClass("Humanoid");
-								if T and (X and X.Health > 0) then
-									local X = Y:FindFirstChild("GhostHitbox");
-									if not X then
-										X = Instance.new("Part");
-										X.Name = "GhostHitbox";
-										X.Size = z;
-										X.Transparency = u;
-										X.Color = k;
-										X.CanCollide = false;
-										X.Massless = true;
-										X.CanQuery = true;
-										X.CFrame = T.CFrame;
-										X.Parent = Y;
-										local K = Instance.new("WeldConstraint");
-										K.Part0 = T;
-										K.Part1 = X;
-										K.Parent = X;
+					local e = Vector3.new(P, P, P);
+					local A = T and 1 or .6;
+					for L, j in ipairs(L:GetPlayers()) do
+						if j ~= K and Ip(j) then
+							local L = j.Character;
+							if L then
+								local j = L:FindFirstChild("HumanoidRootPart");
+								local g = L:FindFirstChildOfClass("Humanoid");
+								if j and (g and g.Health > 0) then
+									local g = L:FindFirstChild("GhostHitbox");
+									if not g then
+										g = Instance.new("Part");
+										g.Name = "GhostHitbox";
+										g.Size = e;
+										g.Transparency = A;
+										g.Color = S;
+										g.CanCollide = false;
+										g.Massless = true;
+										g.CanQuery = true;
+										g.CFrame = j.CFrame;
+										g.Parent = L;
+										local d = Instance.new("WeldConstraint");
+										d.Part0 = j;
+										d.Part1 = g;
+										d.Parent = g;
 									else
-										if X.Size ~= z then
-											X.Size = z;
+										if g.Size ~= e then
+											g.Size = e;
 										end;
-										if X.Transparency ~= u then
-											X.Transparency = u;
+										if g.Transparency ~= A then
+											g.Transparency = A;
 										end;
-										if X.Color ~= k then
-											X.Color = k;
+										if g.Color ~= S then
+											g.Color = S;
 										end;
-										if not X.CanQuery then
-											X.CanQuery = true;
+										if not g.CanQuery then
+											g.CanQuery = true;
 										end;
 									end;
 								else
-									local z = Y:FindFirstChild("GhostHitbox");
-									if z then
-										z:Destroy();
+									local e = L:FindFirstChild("GhostHitbox");
+									if e then
+										e:Destroy();
 									end;
 								end;
 							end;
 						else
-							local Y = T.Character;
-							if Y then
-								local z = Y:FindFirstChild("GhostHitbox");
-								if z then
-									z:Destroy();
+							local L = j.Character;
+							if L then
+								local e = L:FindFirstChild("GhostHitbox");
+								if e then
+									e:Destroy();
 								end;
 							end;
 						end;
 					end;
 				end;
-				z = false;
-				if not D then
-					nc();
+				e = false;
+				if not Y then
+					Dp();
 				end;
 			end);
 		end;
 end;
-local Pc = { ["Right Platforms"] = {
+local sp = { ["Right Platforms"] = {
 			["1v1"] = { ZoneName = "PadZone1", MainPad = "Pad1", AltPad = "Pad2" },
 			["2v2"] = { ZoneName = "PadZone2", MainPad = "Pad1", AltPad = "Pad2" },
 			["3v3"] = { ZoneName = "PadZone3", MainPad = "Pad1", AltPad = "Pad2" },
@@ -1269,7 +1357,7 @@ AutoTeleportMainAlt.__index = AutoTeleportMainAlt;
 function AutoTeleportMainAlt.new()
 	return setmetatable({
 		Running = false,
-		Connections = Nc.new(),
+		Connections = ip.new(),
 		Acc = 0,
 		TickInterval = .5,
 		ActiveRole = nil,
@@ -1286,379 +1374,379 @@ function AutoTeleportMainAlt.new()
 		PadColors = {},
 	}, AutoTeleportMainAlt);
 end;
-function AutoTeleportMainAlt.GetActiveRole(Y)
-	if Y.ActiveRole == "Main" then
+function AutoTeleportMainAlt.GetActiveRole(L)
+	if L.ActiveRole == "Main" then
 		return "Main";
 	end;
-	if Y.ActiveRole == "Alt" then
+	if L.ActiveRole == "Alt" then
 		return "Alt";
 	end;
 	return nil;
 end;
-function AutoTeleportMainAlt.GetRoot(Y)
-	local z = y.Character;
-	if not z then
+function AutoTeleportMainAlt.GetRoot(L)
+	local e = K.Character;
+	if not e then
 		return nil;
 	end;
-	local u = z:FindFirstChild("HumanoidRootPart");
-	if u and u:IsA("BasePart") then
-		return u;
+	local A = e:FindFirstChild("HumanoidRootPart");
+	if A and A:IsA("BasePart") then
+		return A;
 	end;
 	return nil;
 end;
-function AutoTeleportMainAlt.GetHumanoid(Y)
-	local z = y.Character;
-	return z and z:FindFirstChildOfClass("Humanoid") or nil;
+function AutoTeleportMainAlt.GetHumanoid(L)
+	local e = K.Character;
+	return e and e:FindFirstChildOfClass("Humanoid") or nil;
 end;
-function AutoTeleportMainAlt.Attr(z, Y)
-	local u = y:GetAttribute(Y);
-	if typeof(u) == "string" and u ~= "" then
-		return u;
+function AutoTeleportMainAlt.Attr(e, L)
+	local A = K:GetAttribute(L);
+	if typeof(A) == "string" and A ~= "" then
+		return A;
 	end;
 	return nil;
 end;
-function AutoTeleportMainAlt.Snapshot(Y)
-	local z = Y:Attr("Game");
-	local u = Y:Attr("Map");
-	local T = y.Character;
-	local X = T and T:FindFirstChildOfClass("Humanoid");
-	local K = T and T:FindFirstChild("HumanoidRootPart");
-	local j = X ~= nil and (X.Health > 0 and K ~= nil);
+function AutoTeleportMainAlt.Snapshot(L)
+	local e = L:Attr("Game");
+	local A = L:Attr("Map");
+	local j = K.Character;
+	local g = j and j:FindFirstChildOfClass("Humanoid");
+	local d = j and j:FindFirstChild("HumanoidRootPart");
+	local H = g ~= nil and (g.Health > 0 and d ~= nil);
 	return {
-		Game = z,
-		Map = u,
-		InGame = z ~= nil,
-		InMap = z ~= nil and u ~= nil,
-		Alive = j,
+		Game = e,
+		Map = A,
+		InGame = e ~= nil,
+		InMap = e ~= nil and A ~= nil,
+		Alive = H,
 	};
 end;
-function AutoTeleportMainAlt.IsOnMatch(Y)
-	local z = Y:Snapshot();
-	return z and (z.InGame == true and (z.InMap ~= true and z.Alive));
+function AutoTeleportMainAlt.IsOnMatch(L)
+	local e = L:Snapshot();
+	return e and (e.InGame == true and (e.InMap ~= true and e.Alive));
 end;
-function AutoTeleportMainAlt.ResolvePad(z, Y)
-	local u = Pc[z.PlatformRow] or Pc["Right Platforms"];
-	local T = u[z.DuelType] or u["1v1"];
-	local X = K:FindFirstChild("PadZones");
-	if not X then
+function AutoTeleportMainAlt.ResolvePad(e, L)
+	local A = sp[e.PlatformRow] or sp["Right Platforms"];
+	local j = A[e.DuelType] or A["1v1"];
+	local g = d:FindFirstChild("PadZones");
+	if not g then
 		return nil;
 	end;
-	local j = X:FindFirstChild(T.ZoneName);
-	if not j then
+	local H = g:FindFirstChild(j.ZoneName);
+	if not H then
 		return nil;
 	end;
-	local y = (Y == "Alt") and T.AltPad or T.MainPad;
-	local B = j:FindFirstChild(y);
-	if not B then
+	local K = (L == "Alt") and j.AltPad or j.MainPad;
+	local a = H:FindFirstChild(K);
+	if not a then
 		return nil;
 	end;
-	local S = B:FindFirstChild("Pad");
-	if S and S:IsA("BasePart") then
-		return S;
+	local I = a:FindFirstChild("Pad");
+	if I and I:IsA("BasePart") then
+		return I;
 	end;
 	return nil;
 end;
-function AutoTeleportMainAlt.IsOnPad(z, Y)
-	if not Y then
+function AutoTeleportMainAlt.IsOnPad(e, L)
+	if not L then
 		return false;
 	end;
-	local u = z:GetRoot();
-	if not u then
+	local A = e:GetRoot();
+	if not A then
 		return false;
 	end;
-	local T = Y.CFrame:PointToObjectSpace(u.Position);
-	local X = Y.Size / 2;
-	return math.abs(T.X) <= X.X + .5 and (math.abs(T.Z) <= X.Z + .5 and (T.Y >= -((X.Y + 6)) and T.Y <= X.Y + 14));
+	local j = L.CFrame:PointToObjectSpace(A.Position);
+	local g = L.Size / 2;
+	return math.abs(j.X) <= g.X + .5 and (math.abs(j.Z) <= g.Z + .5 and (j.Y >= -((g.Y + 6)) and j.Y <= g.Y + 14));
 end;
-function AutoTeleportMainAlt.MarkPad(u, Y, z)
-	if not Y then
-		u:UnmarkPad();
+function AutoTeleportMainAlt.MarkPad(A, L, e)
+	if not L then
+		A:UnmarkPad();
 		return;
 	end;
-	if u.HighlightedPad == Y then
+	if A.HighlightedPad == L then
 		return;
 	end;
-	u:UnmarkPad();
-	u.HighlightedPad = Y;
-	u.PadColors[Y] = { Color = Y.Color, Transparency = Y.Transparency };
+	A:UnmarkPad();
+	A.HighlightedPad = L;
+	A.PadColors[L] = { Color = L.Color, Transparency = L.Transparency };
 	pcall(function()
-		Y.Color = z and Color3.fromRGB(255, 70, 70) or Color3.fromRGB(70, 145, 255);
-		Y.Transparency = .5;
+		L.Color = e and Color3.fromRGB(255, 70, 70) or Color3.fromRGB(70, 145, 255);
+		L.Transparency = .5;
 	end);
 end;
-function AutoTeleportMainAlt.UnmarkPad(Y)
-	if Y.HighlightedPad and Y.PadColors[Y.HighlightedPad] then
-		local z = Y.HighlightedPad;
-		local u = Y.PadColors[z];
+function AutoTeleportMainAlt.UnmarkPad(L)
+	if L.HighlightedPad and L.PadColors[L.HighlightedPad] then
+		local e = L.HighlightedPad;
+		local A = L.PadColors[e];
 		pcall(function()
-			if z.Parent then
-				z.Color = u.Color;
-				z.Transparency = u.Transparency;
+			if e.Parent then
+				e.Color = A.Color;
+				e.Transparency = A.Transparency;
 			end;
 		end);
 	end;
-	Y.HighlightedPad = nil;
+	L.HighlightedPad = nil;
 end;
-function AutoTeleportMainAlt.FindVoteRemote(Y)
-	local z = T:FindFirstChild("Packages");
-	local u = z and z:FindFirstChild("Networking");
-	local X = u and u:FindFirstChild("RF/Voting/Vote");
-	if X and X:IsA("RemoteFunction") then
-		return X;
+function AutoTeleportMainAlt.FindVoteRemote(L)
+	local e = j:FindFirstChild("Packages");
+	local A = e and e:FindFirstChild("Networking");
+	local g = A and A:FindFirstChild("RF/Voting/Vote");
+	if g and g:IsA("RemoteFunction") then
+		return g;
 	end;
 	return nil;
 end;
-function AutoTeleportMainAlt.FindVisibleMapVote(Y)
-	local z = y:FindFirstChild("PlayerGui");
-	local u = z and z:FindFirstChild("Main");
-	local T = u and u:FindFirstChild("MapVoting");
-	local X = T and T:FindFirstChild("VotingHolder");
-	if not X then
+function AutoTeleportMainAlt.FindVisibleMapVote(L)
+	local e = K:FindFirstChild("PlayerGui");
+	local A = e and e:FindFirstChild("Main");
+	local j = A and A:FindFirstChild("MapVoting");
+	local g = j and j:FindFirstChild("VotingHolder");
+	if not g then
 		return nil;
 	end;
-	for Y, z in ipairs(X:GetChildren()) do
-		if z:IsA("ImageButton") and (z.Visible and z.Name ~= "") then
-			return z.Name;
+	for L, e in ipairs(g:GetChildren()) do
+		if e:IsA("ImageButton") and (e.Visible and e.Name ~= "") then
+			return e.Name;
 		end;
 	end;
 	return nil;
 end;
-function AutoTeleportMainAlt.VoteMap(Y)
-	local z = Y:Snapshot();
-	if not Y:IsOnMatch() then
+function AutoTeleportMainAlt.VoteMap(L)
+	local e = L:Snapshot();
+	if not L:IsOnMatch() then
 		return;
 	end;
-	if Y.VotedMap == z.Game then
+	if L.VotedMap == e.Game then
 		return;
 	end;
-	local u = os.clock();
-	if u - ((Y.LastVote or 0)) < Y.VoteCooldown then
+	local A = os.clock();
+	if A - ((L.LastVote or 0)) < L.VoteCooldown then
 		return;
 	end;
-	Y.LastVote = u;
-	local T = Y:FindVisibleMapVote();
-	local X = Y:FindVoteRemote();
-	if not ((T and X)) then
+	L.LastVote = A;
+	local j = L:FindVisibleMapVote();
+	local g = L:FindVoteRemote();
+	if not ((j and g)) then
 		return;
 	end;
-	Y.VotedMap = z.Game;
+	L.VotedMap = e.Game;
 	pcall(function()
-		X:InvokeServer(T);
+		g:InvokeServer(j);
 	end);
 end;
-function AutoTeleportMainAlt.FindSetStateRemote(Y)
-	local z = T:FindFirstChild("Packages");
-	local u = z and z:FindFirstChild("Networking");
-	local X = u and u:FindFirstChild("RE/Match/SetStatePlr");
-	if X and X:IsA("RemoteEvent") then
-		return X;
+function AutoTeleportMainAlt.FindSetStateRemote(L)
+	local e = j:FindFirstChild("Packages");
+	local A = e and e:FindFirstChild("Networking");
+	local g = A and A:FindFirstChild("RE/Match/SetStatePlr");
+	if g and g:IsA("RemoteEvent") then
+		return g;
 	end;
 	return nil;
 end;
-function AutoTeleportMainAlt.CancelQueue(Y)
-	local z = os.clock();
-	if z - ((Y.LastCancel or 0)) < Y.CancelCooldown then
+function AutoTeleportMainAlt.CancelQueue(L)
+	local e = os.clock();
+	if e - ((L.LastCancel or 0)) < L.CancelCooldown then
 		return;
 	end;
-	local u = Y:FindSetStateRemote();
-	if not u then
+	local A = L:FindSetStateRemote();
+	if not A then
 		return;
 	end;
-	Y.LastCancel = z;
+	L.LastCancel = e;
 	pcall(function()
-		u:FireServer("REMOVE");
+		A:FireServer("REMOVE");
 	end);
 end;
-function AutoTeleportMainAlt.HideGameFrame(Y)
-	local z = y:FindFirstChild("PlayerGui");
-	local u = z and z:FindFirstChild("Main");
-	local T = u and u:FindFirstChild("MainGameFrame");
-	if T and T:IsA("GuiObject") then
+function AutoTeleportMainAlt.HideGameFrame(L)
+	local e = K:FindFirstChild("PlayerGui");
+	local A = e and e:FindFirstChild("Main");
+	local j = A and A:FindFirstChild("MainGameFrame");
+	if j and j:IsA("GuiObject") then
 		pcall(function()
-			T.Visible = false;
+			j.Visible = false;
 		end);
 	end;
 end;
-function AutoTeleportMainAlt.HoldCenter(Y)
-	local z = Y:GetHumanoid();
-	local u = Y:GetRoot();
-	if z and u then
+function AutoTeleportMainAlt.HoldCenter(L)
+	local e = L:GetHumanoid();
+	local A = L:GetRoot();
+	if e and A then
 		pcall(function()
-			z:MoveTo(u.Position);
+			e:MoveTo(A.Position);
 		end);
 	end;
 end;
-function AutoTeleportMainAlt.Teleport(z, Y)
-	if not Y then
+function AutoTeleportMainAlt.Teleport(e, L)
+	if not L then
 		return;
 	end;
-	local u = z:GetRoot();
-	local T = z:GetHumanoid();
-	if not ((u and T)) then
+	local A = e:GetRoot();
+	local j = e:GetHumanoid();
+	if not ((A and j)) then
 		return;
 	end;
 	pcall(function()
-		u.AssemblyAngularVelocity = Vector3.zero;
-		u.AssemblyLinearVelocity = Vector3.zero;
-		z:CancelQueue();
-		z:HideGameFrame();
-		T:MoveTo(Y.Position);
+		A.AssemblyAngularVelocity = Vector3.zero;
+		A.AssemblyLinearVelocity = Vector3.zero;
+		e:CancelQueue();
+		e:HideGameFrame();
+		j:MoveTo(L.Position);
 	end);
 end;
-function AutoTeleportMainAlt.Process(Y)
-	if not Y.Running then
+function AutoTeleportMainAlt.Process(L)
+	if not L.Running then
 		return;
 	end;
-	local z = Y:Snapshot();
-	if z.InGame then
-		Y:UnmarkPad();
-		Y:HoldCenter();
-		Y:VoteMap();
+	local e = L:Snapshot();
+	if e.InGame then
+		L:UnmarkPad();
+		L:HoldCenter();
+		L:VoteMap();
 		return;
 	end;
-	local u = Y:GetActiveRole();
-	if not u then
-		Y:UnmarkPad();
+	local A = L:GetActiveRole();
+	if not A then
+		L:UnmarkPad();
 		return;
 	end;
-	local T = Y:ResolvePad(u);
-	Y:MarkPad(T, u == "Alt");
-	if not T then
+	local j = L:ResolvePad(A);
+	L:MarkPad(j, A == "Alt");
+	if not j then
 		return;
 	end;
-	if Y:IsOnPad(T) then
+	if L:IsOnPad(j) then
 		return;
 	end;
-	local X = os.clock();
-	if X - ((Y.LastTeleport or 0)) < Y.TeleportCooldown then
+	local g = os.clock();
+	if g - ((L.LastTeleport or 0)) < L.TeleportCooldown then
 		return;
 	end;
-	Y.LastTeleport = X;
-	Y:Teleport(T);
+	L.LastTeleport = g;
+	L:Teleport(j);
 end;
-function AutoTeleportMainAlt.Kick(Y)
-	if Y.Running then
-		Y:Process();
+function AutoTeleportMainAlt.Kick(L)
+	if L.Running then
+		L:Process();
 	end;
 end;
-function AutoTeleportMainAlt.Start(Y)
-	if Y.Running then
+function AutoTeleportMainAlt.Start(L)
+	if L.Running then
 		return;
 	end;
-	Y.Running = true;
-	Y.Acc = 0;
-	Y.LastTeleport = 0;
-	Y.LastVote = 0;
-	Y.LastCancel = 0;
-	Y.Connections:Add((y:GetAttributeChangedSignal("Game")):Connect(function()
+	L.Running = true;
+	L.Acc = 0;
+	L.LastTeleport = 0;
+	L.LastVote = 0;
+	L.LastCancel = 0;
+	L.Connections:Add((K:GetAttributeChangedSignal("Game")):Connect(function()
 		task.defer(function()
-			if Y.Running then
-				Y:Process();
+			if L.Running then
+				L:Process();
 			end;
 		end);
 	end));
-	Y.Connections:Add((y:GetAttributeChangedSignal("Map")):Connect(function()
+	L.Connections:Add((K:GetAttributeChangedSignal("Map")):Connect(function()
 		task.defer(function()
-			if Y.Running then
-				Y:Process();
+			if L.Running then
+				L:Process();
 			end;
 		end);
 	end));
-	Y.Connections:Add((y:GetAttributeChangedSignal("Team")):Connect(function()
+	L.Connections:Add((K:GetAttributeChangedSignal("Team")):Connect(function()
 		task.defer(function()
-			if Y.Running then
-				Y:Process();
+			if L.Running then
+				L:Process();
 			end;
 		end);
 	end));
-	Y.Connections:Add(z.Heartbeat:Connect(function(z)
-		if not Y.Running then
+	L.Connections:Add(e.Heartbeat:Connect(function(e)
+		if not L.Running then
 			return;
 		end;
-		Y.Acc = Y.Acc + z;
-		if Y.Acc >= Y.TickInterval then
-			Y.Acc = 0;
-			Y:Process();
+		L.Acc = L.Acc + e;
+		if L.Acc >= L.TickInterval then
+			L.Acc = 0;
+			L:Process();
 		end;
 	end));
-	Y:Process();
+	L:Process();
 end;
-function AutoTeleportMainAlt.Stop(Y)
-	if not Y.Running then
+function AutoTeleportMainAlt.Stop(L)
+	if not L.Running then
 		return;
 	end;
-	Y.Running = false;
-	Y.Connections:Cleanup();
-	Y.Connections = Nc.new();
-	Y:UnmarkPad();
-	Y.VotedMap = nil;
+	L.Running = false;
+	L.Connections:Cleanup();
+	L.Connections = ip.new();
+	L:UnmarkPad();
+	L.VotedMap = nil;
 end;
 AutoTeleportMainAltInstance = AutoTeleportMainAlt.new();
-local function tc()
-	local Y = y:FindFirstChild("PlayerGui");
-	if not Y then
+local function kp()
+	local L = K:FindFirstChild("PlayerGui");
+	if not L then
 		return false;
 	end;
-	local z = Y:FindFirstChild("Main") or Y;
-	local u = z:FindFirstChild("MainGameFrame");
-	if not u or not u.Visible then
+	local e = L:FindFirstChild("Main") or L;
+	local A = e:FindFirstChild("MainGameFrame");
+	if not A or not A.Visible then
 		return false;
 	end;
-	local T = u:FindFirstChild("IngameScore");
-	local X = T and T:FindFirstChild("Timer");
-	if not X then
+	local j = A:FindFirstChild("IngameScore");
+	local g = j and j:FindFirstChild("Timer");
+	if not g then
 		return false;
 	end;
-	if not ((X:IsA("TextLabel") or X:IsA("TextButton") or X:IsA("TextBox"))) then
+	if not ((g:IsA("TextLabel") or g:IsA("TextButton") or g:IsA("TextBox"))) then
 		return false;
 	end;
-	local K = (tostring(X.Text or "")):gsub("%s", "");
-	if K == "" then
+	local d = (tostring(g.Text or "")):gsub("%s", "");
+	if d == "" then
 		return false;
 	end;
-	if string.find(K, "-") then
+	if string.find(d, "-") then
 		return false;
 	end;
-	if K == "0:00" or K == "00:00" or K == "0:0" then
+	if d == "0:00" or d == "00:00" or d == "0:0" then
 		return false;
 	end;
-	return K:match("^%d+:%d%d$") ~= nil;
+	return d:match("^%d+:%d%d$") ~= nil;
 end;
 do
-	local u = 39.9;
-	local T = 1.2;
-	local X = .6;
-	local j = .5;
-	local B = 3;
-	local S = 2.5;
-	local l = 20;
-	local v = 15;
-	local x = 1.5;
-	local c = 1.2;
-	local V = 90;
-	local N = 2.5;
-	local n = 6;
-	local P = .5;
-	local t = 7.5;
-	local o = .3;
-	local J = .08;
-	local s = .16;
-	local D = 25;
-	local p = 6;
-	local b = 1.5;
-	local k = 6;
+	local A = 39.9;
+	local j = 1.2;
 	local g = .6;
-	local M = .25;
-	local r = 1;
-	local L = 3;
-	local R = .06;
-	local A = 40;
-	local w = {};
-	w.__index = w;
-	function w.new()
+	local H = .5;
+	local a = 3;
+	local I = 2.5;
+	local w = 20;
+	local Q = 15;
+	local Z = 1.5;
+	local t = 1.2;
+	local M = 90;
+	local R = 2.5;
+	local X = 6;
+	local i = .5;
+	local D = 7.5;
+	local s = .3;
+	local k = .08;
+	local n = .16;
+	local Y = 25;
+	local T = 6;
+	local P = 1.5;
+	local S = 6;
+	local G = .6;
+	local E = .25;
+	local B = 1;
+	local O = 3;
+	local p = .06;
+	local C = 40;
+	local U = {};
+	U.__index = U;
+	function U.new()
 		return setmetatable({
 			running = false,
-			connections = Nc.new(),
+			connections = ip.new(),
 			savedCollisions = {},
 			swingAccumulator = 0,
 			safePosition = nil,
@@ -1686,1694 +1774,1799 @@ do
 			lastSetCFrame = nil,
 			validFrames = 0,
 			killActivated = false,
-		}, w);
+		}, U);
 	end;
-	function w.DisableCollisions(Y)
-		local z = y.Character;
-		if not z then
+	function U.DisableCollisions(L)
+		local e = K.Character;
+		if not e then
 			return;
 		end;
-		for z, u in ipairs(z:GetDescendants()) do
-			if u:IsA("BasePart") and u.CanCollide then
-				if Y.savedCollisions[u] == nil then
-					Y.savedCollisions[u] = u.CanCollide;
+		for e, A in ipairs(e:GetDescendants()) do
+			if A:IsA("BasePart") and A.CanCollide then
+				if L.savedCollisions[A] == nil then
+					L.savedCollisions[A] = A.CanCollide;
 				end;
-				u.CanCollide = false;
+				A.CanCollide = false;
 			end;
 		end;
 	end;
-	function w.RestoreCollisions(Y)
-		for Y, z in pairs(Y.savedCollisions) do
-			if Y.Parent then
+	function U.RestoreCollisions(L)
+		for L, e in pairs(L.savedCollisions) do
+			if L.Parent then
 				pcall(function()
-					Y.CanCollide = z;
+					L.CanCollide = e;
 				end);
 			end;
 		end;
-		table.clear(Y.savedCollisions);
+		table.clear(L.savedCollisions);
 	end;
-	function w.GetRoot(z, Y)
-		local u = Y and Y.Character;
-		if not u then
+	function U.GetRoot(e, L)
+		local A = L and L.Character;
+		if not A then
 			return nil;
 		end;
-		local T = u:FindFirstChild("HumanoidRootPart");
-		if T and T:IsA("BasePart") then
-			return T;
+		local j = A:FindFirstChild("HumanoidRootPart");
+		if j and j:IsA("BasePart") then
+			return j;
 		end;
 		return nil;
 	end;
-	function w.GetHumanoid(z, Y)
-		local u = Y and Y.Character;
-		return u and u:FindFirstChildOfClass("Humanoid") or nil;
+	function U.GetHumanoid(e, L)
+		local A = L and L.Character;
+		return A and A:FindFirstChildOfClass("Humanoid") or nil;
 	end;
-	function w.GetFloorY(z, Y)
-		local u = Y.Parent and Y.Parent:FindFirstChildOfClass("Humanoid");
-		local T = u and tonumber(u.HipHeight) or 2;
-		return (Y.Position.Y - T) - Y.Size.Y / 2;
+	function U.GetFloorY(e, L)
+		local A = L.Parent and L.Parent:FindFirstChildOfClass("Humanoid");
+		local j = A and tonumber(A.HipHeight) or 2;
+		return (L.Position.Y - j) - L.Size.Y / 2;
 	end;
-	function w.GetPlatformFloorY(z, Y)
-		if not Y then
+	function U.GetPlatformFloorY(e, L)
+		if not L then
 			return nil;
 		end;
-		local u = os.clock();
-		if z.lastFloorTarget == Y and (z.targetFloorY and (u - ((z.floorCheckTime or 0))) < M) then
-			return z.targetFloorY;
+		local A = os.clock();
+		if e.lastFloorTarget == L and (e.targetFloorY and (A - ((e.floorCheckTime or 0))) < E) then
+			return e.targetFloorY;
 		end;
-		local T = RaycastParams.new();
-		T.FilterType = Enum.RaycastFilterType.Exclude;
-		T.FilterDescendantsInstances = { y.Character, Y.Parent };
-		local X = Y.Position + Vector3.new(0, 3, 0);
-		local j = K:Raycast(X, Vector3.new(0, -500, 0), T);
-		z.floorCheckTime = u;
+		local j = RaycastParams.new();
+		j.FilterType = Enum.RaycastFilterType.Exclude;
+		j.FilterDescendantsInstances = { K.Character, L.Parent };
+		local g = L.Position + Vector3.new(0, 3, 0);
+		local H = d:Raycast(g, Vector3.new(0, -500, 0), j);
+		e.floorCheckTime = A;
+		if H then
+			e.targetFloorY = H.Position.Y;
+			e.lastFloorTarget = L;
+			return e.targetFloorY;
+		end;
+		e.targetFloorY = e:GetFloorY(L);
+		e.lastFloorTarget = L;
+		return e.targetFloorY;
+	end;
+	function U.IsInKnifeRange(A, L, e)
+		if not L or not e then
+			return false;
+		end;
+		local d = e.Position - L.Position;
+		local H = (Vector3.new(d.X, 0, d.Z)).Magnitude;
+		local K = math.abs(d.Y);
+		return H <= (j + g) and K <= D;
+	end;
+	function U.IsLockedTargetValid(L)
+		local e = L.lockedTargetPlayer;
+		if not e then
+			return false;
+		end;
+		if not e.Parent then
+			return false;
+		end;
+		if not Zp(e) then
+			return false;
+		end;
+		local A = e.Character;
+		if not A then
+			return false;
+		end;
+		local j = A:FindFirstChild("HumanoidRootPart");
+		local g = A:FindFirstChildOfClass("Humanoid");
+		if not j or not g then
+			return false;
+		end;
+		if g.Health <= 0 then
+			return false;
+		end;
+		return j;
+	end;
+	function U.GetClosestEnemy(e)
+		local A = e:GetRoot(K);
+		if not A then
+			return nil;
+		end;
+		local j = e:IsLockedTargetValid();
 		if j then
-			z.targetFloorY = j.Position.Y;
-			z.lastFloorTarget = Y;
-			return z.targetFloorY;
+			return j;
 		end;
-		z.targetFloorY = z:GetFloorY(Y);
-		z.lastFloorTarget = Y;
-		return z.targetFloorY;
-	end;
-	function w.IsInKnifeRange(u, Y, z)
-		if not Y or not z then
-			return false;
-		end;
-		local K = z.Position - Y.Position;
-		local j = (Vector3.new(K.X, 0, K.Z)).Magnitude;
-		local y = math.abs(K.Y);
-		return j <= (T + X) and y <= t;
-	end;
-	function w.IsLockedTargetValid(Y)
-		local z = Y.lockedTargetPlayer;
-		if not z then
-			return false;
-		end;
-		if not z.Parent then
-			return false;
-		end;
-		if not lc(z) then
-			return false;
-		end;
-		local u = z.Character;
-		if not u then
-			return false;
-		end;
-		local T = u:FindFirstChild("HumanoidRootPart");
-		local X = u:FindFirstChildOfClass("Humanoid");
-		if not T or not X then
-			return false;
-		end;
-		if X.Health <= 0 then
-			return false;
-		end;
-		return T;
-	end;
-	function w.GetClosestEnemy(z)
-		local u = z:GetRoot(y);
-		if not u then
-			return nil;
-		end;
-		local T = z:IsLockedTargetValid();
-		if T then
-			return T;
-		end;
-		z.lockedTargetPlayer = nil;
-		z.currentTarget = nil;
-		local X, K, j = nil, nil, nil;
-		for Y, T in ipairs(Y:GetPlayers()) do
-			if T ~= y and lc(T) then
-				local Y = z:GetHumanoid(T);
-				local y = z:GetRoot(T);
-				if y and (Y and Y.Health > 0) then
-					local Y = ((y.Position - u.Position)).Magnitude;
-					if not K or Y < K then
-						X, K, j = y, Y, T;
+		e.lockedTargetPlayer = nil;
+		e.currentTarget = nil;
+		local g, d, H = nil, nil, nil;
+		for L, j in ipairs(L:GetPlayers()) do
+			if j ~= K and Zp(j) then
+				local L = e:GetHumanoid(j);
+				local K = e:GetRoot(j);
+				if K and (L and L.Health > 0) then
+					local L = ((K.Position - A.Position)).Magnitude;
+					if not d or L < d then
+						g, d, H = K, L, j;
 					end;
 				end;
 			end;
 		end;
-		if j then
-			z.lockedTargetPlayer = j;
+		if H then
+			e.lockedTargetPlayer = H;
 		end;
-		return X;
+		return g;
 	end;
-	function w.IsInMatch(Y)
-		return tc();
+	function U.IsInMatch(L)
+		return kp();
 	end;
-	function w.ResetState(Y)
-		Y.sticking = false;
-		Y.stickingStartTime = 0;
-		Y.lastEnemyHealth = nil;
-		Y.lastHealthChangeTime = 0;
-		Y.targetFloor = nil;
-		Y.inKnifeRangeNow = false;
-		Y.forceDescent = false;
-		Y.jitterSide = 1;
-		Y.jitterCurrent = 0;
-		Y.jitterNextSwitch = 0;
-		Y.lastSetCFrame = nil;
-		Y.validFrames = 0;
-		Y.killActivated = false;
-		Y.triggerStart = nil;
-		Y:RestoreCollisions();
-		local z = Y:GetHumanoid(y);
-		if z and z.PlatformStand then
+	function U.ResetState(L)
+		L.sticking = false;
+		L.stickingStartTime = 0;
+		L.lastEnemyHealth = nil;
+		L.lastHealthChangeTime = 0;
+		L.targetFloor = nil;
+		L.inKnifeRangeNow = false;
+		L.forceDescent = false;
+		L.jitterSide = 1;
+		L.jitterCurrent = 0;
+		L.jitterNextSwitch = 0;
+		L.lastSetCFrame = nil;
+		L.validFrames = 0;
+		L.killActivated = false;
+		L.triggerStart = nil;
+		L:RestoreCollisions();
+		local e = L:GetHumanoid(K);
+		if e and e.PlatformStand then
 			pcall(function()
-				z.PlatformStand = false;
+				e.PlatformStand = false;
 			end);
 		end;
 	end;
-	function w.ReturnToSafePosition(z, Y)
-		if not z.safePosition or not Y then
+	function U.ReturnToSafePosition(e, L)
+		if not e.safePosition or not L then
 			return;
 		end;
-		local u = Y.Position.Y;
-		if u < (z.safePosition.Y - B) then
+		local A = L.Position.Y;
+		if A < (e.safePosition.Y - a) then
 			pcall(function()
-				Y.CFrame = CFrame.new(z.safePosition);
-				Y.AssemblyLinearVelocity = Vector3.zero;
-				Y.AssemblyAngularVelocity = Vector3.zero;
+				L.CFrame = CFrame.new(e.safePosition);
+				L.AssemblyLinearVelocity = Vector3.zero;
+				L.AssemblyAngularVelocity = Vector3.zero;
 			end);
 		end;
 	end;
-	function w.ForceReturnToSafe(z, Y)
-		if not z.safePosition or not Y then
+	function U.ForceReturnToSafe(e, L)
+		if not e.safePosition or not L then
 			return;
 		end;
 		pcall(function()
-			Y.CFrame = CFrame.new(z.safePosition);
-			Y.AssemblyLinearVelocity = Vector3.zero;
-			Y.AssemblyAngularVelocity = Vector3.zero;
+			L.CFrame = CFrame.new(e.safePosition);
+			L.AssemblyLinearVelocity = Vector3.zero;
+			L.AssemblyAngularVelocity = Vector3.zero;
 		end);
 	end;
-	function w.IsFallingIntoVoid(z, Y)
-		if not z.safePosition or not Y then
+	function U.IsFallingIntoVoid(e, L)
+		if not e.safePosition or not L then
 			return false;
 		end;
-		local u = z.safePosition.Y - v;
-		if z.targetFloorY and (z.lastFloorTarget and z.lastFloorTarget.Parent) then
-			u = math.min(u, (z.targetFloorY - p) - v);
+		local A = e.safePosition.Y - Q;
+		if e.targetFloorY and (e.lastFloorTarget and e.lastFloorTarget.Parent) then
+			A = math.min(A, (e.targetFloorY - T) - Q);
 		end;
-		return Y.Position.Y < u;
+		return L.Position.Y < A;
 	end;
-	function w.HideBelowMap(Y)
-		local z = Y:GetRoot(y);
-		if not z then
+	function U.HideBelowMap(L)
+		local e = L:GetRoot(K);
+		if not e then
 			return;
 		end;
-		local u = Y.safePosition and Y.safePosition.Y or z.Position.Y;
-		local T = u - n;
-		local X, K = z.Position.X, z.Position.Z;
+		local A = L.safePosition and L.safePosition.Y or e.Position.Y;
+		local j = A - X;
+		local g, d = e.Position.X, e.Position.Z;
 		pcall(function()
-			z.CFrame = CFrame.new(X, T, K);
-			z.AssemblyLinearVelocity = Vector3.zero;
-			z.AssemblyAngularVelocity = Vector3.zero;
+			e.CFrame = CFrame.new(g, j, d);
+			e.AssemblyLinearVelocity = Vector3.zero;
+			e.AssemblyAngularVelocity = Vector3.zero;
 		end);
-		Y.hiding = true;
-		Y.hidingUntil = os.clock() + P;
+		L.hiding = true;
+		L.hidingUntil = os.clock() + i;
 	end;
-	function w.IsKnife(z, Y)
-		if not ((Y and Y:IsA("Tool"))) then
+	function U.IsKnife(e, L)
+		if not ((L and L:IsA("Tool"))) then
 			return false;
 		end;
-		if Y:FindFirstChild("fire") or Y:FindFirstChild("showBeam") then
+		if L:FindFirstChild("fire") or L:FindFirstChild("showBeam") then
 			return false;
 		end;
-		return Y:FindFirstChild("Slash") ~= nil or Y:FindFirstChild("SlashStart") ~= nil;
+		return L:FindFirstChild("Slash") ~= nil or L:FindFirstChild("SlashStart") ~= nil;
 	end;
-	function w.FindKnife(Y)
-		local z = y.Character;
-		if z then
-			for z, u in ipairs(z:GetChildren()) do
-				if Y:IsKnife(u) then
-					return u, true;
+	function U.FindKnife(L)
+		local e = K.Character;
+		if e then
+			for e, A in ipairs(e:GetChildren()) do
+				if L:IsKnife(A) then
+					return A, true;
 				end;
 			end;
 		end;
-		local u = y:FindFirstChildOfClass("Backpack");
-		if u then
-			for z, u in ipairs(u:GetChildren()) do
-				if Y:IsKnife(u) then
-					return u, false;
+		local A = K:FindFirstChildOfClass("Backpack");
+		if A then
+			for e, A in ipairs(A:GetChildren()) do
+				if L:IsKnife(A) then
+					return A, false;
 				end;
 			end;
 		end;
 		return nil, false;
 	end;
-	function w.SwingKnife(z, Y)
-		z.swingAccumulator = z.swingAccumulator + Y;
-		if z.swingAccumulator < j then
+	function U.SwingKnife(e, L)
+		e.swingAccumulator = e.swingAccumulator + L;
+		if e.swingAccumulator < H then
 			return;
 		end;
-		z.swingAccumulator = 0;
-		local u, T = z:FindKnife();
-		if not u then
+		e.swingAccumulator = 0;
+		local A, j = e:FindKnife();
+		if not A then
 			return;
 		end;
-		if not T then
-			local Y = z:GetHumanoid(y);
-			if not Y then
+		if not j then
+			local L = e:GetHumanoid(K);
+			if not L then
 				return;
 			end;
 			pcall(function()
-				Y:EquipTool(u);
+				L:EquipTool(A);
 			end);
-			if u.Parent ~= y.Character then
+			if A.Parent ~= K.Character then
 				return;
 			end;
 		end;
 		pcall(function()
-			u:Activate();
+			A:Activate();
 		end);
 	end;
-	function w.UpdateJitter(z, Y)
-		local u = os.clock();
-		if u >= z.jitterNextSwitch then
-			z.jitterSide = (math.random() < .5) and 1 or -1;
-			z.jitterNextSwitch = (u + J) + math.random() * ((s - J));
+	function U.UpdateJitter(e, L)
+		local A = os.clock();
+		if A >= e.jitterNextSwitch then
+			e.jitterSide = (math.random() < .5) and 1 or -1;
+			e.jitterNextSwitch = (A + k) + math.random() * ((n - k));
 		end;
-		local T = z.jitterSide * o;
-		z.jitterCurrent = z.jitterCurrent + ((T - z.jitterCurrent)) * math.clamp(Y * D, 0, 1);
+		local j = e.jitterSide * s;
+		e.jitterCurrent = e.jitterCurrent + ((j - e.jitterCurrent)) * math.clamp(L * Y, 0, 1);
 	end;
-	function w.CheckServerValidation(z, Y)
-		if z.killActivated then
+	function U.CheckServerValidation(e, L)
+		if e.killActivated then
 			return true;
 		end;
-		if not z.lastSetCFrame then
+		if not e.lastSetCFrame then
 			return false;
 		end;
-		local u = z.lastSetCFrame.Position;
-		local T = Y.Position;
-		local X = ((T - u)).Magnitude;
-		if X <= r then
-			z.validFrames = z.validFrames + 1;
-			if z.validFrames >= L then
-				z.killActivated = true;
-				z.swingAccumulator = j;
+		local A = e.lastSetCFrame.Position;
+		local j = L.Position;
+		local g = ((j - A)).Magnitude;
+		if g <= B then
+			e.validFrames = e.validFrames + 1;
+			if e.validFrames >= O then
+				e.killActivated = true;
+				e.swingAccumulator = H;
 				return true;
 			end;
 		else
-			z.validFrames = 0;
+			e.validFrames = 0;
 		end;
 		return false;
 	end;
-	function w.ForceUnderground(u, Y, z)
-		if not Y or not z then
+	function U.ForceUnderground(A, L, e)
+		if not L or not e then
 			return;
 		end;
-		local T = u:GetPlatformFloorY(z);
-		if not T then
+		local j = A:GetPlatformFloorY(e);
+		if not j then
 			return;
 		end;
-		local X = T - p;
-		if Y.Position.Y > X + b then
+		local g = j - T;
+		if L.Position.Y > g + P then
 			pcall(function()
-				Y.CFrame = CFrame.new(Y.Position.X, X, Y.Position.Z);
-				Y.AssemblyLinearVelocity = Vector3.zero;
-				Y.AssemblyAngularVelocity = Vector3.zero;
+				L.CFrame = CFrame.new(L.Position.X, g, L.Position.Z);
+				L.AssemblyLinearVelocity = Vector3.zero;
+				L.AssemblyAngularVelocity = Vector3.zero;
 			end);
 		end;
 	end;
-	function w.ApproachTarget(X, Y, z, T)
-		T = T or 0;
-		local K = Y.Position;
-		local y = z.Position;
-		local B = Vector3.new(y.X - K.X, 0, y.Z - K.Z);
-		local S = B.Magnitude;
-		if S <= k then
-			if not X.sticking then
-				local u = os.clock();
-				if not X.triggerStart then
-					X.triggerStart = u;
+	function U.ApproachTarget(g, L, e, j)
+		j = j or 0;
+		local d = L.Position;
+		local K = e.Position;
+		local a = Vector3.new(K.X - d.X, 0, K.Z - d.Z);
+		local I = a.Magnitude;
+		if I <= S then
+			if not g.sticking then
+				local A = os.clock();
+				if not g.triggerStart then
+					g.triggerStart = A;
 				end;
-				local T = Vector3.new(y.X, K.Y, y.Z);
-				local B = CFrame.lookAt(K, T);
-				X.lastSetCFrame = B;
+				local j = Vector3.new(K.X, d.Y, K.Z);
+				local a = CFrame.lookAt(d, j);
+				g.lastSetCFrame = a;
 				pcall(function()
-					Y.CFrame = B;
-					Y.AssemblyLinearVelocity = Vector3.zero;
-					Y.AssemblyAngularVelocity = Vector3.zero;
+					L.CFrame = a;
+					L.AssemblyLinearVelocity = Vector3.zero;
+					L.AssemblyAngularVelocity = Vector3.zero;
 				end);
-				local S = X:CheckServerValidation(Y);
-				if S or (u - X.triggerStart) >= g then
-					X.killActivated = true;
-					X.swingAccumulator = j;
-					X.triggerStart = nil;
-					X.sticking = true;
-					X.stickingStartTime = os.clock();
-					X.lastStickTarget = z;
-					X.targetFloor = nil;
-					X.forceDescent = true;
-					local Y = X:GetHumanoid(z.Parent);
-					X.lastEnemyHealth = Y and Y.Health or nil;
-					X.lastHealthChangeTime = os.clock();
-					X.lastStickTargetHum = Y;
-					X.jitterCurrent = 0;
+				local I = g:CheckServerValidation(L);
+				if I or (A - g.triggerStart) >= G then
+					g.killActivated = true;
+					g.swingAccumulator = H;
+					g.triggerStart = nil;
+					g.sticking = true;
+					g.stickingStartTime = os.clock();
+					g.lastStickTarget = e;
+					g.targetFloor = nil;
+					g.forceDescent = true;
+					local L = g:GetHumanoid(e.Parent);
+					g.lastEnemyHealth = L and L.Health or nil;
+					g.lastHealthChangeTime = os.clock();
+					g.lastStickTargetHum = L;
+					g.jitterCurrent = 0;
 				end;
 			end;
 			return;
 		end;
-		X.lastSetCFrame = nil;
-		X.validFrames = 0;
-		X.triggerStart = nil;
-		local l = B.Unit;
-		local v = Vector3.new(-l.Z, 0, l.X);
-		X:UpdateJitter(T);
-		local x = u * T;
-		local c = math.min(x, math.max(0, S - k));
-		local V = math.sqrt(math.max(0, c * ((2 * S - c)))) * .85;
-		local N = math.clamp(((S - k)) / 8, 0, 1);
-		local n = X.jitterCurrent * N;
-		local P = math.clamp(n, -V, V);
-		local t = K.X + l.X * c;
-		local o = K.Z + l.Z * c;
-		local J = t + v.X * P;
-		local s = o + v.Z * P;
-		local D = X:GetPlatformFloorY(z);
-		local b;
-		if D then
-			b = D - p;
+		g.lastSetCFrame = nil;
+		g.validFrames = 0;
+		g.triggerStart = nil;
+		local w = a.Unit;
+		local Q = Vector3.new(-w.Z, 0, w.X);
+		g:UpdateJitter(j);
+		local Z = A * j;
+		local t = math.min(Z, math.max(0, I - S));
+		local M = math.sqrt(math.max(0, t * ((2 * I - t)))) * .85;
+		local R = math.clamp(((I - S)) / 8, 0, 1);
+		local X = g.jitterCurrent * R;
+		local i = math.clamp(X, -M, M);
+		local D = d.X + w.X * t;
+		local s = d.Z + w.Z * t;
+		local k = D + Q.X * i;
+		local n = s + Q.Z * i;
+		local Y = g:GetPlatformFloorY(e);
+		local P;
+		if Y then
+			P = Y - T;
 		else
-			b = K.Y;
+			P = d.Y;
 		end;
-		local M = Vector3.new(J, b, s);
-		local r = Vector3.new(y.X, M.Y, y.Z);
-		local L = CFrame.lookAt(M, r);
+		local E = Vector3.new(k, P, n);
+		local B = Vector3.new(K.X, E.Y, K.Z);
+		local O = CFrame.lookAt(E, B);
 		pcall(function()
-			Y.CFrame = L;
-			Y.AssemblyLinearVelocity = Vector3.zero;
-			Y.AssemblyAngularVelocity = Vector3.zero;
+			L.CFrame = O;
+			L.AssemblyLinearVelocity = Vector3.zero;
+			L.AssemblyAngularVelocity = Vector3.zero;
 		end);
 	end;
-	function w.CanStickToTarget(T, z, u)
-		if not u or not u.Parent then
+	function U.CanStickToTarget(j, e, A)
+		if not A or not A.Parent then
 			return false;
 		end;
-		local X = Y:GetPlayerFromCharacter(u.Parent);
-		if not X or not lc(X) then
+		local g = L:GetPlayerFromCharacter(A.Parent);
+		if not g or not Zp(g) then
 			return false;
 		end;
-		local K = u.Parent:FindFirstChildOfClass("Humanoid");
-		if not K or K.Health <= 0 then
+		local d = A.Parent:FindFirstChildOfClass("Humanoid");
+		if not d or d.Health <= 0 then
 			return false;
 		end;
-		local j = ((Vector3.new(z.Position.X, 0, z.Position.Z) - Vector3.new(u.Position.X, 0, u.Position.Z))).Magnitude;
-		if j > l then
+		local H = ((Vector3.new(e.Position.X, 0, e.Position.Z) - Vector3.new(A.Position.X, 0, A.Position.Z))).Magnitude;
+		if H > w then
 			return false;
 		end;
 		return true;
 	end;
-	function w.StickToTarget(X, Y, z, u)
-		u = u or .016;
-		local K = z.Position;
-		local j = z.Parent and z.Parent:FindFirstChildOfClass("Humanoid");
-		local y = j and j.FloorMaterial ~= Enum.Material.Air;
-		if z ~= X.lastStickTarget then
-			X.lastStickTarget = z;
-			X.targetFloor = nil;
+	function U.StickToTarget(g, L, e, A)
+		A = A or .016;
+		local d = e.Position;
+		local H = e.Parent and e.Parent:FindFirstChildOfClass("Humanoid");
+		local K = H and H.FloorMaterial ~= Enum.Material.Air;
+		if e ~= g.lastStickTarget then
+			g.lastStickTarget = e;
+			g.targetFloor = nil;
 		end;
-		if y or not X.targetFloor then
-			X.targetFloor = X:GetFloorY(z);
+		if K or not g.targetFloor then
+			g.targetFloor = g:GetFloorY(e);
 		end;
-		local B = Y.Position;
-		local S = z.AssemblyLinearVelocity;
-		local l = K.X + S.X * R;
-		local v = K.Z + S.Z * R;
-		local x = z.CFrame.LookVector;
-		local c = Vector3.new(-x.X, 0, -x.Z);
-		if c.Magnitude < .05 then
-			c = Vector3.new(0, 0, 1);
+		local a = L.Position;
+		local I = e.AssemblyLinearVelocity;
+		local w = d.X + I.X * p;
+		local Q = d.Z + I.Z * p;
+		local Z = e.CFrame.LookVector;
+		local t = Vector3.new(-Z.X, 0, -Z.Z);
+		if t.Magnitude < .05 then
+			t = Vector3.new(0, 0, 1);
 		else
-			c = c.Unit;
+			t = t.Unit;
 		end;
-		local n = l + c.X * T;
-		local P = v + c.Z * T;
-		local t = X:IsInKnifeRange(Y, z);
-		local o;
-		if t and not X.forceDescent then
-			o = B.Y;
+		local X = w + t.X * j;
+		local i = Q + t.Z * j;
+		local D = g:IsInKnifeRange(L, e);
+		local s;
+		if D and not g.forceDescent then
+			s = a.Y;
 		else
-			o = X.targetFloor - N;
-			if t then
-				X.forceDescent = false;
+			s = g.targetFloor - R;
+			if D then
+				g.forceDescent = false;
 			end;
 		end;
-		local J = X.targetFloor - N;
-		if o > J then
-			o = J;
+		local k = g.targetFloor - R;
+		if s > k then
+			s = k;
 		end;
-		local s = math.clamp(u * A, 0, 1);
-		local D = B:Lerp(Vector3.new(n, o, P), s);
+		local n = math.clamp(A * C, 0, 1);
+		local Y = a:Lerp(Vector3.new(X, s, i), n);
 		pcall(function()
-			Y.CFrame = CFrame.new(D) * CFrame.Angles(math.rad(V), 0, 0);
-			Y.AssemblyLinearVelocity = Vector3.zero;
-			Y.AssemblyAngularVelocity = Vector3.zero;
+			L.CFrame = CFrame.new(Y) * CFrame.Angles(math.rad(M), 0, 0);
+			L.AssemblyLinearVelocity = Vector3.zero;
+			L.AssemblyAngularVelocity = Vector3.zero;
 		end);
 	end;
-	function w.CheckEnemyHealth(z, Y)
-		local u = Y.Parent and Y.Parent:FindFirstChildOfClass("Humanoid");
-		if not u then
+	function U.CheckEnemyHealth(e, L)
+		local A = L.Parent and L.Parent:FindFirstChildOfClass("Humanoid");
+		if not A then
 			return false;
 		end;
-		local T = u.Health;
-		if z.lastEnemyHealth == nil then
-			z.lastEnemyHealth = T;
-			z.lastHealthChangeTime = os.clock();
+		local j = A.Health;
+		if e.lastEnemyHealth == nil then
+			e.lastEnemyHealth = j;
+			e.lastHealthChangeTime = os.clock();
 			return false;
 		end;
-		if T < z.lastEnemyHealth then
-			z.lastEnemyHealth = T;
-			z.lastHealthChangeTime = os.clock();
+		if j < e.lastEnemyHealth then
+			e.lastEnemyHealth = j;
+			e.lastHealthChangeTime = os.clock();
 			return false;
 		end;
-		if (os.clock() - z.lastHealthChangeTime) >= x then
+		if (os.clock() - e.lastHealthChangeTime) >= Z then
 			return true;
 		end;
 		return false;
 	end;
-	function w.Update(z, Y)
-		if not z:IsInMatch() then
-			z:ResetState();
-			z.currentTarget = nil;
-			z.lockedTargetPlayer = nil;
-			z.lastStickTarget = nil;
-			z.lastFloorTarget = nil;
-			z.targetFloorY = nil;
+	function U.Update(e, L)
+		if not e:IsInMatch() then
+			e:ResetState();
+			e.currentTarget = nil;
+			e.lockedTargetPlayer = nil;
+			e.lastStickTarget = nil;
+			e.lastFloorTarget = nil;
+			e.targetFloorY = nil;
 			return;
 		end;
-		local u = z:GetRoot(y);
-		if not u then
-			z:ResetState();
-			z.currentTarget = nil;
-			z.lockedTargetPlayer = nil;
+		local A = e:GetRoot(K);
+		if not A then
+			e:ResetState();
+			e.currentTarget = nil;
+			e.lockedTargetPlayer = nil;
 			return;
 		end;
-		if z.lastStickTargetHum then
-			local Y = z.lastStickTargetHum;
-			if not Y.Parent or Y.Health <= 0 then
-				z:HideBelowMap();
-				z.inKnifeRangeNow = false;
-				z.forceDescent = false;
-				z.lastStickTargetHum = nil;
-				z.lastStickTarget = nil;
-				z.sticking = false;
-				z.stickingStartTime = 0;
-				z.lastEnemyHealth = nil;
-				z.lastHealthChangeTime = 0;
-				z.targetFloor = nil;
-				z.killActivated = false;
-				z.validFrames = 0;
-				z.lastSetCFrame = nil;
-				z.triggerStart = nil;
+		if e.lastStickTargetHum then
+			local L = e.lastStickTargetHum;
+			if not L.Parent or L.Health <= 0 then
+				e:HideBelowMap();
+				e.inKnifeRangeNow = false;
+				e.forceDescent = false;
+				e.lastStickTargetHum = nil;
+				e.lastStickTarget = nil;
+				e.sticking = false;
+				e.stickingStartTime = 0;
+				e.lastEnemyHealth = nil;
+				e.lastHealthChangeTime = 0;
+				e.targetFloor = nil;
+				e.killActivated = false;
+				e.validFrames = 0;
+				e.lastSetCFrame = nil;
+				e.triggerStart = nil;
 				return;
 			end;
 		end;
-		if z.hiding then
-			if os.clock() >= z.hidingUntil then
-				z.hiding = false;
+		if e.hiding then
+			if os.clock() >= e.hidingUntil then
+				e.hiding = false;
 			else
 				pcall(function()
-					u.AssemblyLinearVelocity = Vector3.zero;
-					u.AssemblyAngularVelocity = Vector3.zero;
+					A.AssemblyLinearVelocity = Vector3.zero;
+					A.AssemblyAngularVelocity = Vector3.zero;
 				end);
 				return;
 			end;
 		end;
-		if z:IsFallingIntoVoid(u) then
-			z:ForceReturnToSafe(u);
-			z:ResetState();
-			z.currentTarget = nil;
-			z.lockedTargetPlayer = nil;
-			z.lastStickTarget = nil;
-			z.lastFloorTarget = nil;
-			z.targetFloorY = nil;
-			local Y = z:GetHumanoid(y);
-			if Y then
+		if e:IsFallingIntoVoid(A) then
+			e:ForceReturnToSafe(A);
+			e:ResetState();
+			e.currentTarget = nil;
+			e.lockedTargetPlayer = nil;
+			e.lastStickTarget = nil;
+			e.lastFloorTarget = nil;
+			e.targetFloorY = nil;
+			local L = e:GetHumanoid(K);
+			if L then
 				pcall(function()
-					Y.PlatformStand = false;
+					L.PlatformStand = false;
 				end);
 			end;
 			return;
 		end;
-		local T = z:GetClosestEnemy();
-		if T then
-			z.currentTarget = T;
-			z.lastTargetSeenTime = os.clock();
+		local j = e:GetClosestEnemy();
+		if j then
+			e.currentTarget = j;
+			e.lastTargetSeenTime = os.clock();
 		end;
-		if not T then
-			local Y = (os.clock() - ((z.lastTargetSeenTime or 0))) < c;
-			local T = z.safePosition and u.Position.Y < (z.safePosition.Y - 2);
-			if Y and T then
+		if not j then
+			local L = (os.clock() - ((e.lastTargetSeenTime or 0))) < t;
+			local j = e.safePosition and A.Position.Y < (e.safePosition.Y - 2);
+			if L and j then
 				pcall(function()
-					u.AssemblyLinearVelocity = Vector3.zero;
-					u.AssemblyAngularVelocity = Vector3.zero;
+					A.AssemblyLinearVelocity = Vector3.zero;
+					A.AssemblyAngularVelocity = Vector3.zero;
 				end);
 				return;
 			end;
-			z:ReturnToSafePosition(u);
-			z:ResetState();
-			z.currentTarget = nil;
-			z.lockedTargetPlayer = nil;
-			z.lastStickTarget = nil;
-			z.lastFloorTarget = nil;
-			z.targetFloorY = nil;
-			if z.safePosition then
-				local Y = z:GetHumanoid(y);
-				if Y then
+			e:ReturnToSafePosition(A);
+			e:ResetState();
+			e.currentTarget = nil;
+			e.lockedTargetPlayer = nil;
+			e.lastStickTarget = nil;
+			e.lastFloorTarget = nil;
+			e.targetFloorY = nil;
+			if e.safePosition then
+				local L = e:GetHumanoid(K);
+				if L then
 					pcall(function()
-						Y.PlatformStand = false;
+						L.PlatformStand = false;
 					end);
 				end;
 			end;
 			return;
 		end;
-		z:DisableCollisions();
-		if z.lastStickTarget then
-			local Y = z:IsInKnifeRange(u, z.lastStickTarget);
-			if Y and not z.inKnifeRangeNow then
-				z.swingAccumulator = j;
-				z.inKnifeRangeNow = true;
-			elseif not Y then
-				z.inKnifeRangeNow = false;
+		e:DisableCollisions();
+		if e.lastStickTarget then
+			local L = e:IsInKnifeRange(A, e.lastStickTarget);
+			if L and not e.inKnifeRangeNow then
+				e.swingAccumulator = H;
+				e.inKnifeRangeNow = true;
+			elseif not L then
+				e.inKnifeRangeNow = false;
 			end;
 		end;
-		z:SwingKnife(Y or 0);
-		local X = z:GetHumanoid(y);
-		if X and not X.PlatformStand then
+		e:SwingKnife(L or 0);
+		local g = e:GetHumanoid(K);
+		if g and not g.PlatformStand then
 			pcall(function()
-				X.PlatformStand = true;
+				g.PlatformStand = true;
 			end);
 		end;
-		if z.safePosition and u.Position.Y >= (z.safePosition.Y - B) then
-			z.safePosition = Vector3.new(u.Position.X, z.safePosition.Y, u.Position.Z);
+		if e.safePosition and A.Position.Y >= (e.safePosition.Y - a) then
+			e.safePosition = Vector3.new(A.Position.X, e.safePosition.Y, A.Position.Z);
 		end;
-		if not z.sticking then
-			z:ForceUnderground(u, T);
+		if not e.sticking then
+			e:ForceUnderground(A, j);
 		end;
-		if z.sticking then
-			local X = (T ~= z.lastStickTarget);
-			local K = (os.clock() - z.stickingStartTime) > S;
-			local j = not z:CanStickToTarget(u, T);
-			local y = z:CheckEnemyHealth(T);
-			if X or K or j or y then
-				z.sticking = false;
-				z.stickingStartTime = 0;
-				z.lastEnemyHealth = nil;
-				z.lastHealthChangeTime = 0;
-				z.targetFloor = nil;
-				z.inKnifeRangeNow = false;
-				z.forceDescent = false;
-				z.killActivated = false;
-				z.validFrames = 0;
-				z.lastSetCFrame = nil;
-				z.triggerStart = nil;
-				if X then
-					z.lastStickTarget = nil;
+		if e.sticking then
+			local g = (j ~= e.lastStickTarget);
+			local d = (os.clock() - e.stickingStartTime) > I;
+			local H = not e:CanStickToTarget(A, j);
+			local K = e:CheckEnemyHealth(j);
+			if g or d or H or K then
+				e.sticking = false;
+				e.stickingStartTime = 0;
+				e.lastEnemyHealth = nil;
+				e.lastHealthChangeTime = 0;
+				e.targetFloor = nil;
+				e.inKnifeRangeNow = false;
+				e.forceDescent = false;
+				e.killActivated = false;
+				e.validFrames = 0;
+				e.lastSetCFrame = nil;
+				e.triggerStart = nil;
+				if g then
+					e.lastStickTarget = nil;
 				end;
 			else
-				z:StickToTarget(u, T, Y or 0);
+				e:StickToTarget(A, j, L or 0);
 				return;
 			end;
 		end;
-		z:ApproachTarget(u, T, Y or 0);
+		e:ApproachTarget(A, j, L or 0);
 	end;
-	function w.Start(Y)
-		if Y.running then
+	function U.Start(L)
+		if L.running then
 			return;
 		end;
-		Y.running = true;
-		Y.swingAccumulator = 0;
-		Y.sticking = false;
-		Y.stickingStartTime = 0;
-		Y.lastEnemyHealth = nil;
-		Y.lastHealthChangeTime = 0;
-		Y.lastTargetSeenTime = 0;
-		Y.currentTarget = nil;
-		Y.lockedTargetPlayer = nil;
-		Y.lastStickTarget = nil;
-		Y.lastStickTargetHum = nil;
-		Y.hiding = false;
-		Y.hidingUntil = 0;
-		Y.targetFloor = nil;
-		Y.targetFloorY = nil;
-		Y.lastFloorTarget = nil;
-		Y.floorCheckTime = 0;
-		Y.triggerStart = nil;
-		Y.inKnifeRangeNow = false;
-		Y.forceDescent = false;
-		Y.jitterSide = 1;
-		Y.jitterCurrent = 0;
-		Y.jitterNextSwitch = 0;
-		Y.lastSetCFrame = nil;
-		Y.validFrames = 0;
-		Y.killActivated = false;
-		local u = Y:GetRoot(y);
-		if u then
-			local z = RaycastParams.new();
-			z.FilterType = Enum.RaycastFilterType.Exclude;
-			z.FilterDescendantsInstances = { y.Character };
-			local T = u.Position + Vector3.new(0, 5, 0);
-			local X = K:Raycast(T, Vector3.new(0, -500, 0), z);
-			if X then
-				Y.safePosition = Vector3.new(u.Position.X, X.Position.Y + 3, u.Position.Z);
+		L.running = true;
+		L.swingAccumulator = 0;
+		L.sticking = false;
+		L.stickingStartTime = 0;
+		L.lastEnemyHealth = nil;
+		L.lastHealthChangeTime = 0;
+		L.lastTargetSeenTime = 0;
+		L.currentTarget = nil;
+		L.lockedTargetPlayer = nil;
+		L.lastStickTarget = nil;
+		L.lastStickTargetHum = nil;
+		L.hiding = false;
+		L.hidingUntil = 0;
+		L.targetFloor = nil;
+		L.targetFloorY = nil;
+		L.lastFloorTarget = nil;
+		L.floorCheckTime = 0;
+		L.triggerStart = nil;
+		L.inKnifeRangeNow = false;
+		L.forceDescent = false;
+		L.jitterSide = 1;
+		L.jitterCurrent = 0;
+		L.jitterNextSwitch = 0;
+		L.lastSetCFrame = nil;
+		L.validFrames = 0;
+		L.killActivated = false;
+		local A = L:GetRoot(K);
+		if A then
+			local e = RaycastParams.new();
+			e.FilterType = Enum.RaycastFilterType.Exclude;
+			e.FilterDescendantsInstances = { K.Character };
+			local j = A.Position + Vector3.new(0, 5, 0);
+			local g = d:Raycast(j, Vector3.new(0, -500, 0), e);
+			if g then
+				L.safePosition = Vector3.new(A.Position.X, g.Position.Y + 3, A.Position.Z);
 			else
-				Y.safePosition = u.Position;
+				L.safePosition = A.Position;
 			end;
 		else
-			Y.safePosition = nil;
+			L.safePosition = nil;
 		end;
-		Y.connections:Add(z.Heartbeat:Connect(function(z)
-			if not Y.running then
+		L.connections:Add(e.Heartbeat:Connect(function(e)
+			if not L.running then
 				return;
 			end;
-			Y:Update(z);
+			L:Update(e);
 		end));
-		Y.connections:Add(y.CharacterAdded:Connect(function()
-			table.clear(Y.savedCollisions);
-			Y.sticking = false;
-			Y.safePosition = nil;
-			Y.stickingStartTime = 0;
-			Y.lastEnemyHealth = nil;
-			Y.lastHealthChangeTime = 0;
-			Y.lastTargetSeenTime = 0;
-			Y.currentTarget = nil;
-			Y.lockedTargetPlayer = nil;
-			Y.lastStickTarget = nil;
-			Y.lastStickTargetHum = nil;
-			Y.hiding = false;
-			Y.hidingUntil = 0;
-			Y.targetFloor = nil;
-			Y.targetFloorY = nil;
-			Y.lastFloorTarget = nil;
-			Y.floorCheckTime = 0;
-			Y.triggerStart = nil;
-			Y.inKnifeRangeNow = false;
-			Y.forceDescent = false;
-			Y.jitterSide = 1;
-			Y.jitterCurrent = 0;
-			Y.jitterNextSwitch = 0;
-			Y.lastSetCFrame = nil;
-			Y.validFrames = 0;
-			Y.killActivated = false;
+		L.connections:Add(K.CharacterAdded:Connect(function()
+			table.clear(L.savedCollisions);
+			L.sticking = false;
+			L.safePosition = nil;
+			L.stickingStartTime = 0;
+			L.lastEnemyHealth = nil;
+			L.lastHealthChangeTime = 0;
+			L.lastTargetSeenTime = 0;
+			L.currentTarget = nil;
+			L.lockedTargetPlayer = nil;
+			L.lastStickTarget = nil;
+			L.lastStickTargetHum = nil;
+			L.hiding = false;
+			L.hidingUntil = 0;
+			L.targetFloor = nil;
+			L.targetFloorY = nil;
+			L.lastFloorTarget = nil;
+			L.floorCheckTime = 0;
+			L.triggerStart = nil;
+			L.inKnifeRangeNow = false;
+			L.forceDescent = false;
+			L.jitterSide = 1;
+			L.jitterCurrent = 0;
+			L.jitterNextSwitch = 0;
+			L.lastSetCFrame = nil;
+			L.validFrames = 0;
+			L.killActivated = false;
 		end));
 	end;
-	function w.Stop(Y)
-		if not Y.running then
+	function U.Stop(L)
+		if not L.running then
 			return;
 		end;
-		local z = Y:GetRoot(y);
-		if z and Y.safePosition then
+		local e = L:GetRoot(K);
+		if e and L.safePosition then
 			pcall(function()
-				z.CFrame = CFrame.new(Y.safePosition);
-				z.AssemblyLinearVelocity = Vector3.zero;
-				z.AssemblyAngularVelocity = Vector3.zero;
+				e.CFrame = CFrame.new(L.safePosition);
+				e.AssemblyLinearVelocity = Vector3.zero;
+				e.AssemblyAngularVelocity = Vector3.zero;
 			end);
 		end;
-		Y.running = false;
-		Y.connections:Cleanup();
-		Y.connections = Nc.new();
-		Y:ResetState();
-		Y.currentTarget = nil;
-		Y.lockedTargetPlayer = nil;
-		Y.lastStickTarget = nil;
-		Y.lastStickTargetHum = nil;
-		Y.hiding = false;
-		Y.hidingUntil = 0;
-		Y.inKnifeRangeNow = false;
-		Y.forceDescent = false;
-		Y.killActivated = false;
-		Y.targetFloorY = nil;
-		Y.lastFloorTarget = nil;
+		L.running = false;
+		L.connections:Cleanup();
+		L.connections = ip.new();
+		L:ResetState();
+		L.currentTarget = nil;
+		L.lockedTargetPlayer = nil;
+		L.lastStickTarget = nil;
+		L.lastStickTargetHum = nil;
+		L.hiding = false;
+		L.hidingUntil = 0;
+		L.inKnifeRangeNow = false;
+		L.forceDescent = false;
+		L.killActivated = false;
+		L.targetFloorY = nil;
+		L.lastFloorTarget = nil;
 	end;
-	KillAllInstance = w.new();
+	KillAllInstance = U.new();
 end;
 task.wait();
-jc.Aim:Section({ Title = "Auto Shoot", Icon = "solar:target-bold" });
-A.TogAutoShoot = jc.Aim:Toggle({ Title = "Auto Shoot (Normal - Cabeza/Torso)", Callback = function(Y)
-			v = Y;
-			if not Y and (not v and (not x and m)) then
-				m("Auto", nil);
+ap.Aim:Section({ Title = "Auto Shoot", Icon = "solar:target-bold" });
+C.TogAutoShoot = ap.Aim:Toggle({ Title = "Auto Shoot (Normal - Cabeza/Torso)", Callback = function(L)
+			Q = L;
+			if not L and (not Q and (not Z and F)) then
+				F("Auto", nil);
 			end;
-			if w then
-				w();
-			end;
-		end });
-A.TogAutoShootAgr = jc.Aim:Toggle({ Title = "Auto Shoot (Agresivo - Hitbox Completa)", Callback = function(Y)
-			x = Y;
-			if not Y and (not v and (not x and m)) then
-				m("Auto", nil);
-			end;
-			if w then
-				w();
+			if U then
+				U();
 			end;
 		end });
-A.DropAutoShootPart = jc.Aim:Dropdown({
+C.TogAutoShootAgr = ap.Aim:Toggle({ Title = "Auto Shoot (Agresivo - Hitbox Completa)", Callback = function(L)
+			Z = L;
+			if not L and (not Q and (not Z and F)) then
+				F("Auto", nil);
+			end;
+			if U then
+				U();
+			end;
+		end });
+C.DropAutoShootPart = ap.Aim:Dropdown({
 		Title = "Target: Parte del cuerpo",
 		Values = { "Cabeza", "Torso", "Cuerpo Completo" },
 		Value = "Cabeza",
-		Callback = function(Y)
-			c = Y;
+		Callback = function(L)
+			t = L;
 		end,
 	});
-A.TogEquipGun = jc.Aim:Toggle({ Title = "Equipar pistola", Value = false, Callback = function(Y)
-			e = Y;
-			if w then
-				w();
+C.TogEquipGun = ap.Aim:Toggle({ Title = "Equipar pistola", Value = false, Callback = function(L)
+			r = L;
+			if U then
+				U();
 			end;
 		end });
 do
-	local z = false;
-	a = function()
-			if z or not e then
+	local e = false;
+	v = function()
+			if e or not r then
 				return;
 			end;
-			z = true;
+			e = true;
 			task.spawn(function()
-				local u = RaycastParams.new();
-				u.FilterType = Enum.RaycastFilterType.Exclude;
-				while e do
+				local A = RaycastParams.new();
+				A.FilterType = Enum.RaycastFilterType.Exclude;
+				while r do
 					task.wait(.1);
-					if not e then
+					if not r then
 						break;
 					end;
-					if not Sc() then
+					if not Qp() then
 						continue;
 					end;
-					local z = y.Character;
-					local T = z and z:FindFirstChildOfClass("Humanoid");
-					if not z or not T then
+					local e = K.Character;
+					local j = e and e:FindFirstChildOfClass("Humanoid");
+					if not e or not j then
 						continue;
 					end;
-					if T.Health <= 0 then
+					if j.Health <= 0 then
 						continue;
 					end;
-					local X = z:FindFirstChild("HumanoidRootPart");
-					local j = z:FindFirstChild("Head");
-					if not X then
+					local g = e:FindFirstChild("HumanoidRootPart");
+					local H = e:FindFirstChild("Head");
+					if not g then
 						continue;
 					end;
-					local B = j and j.Position or X.Position;
-					local S = false;
-					for Y, T in ipairs(Y:GetPlayers()) do
-						if T ~= y and lc(T) then
-							local Y = T.Character;
-							if Y then
-								local T = Y:FindFirstChild("Head") or Y:FindFirstChild("UpperTorso") or Y:FindFirstChild("Torso") or Y:FindFirstChild("HumanoidRootPart");
-								if T and T:IsA("BasePart") then
-									u.FilterDescendantsInstances = { z, Y };
-									local X = K:Raycast(B, T.Position - B, u);
-									if not X and Sc() then
-										S = true;
+					local a = H and H.Position or g.Position;
+					local I = false;
+					for L, j in ipairs(L:GetPlayers()) do
+						if j ~= K and Zp(j) then
+							local L = j.Character;
+							if L then
+								local j = L:FindFirstChild("Head") or L:FindFirstChild("UpperTorso") or L:FindFirstChild("Torso") or L:FindFirstChild("HumanoidRootPart");
+								if j and j:IsA("BasePart") then
+									A.FilterDescendantsInstances = { e, L };
+									local g = d:Raycast(a, j.Position - a, A);
+									if not g and Qp() then
+										I = true;
 										break;
 									end;
 								end;
 							end;
 						end;
 					end;
-					if not S then
+					if not I then
 						continue;
 					end;
-					local l = cc();
-					if not l then
+					local w = Rp();
+					if not w then
 						continue;
 					end;
-					z = y.Character;
-					T = z and z:FindFirstChildOfClass("Humanoid");
-					if not z or not T then
+					e = K.Character;
+					j = e and e:FindFirstChildOfClass("Humanoid");
+					if not e or not j then
 						continue;
 					end;
-					l = cc();
-					if not l then
+					w = Rp();
+					if not w then
 						continue;
 					end;
-					if l.Parent ~= z then
+					if w.Parent ~= e then
 						pcall(function()
-							T:EquipTool(l);
+							j:EquipTool(w);
 						end);
 					end;
 					task.wait(.35);
-					if not e then
+					if not r then
 						break;
 					end;
-					z = y.Character;
-					T = z and z:FindFirstChildOfClass("Humanoid");
-					if z and T then
+					e = K.Character;
+					j = e and e:FindFirstChildOfClass("Humanoid");
+					if e and j then
 						pcall(function()
-							T:UnequipTools();
+							j:UnequipTools();
 						end);
 					end;
 					task.wait(1.9);
 				end;
-				z = false;
+				e = false;
 			end);
 		end;
 end;
-jc.Aim:Space();
-jc.Aim:Divider();
-jc.Aim:Space();
-jc.Aim:Section({ Title = "Silent Aim + Fov", Icon = "solar:radar-bold" });
-A.TogSilentAimManual = jc.Aim:Toggle({ Title = "Silent Aim", Callback = function(Y)
-			V = Y;
-			if not Y and (not V and (not N and m)) then
-				m("Silent", nil);
+ap.Aim:Space();
+ap.Aim:Divider();
+ap.Aim:Space();
+ap.Aim:Section({ Title = "Silent Aim + Fov", Icon = "solar:radar-bold" });
+C.TogSilentAimManual = ap.Aim:Toggle({ Title = "Silent Aim", Callback = function(L)
+			M = L;
+			if not L and (not M and (not R and F)) then
+				F("Silent", nil);
 			end;
-			if w then
-				w();
+			if U then
+				U();
 			end;
 		end });
-A.DropSilentAimPart = jc.Aim:Dropdown({
+C.DropSilentAimPart = ap.Aim:Dropdown({
 		Title = "Target: Parte del cuerpo",
 		Values = { "Cabeza", "Torso", "Cuerpo Completo" },
 		Value = "Cabeza",
-		Callback = function(Y)
-			n = Y;
+		Callback = function(L)
+			X = L;
 		end,
 	});
-A.TogSilentAimFOV = jc.Aim:Toggle({ Title = "Silent Aim (Con FOV)", Callback = function(Y)
-			N = Y;
-			if not Y and (not V and (not N and m)) then
-				m("Silent", nil);
+C.TogSilentAimFOV = ap.Aim:Toggle({ Title = "Silent Aim (Con FOV)", Callback = function(L)
+			R = L;
+			if not L and (not M and (not R and F)) then
+				F("Silent", nil);
 			end;
-			if w then
-				w();
-			end;
-		end });
-A.TogShowFOV = jc.Aim:Toggle({ Title = "Mostrar C\195\173rculo FOV", Callback = function(Y)
-			S = Y;
-			if W then
-				W();
+			if U then
+				U();
 			end;
 		end });
-A.SliFOVSize = jc.Aim:Slider({
+C.TogShowFOV = ap.Aim:Toggle({ Title = "Mostrar C\195\173rculo FOV", Callback = function(L)
+			I = L;
+			if z then
+				z();
+			end;
+		end });
+C.SliFOVSize = ap.Aim:Slider({
 		Title = "Tama\195\177o del FOV",
 		Step = 1,
 		Value = { Min = 10, Max = 800, Default = 120 },
-		Callback = function(Y)
-			l = Y;
+		Callback = function(L)
+			w = L;
 		end,
 	});
 do
 	(getgenv()).NexvyrTargetPart = nil;
-	local z = (getgenv()).__NexvyrDeferredNamecall;
-	if z then
-		z.Enabled = false;
+	local e = (getgenv()).__NexvyrDeferredNamecall;
+	if e then
+		e.Enabled = false;
 	end;
-	local u = y:GetMouse();
-	local T = { Auto = nil, Silent = nil };
-	local X = 0;
-	local j = (getgenv()).__NexvyrDmvsAimCleanup;
-	if type(j) == "function" then
-		pcall(j);
+	local A = K:GetMouse();
+	local j = { Auto = nil, Silent = nil };
+	local g = 0;
+	local H = (getgenv()).__NexvyrDmvsAimCleanup;
+	if type(H) == "function" then
+		pcall(H);
 	end;
 	(getgenv()).__NexvyrDmvsAimCleanup = nil;
-	local B = {
+	local a = {
 			Enabled = false,
 			Metatable = nil,
 			IndexHook = nil,
 			NamecallHook = nil,
 		};
-	local S = false;
+	local I = false;
 	do
-		local Y = type(getexecutorname) == "function" and getexecutorname or identifyexecutor;
-		if type(Y) == "function" then
-			local z, u = pcall(Y);
-			S = z and ((tostring(u)):lower()):find("madium", 1, true) ~= nil or false;
+		local L = type(getexecutorname) == "function" and getexecutorname or identifyexecutor;
+		if type(L) == "function" then
+			local e, A = pcall(L);
+			I = e and ((tostring(A)):lower()):find("madium", 1, true) ~= nil or false;
 		end;
 	end;
-	local P = {};
+	local i = {};
 	pcall(function()
-		P.Raycast = K.Raycast;
+		i.Raycast = d.Raycast;
 	end);
 	pcall(function()
-		P.FindPartOnRay = K.FindPartOnRay;
+		i.FindPartOnRay = d.FindPartOnRay;
 	end);
 	pcall(function()
-		P.FindPartOnRayWithIgnoreList = K.FindPartOnRayWithIgnoreList;
+		i.FindPartOnRayWithIgnoreList = d.FindPartOnRayWithIgnoreList;
 	end);
 	pcall(function()
-		P.FindPartOnRayWithWhitelist = K.FindPartOnRayWithWhitelist;
+		i.FindPartOnRayWithWhitelist = d.FindPartOnRayWithWhitelist;
 	end);
-	local function t()
-		return v or x or V or N;
+	local function D()
+		return Q or Z or M or R;
 	end;
-	local function o(Y)
-		if typeof(Y) ~= "Instance" or not Y:IsA("BasePart") or not Y.Parent then
+	local function s(L)
+		if typeof(L) ~= "Instance" or not L:IsA("BasePart") or not L.Parent then
 			return false;
 		end;
-		local z = Y:FindFirstAncestorOfClass("Model");
-		local u = z and z:FindFirstChildOfClass("Humanoid");
-		return u ~= nil and u.Health > 0;
+		local e = L:FindFirstAncestorOfClass("Model");
+		local A = e and e:FindFirstChildOfClass("Humanoid");
+		return A ~= nil and A.Health > 0;
 	end;
-	local function J()
-		local Y = os.clock();
-		local z = v or x;
-		if z and (Y <= X and o(T.Auto)) then
-			return T.Auto;
+	local function k()
+		local L = os.clock();
+		local e = Q or Z;
+		if e and (L <= g and s(j.Auto)) then
+			return j.Auto;
 		end;
-		if ((V or N)) and o(T.Silent) then
-			return T.Silent;
+		if ((M or R)) and s(j.Silent) then
+			return j.Silent;
 		end;
-		if z and o(T.Auto) then
-			return T.Auto;
+		if e and s(j.Auto) then
+			return j.Auto;
 		end;
 		return nil;
 	end;
-	m = function(Y, z)
-			if Y ~= "Auto" and Y ~= "Silent" then
+	F = function(L, e)
+			if L ~= "Auto" and L ~= "Silent" then
 				return;
 			end;
-			T[Y] = o(z) and z or nil;
-			(getgenv()).NexvyrTargetPart = J();
+			j[L] = s(e) and e or nil;
+			(getgenv()).NexvyrTargetPart = k();
 		end;
-	local function s()
-		if not B.Enabled or not t() or Bc() then
+	local function n()
+		if not a.Enabled or not D() or wp() then
 			return nil;
 		end;
-		local Y = y.Character;
-		if not Y then
+		local L = K.Character;
+		if not L then
 			return nil;
 		end;
-		local z = Y:FindFirstChildOfClass("Tool");
-		if not ((xc(z) or (x and (z and not vc(z))))) then
+		local e = L:FindFirstChildOfClass("Tool");
+		if not ((Mp(e) or (Z and (e and not tp(e))))) then
 			return nil;
 		end;
-		local u = J();
-		if not u then
+		local A = k();
+		if not A then
 			return nil;
 		end;
-		return u.Position, u;
+		return A.Position, A;
 	end;
-	local function D(Y)
-		if typeof(Y) ~= "Vector3" then
+	local function Y(L)
+		if typeof(L) ~= "Vector3" then
 			return false;
 		end;
-		local z = K.CurrentCamera;
-		if z and ((Y - z.CFrame.Position)).Magnitude <= 3 then
+		local e = d.CurrentCamera;
+		if e and ((L - e.CFrame.Position)).Magnitude <= 3 then
 			return true;
 		end;
-		local u = y.Character;
-		if not u then
+		local A = K.Character;
+		if not A then
 			return false;
 		end;
-		local T = u:FindFirstChildOfClass("Tool");
-		local X = T and T:FindFirstChild("Handle");
-		if X and (X:IsA("BasePart") and ((Y - X.Position)).Magnitude <= 18) then
+		local j = A:FindFirstChildOfClass("Tool");
+		local g = j and j:FindFirstChild("Handle");
+		if g and (g:IsA("BasePart") and ((L - g.Position)).Magnitude <= 18) then
 			return true;
 		end;
-		local j = u:FindFirstChild("Head");
-		return j and ((Y - j.Position)).Magnitude <= 8 or false;
+		local H = A:FindFirstChild("Head");
+		return H and ((L - H.Position)).Magnitude <= 8 or false;
 	end;
-	local function p()
-		local Y = K.CurrentCamera;
-		local z = Y and Y.CFrame.Position;
-		local u = y.Character;
-		local T = u and u:FindFirstChild("Head");
-		if z and (T and ((z - T.Position)).Magnitude <= 1.75) then
-			return z;
+	local function T()
+		local L = d.CurrentCamera;
+		local e = L and L.CFrame.Position;
+		local A = K.Character;
+		local j = A and A:FindFirstChild("Head");
+		if e and (j and ((e - j.Position)).Magnitude <= 1.75) then
+			return e;
 		end;
-		local X = u and u:FindFirstChildOfClass("Tool");
-		local j = X and X:FindFirstChild("Handle");
-		if j and j:IsA("BasePart") then
+		local g = A and A:FindFirstChildOfClass("Tool");
+		local H = g and g:FindFirstChild("Handle");
+		if H and H:IsA("BasePart") then
+			return H.Position;
+		end;
+		if j then
 			return j.Position;
 		end;
-		if T then
-			return T.Position;
-		end;
-		return z;
+		return e;
 	end;
-	local function b()
-		B.Enabled = false;
-		local Y = B.Metatable;
-		if not Y or type(setreadonly) ~= "function" then
+	local function P()
+		a.Enabled = false;
+		local L = a.Metatable;
+		if not L or type(setreadonly) ~= "function" then
 			return;
 		end;
-		local z = pcall(setreadonly, Y, false);
-		if not z then
+		local e = pcall(setreadonly, L, false);
+		if not e then
 			return;
 		end;
 		pcall(function()
-			if Y.__index == B.IndexHook then
-				Y.__index = B.OriginalIndex;
+			if L.__index == a.IndexHook then
+				L.__index = a.OriginalIndex;
 			end;
-			if B.NamecallHook and Y.__namecall == B.NamecallHook then
-				Y.__namecall = B.OriginalNamecall;
+			if a.NamecallHook and L.__namecall == a.NamecallHook then
+				L.__namecall = a.OriginalNamecall;
 			end;
 		end);
-		pcall(setreadonly, Y, B.WasReadonly);
-		if Y.__index ~= B.IndexHook and ((not B.NamecallHook or Y.__namecall ~= B.NamecallHook)) then
-			B.Metatable = nil;
-			B.IndexHook = nil;
-			B.NamecallHook = nil;
+		pcall(setreadonly, L, a.WasReadonly);
+		if L.__index ~= a.IndexHook and ((not a.NamecallHook or L.__namecall ~= a.NamecallHook)) then
+			a.Metatable = nil;
+			a.IndexHook = nil;
+			a.NamecallHook = nil;
 		end;
 	end;
-	(getgenv()).__NexvyrDmvsAimCleanup = b;
-	local function k()
-		if B.Metatable then
-			local Y = B.Metatable;
-			local z = Y.__index == B.IndexHook;
-			B.Enabled = z;
-			return z;
+	(getgenv()).__NexvyrDmvsAimCleanup = P;
+	local function S()
+		if a.Metatable then
+			local L = a.Metatable;
+			local e = L.__index == a.IndexHook;
+			a.Enabled = e;
+			return e;
 		end;
 		if type(getrawmetatable) ~= "function" or type(setreadonly) ~= "function" then
 			warn("Nexvyr: este executor no permite instalar la redireccion del mouse.");
 			return false;
 		end;
-		local Y, z = pcall(getrawmetatable, S and game or u);
-		if not Y or not z then
+		local L, e = pcall(getrawmetatable, I and game or A);
+		if not L or not e then
 			return false;
 		end;
-		local T, X = z.__index, z.__namecall;
-		if type(T) ~= "function" and type(T) ~= "table" then
+		local j, g = e.__index, e.__namecall;
+		if type(j) ~= "function" and type(j) ~= "table" then
 			return false;
 		end;
-		local j = true;
+		local H = true;
 		if type(isreadonly) == "function" then
-			local Y, u = pcall(isreadonly, z);
-			if Y and type(u) == "boolean" then
-				j = u;
+			local L, A = pcall(isreadonly, e);
+			if L and type(A) == "boolean" then
+				H = A;
 			end;
 		end;
-		local function y(Y, z)
-			if type(T) == "function" then
-				return T(Y, z);
+		local function K(L, e)
+			if type(j) == "function" then
+				return j(L, e);
 			end;
-			return T[z];
+			return j[e];
 		end;
-		local l = function(Y, z)
-				if B.Enabled and (Y == u and (((z == "Hit" or z == "Target" or z == "UnitRay" or (S and z == "TargetSurface"))) and ((S or type(checkcaller) ~= "function" or not checkcaller())))) then
-					local u, T, X = pcall(s);
-					if u and (T and X) then
-						if z == "Target" then
-							return X;
+		local w = function(L, e)
+				if a.Enabled and (L == A and (((e == "Hit" or e == "Target" or e == "UnitRay" or (I and e == "TargetSurface"))) and ((I or type(checkcaller) ~= "function" or not checkcaller())))) then
+					local A, j, g = pcall(n);
+					if A and (j and g) then
+						if e == "Target" then
+							return g;
 						end;
-						if z == "TargetSurface" then
+						if e == "TargetSurface" then
 							return Enum.NormalId.Front;
 						end;
-						if z == "Hit" then
-							if S then
-								return CFrame.new(T);
+						if e == "Hit" then
+							if I then
+								return CFrame.new(j);
 							end;
-							local Y = p();
-							local z = Y and T - Y;
-							if z and z.Magnitude > .001 then
-								return CFrame.lookAt(T, T + z.Unit);
+							local L = T();
+							local e = L and j - L;
+							if e and e.Magnitude > .001 then
+								return CFrame.lookAt(j, j + e.Unit);
 							end;
-							return CFrame.new(T);
+							return CFrame.new(j);
 						end;
-						local u = y(Y, z);
-						local j = typeof(u) == "Ray" and u.Origin or nil;
-						if not j then
-							local Y = K.CurrentCamera;
-							j = Y and Y.CFrame.Position or p();
+						local A = K(L, e);
+						local H = typeof(A) == "Ray" and A.Origin or nil;
+						if not H then
+							local L = d.CurrentCamera;
+							H = L and L.CFrame.Position or T();
 						end;
-						local B = j and T - j;
-						if B and B.Magnitude > .001 then
-							return Ray.new(j, B.Unit);
+						local a = H and j - H;
+						if a and a.Magnitude > .001 then
+							return Ray.new(H, a.Unit);
 						end;
 					end;
 				end;
-				return y(Y, z);
+				return K(L, e);
 			end;
-		local v;
-		if not S and (type(X) == "function" and (type(getnamecallmethod) == "function" and type(checkcaller) == "function")) then
-			v = function(Y, ...)
-					if not B.Enabled or checkcaller() then
-						return X(Y, ...);
+		local Q;
+		if not I and (type(g) == "function" and (type(getnamecallmethod) == "function" and type(checkcaller) == "function")) then
+			Q = function(L, ...)
+					if not a.Enabled or checkcaller() then
+						return g(L, ...);
 					end;
-					if Y == K and not B.ResolvingRay then
-						local z = getnamecallmethod();
-						local u = z and P[z];
-						if u then
-							local T = table.pack(...);
-							local X, K;
-							if z == "Raycast" then
-								if typeof(T[1]) == "Vector3" and typeof(T[2]) == "Vector3" then
-									X, K = T[1], T[2].Magnitude;
+					if L == d and not a.ResolvingRay then
+						local e = getnamecallmethod();
+						local A = e and i[e];
+						if A then
+							local j = table.pack(...);
+							local g, d;
+							if e == "Raycast" then
+								if typeof(j[1]) == "Vector3" and typeof(j[2]) == "Vector3" then
+									g, d = j[1], j[2].Magnitude;
 								end;
-							elseif typeof(T[1]) == "Ray" then
-								X, K = T[1].Origin, T[1].Direction.Magnitude;
+							elseif typeof(j[1]) == "Ray" then
+								g, d = j[1].Origin, j[1].Direction.Magnitude;
 							end;
-							if X and (K and (K >= 50 and D(X))) then
-								B.ResolvingRay = true;
-								local Y, u = pcall(s);
-								B.ResolvingRay = false;
-								if Y and u then
-									local Y = u - X;
-									if Y.Magnitude > .001 then
-										if z == "Raycast" then
-											T[2] = Y.Unit * K;
+							if g and (d and (d >= 50 and Y(g))) then
+								a.ResolvingRay = true;
+								local L, A = pcall(n);
+								a.ResolvingRay = false;
+								if L and A then
+									local L = A - g;
+									if L.Magnitude > .001 then
+										if e == "Raycast" then
+											j[2] = L.Unit * d;
 										else
-											T[1] = Ray.new(X, Y.Unit * K);
+											j[1] = Ray.new(g, L.Unit * d);
 										end;
 									end;
 								end;
 							end;
-							return u(Y, table.unpack(T, 1, T.n));
+							return A(L, table.unpack(j, 1, j.n));
 						end;
 					end;
-					return X(Y, ...);
+					return g(L, ...);
 				end;
 		end;
-		if not pcall(setreadonly, z, false) then
+		if not pcall(setreadonly, e, false) then
 			return false;
 		end;
-		local x = pcall(function()
-				z.__index = l;
-				if v then
-					z.__namecall = v;
+		local Z = pcall(function()
+				e.__index = w;
+				if Q then
+					e.__namecall = Q;
 				end;
 			end);
-		if not x then
+		if not Z then
 			pcall(function()
-				if z.__index == l then
-					z.__index = T;
+				if e.__index == w then
+					e.__index = j;
 				end;
-				if v and z.__namecall == v then
-					z.__namecall = X;
+				if Q and e.__namecall == Q then
+					e.__namecall = g;
 				end;
 			end);
-			pcall(setreadonly, z, j);
+			pcall(setreadonly, e, H);
 			return false;
 		end;
-		pcall(setreadonly, z, j);
-		B.Metatable = z;
-		B.OriginalIndex = T;
-		B.OriginalNamecall = X;
-		B.IndexHook = l;
-		B.NamecallHook = v;
-		B.WasReadonly = j;
-		B.Enabled = true;
+		pcall(setreadonly, e, H);
+		a.Metatable = e;
+		a.OriginalIndex = j;
+		a.OriginalNamecall = g;
+		a.IndexHook = w;
+		a.NamecallHook = Q;
+		a.WasReadonly = H;
+		a.Enabled = true;
 		return true;
 	end;
-	local function g()
-		if t() then
-			k();
+	local function G()
+		if D() then
+			S();
 		else
-			T.Auto = nil;
-			T.Silent = nil;
-			X = 0;
+			j.Auto = nil;
+			j.Silent = nil;
+			g = 0;
 			(getgenv()).NexvyrTargetPart = nil;
-			b();
+			P();
 		end;
 	end;
-	local M;
-	w = function()
-			Q();
-			g();
-			if M then
-				M();
+	local E;
+	U = function()
+			h();
+			G();
+			if E then
+				E();
 			end;
 		end;
-	local r = false;
-	E = function()
-			if r or not ((v or x)) then
+	local B = false;
+	c = function()
+			if B or not ((Q or Z)) then
 				return;
 			end;
-			r = true;
+			B = true;
 			task.spawn(function()
-				local z = RaycastParams.new();
-				z.FilterType = Enum.RaycastFilterType.Exclude;
-				while v or x do
+				local e = RaycastParams.new();
+				e.FilterType = Enum.RaycastFilterType.Exclude;
+				while Q or Z do
 					task.wait(.1);
-					if not ((v or x)) then
+					if not ((Q or Z)) then
 						break;
 					end;
-					if not B.Enabled then
+					if not a.Enabled then
 						continue;
 					end;
-					if not Bc() then
-						local u = y.Character;
-						if not u or not u:FindFirstChild("HumanoidRootPart") then
+					if not wp() then
+						local A = K.Character;
+						if not A or not A:FindFirstChild("HumanoidRootPart") then
 							continue;
 						end;
-						local T = u:FindFirstChildOfClass("Tool");
-						if not T or not T:FindFirstChild("Handle") then
-							m("Auto", nil);
+						local j = A:FindFirstChildOfClass("Tool");
+						if not j or not j:FindFirstChild("Handle") then
+							F("Auto", nil);
 							continue;
 						end;
-						if x then
-							if vc(T) then
-								m("Auto", nil);
+						if Z then
+							if tp(j) then
+								F("Auto", nil);
 								continue;
 							end;
-						elseif not xc(T) then
-							m("Auto", nil);
+						elseif not Mp(j) then
+							F("Auto", nil);
 							continue;
 						end;
-						local j = nil;
-						local B = math.huge;
-						local S = u.HumanoidRootPart.Position;
-						local l = u:FindFirstChild("Head");
-						local v = l and l.Position or S;
-						if x then
-							for Y, T in pairs(Y:GetPlayers()) do
-								if T ~= y and (yc(T) and T.Character) then
-									local Y = T.Character:FindFirstChild("Humanoid");
-									if Y and Y.Health > 0 then
-										z.FilterDescendantsInstances = { u, T.Character };
-										local function Y(Y)
-											local u = ((Y.Position - S)).Magnitude;
-											if u < B then
-												local T = Y.Size;
-												local X = { Vector3.new(0, 0, 0), Vector3.new(0, T.Y / 2.1, 0), Vector3.new(0, -T.Y / 2.1, 0) };
-												local y = false;
-												for u, T in ipairs(X) do
-													if not K:Raycast(v, (Y.CFrame * T) - v, z) then
-														y = true;
+						local H = nil;
+						local a = math.huge;
+						local I = A.HumanoidRootPart.Position;
+						local w = A:FindFirstChild("Head");
+						local Q = w and w.Position or I;
+						if Z then
+							for L, j in pairs(L:GetPlayers()) do
+								if j ~= K and (Ip(j) and j.Character) then
+									local L = j.Character:FindFirstChild("Humanoid");
+									if L and L.Health > 0 then
+										e.FilterDescendantsInstances = { A, j.Character };
+										local function L(L)
+											local A = ((L.Position - I)).Magnitude;
+											if A < a then
+												local j = L.Size;
+												local g = { Vector3.new(0, 0, 0), Vector3.new(0, j.Y / 2.1, 0), Vector3.new(0, -j.Y / 2.1, 0) };
+												local K = false;
+												for A, j in ipairs(g) do
+													if not d:Raycast(Q, (L.CFrame * j) - Q, e) then
+														K = true;
 														break;
 													end;
 												end;
-												if y then
-													B = u;
-													j = Y;
+												if K then
+													a = A;
+													H = L;
 												end;
 											end;
 										end;
-										for z, u in ipairs(T.Character:GetChildren()) do
-											if u:IsA("BasePart") and u.Name ~= "HumanoidRootPart" then
-												Y(u);
+										for e, A in ipairs(j.Character:GetChildren()) do
+											if A:IsA("BasePart") and A.Name ~= "HumanoidRootPart" then
+												L(A);
 											end;
 										end;
 									end;
 								end;
 							end;
 						else
-							local T = {};
-							for Y, z in ipairs(Y:GetPlayers()) do
-								if z ~= y and (yc(z) and z.Character) then
-									local Y = z.Character;
-									local u = Y:FindFirstChildOfClass("Humanoid");
-									if u and u.Health > 0 then
-										local z = Y:FindFirstChild("HumanoidRootPart");
-										T[#T + 1] = { Character = Y, Distance = z and ((z.Position - S)).Magnitude or math.huge };
+							local j = {};
+							for L, e in ipairs(L:GetPlayers()) do
+								if e ~= K and (Ip(e) and e.Character) then
+									local L = e.Character;
+									local A = L:FindFirstChildOfClass("Humanoid");
+									if A and A.Health > 0 then
+										local e = L:FindFirstChild("HumanoidRootPart");
+										j[#j + 1] = { Character = L, Distance = e and ((e.Position - I)).Magnitude or math.huge };
 									end;
 								end;
 							end;
-							table.sort(T, function(Y, z)
-								return Y.Distance < z.Distance;
+							table.sort(j, function(L, e)
+								return L.Distance < e.Distance;
 							end);
-							local X = 192;
-							local function l(Y)
-								if not Y or not Y:IsA("BasePart") then
+							local g = 192;
+							local function w(L)
+								if not L or not L:IsA("BasePart") then
 									return;
 								end;
-								local u = ((Y.Position - S)).Magnitude;
-								if u >= B then
+								local A = ((L.Position - I)).Magnitude;
+								if A >= a then
 									return;
 								end;
-								local T = Y.Size.Y / 2.1;
-								local y = Y.CFrame;
-								local function l(Y)
-									if X <= 0 then
+								local j = L.Size.Y / 2.1;
+								local K = L.CFrame;
+								local function w(L)
+									if g <= 0 then
 										return false;
 									end;
-									X = X - (1);
-									return not K:Raycast(v, Y - v, z);
+									g = g - (1);
+									return not d:Raycast(Q, L - Q, e);
 								end;
-								if l(Y.Position) or l(y * Vector3.new(0, T, 0)) or l(y * Vector3.new(0, -T, 0)) then
-									B = u;
-									j = Y;
+								if w(L.Position) or w(K * Vector3.new(0, j, 0)) or w(K * Vector3.new(0, -j, 0)) then
+									a = A;
+									H = L;
 								end;
 							end;
-							for Y, T in ipairs(T) do
-								if X <= 0 then
+							for L, j in ipairs(j) do
+								if g <= 0 then
 									break;
 								end;
-								local K = T.Character;
-								if K.Parent then
-									z.FilterDescendantsInstances = { u, K };
-									if c == "Cuerpo Completo" then
-										for Y, z in ipairs(K:GetChildren()) do
-											if X <= 0 then
+								local d = j.Character;
+								if d.Parent then
+									e.FilterDescendantsInstances = { A, d };
+									if t == "Cuerpo Completo" then
+										for L, e in ipairs(d:GetChildren()) do
+											if g <= 0 then
 												break;
 											end;
-											if z:IsA("BasePart") and z.Name ~= "HumanoidRootPart" then
-												l(z);
+											if e:IsA("BasePart") and e.Name ~= "HumanoidRootPart" then
+												w(e);
 											end;
 										end;
-									elseif c == "Cabeza" then
-										l(K:FindFirstChild("Head"));
-									elseif c == "Torso" then
-										for Y, z in ipairs({ "UpperTorso", "Torso", "HumanoidRootPart" }) do
-											if X <= 0 then
+									elseif t == "Cabeza" then
+										w(d:FindFirstChild("Head"));
+									elseif t == "Torso" then
+										for L, e in ipairs({ "UpperTorso", "Torso", "HumanoidRootPart" }) do
+											if g <= 0 then
 												break;
 											end;
-											l(K:FindFirstChild(z));
+											w(d:FindFirstChild(e));
+										end;
+									end;
+								end;
+							end;
+						end;
+						if H then
+							g = os.clock() + .35;
+							F("Auto", H);
+							pcall(function()
+								j:Activate();
+								task.delay(.05, function()
+									if j.Parent == A then
+										j:Deactivate();
+									end;
+								end);
+							end);
+							task.wait(.2);
+						else
+							F("Auto", nil);
+						end;
+					end;
+				end;
+				F("Auto", nil);
+				B = false;
+			end);
+		end;
+	local O = false;
+	x = function()
+			if O or not ((M or R)) then
+				return;
+			end;
+			O = true;
+			task.spawn(function()
+				local e = RaycastParams.new();
+				e.FilterType = Enum.RaycastFilterType.Exclude;
+				while M or R do
+					task.wait(.1);
+					if not ((M or R)) then
+						break;
+					end;
+					if not wp() then
+						local A = K.Character;
+						if not A or not A:FindFirstChild("HumanoidRootPart") then
+							continue;
+						end;
+						local j = nil;
+						local g = math.huge;
+						local H = math.huge;
+						local a = A.HumanoidRootPart.Position;
+						local I = A:FindFirstChild("Head") and A.Head.Position or a;
+						for L, Q in pairs(L:GetPlayers()) do
+							if Q ~= K and (Ip(Q) and Q.Character) then
+								local L = Q.Character:FindFirstChild("Humanoid");
+								if L and L.Health > 0 then
+									local L = {};
+									if X == "Cabeza" then
+										local e = Q.Character:FindFirstChild("Head");
+										if e then
+											table.insert(L, e);
+										end;
+									elseif X == "Torso" then
+										local e = { "UpperTorso", "Torso", "HumanoidRootPart" };
+										for e, A in ipairs(e) do
+											local j = Q.Character:FindFirstChild(A);
+											if j and j:IsA("BasePart") then
+												table.insert(L, j);
+											end;
+										end;
+									elseif X == "Cuerpo Completo" then
+										for e, A in ipairs(Q.Character:GetChildren()) do
+											if A:IsA("BasePart") and A.Name ~= "HumanoidRootPart" then
+												table.insert(L, A);
+											end;
+										end;
+									end;
+									e.FilterDescendantsInstances = { A, Q.Character };
+									for L, A in ipairs(L) do
+										local K = ((A.Position - a)).Magnitude;
+										local Q = d.CurrentCamera;
+										if not Q then
+											continue;
+										end;
+										local Z, t = Q:WorldToViewportPoint(A.Position);
+										local X = ((Vector2.new(Z.X, Z.Y) - Q.ViewportSize / 2)).Magnitude;
+										local i = false;
+										if R then
+											if t and (X <= w and X < g) then
+												i = true;
+											end;
+										elseif M then
+											if K < H then
+												i = true;
+											end;
+										end;
+										if i then
+											local L = d:Raycast(I, A.Position - I, e);
+											if not L then
+												if R then
+													g = X;
+													j = A;
+												else
+													H = K;
+													j = A;
+												end;
+											end;
 										end;
 									end;
 								end;
 							end;
 						end;
 						if j then
-							X = os.clock() + .35;
-							m("Auto", j);
-							pcall(function()
-								T:Activate();
-								task.delay(.05, function()
-									if T.Parent == u then
-										T:Deactivate();
-									end;
-								end);
-							end);
-							task.wait(.2);
+							F("Silent", j);
 						else
-							m("Auto", nil);
+							F("Silent", nil);
 						end;
 					end;
 				end;
-				m("Auto", nil);
-				r = false;
+				F("Silent", nil);
+				O = false;
 			end);
 		end;
-	local L = false;
-	h = function()
-			if L or not ((V or N)) then
-				return;
+	E = function()
+			if Q or Z then
+				c();
 			end;
-			L = true;
-			task.spawn(function()
-				local z = RaycastParams.new();
-				z.FilterType = Enum.RaycastFilterType.Exclude;
-				while V or N do
-					task.wait(.1);
-					if not ((V or N)) then
-						break;
-					end;
-					if not Bc() then
-						local u = y.Character;
-						if not u or not u:FindFirstChild("HumanoidRootPart") then
-							continue;
-						end;
-						local T = nil;
-						local X = math.huge;
-						local j = math.huge;
-						local B = u.HumanoidRootPart.Position;
-						local S = u:FindFirstChild("Head") and u.Head.Position or B;
-						for Y, v in pairs(Y:GetPlayers()) do
-							if v ~= y and (yc(v) and v.Character) then
-								local Y = v.Character:FindFirstChild("Humanoid");
-								if Y and Y.Health > 0 then
-									local Y = {};
-									if n == "Cabeza" then
-										local z = v.Character:FindFirstChild("Head");
-										if z then
-											table.insert(Y, z);
-										end;
-									elseif n == "Torso" then
-										local z = { "UpperTorso", "Torso", "HumanoidRootPart" };
-										for z, u in ipairs(z) do
-											local T = v.Character:FindFirstChild(u);
-											if T and T:IsA("BasePart") then
-												table.insert(Y, T);
-											end;
-										end;
-									elseif n == "Cuerpo Completo" then
-										for z, u in ipairs(v.Character:GetChildren()) do
-											if u:IsA("BasePart") and u.Name ~= "HumanoidRootPart" then
-												table.insert(Y, u);
-											end;
-										end;
-									end;
-									z.FilterDescendantsInstances = { u, v.Character };
-									for Y, u in ipairs(Y) do
-										local y = ((u.Position - B)).Magnitude;
-										local v = K.CurrentCamera;
-										if not v then
-											continue;
-										end;
-										local x, c = v:WorldToViewportPoint(u.Position);
-										local n = ((Vector2.new(x.X, x.Y) - v.ViewportSize / 2)).Magnitude;
-										local P = false;
-										if N then
-											if c and (n <= l and n < X) then
-												P = true;
-											end;
-										elseif V then
-											if y < j then
-												P = true;
-											end;
-										end;
-										if P then
-											local Y = K:Raycast(S, u.Position - S, z);
-											if not Y then
-												if N then
-													X = n;
-													T = u;
-												else
-													j = y;
-													T = u;
-												end;
-											end;
-										end;
-									end;
-								end;
-							end;
-						end;
-						if T then
-							m("Silent", T);
-						else
-							m("Silent", nil);
-						end;
-					end;
-				end;
-				m("Silent", nil);
-				L = false;
-			end);
-		end;
-	M = function()
-			if v or x then
-				E();
+			if M or R then
+				x();
 			end;
-			if V or N then
-				h();
-			end;
-			if e then
-				a();
+			if r then
+				v();
 			end;
 		end;
 end;
-jc.KillAll:Section({ Title = "Kill All", Icon = "solar:danger-triangle-bold" });
-A.TogKillAll = jc.KillAll:Toggle({ Title = "Kill All", Value = false, Callback = function(Y)
-			s = Y;
-			if Q then
-				Q();
+ap.KillAll:Section({ Title = "Kill All", Icon = "solar:danger-triangle-bold" });
+C.TogKillAll = ap.KillAll:Toggle({ Title = "Kill All", Value = false, Callback = function(L)
+			n = L;
+			if h then
+				h();
 			end;
-			if Y then
+			if L then
 				KillAllInstance:Start();
 			else
 				KillAllInstance:Stop();
 			end;
 		end });
-jc.KillAll:Space();
-jc.KillAll:Divider();
-jc.KillAll:Space();
-jc.KillAll:Section({ Title = "Hitbox Expander", Icon = "solar:box-bold" });
-A.TogHitbox = jc.KillAll:Toggle({ Title = "Activar Hitbox", Value = false, Callback = function(Y)
-			D = Y;
-			if Q then
-				Q();
+ap.KillAll:Space();
+ap.KillAll:Divider();
+ap.KillAll:Space();
+ap.KillAll:Section({ Title = "Hitbox Expander", Icon = "solar:box-bold" });
+C.TogHitbox = ap.KillAll:Toggle({ Title = "Activar Hitbox", Value = false, Callback = function(L)
+			Y = L;
+			if h then
+				h();
 			end;
-			if Y then
-				O();
+			if L then
+				l();
 			else
-				nc();
+				Dp();
 			end;
 		end });
-A.TogHitboxInvisible = jc.KillAll:Toggle({ Title = "Hitbox Invisible", Value = false, Callback = function(Y)
-			p = Y;
+C.TogHitboxInvisible = ap.KillAll:Toggle({ Title = "Hitbox Invisible", Value = false, Callback = function(L)
+			T = L;
 		end });
-A.SliHitboxSize = jc.KillAll:Slider({
+C.SliHitboxSize = ap.KillAll:Slider({
 		Title = "Tama\195\177o de la Hitbox",
 		Step = .5,
 		Value = { Min = 1, Max = 28, Default = 3.5 },
-		Callback = function(Y)
-			b = Y;
+		Callback = function(L)
+			P = L;
 		end,
 	});
-A.ColHitbox = jc.KillAll:Colorpicker({ Title = "Color de la Hitbox", Default = Color3.fromRGB(255, 0, 0), Callback = function(Y)
-			k = Y;
+C.ColHitbox = ap.KillAll:Colorpicker({ Title = "Color de la Hitbox", Default = Color3.fromRGB(255, 0, 0), Callback = function(L)
+			S = L;
 		end });
-jc.Invisible:Section({ Title = "Invisible", Icon = "solar:ghost-bold" });
-local function oc(Y)
-	if y.Character then
-		for z, u in pairs(y.Character:GetDescendants()) do
-			if u:IsA("BasePart") then
-				if Y and u.Transparency == 0 then
-					u:SetAttribute("NexvyrOrigTrans", 0);
-					u.Transparency = .5;
-				elseif not Y and u:GetAttribute("NexvyrOrigTrans") ~= nil then
-					u.Transparency = u:GetAttribute("NexvyrOrigTrans");
-					u:SetAttribute("NexvyrOrigTrans", nil);
+ap.Invisible:Section({ Title = "Invisible", Icon = "solar:ghost-bold" });
+local function np(L)
+	if K.Character then
+		for e, A in pairs(K.Character:GetDescendants()) do
+			if A:IsA("BasePart") then
+				if L and A.Transparency == 0 then
+					A:SetAttribute("NexvyrOrigTrans", 0);
+					A.Transparency = .5;
+				elseif not L and A:GetAttribute("NexvyrOrigTrans") ~= nil then
+					A.Transparency = A:GetAttribute("NexvyrOrigTrans");
+					A:SetAttribute("NexvyrOrigTrans", nil);
 				end;
 			end;
 		end;
 	end;
 end;
-A.TogInvisible = jc.Invisible:Toggle({ Title = "Invisible", Value = false, Callback = function(Y)
-			r = Y;
-			oc(Y);
-			if f then
-				f(Y);
+C.TogInvisible = ap.Invisible:Toggle({ Title = "Invisible", Value = false, Callback = function(L)
+			B = L;
+			np(L);
+			if u then
+				u(L);
 			end;
 		end });
 do
-	local Y;
-	f = function(u)
-			if Y then
-				Y:Disconnect();
-				Y = nil;
+	local L = game:GetService("TweenService");
+	local j = true;
+	local g = Instance.new("TextButton");
+	g.Name = "UzivertInvisibleBind";
+	g.Size = UDim2.fromOffset(104, 38);
+	g.Position = UDim2.new(1, -124, .5, 40);
+	g.BackgroundColor3 = Color3.fromRGB(14, 15, 24);
+	g.BackgroundTransparency = .1;
+	g.AutoButtonColor = false;
+	g.Text = "";
+	g.ZIndex = 60;
+	g.Parent = f;
+	(Instance.new("UICorner", g)).CornerRadius = UDim.new(0, 10);
+	local d = Instance.new("UIScale", g);
+	local H = Instance.new("UIStroke", g);
+	H.Thickness = 1.6;
+	H.Color = Color3.fromRGB(190, 200, 225);
+	local K = Instance.new("Frame", g);
+	K.AnchorPoint = Vector2.new(0, .5);
+	K.Position = UDim2.new(0, 12, .5, 0);
+	K.Size = UDim2.fromOffset(10, 10);
+	K.BackgroundColor3 = Color3.fromRGB(110, 116, 140);
+	K.BorderSizePixel = 0;
+	K.ZIndex = 61;
+	(Instance.new("UICorner", K)).CornerRadius = UDim.new(1, 0);
+	local a = Instance.new("TextLabel", g);
+	a.Position = UDim2.fromOffset(30, 0);
+	a.Size = UDim2.new(1, -36, 1, 0);
+	a.BackgroundTransparency = 1;
+	a.Text = "Invisible";
+	a.TextColor3 = Color3.new(1, 1, 1);
+	a.Font = Enum.Font.GothamBold;
+	a.TextSize = 13;
+	a.TextXAlignment = Enum.TextXAlignment.Left;
+	a.ZIndex = 61;
+	local function I(L)
+		pcall(function()
+			C.TogInvisible:Set(L);
+		end);
+		if B ~= L then
+			B = L;
+			np(L);
+			if u then
+				u(L);
 			end;
-			if not u then
+		end;
+	end;
+	local w, Q, Z, t, M = false, false, nil, nil, nil;
+	g.InputBegan:Connect(function(e)
+		if e.UserInputType == Enum.UserInputType.MouseButton1 or e.UserInputType == Enum.UserInputType.Touch then
+			if w then
 				return;
 			end;
-			Y = z.Heartbeat:Connect(function()
-					if not r then
+			w, Q = true, false;
+			M = e;
+			Z, t = g.Position, e.Position;
+			(L:Create(d, TweenInfo.new(.1), { Scale = .94 })):Play();
+		end;
+	end);
+	A.InputChanged:Connect(function(L)
+		if not w then
+			return;
+		end;
+		if L.UserInputType == Enum.UserInputType.MouseMovement then
+			if not M or M.UserInputType ~= Enum.UserInputType.MouseButton1 then
+				return;
+			end;
+		elseif L ~= M then
+			return;
+		end;
+		do
+			local e = L.Position - t;
+			if Q or e.Magnitude > 8 then
+				Q = true;
+				g.Position = UDim2.new(Z.X.Scale, Z.X.Offset + e.X, Z.Y.Scale, Z.Y.Offset + e.Y);
+			end;
+		end;
+	end);
+	A.InputEnded:Connect(function(e)
+		if not w or e ~= M then
+			return;
+		end;
+		do
+			w = false;
+			M = nil;
+			(L:Create(d, TweenInfo.new(.2, Enum.EasingStyle.Back), { Scale = 1 })):Play();
+			if not Q then
+				I(not B);
+			end;
+		end;
+	end);
+	e.Heartbeat:Connect(function()
+		if not g.Parent then
+			return;
+		end;
+		local L = B;
+		K.BackgroundColor3 = K.BackgroundColor3:Lerp(L and Color3.fromRGB(61, 220, 132) or Color3.fromRGB(110, 116, 140), .25);
+		H.Color = H.Color:Lerp(L and Color3.fromRGB(61, 220, 132) or Color3.fromRGB(190, 200, 225), .25);
+	end);
+	ap.Invisible:Toggle({ Title = "Mostrar bot\195\179n bindable", Value = true, Callback = function(L)
+			j = L;
+			g.Visible = L;
+		end });
+end;
+do
+	local L;
+	u = function(A)
+			if L then
+				L:Disconnect();
+				L = nil;
+			end;
+			if not A then
+				return;
+			end;
+			L = e.Heartbeat:Connect(function()
+					if not B then
 						return;
 					end;
-					local Y = y.Character;
-					if Y then
-						local u = Y:FindFirstChild("HumanoidRootPart");
-						local T = Y:FindFirstChildOfClass("Humanoid");
-						if u and (T and T.Health > 0) then
-							if u.Position.Y > 200 then
+					local L = K.Character;
+					if L then
+						local A = L:FindFirstChild("HumanoidRootPart");
+						local j = L:FindFirstChildOfClass("Humanoid");
+						if A and (j and j.Health > 0) then
+							if A.Position.Y > 200 then
 								return;
 							end;
-							local Y = u.CFrame;
-							local X = T.CameraOffset;
-							local K = Y * CFrame.new(0, -40, 0);
-							u.CFrame = K;
-							T.CameraOffset = (K:ToObjectSpace(CFrame.new(Y.Position))).Position;
-							z.RenderStepped:Wait();
-							if u.Parent and T.Parent then
-								u.CFrame = Y;
-								T.CameraOffset = X;
+							local L = A.CFrame;
+							local g = j.CameraOffset;
+							local d = L * CFrame.new(0, -40, 0);
+							A.CFrame = d;
+							j.CameraOffset = (d:ToObjectSpace(CFrame.new(L.Position))).Position;
+							e.RenderStepped:Wait();
+							if A.Parent and j.Parent then
+								A.CFrame = L;
+								j.CameraOffset = g;
 							end;
 						end;
 					end;
 				end);
 		end;
 end;
-y.CharacterAdded:Connect(function(Y)
-	if r then
+K.CharacterAdded:Connect(function(L)
+	if B then
 		task.wait(.5);
-		oc(true);
+		np(true);
 	end;
 end);
-jc.Tramposo:Section({ Title = "Movimiento", Icon = "solar:bolt-bold" });
-local Jc = 28.7;
-local sc = 45;
+ap.Tramposo:Section({ Title = "Movimiento", Icon = "solar:bolt-bold" });
+local Yp = 28.7;
+local Tp = 45;
 do
-	local Y = T:WaitForChild("MovementState", 3);
-	local function X(z, u)
-		if Y then
-			Y:FireServer(z, u);
+	local L = j:WaitForChild("MovementState", 3);
+	local function g(e, A)
+		if L then
+			L:FireServer(e, A);
 		end;
 	end;
-	local K = 14;
-	local j, B, S;
-	local l = Vector3.zero;
-	local v = false;
-	local x = 0;
-	local function c()
-		local Y = y.Character;
-		if not Y then
+	local d = 14;
+	local H, a, I;
+	local w = Vector3.zero;
+	local Q = false;
+	local Z = 0;
+	local function t()
+		local L = K.Character;
+		if not L then
 			return;
 		end;
-		return Y:FindFirstChildOfClass("Humanoid"), Y:FindFirstChild("HumanoidRootPart");
+		return L:FindFirstChildOfClass("Humanoid"), L:FindFirstChild("HumanoidRootPart");
 	end;
-	local function V(Y)
-		if j then
-			j:Disconnect();
-			j = nil;
+	local function M(L)
+		if H then
+			H:Disconnect();
+			H = nil;
 		end;
-		l = Vector3.zero;
-		if not Y then
+		w = Vector3.zero;
+		if not L then
 			return;
 		end;
-		j = z.Stepped:Connect(function(Y, z)
-				local u, T = c();
-				if not u or not T or u.Health <= 0 then
+		H = e.Stepped:Connect(function(L, e)
+				local A, j = t();
+				if not A or not j or A.Health <= 0 then
 					return;
 				end;
-				local X = 1 - math.exp(-K * z);
-				l = l:Lerp(u.MoveDirection, X);
-				if l.Magnitude > .01 then
-					local Y = math.max(Jc - u.WalkSpeed, 0);
-					T.CFrame = T.CFrame + (l * Y) * z;
+				local g = 1 - math.exp(-d * e);
+				w = w:Lerp(A.MoveDirection, g);
+				if w.Magnitude > .01 then
+					local L = math.max(Yp - A.WalkSpeed, 0);
+					j.CFrame = j.CFrame + (w * L) * e;
 				end;
 			end);
 	end;
-	local function N(Y)
-		if B then
-			B:Disconnect();
-			B = nil;
+	local function R(L)
+		if a then
+			a:Disconnect();
+			a = nil;
 		end;
-		if S then
-			S:Disconnect();
-			S = nil;
+		if I then
+			I:Disconnect();
+			I = nil;
 		end;
-		v = false;
-		x = 0;
-		if not Y then
+		Q = false;
+		Z = 0;
+		if not L then
 			return;
 		end;
-		S = u.JumpRequest:Connect(function()
-				v = true;
+		I = A.JumpRequest:Connect(function()
+				Q = true;
 			end);
-		B = z.Stepped:Connect(function(Y, z)
-				local T, X = c();
-				if not T or not X or T.Health <= 0 then
+		a = e.Stepped:Connect(function(L, e)
+				local j, g = t();
+				if not j or not g or j.Health <= 0 then
 					return;
 				end;
-				local j = u:IsKeyDown(Enum.KeyCode.Space) or T.Jump;
-				if v and not j then
-					v = false;
+				local H = A:IsKeyDown(Enum.KeyCode.Space) or j.Jump;
+				if Q and not H then
+					Q = false;
 				end;
-				local y = v and sc or 0;
-				x = x + ((y - x)) * ((1 - math.exp(-K * z)));
-				if x > .5 then
-					X.CFrame = X.CFrame + Vector3.new(0, x * z, 0);
-					local Y = X.AssemblyLinearVelocity;
-					if Y.Y < 0 then
-						X.AssemblyLinearVelocity = Vector3.new(Y.X, 0, Y.Z);
+				local K = Q and Tp or 0;
+				Z = Z + ((K - Z)) * ((1 - math.exp(-d * e)));
+				if Z > .5 then
+					g.CFrame = g.CFrame + Vector3.new(0, Z * e, 0);
+					local L = g.AssemblyLinearVelocity;
+					if L.Y < 0 then
+						g.AssemblyLinearVelocity = Vector3.new(L.X, 0, L.Z);
 					end;
 				end;
 			end);
 	end;
-	A.TogSpeed = jc.Tramposo:Toggle({ Title = "Speed", Value = false, Callback = function(Y)
-				V(Y);
-				X("Speed", Y);
+	C.TogSpeed = ap.Tramposo:Toggle({ Title = "Speed", Value = false, Callback = function(L)
+				M(L);
+				g("Speed", L);
 			end });
-	A.SliSpeed = jc.Tramposo:Slider({
+	C.SliSpeed = ap.Tramposo:Slider({
 			Title = "Ajuste Speed",
 			Step = 1,
 			Value = { Min = 1, Max = 100, Default = 29 },
-			Callback = function(Y)
-				Jc = Y;
+			Callback = function(L)
+				Yp = L;
 			end,
 		});
-	A.TogInfJump = jc.Tramposo:Toggle({ Title = "Salto Inf", Value = false, Callback = function(Y)
-				N(Y);
-				X("Jump", Y);
+	C.TogInfJump = ap.Tramposo:Toggle({ Title = "Salto Inf", Value = false, Callback = function(L)
+				R(L);
+				g("Jump", L);
 			end });
-	A.SliJumpPower = jc.Tramposo:Slider({
+	C.SliJumpPower = ap.Tramposo:Slider({
 			Title = "Ajuste Salto",
 			Step = 1,
 			Value = { Min = 1, Max = 100, Default = 45 },
-			Callback = function(Y)
-				sc = Y;
+			Callback = function(L)
+				Tp = L;
 			end,
 		});
 end;
-jc.RachaFarm:Section({ Title = "Auto Teleport Main/Alt", Icon = "solar:map-arrow-square-bold" });
-local Dc, pc;
-Dc = jc.RachaFarm:Toggle({ Title = "Auto Teleport (Main)", Value = false, Callback = function(Y)
-			if Y then
+ap.RachaFarm:Section({ Title = "Auto Teleport Main/Alt", Icon = "solar:map-arrow-square-bold" });
+local Pp, Sp;
+Pp = ap.RachaFarm:Toggle({ Title = "Auto Teleport (Main)", Value = false, Callback = function(L)
+			if L then
 				AutoTeleportMainAltInstance.ActiveRole = "Main";
-				if pc then
+				if Sp then
 					pcall(function()
-						pc:Set(false);
+						Sp:Set(false);
 					end);
 				end;
 				AutoTeleportMainAltInstance:Stop();
@@ -3385,12 +3578,12 @@ Dc = jc.RachaFarm:Toggle({ Title = "Auto Teleport (Main)", Value = false, Callba
 				end;
 			end;
 		end });
-pc = jc.RachaFarm:Toggle({ Title = "Auto Teleport (Alt)", Value = false, Callback = function(Y)
-			if Y then
+Sp = ap.RachaFarm:Toggle({ Title = "Auto Teleport (Alt)", Value = false, Callback = function(L)
+			if L then
 				AutoTeleportMainAltInstance.ActiveRole = "Alt";
-				if Dc then
+				if Pp then
 					pcall(function()
-						Dc:Set(false);
+						Pp:Set(false);
 					end);
 				end;
 				AutoTeleportMainAltInstance:Stop();
@@ -3402,7 +3595,7 @@ pc = jc.RachaFarm:Toggle({ Title = "Auto Teleport (Alt)", Value = false, Callbac
 				end;
 			end;
 		end });
-jc.RachaFarm:Dropdown({
+ap.RachaFarm:Dropdown({
 	Title = "Tipo de Duelo",
 	Values = {
 		"1v1",
@@ -3411,22 +3604,22 @@ jc.RachaFarm:Dropdown({
 		"4v4",
 	},
 	Value = "1v1",
-	Callback = function(Y)
-		if Pc["Right Platforms"][Y] then
-			AutoTeleportMainAltInstance.DuelType = Y;
+	Callback = function(L)
+		if sp["Right Platforms"][L] then
+			AutoTeleportMainAltInstance.DuelType = L;
 		else
 			AutoTeleportMainAltInstance.DuelType = "1v1";
 		end;
 		AutoTeleportMainAltInstance:Kick();
 	end,
 });
-jc.RachaFarm:Dropdown({
+ap.RachaFarm:Dropdown({
 	Title = "Fila de Plataformas",
 	Values = { "Right Platforms", "Left Platforms" },
 	Value = "Right Platforms",
-	Callback = function(Y)
-		if Pc[Y] then
-			AutoTeleportMainAltInstance.PlatformRow = Y;
+	Callback = function(L)
+		if sp[L] then
+			AutoTeleportMainAltInstance.PlatformRow = L;
 		else
 			AutoTeleportMainAltInstance.PlatformRow = "Right Platforms";
 		end;
@@ -3434,180 +3627,180 @@ jc.RachaFarm:Dropdown({
 	end,
 });
 do
-	jc.Vis:Section({ Title = "Configuraci\195\179n de ESP", Icon = "solar:eye-bold" });
-	local u = {};
-	local X = 1500;
-	local function j(Y)
-		local z = u[Y];
-		if not z then
+	ap.Vis:Section({ Title = "Configuraci\195\179n de ESP", Icon = "solar:eye-bold" });
+	local A = {};
+	local g = 1500;
+	local function H(L)
+		local e = A[L];
+		if not e then
 			return;
 		end;
-		if z.Highlight then
-			z.Highlight:Destroy();
+		if e.Highlight then
+			e.Highlight:Destroy();
 		end;
-		u[Y] = nil;
+		A[L] = nil;
 	end;
-	local function B()
-		for Y in pairs(u) do
-			j(Y);
+	local function a()
+		for L in pairs(A) do
+			H(L);
 		end;
 	end;
-	A.TogEsp = jc.Vis:Toggle({ Title = "ESP Jugadores", Callback = function(Y)
-				t = Y;
-				if Q then
-					Q();
+	C.TogEsp = ap.Vis:Toggle({ Title = "ESP Jugadores", Callback = function(L)
+				D = L;
+				if h then
+					h();
 				end;
-				if t and J.Glow then
-					Z();
+				if D and k.Glow then
+					y();
 				else
-					B();
+					a();
 				end;
 			end });
-	A.ColEsp = jc.Vis:Colorpicker({ Title = "Color del ESP", Default = Color3.fromRGB(255, 255, 255), Callback = function(Y)
-				o = Y;
+	C.ColEsp = ap.Vis:Colorpicker({ Title = "Color del ESP", Default = Color3.fromRGB(255, 255, 255), Callback = function(L)
+				s = L;
 			end });
-	jc.Vis:Space();
-	jc.Vis:Divider();
-	jc.Vis:Space();
-	jc.Vis:Section({ Title = "Filtros de ESP", Icon = "solar:filter-bold" });
-	A.TogEspGl = jc.Vis:Toggle({ Title = "Mostrar Resplandor", Value = true, Callback = function(Y)
-				J.Glow = Y;
-				if Q then
-					Q();
+	ap.Vis:Space();
+	ap.Vis:Divider();
+	ap.Vis:Space();
+	ap.Vis:Section({ Title = "Filtros de ESP", Icon = "solar:filter-bold" });
+	C.TogEspGl = ap.Vis:Toggle({ Title = "Mostrar Resplandor", Value = true, Callback = function(L)
+				k.Glow = L;
+				if h then
+					h();
 				end;
-				if Y and t then
-					Z();
+				if L and D then
+					y();
 				else
-					B();
+					a();
 				end;
 			end });
-	local v = false;
-	Z = function()
-			if v or not t or not J.Glow then
+	local Q = false;
+	y = function()
+			if Q or not D or not k.Glow then
 				return;
 			end;
-			v = true;
+			Q = true;
 			task.spawn(function()
-				local z = Y.PlayerRemoving:Connect(j);
-				while t and J.Glow do
+				local e = L.PlayerRemoving:Connect(H);
+				while D and k.Glow do
 					task.wait(.2);
-					if not t or not J.Glow then
+					if not D or not k.Glow then
 						break;
 					end;
-					if Sc() then
-						local z = y.Character;
-						local T = z and z:FindFirstChild("Head");
-						local K = T and T.Position;
-						for Y, z in ipairs(Y:GetPlayers()) do
-							if z ~= y then
-								local Y = z.Character;
-								local T = Y and Y:FindFirstChild("Head");
-								if T and (yc(z) and ((not K or ((T.Position - K)).Magnitude <= X))) then
-									local T = u[z];
-									if T and ((T.Char ~= Y or not T.Highlight or T.Highlight.Parent ~= I)) then
-										j(z);
+					if Qp() then
+						local e = K.Character;
+						local j = e and e:FindFirstChild("Head");
+						local d = j and j.Position;
+						for L, e in ipairs(L:GetPlayers()) do
+							if e ~= K then
+								local L = e.Character;
+								local j = L and L:FindFirstChild("Head");
+								if j and (Ip(e) and ((not d or ((j.Position - d)).Magnitude <= g))) then
+									local j = A[e];
+									if j and ((j.Char ~= L or not j.Highlight or j.Highlight.Parent ~= W)) then
+										H(e);
 									end;
-									if not u[z] then
-										local T = Instance.new("Highlight");
-										T.Name = z.Name .. "_Glow";
-										T.FillTransparency = 1;
-										T.OutlineTransparency = 0;
-										T.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop;
-										T.Adornee = Y;
-										T.Parent = I;
-										u[z] = { Highlight = T, Char = Y };
+									if not A[e] then
+										local j = Instance.new("Highlight");
+										j.Name = e.Name .. "_Glow";
+										j.FillTransparency = 1;
+										j.OutlineTransparency = 0;
+										j.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop;
+										j.Adornee = L;
+										j.Parent = W;
+										A[e] = { Highlight = j, Char = L };
 									end;
-									local X = u[z].Highlight;
-									if X.Enabled ~= J.Glow then
-										X.Enabled = J.Glow;
+									local g = A[e].Highlight;
+									if g.Enabled ~= k.Glow then
+										g.Enabled = k.Glow;
 									end;
-									if X.OutlineColor ~= o then
-										X.OutlineColor = o;
+									if g.OutlineColor ~= s then
+										g.OutlineColor = s;
 									end;
 								else
-									j(z);
+									H(e);
 								end;
 							end;
 						end;
 					else
-						B();
+						a();
 					end;
 				end;
-				z:Disconnect();
-				B();
-				v = false;
+				e:Disconnect();
+				a();
+				Q = false;
 			end);
 		end;
-	local x;
-	local c;
-	W = function()
-			if not S then
-				if c then
-					c:Disconnect();
-					c = nil;
+	local Z;
+	local t;
+	z = function()
+			if not I then
+				if t then
+					t:Disconnect();
+					t = nil;
 				end;
-				if x then
-					x.Visible = false;
+				if Z then
+					Z.Visible = false;
 				end;
 				return;
 			end;
-			if not x and Drawing then
-				x = Drawing.new("Circle");
-				x.Filled = false;
-				x.Thickness = 1;
-				x.Visible = false;
+			if not Z and Drawing then
+				Z = Drawing.new("Circle");
+				Z.Filled = false;
+				Z.Thickness = 1;
+				Z.Visible = false;
 			end;
-			if not x or c then
+			if not Z or t then
 				return;
 			end;
-			c = z.RenderStepped:Connect(function()
-					if not S then
+			t = e.RenderStepped:Connect(function()
+					if not I then
 						return;
 					end;
-					local Y = K.CurrentCamera;
-					if not Y then
+					local L = d.CurrentCamera;
+					if not L then
 						return;
 					end;
-					x.Position = Y.ViewportSize / 2;
-					x.Radius = l;
-					x.Color = N and ((getgenv()).NexvyrTargetPart and Color3.fromRGB(0, 255, 0)) or Color3.fromRGB(255, 255, 255);
-					x.Visible = true;
+					Z.Position = L.ViewportSize / 2;
+					Z.Radius = w;
+					Z.Color = R and ((getgenv()).NexvyrTargetPart and Color3.fromRGB(0, 255, 0)) or Color3.fromRGB(255, 255, 255);
+					Z.Visible = true;
 				end);
 		end;
-	jc.Farm:Section({ Title = "Farmeo de Evento", Icon = "solar:gift-bold" });
+	ap.Farm:Section({ Title = "Farmeo de Evento", Icon = "solar:gift-bold" });
 	(getgenv()).AutoEventFarm = false;
-	local V = 0;
-	local n = T:FindFirstChild("Packages") and T.Packages:FindFirstChild("Networking");
-	local P = n and n:FindFirstChild("RE/Events/CollectEventSpawnable");
-	jc.Farm:Toggle({ Title = "Auto Farmear Evento", Callback = function(Y)
-			(getgenv()).AutoEventFarm = Y;
-			V = V + (1);
-			local z = V;
-			if Y then
+	local M = 0;
+	local X = j:FindFirstChild("Packages") and j.Packages:FindFirstChild("Networking");
+	local i = X and X:FindFirstChild("RE/Events/CollectEventSpawnable");
+	ap.Farm:Toggle({ Title = "Auto Farmear Evento", Callback = function(L)
+			(getgenv()).AutoEventFarm = L;
+			M = M + (1);
+			local e = M;
+			if L then
 				task.spawn(function()
-					while (getgenv()).AutoEventFarm and z == V do
+					while (getgenv()).AutoEventFarm and e == M do
 						pcall(function()
-							if P then
-								P:FireServer();
+							if i then
+								i:FireServer();
 							else
-								n = T:FindFirstChild("Packages") and T.Packages:FindFirstChild("Networking");
-								P = n and n:FindFirstChild("RE/Events/CollectEventSpawnable");
+								X = j:FindFirstChild("Packages") and j.Packages:FindFirstChild("Networking");
+								i = X and X:FindFirstChild("RE/Events/CollectEventSpawnable");
 							end;
 						end);
-						local Y = y.Character;
-						local u = Y and Y:FindFirstChild("HumanoidRootPart");
-						if u then
-							local Y = K:FindFirstChild("SpawnablesClient");
-							if Y then
-								for Y, T in ipairs(Y:GetChildren()) do
-									if not (getgenv()).AutoEventFarm or z ~= V then
+						local L = K.Character;
+						local A = L and L:FindFirstChild("HumanoidRootPart");
+						if A then
+							local L = d:FindFirstChild("SpawnablesClient");
+							if L then
+								for L, j in ipairs(L:GetChildren()) do
+									if not (getgenv()).AutoEventFarm or e ~= M then
 										break;
 									end;
-									local X = T:FindFirstChild("Touch");
-									if X then
+									local g = j:FindFirstChild("Touch");
+									if g then
 										pcall(function()
-											firetouchinterest(u, X, 0);
-											firetouchinterest(u, X, 1);
+											firetouchinterest(A, g, 0);
+											firetouchinterest(A, g, 1);
 										end);
 									end;
 								end;
@@ -3620,7 +3813,7 @@ do
 		end });
 end;
 do
-	local Y = {
+	local L = {
 			["Old School"] = {
 				Walk = 10921244891,
 				Run = 10921240218,
@@ -3882,197 +4075,197 @@ do
 				Climb = 742636889,
 			},
 		};
-	local function z()
-		local Y = y.Character;
-		if not Y then
+	local function e()
+		local L = K.Character;
+		if not L then
 			return;
 		end;
-		local z = Y:FindFirstChildOfClass("Humanoid");
-		if not z then
+		local e = L:FindFirstChildOfClass("Humanoid");
+		if not e then
 			return;
 		end;
-		for Y, z in pairs(z:GetPlayingAnimationTracks()) do
-			z:Stop(0);
-			z:Destroy();
+		for L, e in pairs(e:GetPlayingAnimationTracks()) do
+			e:Stop(0);
+			e:Destroy();
 		end;
-		local u = z:FindFirstChildOfClass("Animator");
-		if u then
-			for Y, z in pairs(u:GetPlayingAnimationTracks()) do
-				z:Stop(0);
-				z:Destroy();
+		local A = e:FindFirstChildOfClass("Animator");
+		if A then
+			for L, e in pairs(A:GetPlayingAnimationTracks()) do
+				e:Stop(0);
+				e:Destroy();
 			end;
 		end;
 		task.wait(.1);
 	end;
-	local function u(Y)
-		if not Y then
+	local function A(L)
+		if not L then
 			return;
 		end;
-		local u = y.Character;
-		if not u then
+		local A = K.Character;
+		if not A then
 			return;
 		end;
-		z();
-		local T = u:FindFirstChild("Animate");
-		if not T then
+		e();
+		local j = A:FindFirstChild("Animate");
+		if not j then
 			return;
 		end;
-		if not R then
-			local function Y(Y, z)
-				local u = T:FindFirstChild(Y);
-				if u then
-					local Y = u:FindFirstChild(z);
-					if Y and Y:IsA("Animation") then
-						local z = Y.AnimationId:match("%d+");
-						if z then
-							return tonumber(z);
+		if not p then
+			local function L(L, e)
+				local A = j:FindFirstChild(L);
+				if A then
+					local L = A:FindFirstChild(e);
+					if L and L:IsA("Animation") then
+						local e = L.AnimationId:match("%d+");
+						if e then
+							return tonumber(e);
 						end;
 					end;
 				end;
 				return nil;
 			end;
-			R = {
-					Idle = Y("idle", "Animation1") or 507766666,
-					Idle2 = Y("idle", "Animation2") or 507766951,
-					Walk = Y("walk", "WalkAnim") or 507777826,
-					Run = Y("run", "RunAnim") or 507767714,
-					Jump = Y("jump", "JumpAnim") or 507765000,
-					Climb = Y("climb", "ClimbAnim") or 507765644,
-					Fall = Y("fall", "FallAnim") or 507767968,
-					Swim = Y("swim", "Swim") or 507784897,
-					SwimIdle = Y("swimidle", "SwimIdle") or 507785072,
+			p = {
+					Idle = L("idle", "Animation1") or 507766666,
+					Idle2 = L("idle", "Animation2") or 507766951,
+					Walk = L("walk", "WalkAnim") or 507777826,
+					Run = L("run", "RunAnim") or 507767714,
+					Jump = L("jump", "JumpAnim") or 507765000,
+					Climb = L("climb", "ClimbAnim") or 507765644,
+					Fall = L("fall", "FallAnim") or 507767968,
+					Swim = L("swim", "Swim") or 507784897,
+					SwimIdle = L("swimidle", "SwimIdle") or 507785072,
 				};
 		end;
-		T.Disabled = true;
+		j.Disabled = true;
 		task.wait(.1);
-		local function X(Y, z, u)
-			if not u then
+		local function g(L, e, A)
+			if not A then
 				return;
 			end;
-			local X = T:FindFirstChild(Y);
-			if X then
-				local Y = X:FindFirstChild(z);
-				if Y and Y:IsA("Animation") then
-					Y.AnimationId = "rbxassetid://" .. tostring(u);
+			local g = j:FindFirstChild(L);
+			if g then
+				local L = g:FindFirstChild(e);
+				if L and L:IsA("Animation") then
+					L.AnimationId = "rbxassetid://" .. tostring(A);
 				end;
 			end;
 		end;
-		X("idle", "Animation1", Y.Idle);
-		X("idle", "Animation2", Y.Idle2 or Y.Idle);
-		X("walk", "WalkAnim", Y.Walk);
-		X("run", "RunAnim", Y.Run);
-		X("jump", "JumpAnim", Y.Jump);
-		X("climb", "ClimbAnim", Y.Climb);
-		X("fall", "FallAnim", Y.Fall);
-		X("swim", "Swim", Y.Swim);
-		X("swimidle", "SwimIdle", Y.SwimIdle or Y.Swim);
+		g("idle", "Animation1", L.Idle);
+		g("idle", "Animation2", L.Idle2 or L.Idle);
+		g("walk", "WalkAnim", L.Walk);
+		g("run", "RunAnim", L.Run);
+		g("jump", "JumpAnim", L.Jump);
+		g("climb", "ClimbAnim", L.Climb);
+		g("fall", "FallAnim", L.Fall);
+		g("swim", "Swim", L.Swim);
+		g("swimidle", "SwimIdle", L.SwimIdle or L.Swim);
 		task.wait(.1);
-		T.Disabled = false;
-		local K = u:FindFirstChildOfClass("Humanoid");
-		if K then
-			K:ChangeState(Enum.HumanoidStateType.Landed);
+		j.Disabled = false;
+		local d = A:FindFirstChildOfClass("Humanoid");
+		if d then
+			d:ChangeState(Enum.HumanoidStateType.Landed);
 			task.wait(.05);
-			K:ChangeState(Enum.HumanoidStateType.Running);
+			d:ChangeState(Enum.HumanoidStateType.Running);
 		end;
 	end;
-	local T = false;
-	F = function()
-			if T or not L then
+	local j = false;
+	q = function()
+			if j or not O then
 				return;
 			end;
-			T = true;
+			j = true;
 			task.spawn(function()
-				while L do
+				while O do
 					task.wait(.2);
-					if not L then
+					if not O then
 						break;
 					end;
-					local Y = y.Character;
-					if not Y then
+					local L = K.Character;
+					if not L then
 						continue;
 					end;
-					local z = Y:FindFirstChildOfClass("Humanoid");
-					if not z then
+					local e = L:FindFirstChildOfClass("Humanoid");
+					if not e then
 						continue;
 					end;
-					if z.Health <= 0 then
+					if e.Health <= 0 then
 						continue;
 					end;
-					if z.MoveDirection.Magnitude >= .1 then
+					if e.MoveDirection.Magnitude >= .1 then
 						continue;
 					end;
-					local u = Y:FindFirstChild("Animate");
-					if not u then
+					local A = L:FindFirstChild("Animate");
+					if not A then
 						continue;
 					end;
-					local T = {};
-					local X = u:FindFirstChild("walk");
-					local K = u:FindFirstChild("run");
-					if X then
-						for Y, z in ipairs(X:GetChildren()) do
-							if z:IsA("Animation") then
-								table.insert(T, z.AnimationId);
+					local j = {};
+					local g = A:FindFirstChild("walk");
+					local d = A:FindFirstChild("run");
+					if g then
+						for L, e in ipairs(g:GetChildren()) do
+							if e:IsA("Animation") then
+								table.insert(j, e.AnimationId);
 							end;
 						end;
 					end;
-					if K then
-						for Y, z in ipairs(K:GetChildren()) do
-							if z:IsA("Animation") then
-								table.insert(T, z.AnimationId);
+					if d then
+						for L, e in ipairs(d:GetChildren()) do
+							if e:IsA("Animation") then
+								table.insert(j, e.AnimationId);
 							end;
 						end;
 					end;
-					if #T == 0 then
+					if #j == 0 then
 						continue;
 					end;
-					local j = z:FindFirstChildOfClass("Animator");
-					if j then
-						for Y, z in ipairs(j:GetPlayingAnimationTracks()) do
-							if z.Animation and table.find(T, z.Animation.AnimationId) then
-								z:Stop(0);
+					local H = e:FindFirstChildOfClass("Animator");
+					if H then
+						for L, e in ipairs(H:GetPlayingAnimationTracks()) do
+							if e.Animation and table.find(j, e.Animation.AnimationId) then
+								e:Stop(0);
 							end;
 						end;
 					end;
 				end;
-				T = false;
+				j = false;
 			end);
 		end;
-	y.CharacterAdded:Connect(function()
-		if L then
+	K.CharacterAdded:Connect(function()
+		if O then
 			task.spawn(function()
 				task.wait(.8);
-				u(L);
+				A(O);
 			end);
 		end;
 	end);
-	local X = { "Ninguno" };
-	for Y, z in pairs(Y) do
-		table.insert(X, Y);
+	local g = { "Ninguno" };
+	for L, e in pairs(L) do
+		table.insert(g, L);
 	end;
-	table.sort(X);
-	jc.Animaciones:Section({ Title = "Paquetes Completos", Icon = "solar:folder-with-files-bold" });
-	local K = "Ninguno";
-	jc.Animaciones:Dropdown({
+	table.sort(g);
+	ap.Animaciones:Section({ Title = "Paquetes Completos", Icon = "solar:folder-with-files-bold" });
+	local d = "Ninguno";
+	ap.Animaciones:Dropdown({
 		Title = "Elegir Paquete",
-		Values = X,
+		Values = g,
 		Value = "Ninguno",
-		Callback = function(Y)
-			K = Y;
+		Callback = function(L)
+			d = L;
 		end,
 	});
-	jc.Animaciones:Button({ Title = "Aplicar Paquete Completo", Callback = function()
-			if K == "Ninguno" then
+	ap.Animaciones:Button({ Title = "Aplicar Paquete Completo", Callback = function()
+			if d == "Ninguno" then
 				return;
 			end;
 			task.spawn(function()
-				L = Y[K];
-				F();
-				u(L);
+				O = L[d];
+				q();
+				A(O);
 			end);
 		end });
-	jc.Animaciones:Button({ Title = "Restaurar Default", Callback = function()
+	ap.Animaciones:Button({ Title = "Restaurar Default", Callback = function()
 			task.spawn(function()
-				local Y = R or {
+				local L = p or {
 						Idle = 507766666,
 						Idle2 = 507766951,
 						Walk = 507777826,
@@ -4083,15 +4276,15 @@ do
 						Swim = 507784897,
 						SwimIdle = 507785072,
 					};
-				L = nil;
-				u(Y);
+				O = nil;
+				A(L);
 			end);
 		end });
-	jc.Animaciones:Space();
-	jc.Animaciones:Divider();
-	jc.Animaciones:Space();
-	jc.Animaciones:Section({ Title = "Mezclador de Animaciones", Icon = "solar:layers-bold" });
-	local j = {
+	ap.Animaciones:Space();
+	ap.Animaciones:Divider();
+	ap.Animaciones:Space();
+	ap.Animaciones:Section({ Title = "Mezclador de Animaciones", Icon = "solar:layers-bold" });
+	local H = {
 			Idle = "Ninguno",
 			Walk = "Ninguno",
 			Run = "Ninguno",
@@ -4099,125 +4292,125 @@ do
 			Fall = "Ninguno",
 			Climb = "Ninguno",
 		};
-	jc.Animaciones:Dropdown({
+	ap.Animaciones:Dropdown({
 		Title = "Reposo",
-		Values = X,
+		Values = g,
 		Value = "Ninguno",
-		Callback = function(Y)
-			j.Idle = Y;
+		Callback = function(L)
+			H.Idle = L;
 		end,
 	});
-	jc.Animaciones:Dropdown({
+	ap.Animaciones:Dropdown({
 		Title = "Caminar",
-		Values = X,
+		Values = g,
 		Value = "Ninguno",
-		Callback = function(Y)
-			j.Walk = Y;
+		Callback = function(L)
+			H.Walk = L;
 		end,
 	});
-	jc.Animaciones:Dropdown({
+	ap.Animaciones:Dropdown({
 		Title = "Correr",
-		Values = X,
+		Values = g,
 		Value = "Ninguno",
-		Callback = function(Y)
-			j.Run = Y;
+		Callback = function(L)
+			H.Run = L;
 		end,
 	});
-	jc.Animaciones:Dropdown({
+	ap.Animaciones:Dropdown({
 		Title = "Saltar",
-		Values = X,
+		Values = g,
 		Value = "Ninguno",
-		Callback = function(Y)
-			j.Jump = Y;
+		Callback = function(L)
+			H.Jump = L;
 		end,
 	});
-	jc.Animaciones:Dropdown({
+	ap.Animaciones:Dropdown({
 		Title = "Caer",
-		Values = X,
+		Values = g,
 		Value = "Ninguno",
-		Callback = function(Y)
-			j.Fall = Y;
+		Callback = function(L)
+			H.Fall = L;
 		end,
 	});
-	jc.Animaciones:Dropdown({
+	ap.Animaciones:Dropdown({
 		Title = "Escalar",
-		Values = X,
+		Values = g,
 		Value = "Ninguno",
-		Callback = function(Y)
-			j.Climb = Y;
+		Callback = function(L)
+			H.Climb = L;
 		end,
 	});
-	jc.Animaciones:Button({ Title = "Combinar y Aplicar", Callback = function()
+	ap.Animaciones:Button({ Title = "Combinar y Aplicar", Callback = function()
 			task.spawn(function()
-				local z = {};
-				if j.Idle ~= "Ninguno" then
-					z.Idle = Y[j.Idle].Idle;
-					z.Idle2 = Y[j.Idle].Idle2;
+				local e = {};
+				if H.Idle ~= "Ninguno" then
+					e.Idle = L[H.Idle].Idle;
+					e.Idle2 = L[H.Idle].Idle2;
 				end;
-				if j.Walk ~= "Ninguno" then
-					z.Walk = Y[j.Walk].Walk;
+				if H.Walk ~= "Ninguno" then
+					e.Walk = L[H.Walk].Walk;
 				end;
-				if j.Run ~= "Ninguno" then
-					z.Run = Y[j.Run].Run;
+				if H.Run ~= "Ninguno" then
+					e.Run = L[H.Run].Run;
 				end;
-				if j.Jump ~= "Ninguno" then
-					z.Jump = Y[j.Jump].Jump;
+				if H.Jump ~= "Ninguno" then
+					e.Jump = L[H.Jump].Jump;
 				end;
-				if j.Fall ~= "Ninguno" then
-					z.Fall = Y[j.Fall].Fall;
+				if H.Fall ~= "Ninguno" then
+					e.Fall = L[H.Fall].Fall;
 				end;
-				if j.Climb ~= "Ninguno" then
-					z.Climb = Y[j.Climb].Climb;
+				if H.Climb ~= "Ninguno" then
+					e.Climb = L[H.Climb].Climb;
 				end;
-				local T = false;
-				for Y, z in pairs(z) do
-					if z then
-						T = true;
+				local j = false;
+				for L, e in pairs(e) do
+					if e then
+						j = true;
 						break;
 					end;
 				end;
-				if T then
-					L = z;
-					F();
-					u(L);
+				if j then
+					O = e;
+					q();
+					A(O);
 				end;
 			end);
 		end });
 end;
-local bc = 1;
-local kc = Instance.new("Sound");
-kc.Name = "NexvyrKillSound";
-kc.Volume = 1;
-kc.Looped = false;
-kc.Parent = j;
-local gc = Instance.new("Sound");
-gc.Name = "NexvyrShootSound";
-gc.Volume = 1;
-gc.Looped = false;
-gc.Parent = j;
-local Mc = Instance.new("Sound");
-Mc.Name = "NexvyrReloadSound";
-Mc.Volume = 1;
-Mc.Looped = false;
-Mc.Parent = j;
+local Gp = 1;
+local Ep = Instance.new("Sound");
+Ep.Name = "NexvyrKillSound";
+Ep.Volume = 1;
+Ep.Looped = false;
+Ep.Parent = H;
+local Bp = Instance.new("Sound");
+Bp.Name = "NexvyrShootSound";
+Bp.Volume = 1;
+Bp.Looped = false;
+Bp.Parent = H;
+local Op = Instance.new("Sound");
+Op.Name = "NexvyrReloadSound";
+Op.Volume = 1;
+Op.Looped = false;
+Op.Parent = H;
 do
-	local z = game:GetService("ContentProvider");
-	local function u(Y)
-		if not Y then
+	local e = game:GetService("ContentProvider");
+	local function A(L)
+		if not L then
 			return;
 		end;
-		for z = #Y, 1, -1 do
-			local u = Y[z];
-			Y[z] = nil;
-			if u and u.Connected then
-				u:Disconnect();
+		for e = #L, 1, -1 do
+			local A = L[e];
+			L[e] = nil;
+			if A and A.Connected then
+				A:Disconnect();
 			end;
 		end;
 	end;
-	local X = false;
-	local K = false;
-	local j = "Onichaaan";
-	local B = {
+	local g = false;
+	local d = false;
+	local H = "Onichaaan";
+	local a = {
 			{ Name = "Onichaaan", Id = "114361503583259" },
 			{ Name = "Omagaaa", Id = "4496966777" },
 			{ Name = "korummm", Id = "119896940405402" },
@@ -4234,66 +4427,66 @@ do
 			{ Name = "\195\177yaa >//~//<", Id = "78798011197804" },
 			{ Name = "Headshot", Id = "130456049552264" },
 		};
-	local S = { ["Revolver + Recarga"] = { Shoot = "680140087", Reload = "138084889" }, ["Magia de Anime"] = { Shoot = "109296938403067", Reload = nil }, ["L\195\161ser + Recarga l\195\161ser"] = { Shoot = "4400449399", Reload = "129456040607483" } };
-	local l = "Revolver + Recarga";
-	local v = 1.5;
-	local x = 0;
-	local c = 0;
-	local V = .05;
-	local function N()
-		if not K then
+	local I = { ["Revolver + Recarga"] = { Shoot = "680140087", Reload = "138084889" }, ["Magia de Anime"] = { Shoot = "109296938403067", Reload = nil }, ["L\195\161ser + Recarga l\195\161ser"] = { Shoot = "4400449399", Reload = "129456040607483" } };
+	local w = "Revolver + Recarga";
+	local Q = 1.5;
+	local Z = 0;
+	local t = 0;
+	local M = .05;
+	local function R()
+		if not d then
 			return;
 		end;
-		local Y = S[l];
-		if not Y or not Y.Shoot then
+		local L = I[w];
+		if not L or not L.Shoot then
 			return;
 		end;
-		local z = tick();
-		if z - c < V then
+		local e = tick();
+		if e - t < M then
 			return;
 		end;
-		c = z;
-		x = x + 1;
-		local u = x;
-		gc:Stop();
-		gc.SoundId = "rbxassetid://" .. Y.Shoot;
-		gc.Volume = bc;
-		gc:Play();
-		task.delay(v, function()
-			if x == u and gc.Playing then
-				gc:Stop();
+		t = e;
+		Z = Z + 1;
+		local A = Z;
+		Bp:Stop();
+		Bp.SoundId = "rbxassetid://" .. L.Shoot;
+		Bp.Volume = Gp;
+		Bp:Play();
+		task.delay(Q, function()
+			if Z == A and Bp.Playing then
+				Bp:Stop();
 			end;
 		end);
 	end;
-	local function n()
-		if not K then
+	local function X()
+		if not d then
 			return;
 		end;
-		local Y = S[l];
-		if not Y or not Y.Reload then
+		local L = I[w];
+		if not L or not L.Reload then
 			return;
 		end;
-		Mc:Stop();
-		Mc.SoundId = "rbxassetid://" .. Y.Reload;
-		Mc.Volume = bc;
-		Mc:Play();
+		Op:Stop();
+		Op.SoundId = "rbxassetid://" .. L.Reload;
+		Op.Volume = Gp;
+		Op:Play();
 	end;
-	local P = {};
-	local t = setmetatable({}, { __mode = "k" });
-	local o = setmetatable({}, { __mode = "k" });
-	local J = setmetatable({}, { __mode = "k" });
-	local function s(Y)
-		P[#P + 1] = Y;
-		return Y;
+	local i = {};
+	local D = setmetatable({}, { __mode = "k" });
+	local s = setmetatable({}, { __mode = "k" });
+	local k = setmetatable({}, { __mode = "k" });
+	local function n(L)
+		i[#i + 1] = L;
+		return L;
 	end;
-	local function D()
-		u(P);
-		table.clear(t);
-		table.clear(o);
-		table.clear(J);
+	local function Y()
+		A(i);
+		table.clear(D);
+		table.clear(s);
+		table.clear(k);
 	end;
-	local p;
-	local b = {
+	local T;
+	local P = {
 			"fire",
 			"shoot",
 			"shot",
@@ -4307,170 +4500,170 @@ do
 			"shooting",
 			"firing",
 		};
-	local function k(Y)
-		if not Y:IsA("Sound") then
+	local function S(L)
+		if not L:IsA("Sound") then
 			return false;
 		end;
-		local z = string.lower(Y.Name);
-		for Y, u in ipairs(b) do
-			if string.find(z, u, 1, true) then
+		local e = string.lower(L.Name);
+		for L, A in ipairs(P) do
+			if string.find(e, A, 1, true) then
 				return true;
 			end;
 		end;
 		return false;
 	end;
-	local function g(Y)
-		if not Y:IsA("Sound") then
+	local function G(L)
+		if not L:IsA("Sound") then
 			return;
 		end;
-		if not k(Y) then
+		if not S(L) then
 			return;
 		end;
-		if not K or t[Y] then
+		if not d or D[L] then
 			return;
 		end;
-		t[Y] = true;
-		s(Y.Played:Connect(function()
-			if not K then
+		D[L] = true;
+		n(L.Played:Connect(function()
+			if not d then
 				return;
 			end;
-			local z = y.Character;
-			if not z then
+			local e = K.Character;
+			if not e then
 				return;
 			end;
-			if Y:IsDescendantOf(z) or Y:IsDescendantOf(y:FindFirstChildOfClass("Backpack") or z) then
-				N();
+			if L:IsDescendantOf(e) or L:IsDescendantOf(K:FindFirstChildOfClass("Backpack") or e) then
+				R();
 			end;
 		end));
 	end;
-	local function M(Y)
-		if not Y or not Y:IsA("Tool") then
+	local function E(L)
+		if not L or not L:IsA("Tool") then
 			return;
 		end;
-		for Y, z in ipairs(Y:GetDescendants()) do
-			g(z);
+		for L, e in ipairs(L:GetDescendants()) do
+			G(e);
 		end;
-		if not o[Y] and K then
-			o[Y] = true;
-			s(Y.DescendantAdded:Connect(g));
+		if not s[L] and d then
+			s[L] = true;
+			n(L.DescendantAdded:Connect(G));
 		end;
 	end;
-	local function r(Y)
-		if not Y then
+	local function B(L)
+		if not L then
 			return;
 		end;
-		for Y, z in ipairs(Y:GetChildren()) do
-			if z:IsA("Tool") then
-				M(z);
+		for L, e in ipairs(L:GetChildren()) do
+			if e:IsA("Tool") then
+				E(e);
 			end;
 		end;
-		s(Y.ChildAdded:Connect(function(Y)
-			if Y:IsA("Tool") then
-				M(Y);
+		n(L.ChildAdded:Connect(function(L)
+			if L:IsA("Tool") then
+				E(L);
 			end;
 		end));
 	end;
-	local L = false;
-	p = function()
-			if L or not K then
+	local O = false;
+	T = function()
+			if O or not d then
 				return;
 			end;
-			L = true;
+			O = true;
 			task.spawn(function()
-				local Y = false;
-				while K do
+				local L = false;
+				while d do
 					task.wait(.05);
-					if not K then
+					if not d then
 						break;
 					end;
-					local z = y.Character;
-					if not z then
-						Y = false;
+					local e = K.Character;
+					if not e then
+						L = false;
 						continue;
 					end;
-					local u = z:FindFirstChildOfClass("Tool");
-					if not u or vc(u) then
-						Y = false;
+					local A = e:FindFirstChildOfClass("Tool");
+					if not A or tp(A) then
+						L = false;
 						continue;
 					end;
-					local T = Vc(u);
-					if T and not Y then
-						n();
+					local j = Xp(A);
+					if j and not L then
+						X();
 					end;
-					Y = T;
+					L = j;
 				end;
-				L = false;
+				O = false;
 			end);
 		end;
-	local function R(Y)
-		for z, u in ipairs(B) do
-			if u.Name == Y then
-				return u.Id;
+	local function p(L)
+		for e, A in ipairs(a) do
+			if A.Name == L then
+				return A.Id;
 			end;
 		end;
-		return B[1].Id;
+		return a[1].Id;
 	end;
-	local function w()
+	local function U()
 		task.spawn(function()
 			pcall(function()
-				local Y = "rbxassetid://" .. R(j);
-				if kc.SoundId ~= Y then
-					kc.SoundId = Y;
+				local L = "rbxassetid://" .. p(H);
+				if Ep.SoundId ~= L then
+					Ep.SoundId = L;
 				end;
-				z:PreloadAsync({ kc });
+				e:PreloadAsync({ Ep });
 			end);
 		end);
 	end;
-	local function Q()
-		if not X then
+	local function h()
+		if not g then
 			return;
 		end;
-		local Y = "rbxassetid://" .. R(j);
-		kc:Stop();
-		if kc.SoundId ~= Y then
-			kc.SoundId = Y;
+		local L = "rbxassetid://" .. p(H);
+		Ep:Stop();
+		if Ep.SoundId ~= L then
+			Ep.SoundId = L;
 		end;
-		kc.Volume = bc;
-		kc.TimePosition = 0;
-		kc:Play();
+		Ep.Volume = Gp;
+		Ep.TimePosition = 0;
+		Ep:Play();
 	end;
-	local m = 0;
-	local E = 0;
-	local h = .08;
-	local a = .3;
-	local Z = 4;
-	local function O(Y)
-		if not X then
+	local F = 0;
+	local c = 0;
+	local x = .08;
+	local v = .3;
+	local y = 4;
+	local function l(L)
+		if not g then
 			return;
 		end;
-		local z = tick();
-		if Y then
-			if z - m < a then
+		local e = tick();
+		if L then
+			if e - F < v then
 				return;
 			end;
-			E = z;
+			c = e;
 		else
-			if z - m < h then
+			if e - F < x then
 				return;
 			end;
-			if z - E < Z then
+			if e - c < y then
 				return;
 			end;
 		end;
-		m = z;
-		Q();
+		F = e;
+		h();
 	end;
-	local F = {};
-	local W = setmetatable({}, { __mode = "k" });
-	local e = setmetatable({}, { __mode = "k" });
+	local q = {};
+	local z = setmetatable({}, { __mode = "k" });
+	local r = setmetatable({}, { __mode = "k" });
+	local u = setmetatable({}, { __mode = "k" });
 	local f = setmetatable({}, { __mode = "k" });
-	local q = setmetatable({}, { __mode = "k" });
-	local I = 0;
-	local function C(Y)
-		F[#F + 1] = Y;
-		return Y;
+	local W = 0;
+	local function J(L)
+		q[#q + 1] = L;
+		return L;
 	end;
-	local d = {
+	local N = {
 			kos = true,
 			kills = true,
 			kill = true,
@@ -4479,39 +4672,39 @@ do
 			eliminations = true,
 			kills_count = true,
 		};
-	local function i(Y)
-		if not Y then
+	local function V(L)
+		if not L then
 			return;
 		end;
-		if not ((Y:IsA("IntValue") or Y:IsA("NumberValue"))) then
+		if not ((L:IsA("IntValue") or L:IsA("NumberValue"))) then
 			return;
 		end;
-		if not d[string.lower(Y.Name)] then
+		if not N[string.lower(L.Name)] then
 			return;
 		end;
-		if not X or W[Y] then
+		if not g or z[L] then
 			return;
 		end;
-		W[Y] = true;
-		local z = Y.Value;
-		C((Y:GetPropertyChangedSignal("Value")):Connect(function()
-			if Y.Value > z then
-				O();
+		z[L] = true;
+		local e = L.Value;
+		J((L:GetPropertyChangedSignal("Value")):Connect(function()
+			if L.Value > e then
+				l();
 			end;
-			z = Y.Value;
+			e = L.Value;
 		end));
 	end;
-	local function U(Y)
-		if not Y or not X or q[Y] then
+	local function m(L)
+		if not L or not g or f[L] then
 			return;
 		end;
-		q[Y] = true;
-		for Y, z in ipairs(Y:GetChildren()) do
-			i(z);
+		f[L] = true;
+		for L, e in ipairs(L:GetChildren()) do
+			V(e);
 		end;
-		C(Y.ChildAdded:Connect(i));
+		J(L.ChildAdded:Connect(V));
 	end;
-	local H = {
+	local o = {
 			"KOs",
 			"Kills",
 			"kos",
@@ -4520,285 +4713,285 @@ do
 			"killed",
 			"Eliminations",
 		};
-	local function G()
-		for Y, z in ipairs(H) do
-			local u = tonumber(y:GetAttribute(z));
-			C((y:GetAttributeChangedSignal(z)):Connect(function()
-				local Y = tonumber(y:GetAttribute(z));
-				if Y ~= nil and (u ~= nil and Y > u) then
-					O();
+	local function b()
+		for L, e in ipairs(o) do
+			local A = tonumber(K:GetAttribute(e));
+			J((K:GetAttributeChangedSignal(e)):Connect(function()
+				local L = tonumber(K:GetAttribute(e));
+				if L ~= nil and (A ~= nil and L > A) then
+					l();
 				end;
-				u = Y;
+				A = L;
 			end));
 		end;
-		for Y, z in ipairs({
+		for L, e in ipairs({
 			"leaderstats",
 			"Stats",
 			"stats",
 			"PlayerStats",
 		}) do
-			U(y:FindFirstChild(z));
+			m(K:FindFirstChild(e));
 		end;
-		C(y.ChildAdded:Connect(function(Y)
-			if Y.Name == "leaderstats" or Y.Name == "Stats" or Y.Name == "stats" or Y.Name == "PlayerStats" then
-				U(Y);
+		J(K.ChildAdded:Connect(function(L)
+			if L.Name == "leaderstats" or L.Name == "Stats" or L.Name == "stats" or L.Name == "PlayerStats" then
+				m(L);
 			end;
 		end));
 	end;
-	local function Yc(Y, z)
-		if not X or e[z] then
+	local function Lp(L, e)
+		if not g or r[e] then
 			return;
 		end;
-		e[z] = true;
-		local u;
-		local function T(Y)
-			if not X or not Y or not Y:IsA("Humanoid") then
+		r[e] = true;
+		local A;
+		local function j(L)
+			if not g or not L or not L:IsA("Humanoid") then
 				return;
 			end;
-			if u then
-				u:Disconnect();
-				u = nil;
+			if A then
+				A:Disconnect();
+				A = nil;
 			end;
-			C(Y.Died:Connect(function()
-				if not X then
+			J(L.Died:Connect(function()
+				if not g then
 					return;
 				end;
-				local z = Y:FindFirstChild("creator");
-				if z and z.Value == y then
-					O();
+				local e = L:FindFirstChild("creator");
+				if e and e.Value == K then
+					l();
 				end;
 			end));
 		end;
-		local K = z:FindFirstChildOfClass("Humanoid");
-		if K then
-			T(K);
+		local d = e:FindFirstChildOfClass("Humanoid");
+		if d then
+			j(d);
 		else
-			u = C(z.ChildAdded:Connect(T));
+			A = J(e.ChildAdded:Connect(j));
 		end;
 	end;
-	local function zc(Y)
-		if Y == y or not X or f[Y] then
+	local function ep(L)
+		if L == K or not g or u[L] then
 			return;
 		end;
-		f[Y] = true;
-		if Y.Character then
-			Yc(Y, Y.Character);
+		u[L] = true;
+		if L.Character then
+			Lp(L, L.Character);
 		end;
-		C(Y.CharacterAdded:Connect(function(z)
-			Yc(Y, z);
+		J(L.CharacterAdded:Connect(function(e)
+			Lp(L, e);
 		end));
 	end;
-	local function uc()
-		I = I + (1);
-		local Y = I;
+	local function Ap()
+		W = W + (1);
+		local L = W;
 		task.spawn(function()
-			local z = 0;
-			while X and (Y == I and z < 30) do
-				local Y = T:FindFirstChild("Packages");
-				local u = Y and Y:FindFirstChild("Networking");
-				local X = u and u:FindFirstChild("RE/Combat/Killed");
-				if X and X:IsA("RemoteEvent") then
-					C(X.OnClientEvent:Connect(function(Y)
-						if Y == y then
-							O(true);
+			local e = 0;
+			while g and (L == W and e < 30) do
+				local L = j:FindFirstChild("Packages");
+				local A = L and L:FindFirstChild("Networking");
+				local g = A and A:FindFirstChild("RE/Combat/Killed");
+				if g and g:IsA("RemoteEvent") then
+					J(g.OnClientEvent:Connect(function(L)
+						if L == K then
+							l(true);
 						end;
 					end));
 					return;
 				end;
-				z = z + (1);
+				e = e + (1);
 				task.wait(1);
 			end;
 		end);
 	end;
-	local function Tc()
-		if not X then
+	local function jp()
+		if not g then
 			return;
 		end;
-		uc();
-		G();
-		for Y, z in ipairs(Y:GetPlayers()) do
-			zc(z);
+		Ap();
+		b();
+		for L, e in ipairs(L:GetPlayers()) do
+			ep(e);
 		end;
-		C(Y.PlayerAdded:Connect(zc));
+		J(L.PlayerAdded:Connect(ep));
 	end;
-	local function Xc()
-		I = I + (1);
-		u(F);
-		table.clear(W);
-		table.clear(e);
+	local function gp()
+		W = W + (1);
+		A(q);
+		table.clear(z);
+		table.clear(r);
+		table.clear(u);
 		table.clear(f);
-		table.clear(q);
 	end;
-	local Kc = {};
-	local yc = setmetatable({}, { __mode = "k" });
-	local function Bc(Y)
-		if not K or not Y:IsA("Sound") then
+	local dp = {};
+	local Hp = setmetatable({}, { __mode = "k" });
+	local function Kp(L)
+		if not d or not L:IsA("Sound") then
 			return;
 		end;
-		if Y.Name == "NexvyrKillSound" or Y.Name == "WindUI_MusicPlayer" or Y.Name == "NexvyrShootSound" or Y.Name == "NexvyrReloadSound" then
+		if L.Name == "NexvyrKillSound" or L.Name == "WindUI_MusicPlayer" or L.Name == "NexvyrShootSound" or L.Name == "NexvyrReloadSound" then
 			return;
 		end;
-		if Kc[Y] == nil and Y.Volume > 0 then
-			Kc[Y] = Y.Volume;
+		if dp[L] == nil and L.Volume > 0 then
+			dp[L] = L.Volume;
 		end;
-		if K then
-			Y.Volume = 0;
+		if d then
+			L.Volume = 0;
 		end;
-		if not yc[Y] then
-			yc[Y] = true;
-			s((Y:GetPropertyChangedSignal("Volume")):Connect(function()
-				if K and Y.Volume ~= 0 then
-					Kc[Y] = Y.Volume;
-					Y.Volume = 0;
+		if not Hp[L] then
+			Hp[L] = true;
+			n((L:GetPropertyChangedSignal("Volume")):Connect(function()
+				if d and L.Volume ~= 0 then
+					dp[L] = L.Volume;
+					L.Volume = 0;
 				end;
 			end));
-			s(Y.Played:Connect(function()
-				if K then
-					Y.Volume = 0;
+			n(L.Played:Connect(function()
+				if d then
+					L.Volume = 0;
 				end;
 			end));
 		end;
 	end;
-	local function Sc(Y)
-		if not Y then
+	local function Ip(L)
+		if not L then
 			return;
 		end;
-		for Y, z in ipairs(Y:GetDescendants()) do
-			Bc(z);
+		for L, e in ipairs(L:GetDescendants()) do
+			Kp(e);
 		end;
-		s(Y.DescendantAdded:Connect(Bc));
+		n(L.DescendantAdded:Connect(Kp));
 	end;
-	local function lc(Y)
-		if Y then
-			for Y in pairs(Kc) do
-				if Y.Parent then
-					Y.Volume = 0;
+	local function wp(L)
+		if L then
+			for L in pairs(dp) do
+				if L.Parent then
+					L.Volume = 0;
 				end;
 			end;
-			if y.Character then
-				for Y, z in ipairs(y.Character:GetDescendants()) do
-					Bc(z);
+			if K.Character then
+				for L, e in ipairs(K.Character:GetDescendants()) do
+					Kp(e);
 				end;
 			end;
-			local Y = y:FindFirstChildOfClass("Backpack");
-			if Y then
-				for Y, z in ipairs(Y:GetDescendants()) do
-					Bc(z);
+			local L = K:FindFirstChildOfClass("Backpack");
+			if L then
+				for L, e in ipairs(L:GetDescendants()) do
+					Kp(e);
 				end;
 			end;
 		else
-			for Y, z in pairs(Kc) do
-				if Y.Parent then
-					Y.Volume = z;
+			for L, e in pairs(dp) do
+				if L.Parent then
+					L.Volume = e;
 				end;
 			end;
 		end;
 	end;
-	local function xc()
-		if not K then
+	local function Qp()
+		if not d then
 			return;
 		end;
-		local function Y(Y)
-			if not Y or not K or J[Y] then
+		local function L(L)
+			if not L or not d or k[L] then
 				return;
 			end;
-			J[Y] = true;
-			Sc(Y);
-			r(Y);
+			k[L] = true;
+			Ip(L);
+			B(L);
 		end;
-		Y(y.Character);
-		Y(y:FindFirstChildOfClass("Backpack"));
-		s(y.CharacterAdded:Connect(function(z)
-			if not K then
+		L(K.Character);
+		L(K:FindFirstChildOfClass("Backpack"));
+		n(K.CharacterAdded:Connect(function(e)
+			if not d then
 				return;
 			end;
-			Y(z);
-			local u = y:FindFirstChildOfClass("Backpack");
-			if u then
-				Y(u);
+			L(e);
+			local A = K:FindFirstChildOfClass("Backpack");
+			if A then
+				L(A);
 			end;
 		end));
-		s(y.ChildAdded:Connect(function(z)
-			if z:IsA("Backpack") then
-				Y(z);
+		n(K.ChildAdded:Connect(function(e)
+			if e:IsA("Backpack") then
+				L(e);
 			end;
 		end));
-		p();
+		T();
 	end;
-	jc.Sonidos:Section({ Title = "Sonido de Muerte", Icon = "solar:speaker-bold" });
-	jc.Sonidos:Toggle({ Title = "Sonido de Kill", Value = false, Callback = function(Y)
-			if X == Y then
+	ap.Sonidos:Section({ Title = "Sonido de Muerte", Icon = "solar:speaker-bold" });
+	ap.Sonidos:Toggle({ Title = "Sonido de Kill", Value = false, Callback = function(L)
+			if g == L then
 				return;
 			end;
-			X = Y;
-			if Y then
-				w();
-				Tc();
+			g = L;
+			if L then
+				U();
+				jp();
 			else
-				Xc();
-				kc:Stop();
+				gp();
+				Ep:Stop();
 			end;
 		end });
-	local cc = {};
-	for Y, z in ipairs(B) do
-		table.insert(cc, z.Name);
+	local Zp = {};
+	for L, e in ipairs(a) do
+		table.insert(Zp, e.Name);
 	end;
-	jc.Sonidos:Dropdown({
+	ap.Sonidos:Dropdown({
 		Title = "Sonido de muerte",
-		Values = cc,
+		Values = Zp,
 		Value = "Onichaaan",
-		Callback = function(Y)
-			j = Y;
-			if X then
-				w();
+		Callback = function(L)
+			H = L;
+			if g then
+				U();
 			end;
 		end,
 	});
-	jc.Sonidos:Section({ Title = "Disparo y Recarga", Icon = "solar:target-bold" });
-	jc.Sonidos:Toggle({ Title = "Recarga + disparo", Value = false, Callback = function(Y)
-			if K == Y then
+	ap.Sonidos:Section({ Title = "Disparo y Recarga", Icon = "solar:target-bold" });
+	ap.Sonidos:Toggle({ Title = "Recarga + disparo", Value = false, Callback = function(L)
+			if d == L then
 				return;
 			end;
-			K = Y;
-			if Y then
-				xc();
-				lc(true);
+			d = L;
+			if L then
+				Qp();
+				wp(true);
 			else
-				D();
-				gc:Stop();
-				Mc:Stop();
-				lc(false);
-				table.clear(Kc);
-				table.clear(yc);
+				Y();
+				Bp:Stop();
+				Op:Stop();
+				wp(false);
+				table.clear(dp);
+				table.clear(Hp);
 			end;
 		end });
-	jc.Sonidos:Dropdown({
+	ap.Sonidos:Dropdown({
 		Title = "Sonido de disparo",
 		Values = { "Revolver + Recarga", "Magia de Anime", "L\195\161ser + Recarga l\195\161ser" },
 		Value = "Revolver + Recarga",
-		Callback = function(Y)
-			l = Y;
+		Callback = function(L)
+			w = L;
 		end,
 	});
-	A.SliKillSoundVolume = jc.Sonidos:Slider({
+	C.SliKillSoundVolume = ap.Sonidos:Slider({
 			Title = "Volumen",
 			Step = .1,
 			Value = { Min = 1, Max = 3, Default = 1 },
-			Callback = function(Y)
-				bc = Y;
-				kc.Volume = Y;
-				gc.Volume = Y;
-				Mc.Volume = Y;
+			Callback = function(L)
+				Gp = L;
+				Ep.Volume = L;
+				Bp.Volume = L;
+				Op.Volume = L;
 			end,
 		});
 end;
 do
-	local Y = Instance.new("Sound");
-	Y.Name = "WindUI_MusicPlayer";
-	Y.Looped = false;
-	Y.Volume = .5;
-	Y.Parent = j;
-	local z = {
+	local L = Instance.new("Sound");
+	L.Name = "WindUI_MusicPlayer";
+	L.Looped = false;
+	L.Volume = .5;
+	L.Parent = H;
+	local e = {
 			{ Name = "Canci\195\179n 1", Id = "84944985070181" },
 			{ Name = "Canci\195\179n 2", Id = "87570666848900" },
 			{ Name = "Canci\195\179n 3", Id = "82746224492420" },
@@ -4813,120 +5006,120 @@ do
 			{ Name = "Canci\195\179n 12", Id = "135321902579514" },
 			{ Name = "Canci\195\179n 13", Id = "131465489873214" },
 		};
-	local u = 1;
-	local T = false;
-	local X;
-	local function K()
-		local T = z[u];
-		if T and X then
-			X:SetDesc((("%s \226\128\162 ID: %s \226\128\162 %s")):format(T.Name, T.Id, Y.Playing and "Reproduciendo" or "Pausado"));
+	local A = 1;
+	local j = false;
+	local g;
+	local function d()
+		local j = e[A];
+		if j and g then
+			g:SetDesc((("%s \226\128\162 ID: %s \226\128\162 %s")):format(j.Name, j.Id, L.Playing and "Reproduciendo" or "Pausado"));
 		end;
 	end;
-	local function y(T)
-		if not z[T] then
+	local function K(j)
+		if not e[j] then
 			return;
 		end;
-		u = T;
-		Y:Stop();
-		Y.SoundId = "rbxassetid://" .. z[T].Id;
-		Y:Play();
-		K();
+		A = j;
+		L:Stop();
+		L.SoundId = "rbxassetid://" .. e[j].Id;
+		L:Play();
+		d();
 	end;
-	local function B()
-		if Y.SoundId == "" then
-			y(u);
-		elseif not Y.Playing then
-			Y:Resume();
+	local function a()
+		if L.SoundId == "" then
+			K(A);
+		elseif not L.Playing then
+			L:Resume();
 		end;
-		K();
+		d();
 	end;
-	local function S()
-		if Y.Playing then
-			Y:Pause();
+	local function I()
+		if L.Playing then
+			L:Pause();
 		end;
-		K();
+		d();
 	end;
-	local function l()
-		Y:Stop();
-		Y.SoundId = "";
-		K();
+	local function w()
+		L:Stop();
+		L.SoundId = "";
+		d();
 	end;
-	local function v()
-		local Y;
-		if T then
-			Y = math.random(1, #z);
+	local function Q()
+		local L;
+		if j then
+			L = math.random(1, #e);
 		else
-			Y = u + 1;
-			if Y > #z then
-				Y = 1;
+			L = A + 1;
+			if L > #e then
+				L = 1;
 			end;
 		end;
-		y(Y);
+		K(L);
 	end;
-	local function x()
-		local Y;
-		if T then
-			Y = math.random(1, #z);
+	local function Z()
+		local L;
+		if j then
+			L = math.random(1, #e);
 		else
-			Y = u - 1;
-			if Y < 1 then
-				Y = #z;
+			L = A - 1;
+			if L < 1 then
+				L = #e;
 			end;
 		end;
-		y(Y);
+		K(L);
 	end;
-	Y.Ended:Connect(function()
-		v();
+	L.Ended:Connect(function()
+		Q();
 	end);
-	jc.Music:Section({ Title = "Ahora suena", Icon = "solar:music-note-bold" });
-	X = jc.Music:Paragraph({ Title = "Sin canci\195\179n seleccionada", Icon = "solar:music-note-2-bold" });
-	jc.Music:Section({ Title = "Controles", Icon = "solar:tuning-2-bold" });
-	jc.Music:Button({
+	ap.Music:Section({ Title = "Ahora suena", Icon = "solar:music-note-bold" });
+	g = ap.Music:Paragraph({ Title = "Sin canci\195\179n seleccionada", Icon = "solar:music-note-2-bold" });
+	ap.Music:Section({ Title = "Controles", Icon = "solar:tuning-2-bold" });
+	ap.Music:Button({
 		Title = "Anterior",
 		Icon = "solar:skip-previous-bold",
 		Variant = "Secondary",
 		Callback = function()
-			x();
+			Z();
 		end,
 	});
-	jc.Music:Button({
+	ap.Music:Button({
 		Title = "Siguiente",
 		Icon = "solar:skip-next-bold",
 		Variant = "Secondary",
 		Callback = function()
-			v();
+			Q();
 		end,
 	});
-	jc.Music:Button({
+	ap.Music:Button({
 		Title = "Reproducir",
 		Icon = "solar:play-circle-bold",
 		Variant = "Primary",
 		Callback = function()
-			B();
+			a();
 		end,
 	});
-	jc.Music:Button({
+	ap.Music:Button({
 		Title = "Pausar",
 		Icon = "solar:pause-circle-bold",
 		Variant = "Secondary",
 		Callback = function()
-			S();
+			I();
 		end,
 	});
-	jc.Music:Button({
+	ap.Music:Button({
 		Title = "Detener",
 		Icon = "solar:close-circle-bold",
 		Variant = "Danger",
 		Callback = function()
-			l();
+			w();
 		end,
 	});
 end;
-local rc = false;
-local Lc = false;
-local Rc, Ac, wc;
+local pp = false;
+local Cp = false;
+local Up, hp, Fp;
 do
-	local Y = { ["Right Leg"] = {
+	local L = { ["Right Leg"] = {
 				id = "rbxassetid://139607718",
 				targetBodyPart = "RightUpperLeg",
 				partsToHide = { "RightUpperLeg", "RightLowerLeg", "RightFoot" },
@@ -4934,701 +5127,701 @@ do
 				audio = "rbxassetid://135315310485417",
 				offset = CFrame.new(0, 0, 0) * CFrame.Angles(0, 0, 0),
 			} };
-	local z = {};
-	local function u(Y, u)
-		local T = y.Character;
-		if not T then
+	local e = {};
+	local function A(L, A)
+		local j = K.Character;
+		if not j then
 			return false;
 		end;
-		local X = T:WaitForChild(u.targetBodyPart, 2);
-		if not X then
+		local g = j:WaitForChild(A.targetBodyPart, 2);
+		if not g then
 			return false;
 		end;
-		local K = T:FindFirstChild("Korblox_" .. Y:gsub("%s+", ""));
-		if K then
-			K:Destroy();
+		local d = j:FindFirstChild("Korblox_" .. L:gsub("%s+", ""));
+		if d then
+			d:Destroy();
 		end;
-		for Y, u in ipairs(u.partsToHide) do
-			local X = T:FindFirstChild(u);
-			if X and X:IsA("BasePart") then
-				if z[u] == nil then
-					z[u] = X.Transparency;
+		for L, A in ipairs(A.partsToHide) do
+			local g = j:FindFirstChild(A);
+			if g and g:IsA("BasePart") then
+				if e[A] == nil then
+					e[A] = g.Transparency;
 				end;
-				X.Transparency = 1;
+				g.Transparency = 1;
 			end;
 		end;
-		local j, B = pcall(function()
-				return game:GetObjects(u.id);
+		local H, a = pcall(function()
+				return game:GetObjects(A.id);
 			end);
-		if not j or not B or #B == 0 then
+		if not H or not a or #a == 0 then
 			return false;
 		end;
-		local S = B[1];
-		S.Name = "Korblox_" .. Y:gsub("%s+", "");
-		local l = S:IsA("BasePart") and S or S:FindFirstChildWhichIsA("BasePart", true);
-		if not l then
+		local I = a[1];
+		I.Name = "Korblox_" .. L:gsub("%s+", "");
+		local w = I:IsA("BasePart") and I or I:FindFirstChildWhichIsA("BasePart", true);
+		if not w then
 			return false;
 		end;
-		l.Size = l.Size * u.scale;
-		l.CanCollide = false;
-		l.CFrame = X.CFrame * u.offset;
-		local v = Instance.new("WeldConstraint");
-		v.Part0 = X;
-		v.Part1 = l;
-		v.Parent = l;
-		S.Parent = T;
-		if u.audio then
-			local Y = Instance.new("Sound");
-			Y.SoundId = u.audio;
-			Y.Volume = .5;
-			Y.Parent = l;
-			Y:Play();
-			(game:GetService("Debris")):AddItem(Y, 3);
+		w.Size = w.Size * A.scale;
+		w.CanCollide = false;
+		w.CFrame = g.CFrame * A.offset;
+		local Q = Instance.new("WeldConstraint");
+		Q.Part0 = g;
+		Q.Part1 = w;
+		Q.Parent = w;
+		I.Parent = j;
+		if A.audio then
+			local L = Instance.new("Sound");
+			L.SoundId = A.audio;
+			L.Volume = .5;
+			L.Parent = w;
+			L:Play();
+			(game:GetService("Debris")):AddItem(L, 3);
 		end;
 		return true;
 	end;
-	function Rc()
-		if not rc then
+	function Up()
+		if not pp then
 			return;
 		end;
-		local z = Y["Right Leg"];
-		local T = u("Right Leg", z);
-		if not T then
+		local e = L["Right Leg"];
+		local j = A("Right Leg", e);
+		if not j then
 			task.wait(.2);
-			u("Right Leg", z);
+			A("Right Leg", e);
 		end;
 	end;
-	function Ac()
-		local Y = y.Character;
-		if not Y then
+	function hp()
+		local L = K.Character;
+		if not L then
 			return;
 		end;
-		local u = "Korblox_RightLeg";
-		local T = Y:FindFirstChild(u);
-		if T then
+		local A = "Korblox_RightLeg";
+		local j = L:FindFirstChild(A);
+		if j then
 			pcall(function()
-				T:Destroy();
+				j:Destroy();
 			end);
 		end;
-		for z, u in pairs(z) do
-			local T = Y:FindFirstChild(z);
-			if T and T:IsA("BasePart") then
+		for e, A in pairs(e) do
+			local j = L:FindFirstChild(e);
+			if j and j:IsA("BasePart") then
 				pcall(function()
-					T.Transparency = u;
+					j.Transparency = A;
 				end);
 			end;
 		end;
-		z = {};
+		e = {};
 	end;
-	local T = 134082579;
-	local X = nil;
-	local function K(Y)
-		local z = y.Character;
-		if not z then
+	local j = 134082579;
+	local g = nil;
+	local function d(L)
+		local e = K.Character;
+		if not e then
 			return;
 		end;
-		local u = z:FindFirstChild("Head");
-		if u then
-			u.Transparency = Y and 1 or 0;
-			local z = u:FindFirstChildOfClass("Decal");
-			if z then
-				z.Transparency = Y and 1 or 0;
+		local A = e:FindFirstChild("Head");
+		if A then
+			A.Transparency = L and 1 or 0;
+			local e = A:FindFirstChildOfClass("Decal");
+			if e then
+				e.Transparency = L and 1 or 0;
 			end;
 		end;
 	end;
-	function wc(Y)
-		local z = y.Character;
-		if not z then
+	function Fp(L)
+		local e = K.Character;
+		if not e then
 			return;
 		end;
-		if Y then
-			z:WaitForChild("Head", 2);
-			K(true);
-			if X and X.Parent ~= z then
-				X = nil;
+		if L then
+			e:WaitForChild("Head", 2);
+			d(true);
+			if g and g.Parent ~= e then
+				g = nil;
 			end;
-			if X then
+			if g then
 				return;
 			end;
-			local Y, u = pcall(function()
-					return game:GetObjects("rbxassetid://" .. tostring(T));
+			local L, A = pcall(function()
+					return game:GetObjects("rbxassetid://" .. tostring(j));
 				end);
-			if Y and (u and #u > 0) then
-				local Y = u[1];
-				local T = nil;
-				if Y:IsA("Accessory") then
-					T = Y;
+			if L and (A and #A > 0) then
+				local L = A[1];
+				local j = nil;
+				if L:IsA("Accessory") then
+					j = L;
 				else
-					for Y, z in ipairs(Y:GetDescendants()) do
-						if z:IsA("Accessory") then
-							T = z;
+					for L, e in ipairs(L:GetDescendants()) do
+						if e:IsA("Accessory") then
+							j = e;
 							break;
 						end;
 					end;
-					T = T or (Y:IsA("Model") and Y or nil);
+					j = j or (L:IsA("Model") and L or nil);
 				end;
-				if T then
-					if T:IsA("Accessory") then
-						local Y = z:FindFirstChildOfClass("Humanoid");
-						local u = Y and pcall(function()
-								Y:AddAccessory(T);
+				if j then
+					if j:IsA("Accessory") then
+						local L = e:FindFirstChildOfClass("Humanoid");
+						local A = L and pcall(function()
+								L:AddAccessory(j);
 							end);
-						if not u then
-							T.Parent = z;
+						if not A then
+							j.Parent = e;
 						end;
 					else
-						T.Parent = z;
+						j.Parent = e;
 					end;
-					X = T;
+					g = j;
 				end;
 			else
-				warn("[Headless] Failed to load headless asset: " .. tostring(u));
+				warn("[Headless] Failed to load headless asset: " .. tostring(A));
 			end;
 		else
-			K(false);
-			if X then
-				X:Destroy();
-				X = nil;
+			d(false);
+			if g then
+				g:Destroy();
+				g = nil;
 			end;
 		end;
 	end;
-	y.CharacterAdded:Connect(function(Y)
-		z = {};
-		X = nil;
-		if rc then
+	K.CharacterAdded:Connect(function(L)
+		e = {};
+		g = nil;
+		if pp then
 			task.spawn(function()
 				task.wait(.1);
-				Rc();
+				Up();
 			end);
 		end;
-		if Lc then
+		if Cp then
 			task.spawn(function()
 				task.wait(.1);
-				wc(true);
+				Fp(true);
 			end);
 		end;
 	end);
-	jc.Items:Section({ Title = "Apariencia", Icon = "solar:crown-star-bold" });
-	A.TogHeadless = jc.Items:Toggle({ Title = "Aplicar Headless", Value = false, Callback = function(Y)
-				Lc = Y;
-				if Y then
-					wc(true);
+	ap.Items:Section({ Title = "Apariencia", Icon = "solar:crown-star-bold" });
+	C.TogHeadless = ap.Items:Toggle({ Title = "Aplicar Headless", Value = false, Callback = function(L)
+				Cp = L;
+				if L then
+					Fp(true);
 				else
-					wc(false);
+					Fp(false);
 				end;
 			end });
-	A.TogKorblox = jc.Items:Toggle({ Title = "Aplicar Korblox", Value = false, Callback = function(Y)
-				rc = Y;
-				if Y then
-					Rc();
+	C.TogKorblox = ap.Items:Toggle({ Title = "Aplicar Korblox", Value = false, Callback = function(L)
+				pp = L;
+				if L then
+					Up();
 				else
-					Ac();
+					hp();
 				end;
 			end });
 end;
-jc.Identidad:Section({ Title = "identidad falsa", Icon = "solar:user-id-bold" });
-local Qc;
+ap.Identidad:Section({ Title = "identidad falsa", Icon = "solar:user-id-bold" });
+local cp;
 do
-	local function z(Y, z, u)
-		local T = z:gsub("[%-%^%$%(%)%%%.%[%]%*%+%?]", "%%%1");
-		return (Y:gsub(T, u));
+	local function e(L, e, A)
+		local j = e:gsub("[%-%^%$%(%)%%%.%[%]%*%+%?]", "%%%1");
+		return (L:gsub(j, A));
 	end;
-	local u = {};
-	local T = {};
-	local X = setmetatable({}, { __mode = "k" });
-	local K = false;
-	local function j(Y, T, X)
-		local K = Y:FindFirstAncestorWhichIsA("ScreenGui");
-		if K and ((string.find(K.Name, "WindUI") or string.find(K.Name, "Nexvyr"))) then
+	local A = {};
+	local j = {};
+	local g = setmetatable({}, { __mode = "k" });
+	local d = false;
+	local function H(L, j, g)
+		local d = L:FindFirstAncestorWhichIsA("ScreenGui");
+		if d and ((string.find(d.Name, "WindUI") or string.find(d.Name, "Nexvyr"))) then
 			return;
 		end;
-		if Y:IsA("TextLabel") or Y:IsA("TextBox") or Y:IsA("TextButton") then
-			local K = Y.Text;
-			local j = false;
-			if K and K ~= "" then
-				if string.find(K, T, 1, true) or string.find(K, X, 1, true) then
-					j = true;
+		if L:IsA("TextLabel") or L:IsA("TextBox") or L:IsA("TextButton") then
+			local d = L.Text;
+			local H = false;
+			if d and d ~= "" then
+				if string.find(d, j, 1, true) or string.find(d, g, 1, true) then
+					H = true;
 				end;
 			end;
-			if j and not u[Y] then
-				u[Y] = {
-						Text = K,
-						Color = Y.TextColor3,
-						TextTransp = Y.TextTransparency,
-						StrokeTransp = Y.TextStrokeTransparency,
+			if H and not A[L] then
+				A[L] = {
+						Text = d,
+						Color = L.TextColor3,
+						TextTransp = L.TextTransparency,
+						StrokeTransp = L.TextStrokeTransparency,
 						Strokes = {},
 					};
-				for z, T in pairs(Y:GetChildren()) do
-					if T:IsA("UIStroke") then
-						u[Y].Strokes[T] = { Enabled = T.Enabled, Transp = T.Transparency, Thickness = T.Thickness };
+				for e, j in pairs(L:GetChildren()) do
+					if j:IsA("UIStroke") then
+						A[L].Strokes[j] = { Enabled = j.Enabled, Transp = j.Transparency, Thickness = j.Thickness };
 					end;
 				end;
 			end;
-			if u[Y] then
-				if g then
-					local K = u[Y].Text;
-					K = z(K, T, M);
-					K = z(K, X, M);
-					Y.Text = K;
-					Y.TextTransparency = u[Y].TextTransp;
-					Y.TextStrokeTransparency = u[Y].StrokeTransp;
-					Y.TextColor3 = u[Y].Color;
-					for z, T in pairs(Y:GetChildren()) do
-						if T:IsA("UIStroke") and u[Y].Strokes[T] then
-							T.Enabled = u[Y].Strokes[T].Enabled;
+			if A[L] then
+				if G then
+					local d = A[L].Text;
+					d = e(d, j, E);
+					d = e(d, g, E);
+					L.Text = d;
+					L.TextTransparency = A[L].TextTransp;
+					L.TextStrokeTransparency = A[L].StrokeTransp;
+					L.TextColor3 = A[L].Color;
+					for e, j in pairs(L:GetChildren()) do
+						if j:IsA("UIStroke") and A[L].Strokes[j] then
+							j.Enabled = A[L].Strokes[j].Enabled;
 						end;
 					end;
 				else
-					Y.Text = u[Y].Text;
-					Y.TextColor3 = u[Y].Color;
-					Y.TextTransparency = u[Y].TextTransp;
-					Y.TextStrokeTransparency = u[Y].StrokeTransp;
-					for z, T in pairs(Y:GetChildren()) do
-						if T:IsA("UIStroke") and u[Y].Strokes[T] then
-							T.Enabled = u[Y].Strokes[T].Enabled;
-							T.Transparency = u[Y].Strokes[T].Transp;
-							T.Thickness = u[Y].Strokes[T].Thickness;
+					L.Text = A[L].Text;
+					L.TextColor3 = A[L].Color;
+					L.TextTransparency = A[L].TextTransp;
+					L.TextStrokeTransparency = A[L].StrokeTransp;
+					for e, j in pairs(L:GetChildren()) do
+						if j:IsA("UIStroke") and A[L].Strokes[j] then
+							j.Enabled = A[L].Strokes[j].Enabled;
+							j.Transparency = A[L].Strokes[j].Transp;
+							j.Thickness = A[L].Strokes[j].Thickness;
 						end;
 					end;
 				end;
 			end;
 		end;
 	end;
-	function Qc()
-		local z = y.Name;
-		local B = y.DisplayName;
+	function cp()
+		local e = K.Name;
+		local a = K.DisplayName;
 		task.spawn(function()
-			for Y, u in pairs(Y:GetPlayers()) do
-				if u.Character then
-					for Y, u in pairs(u.Character:GetDescendants()) do
-						if u:IsA("TextLabel") or u:IsA("TextBox") or u:IsA("TextButton") then
-							j(u, z, B);
+			for L, A in pairs(L:GetPlayers()) do
+				if A.Character then
+					for L, A in pairs(A.Character:GetDescendants()) do
+						if A:IsA("TextLabel") or A:IsA("TextBox") or A:IsA("TextButton") then
+							H(A, e, a);
 						end;
 					end;
 				end;
 			end;
-			local u = y:FindFirstChild("PlayerGui");
-			if u then
-				for Y, u in pairs(u:GetDescendants()) do
-					if u:IsA("TextLabel") or u:IsA("TextBox") or u:IsA("TextButton") then
-						j(u, z, B);
+			local A = K:FindFirstChild("PlayerGui");
+			if A then
+				for L, A in pairs(A:GetDescendants()) do
+					if A:IsA("TextLabel") or A:IsA("TextBox") or A:IsA("TextButton") then
+						H(A, e, a);
 					end;
 				end;
 			end;
 		end);
-		if g then
-			if not K then
-				K = true;
-				local function Y(Y)
-					local y = Y:FindFirstAncestorWhichIsA("ScreenGui");
-					if y and ((string.find(y.Name, "WindUI") or string.find(y.Name, "Nexvyr"))) then
+		if G then
+			if not d then
+				d = true;
+				local function L(L)
+					local K = L:FindFirstAncestorWhichIsA("ScreenGui");
+					if K and ((string.find(K.Name, "WindUI") or string.find(K.Name, "Nexvyr"))) then
 						return;
 					end;
-					if Y:IsA("TextLabel") or Y:IsA("TextBox") or Y:IsA("TextButton") then
-						j(Y, z, B);
-						if not X[Y] then
-							X[Y] = true;
-							table.insert(T, (Y:GetPropertyChangedSignal("Text")):Connect(function()
-								if K and (Y.Text ~= M and not string.find(Y.Text, M)) then
-									u[Y] = nil;
-									j(Y, z, B);
+					if L:IsA("TextLabel") or L:IsA("TextBox") or L:IsA("TextButton") then
+						H(L, e, a);
+						if not g[L] then
+							g[L] = true;
+							table.insert(j, (L:GetPropertyChangedSignal("Text")):Connect(function()
+								if d and (L.Text ~= E and not string.find(L.Text, E)) then
+									A[L] = nil;
+									H(L, e, a);
 								end;
 							end));
 						end;
 					end;
 				end;
-				local S = y:FindFirstChild("PlayerGui");
-				if S then
-					table.insert(T, S.DescendantAdded:Connect(function(z)
-						if K and ((z:IsA("TextLabel") or z:IsA("TextBox") or z:IsA("TextButton"))) then
+				local I = K:FindFirstChild("PlayerGui");
+				if I then
+					table.insert(j, I.DescendantAdded:Connect(function(e)
+						if d and ((e:IsA("TextLabel") or e:IsA("TextBox") or e:IsA("TextButton"))) then
 							task.spawn(function()
-								Y(z);
+								L(e);
 							end);
 						end;
 					end));
 				end;
-				local l, v = pcall(function()
+				local w, Q = pcall(function()
 						return game:GetService("CoreGui");
 					end);
-				if l and v then
-					table.insert(T, v.DescendantAdded:Connect(function(z)
-						if K and ((z:IsA("TextLabel") or z:IsA("TextBox") or z:IsA("TextButton"))) then
+				if w and Q then
+					table.insert(j, Q.DescendantAdded:Connect(function(e)
+						if d and ((e:IsA("TextLabel") or e:IsA("TextBox") or e:IsA("TextButton"))) then
 							task.spawn(function()
-								Y(z);
+								L(e);
 							end);
 						end;
 					end));
 				end;
 			end;
 		else
-			K = false;
-			for Y, z in ipairs(T) do
-				z:Disconnect();
+			d = false;
+			for L, e in ipairs(j) do
+				e:Disconnect();
 			end;
-			T = {};
-			table.clear(X);
-			for Y, z in pairs(u) do
-				if Y and Y.Parent then
-					Y.Text = z.Text;
-					Y.TextColor3 = z.Color;
-					Y.TextTransparency = z.TextTransp;
-					Y.TextStrokeTransparency = z.StrokeTransp;
-					for Y, z in pairs(z.Strokes) do
-						if Y and Y.Parent then
-							Y.Enabled = z.Enabled;
-							Y.Transparency = z.Transp;
-							Y.Thickness = z.Thickness;
+			j = {};
+			table.clear(g);
+			for L, e in pairs(A) do
+				if L and L.Parent then
+					L.Text = e.Text;
+					L.TextColor3 = e.Color;
+					L.TextTransparency = e.TextTransp;
+					L.TextStrokeTransparency = e.StrokeTransp;
+					for L, e in pairs(e.Strokes) do
+						if L and L.Parent then
+							L.Enabled = e.Enabled;
+							L.Transparency = e.Transp;
+							L.Thickness = e.Thickness;
 						end;
 					end;
 				end;
 			end;
-			u = {};
+			A = {};
 		end;
 	end;
-	A.TogFakeName = jc.Identidad:Toggle({ Title = "Activar Nombre Falso", Value = false, Callback = function(Y)
-				g = Y;
-				Qc();
+	C.TogFakeName = ap.Identidad:Toggle({ Title = "Activar Nombre Falso", Value = false, Callback = function(L)
+				G = L;
+				cp();
 			end });
-	A.InpFakeName = jc.Identidad:Input({ Title = "Nuevo Nombre", Placeholder = "Escribe tu nombre falso...", Callback = function(Y)
-				if Y ~= "" then
-					M = Y;
-					if g then
-						Qc();
+	C.InpFakeName = ap.Identidad:Input({ Title = "Nuevo Nombre", Placeholder = "Escribe tu nombre falso...", Callback = function(L)
+				if L ~= "" then
+					E = L;
+					if G then
+						cp();
 					end;
 				end;
 			end });
-	y.CharacterAdded:Connect(function()
-		if g then
+	K.CharacterAdded:Connect(function()
+		if G then
 			task.wait(1);
-			Qc();
+			cp();
 		end;
 	end);
 end;
 do
-	local Y = "UzivertHub_Configs_WindUI";
-	if isfolder and not isfolder(Y) then
+	local L = "UzivertHub_Configs_WindUI";
+	if isfolder and not isfolder(L) then
 		pcall(function()
-			makefolder(Y);
+			makefolder(L);
 		end);
 	end;
-	local z = { "Ninguna" };
-	local u = "Ninguna";
-	local T = "";
-	jc.Guardado:Section({ Title = "Gestor de Configs", Icon = "solar:diskette-bold" });
-	local K = jc.Guardado:Dropdown({
+	local e = { "Ninguna" };
+	local A = "Ninguna";
+	local j = "";
+	ap.Guardado:Section({ Title = "Gestor de Configs", Icon = "solar:diskette-bold" });
+	local d = ap.Guardado:Dropdown({
 			Title = "Seleccionar Configuraci\195\179n",
-			Values = z,
+			Values = e,
 			Value = "Ninguna",
-			Callback = function(Y)
-				u = Y;
+			Callback = function(L)
+				A = L;
 			end,
 		});
-	local function j()
-		local z = {};
+	local function H()
+		local e = {};
 		if listfiles then
 			pcall(function()
-				for Y, u in ipairs(listfiles(Y)) do
-					if u:match("%.json$") then
-						local Y = u:match("([^/\\]+)%.json$");
-						if Y then
-							table.insert(z, Y);
+				for L, A in ipairs(listfiles(L)) do
+					if A:match("%.json$") then
+						local L = A:match("([^/\\]+)%.json$");
+						if L then
+							table.insert(e, L);
 						end;
 					end;
 				end;
 			end);
 		end;
-		if #z == 0 then
-			table.insert(z, "Ninguna");
+		if #e == 0 then
+			table.insert(e, "Ninguna");
 		end;
 		pcall(function()
-			K:Refresh(z);
-			if u == "Ninguna" or not table.find(z, u) then
-				K:Select(z[1]);
-				u = z[1];
+			d:Refresh(e);
+			if A == "Ninguna" or not table.find(e, A) then
+				d:Select(e[1]);
+				A = e[1];
 			end;
 		end);
 	end;
-	jc.Guardado:Button({
+	ap.Guardado:Button({
 		Title = "Actualizar Lista",
 		Icon = "solar:refresh-bold",
 		Variant = "Secondary",
 		Callback = function()
-			j();
+			H();
 		end,
 	});
-	jc.Guardado:Input({
+	ap.Guardado:Input({
 		Title = "Nombre para Guardar",
 		Placeholder = "Ej: Config 1, Config 2...",
 		Icon = "solar:text-field-bold",
-		Callback = function(Y)
-			T = Y;
+		Callback = function(L)
+			j = L;
 		end,
 	});
-	local y = false;
-	local B = 0;
-	jc.Guardado:Button({
+	local K = false;
+	local a = 0;
+	ap.Guardado:Button({
 		Title = "Eliminar todos los guardados",
 		Icon = "solar:trash-bin-trash-bold",
 		Variant = "Danger",
 		Callback = function()
-			local z = os.clock();
-			if y and (z - B) < 4 then
-				y = false;
+			local e = os.clock();
+			if K and (e - a) < 4 then
+				K = false;
 				if listfiles then
 					pcall(function()
-						for Y, z in ipairs(listfiles(Y)) do
-							if z:match("%.json$") then
+						for L, e in ipairs(listfiles(L)) do
+							if e:match("%.json$") then
 								pcall(function()
-									delfile(z);
+									delfile(e);
 								end);
 							end;
 						end;
 					end);
 				end;
-				j();
+				H();
 			else
-				y = true;
-				B = z;
+				K = true;
+				a = e;
 			end;
 		end,
 	});
-	local function c(Y, z)
-		if not Y or z == nil then
+	local function t(L, e)
+		if not L or e == nil then
 			return;
 		end;
 		pcall(function()
-			Y:Set(z);
+			L:Set(e);
 		end);
 	end;
-	jc.Guardado:Button({
+	ap.Guardado:Button({
 		Title = "Guardar Configuraci\195\179n",
 		Icon = "solar:diskette-bold",
 		Variant = "Primary",
 		Callback = function()
-			local z = T:gsub("[^%w%s%-]", "");
-			if z == "" then
-				z = u;
+			local e = j:gsub("[^%w%s%-]", "");
+			if e == "" then
+				e = A;
 			end;
-			if z == "" or z == "Ninguna" then
+			if e == "" or e == "Ninguna" then
 				return;
 			end;
-			local y = Y .. ("/" .. (z .. ".json"));
-			local B = {
-					ConfigName = z,
+			local K = L .. ("/" .. (e .. ".json"));
+			local a = {
+					ConfigName = e,
 					Toggles = {
-						["Auto Shoot"] = v,
-						["Auto Shoot Agresivo"] = x,
-						["Equipar pistola"] = e,
-						["Silent Aim (Manual)"] = V,
-						["Silent Aim (FOV)"] = N,
-						["Mostrar C\195\173rculo FOV"] = S,
-						["Team Check"] = P,
-						["ESP Jugadores"] = t,
-						["ESP Glow"] = J.Glow,
-						["Kill All"] = s,
-						["Hitbox Activar"] = D,
-						["Hitbox Invisible"] = p,
-						Headless = Lc,
-						Korblox = rc,
-						["Nombre Falso"] = g,
-						Invisible = r,
+						["Auto Shoot"] = Q,
+						["Auto Shoot Agresivo"] = Z,
+						["Equipar pistola"] = r,
+						["Silent Aim (Manual)"] = M,
+						["Silent Aim (FOV)"] = R,
+						["Mostrar C\195\173rculo FOV"] = I,
+						["Team Check"] = i,
+						["ESP Jugadores"] = D,
+						["ESP Glow"] = k.Glow,
+						["Kill All"] = n,
+						["Hitbox Activar"] = Y,
+						["Hitbox Invisible"] = T,
+						Headless = Cp,
+						Korblox = pp,
+						["Nombre Falso"] = G,
+						Invisible = B,
 					},
 					Sliders = {
-						["Tama\195\177o del FOV"] = l,
-						["Tama\195\177o de Hitbox"] = b,
-						["Volumen Kill Sound"] = bc,
-						["Ajuste Speed"] = Jc,
-						["Ajuste Salto"] = sc,
+						["Tama\195\177o del FOV"] = w,
+						["Tama\195\177o de Hitbox"] = P,
+						["Volumen Kill Sound"] = Gp,
+						["Ajuste Speed"] = Yp,
+						["Ajuste Salto"] = Tp,
 					},
-					Colors = { ["Color de Hitbox"] = { R = k.R, G = k.G, B = k.B }, ["Color del ESP"] = { R = o.R, G = o.G, B = o.B } },
-					Extras = { ["Parte Silent Aim"] = n, ["Nombre Falso Texto"] = M },
+					Colors = { ["Color de Hitbox"] = { R = S.R, G = S.G, B = S.B }, ["Color del ESP"] = { R = s.R, G = s.G, B = s.B } },
+					Extras = { ["Parte Silent Aim"] = X, ["Nombre Falso Texto"] = E },
 				};
 			if writefile then
-				local Y, u = pcall(function()
-						return X:JSONEncode(B);
+				local L, A = pcall(function()
+						return g:JSONEncode(a);
 					end);
-				if Y then
+				if L then
 					pcall(function()
-						writefile(y, u);
+						writefile(K, A);
 					end);
-					j();
+					H();
 					pcall(function()
-						K:Select(z);
+						d:Select(e);
 					end);
 				end;
 			end;
 		end,
 	});
-	jc.Guardado:Button({
+	ap.Guardado:Button({
 		Title = "Cargar Configuraci\195\179n",
 		Icon = "solar:folder-open-bold",
 		Variant = "Primary",
 		Callback = function()
-			if u == "Ninguna" or u == "" then
+			if A == "Ninguna" or A == "" then
 				return;
 			end;
-			local z = Y .. ("/" .. (u .. ".json"));
-			if isfile and isfile(z) then
-				local Y, u = pcall(function()
-						return X:JSONDecode(readfile(z));
+			local e = L .. ("/" .. (A .. ".json"));
+			if isfile and isfile(e) then
+				local L, A = pcall(function()
+						return g:JSONDecode(readfile(e));
 					end);
-				if Y and type(u) == "table" then
-					if u.Toggles then
-						if u.Toggles["Auto Shoot"] ~= nil then
-							v = u.Toggles["Auto Shoot"];
-							c(A.TogAutoShoot, v);
+				if L and type(A) == "table" then
+					if A.Toggles then
+						if A.Toggles["Auto Shoot"] ~= nil then
+							Q = A.Toggles["Auto Shoot"];
+							t(C.TogAutoShoot, Q);
 						end;
-						if u.Toggles["Auto Shoot Agresivo"] ~= nil then
-							x = u.Toggles["Auto Shoot Agresivo"];
-							c(A.TogAutoShootAgr, x);
+						if A.Toggles["Auto Shoot Agresivo"] ~= nil then
+							Z = A.Toggles["Auto Shoot Agresivo"];
+							t(C.TogAutoShootAgr, Z);
 						end;
-						if u.Toggles["Equipar pistola"] ~= nil then
-							e = u.Toggles["Equipar pistola"];
-							c(A.TogEquipGun, e);
+						if A.Toggles["Equipar pistola"] ~= nil then
+							r = A.Toggles["Equipar pistola"];
+							t(C.TogEquipGun, r);
 						end;
-						if u.Toggles["Silent Aim (Manual)"] ~= nil then
-							V = u.Toggles["Silent Aim (Manual)"];
-							c(A.TogSilentAimManual, V);
+						if A.Toggles["Silent Aim (Manual)"] ~= nil then
+							M = A.Toggles["Silent Aim (Manual)"];
+							t(C.TogSilentAimManual, M);
 						end;
-						if u.Toggles["Silent Aim (FOV)"] ~= nil then
-							N = u.Toggles["Silent Aim (FOV)"];
-							c(A.TogSilentAimFOV, N);
+						if A.Toggles["Silent Aim (FOV)"] ~= nil then
+							R = A.Toggles["Silent Aim (FOV)"];
+							t(C.TogSilentAimFOV, R);
 						end;
-						if u.Toggles["Mostrar C\195\173rculo FOV"] ~= nil then
-							S = u.Toggles["Mostrar C\195\173rculo FOV"];
-							c(A.TogShowFOV, S);
+						if A.Toggles["Mostrar C\195\173rculo FOV"] ~= nil then
+							I = A.Toggles["Mostrar C\195\173rculo FOV"];
+							t(C.TogShowFOV, I);
 						end;
-						if u.Toggles["Team Check"] ~= nil then
-							P = u.Toggles["Team Check"];
+						if A.Toggles["Team Check"] ~= nil then
+							i = A.Toggles["Team Check"];
 						end;
-						if u.Toggles["ESP Jugadores"] ~= nil then
-							t = u.Toggles["ESP Jugadores"];
-							c(A.TogEsp, t);
+						if A.Toggles["ESP Jugadores"] ~= nil then
+							D = A.Toggles["ESP Jugadores"];
+							t(C.TogEsp, D);
 						end;
-						if u.Toggles["ESP Glow"] ~= nil then
-							J.Glow = u.Toggles["ESP Glow"];
-							c(A.TogEspGl, J.Glow);
+						if A.Toggles["ESP Glow"] ~= nil then
+							k.Glow = A.Toggles["ESP Glow"];
+							t(C.TogEspGl, k.Glow);
 						end;
-						if u.Toggles["Kill All"] ~= nil then
-							s = u.Toggles["Kill All"];
-							c(A.TogKillAll, s);
-							if s then
+						if A.Toggles["Kill All"] ~= nil then
+							n = A.Toggles["Kill All"];
+							t(C.TogKillAll, n);
+							if n then
 								KillAllInstance:Start();
 							else
 								KillAllInstance:Stop();
 							end;
 						end;
-						if u.Toggles["Hitbox Activar"] ~= nil then
-							D = u.Toggles["Hitbox Activar"];
-							c(A.TogHitbox, D);
-							if D then
-								O();
+						if A.Toggles["Hitbox Activar"] ~= nil then
+							Y = A.Toggles["Hitbox Activar"];
+							t(C.TogHitbox, Y);
+							if Y then
+								l();
 							else
-								nc();
+								Dp();
 							end;
 						end;
-						if u.Toggles["Hitbox Invisible"] ~= nil then
-							p = u.Toggles["Hitbox Invisible"];
-							c(A.TogHitboxInvisible, p);
+						if A.Toggles["Hitbox Invisible"] ~= nil then
+							T = A.Toggles["Hitbox Invisible"];
+							t(C.TogHitboxInvisible, T);
 						end;
-						if u.Toggles.Headless ~= nil then
-							Lc = u.Toggles.Headless;
-							c(A.TogHeadless, Lc);
-							if Lc then
-								wc(true);
+						if A.Toggles.Headless ~= nil then
+							Cp = A.Toggles.Headless;
+							t(C.TogHeadless, Cp);
+							if Cp then
+								Fp(true);
 							else
-								wc(false);
+								Fp(false);
 							end;
 						end;
-						if u.Toggles.Korblox ~= nil then
-							rc = u.Toggles.Korblox;
-							c(A.TogKorblox, rc);
-							if rc then
-								Rc();
+						if A.Toggles.Korblox ~= nil then
+							pp = A.Toggles.Korblox;
+							t(C.TogKorblox, pp);
+							if pp then
+								Up();
 							else
-								Ac();
+								hp();
 							end;
 						end;
-						if u.Toggles["Nombre Falso"] ~= nil then
-							g = u.Toggles["Nombre Falso"];
-							c(A.TogFakeName, g);
-							Qc();
+						if A.Toggles["Nombre Falso"] ~= nil then
+							G = A.Toggles["Nombre Falso"];
+							t(C.TogFakeName, G);
+							cp();
 						end;
-						if u.Toggles.Invisible ~= nil then
-							r = u.Toggles.Invisible;
-							c(A.TogInvisible, r);
-							oc(r);
-							if f then
-								f(r);
+						if A.Toggles.Invisible ~= nil then
+							B = A.Toggles.Invisible;
+							t(C.TogInvisible, B);
+							np(B);
+							if u then
+								u(B);
 							end;
 						end;
 					end;
-					if u.Sliders then
-						if u.Sliders["Tama\195\177o del FOV"] ~= nil then
-							l = u.Sliders["Tama\195\177o del FOV"];
-							c(A.SliFOVSize, l);
+					if A.Sliders then
+						if A.Sliders["Tama\195\177o del FOV"] ~= nil then
+							w = A.Sliders["Tama\195\177o del FOV"];
+							t(C.SliFOVSize, w);
 						end;
-						if u.Sliders["Tama\195\177o de Hitbox"] ~= nil then
-							b = u.Sliders["Tama\195\177o de Hitbox"];
-							c(A.SliHitboxSize, b);
+						if A.Sliders["Tama\195\177o de Hitbox"] ~= nil then
+							P = A.Sliders["Tama\195\177o de Hitbox"];
+							t(C.SliHitboxSize, P);
 						end;
-						if u.Sliders["Volumen Kill Sound"] ~= nil then
-							bc = u.Sliders["Volumen Kill Sound"];
-							kc.Volume = bc;
-							gc.Volume = bc;
-							Mc.Volume = bc;
-							c(A.SliKillSoundVolume, bc);
+						if A.Sliders["Volumen Kill Sound"] ~= nil then
+							Gp = A.Sliders["Volumen Kill Sound"];
+							Ep.Volume = Gp;
+							Bp.Volume = Gp;
+							Op.Volume = Gp;
+							t(C.SliKillSoundVolume, Gp);
 						end;
-						if u.Sliders["Ajuste Speed"] ~= nil then
-							Jc = u.Sliders["Ajuste Speed"];
-							c(A.SliSpeed, Jc);
+						if A.Sliders["Ajuste Speed"] ~= nil then
+							Yp = A.Sliders["Ajuste Speed"];
+							t(C.SliSpeed, Yp);
 						end;
-						if u.Sliders["Ajuste Salto"] ~= nil then
-							sc = u.Sliders["Ajuste Salto"];
-							c(A.SliJumpPower, sc);
+						if A.Sliders["Ajuste Salto"] ~= nil then
+							Tp = A.Sliders["Ajuste Salto"];
+							t(C.SliJumpPower, Tp);
 						end;
 					end;
-					if u.Colors then
-						if u.Colors["Color de Hitbox"] then
-							k = Color3.new(u.Colors["Color de Hitbox"].R, u.Colors["Color de Hitbox"].G, u.Colors["Color de Hitbox"].B);
-							if A.ColHitbox then
+					if A.Colors then
+						if A.Colors["Color de Hitbox"] then
+							S = Color3.new(A.Colors["Color de Hitbox"].R, A.Colors["Color de Hitbox"].G, A.Colors["Color de Hitbox"].B);
+							if C.ColHitbox then
 								pcall(function()
-									A.ColHitbox:Update(k);
+									C.ColHitbox:Update(S);
 								end);
 							end;
 						end;
-						if u.Colors["Color del ESP"] then
-							local Y = Color3.new(u.Colors["Color del ESP"].R, u.Colors["Color del ESP"].G, u.Colors["Color del ESP"].B);
-							o = Y;
-							if A.ColEsp then
+						if A.Colors["Color del ESP"] then
+							local L = Color3.new(A.Colors["Color del ESP"].R, A.Colors["Color del ESP"].G, A.Colors["Color del ESP"].B);
+							s = L;
+							if C.ColEsp then
 								pcall(function()
-									A.ColEsp:Update(Y);
+									C.ColEsp:Update(L);
 								end);
 							end;
 						end;
 					end;
-					if u.Extras then
-						if u.Extras["Parte Silent Aim"] then
-							n = u.Extras["Parte Silent Aim"];
-							if A.DropSilentAimPart then
+					if A.Extras then
+						if A.Extras["Parte Silent Aim"] then
+							X = A.Extras["Parte Silent Aim"];
+							if C.DropSilentAimPart then
 								pcall(function()
-									A.DropSilentAimPart:Select(n);
+									C.DropSilentAimPart:Select(X);
 								end);
 							end;
 						end;
-						if u.Extras["Nombre Falso Texto"] then
-							M = u.Extras["Nombre Falso Texto"];
-							c(A.InpFakeName, M);
-							if g then
-								Qc();
+						if A.Extras["Nombre Falso Texto"] then
+							E = A.Extras["Nombre Falso Texto"];
+							t(C.InpFakeName, E);
+							if G then
+								cp();
 							end;
 						end;
 					end;
-					if w then
-						w();
+					if U then
+						U();
 					end;
-					if W then
-						W();
+					if z then
+						z();
 					end;
 				end;
 			end;
@@ -5636,375 +5829,380 @@ do
 	});
 	task.spawn(function()
 		task.wait(1);
-		j();
+		H();
 	end);
 end;
 do
-	jc.Graficos:Section({ Title = "Presets de Iluminaci\195\179n", Icon = "solar:palette-bold" });
-	local Y = {};
-	local z = {};
-	local u = {};
-	local T = nil;
-	local function X(Y)
-		local z = game:GetService("Lighting");
-		if z:GetAttribute("OrigSaved_" .. Y) then
+	ap.Graficos:Section({ Title = "Presets de Iluminaci\195\179n", Icon = "solar:palette-bold" });
+	local L = {};
+	local e = {};
+	local A = {};
+	local j = nil;
+	local function g(L)
+		local e = game:GetService("Lighting");
+		if e:GetAttribute("OrigSaved_" .. L) then
 			return;
 		end;
-		z:SetAttribute("Orig_Ambient_" .. Y, z.Ambient);
-		z:SetAttribute("Orig_OutdoorAmbient_" .. Y, z.OutdoorAmbient);
-		z:SetAttribute("Orig_Brightness_" .. Y, z.Brightness);
-		z:SetAttribute("Orig_ClockTime_" .. Y, z.ClockTime);
-		z:SetAttribute("Orig_FogColor_" .. Y, z.FogColor);
-		z:SetAttribute("Orig_FogEnd_" .. Y, z.FogEnd);
-		z:SetAttribute("Orig_FogStart_" .. Y, z.FogStart);
-		z:SetAttribute("Orig_ColorShift_Top_" .. Y, z.ColorShift_Top);
-		z:SetAttribute("Orig_ColorShift_Bottom_" .. Y, z.ColorShift_Bottom);
-		z:SetAttribute("Orig_ExposureCompensation_" .. Y, z.ExposureCompensation);
-		z:SetAttribute("Orig_GlobalShadows_" .. Y, z.GlobalShadows);
-		z:SetAttribute("Orig_EnvironmentDiffuseScale_" .. Y, z.EnvironmentDiffuseScale);
-		z:SetAttribute("Orig_EnvironmentSpecularScale_" .. Y, z.EnvironmentSpecularScale);
-		z:SetAttribute("OrigSaved_" .. Y, true);
+		e:SetAttribute("Orig_Ambient_" .. L, e.Ambient);
+		e:SetAttribute("Orig_OutdoorAmbient_" .. L, e.OutdoorAmbient);
+		e:SetAttribute("Orig_Brightness_" .. L, e.Brightness);
+		e:SetAttribute("Orig_ClockTime_" .. L, e.ClockTime);
+		e:SetAttribute("Orig_FogColor_" .. L, e.FogColor);
+		e:SetAttribute("Orig_FogEnd_" .. L, e.FogEnd);
+		e:SetAttribute("Orig_FogStart_" .. L, e.FogStart);
+		e:SetAttribute("Orig_ColorShift_Top_" .. L, e.ColorShift_Top);
+		e:SetAttribute("Orig_ColorShift_Bottom_" .. L, e.ColorShift_Bottom);
+		e:SetAttribute("Orig_ExposureCompensation_" .. L, e.ExposureCompensation);
+		e:SetAttribute("Orig_GlobalShadows_" .. L, e.GlobalShadows);
+		e:SetAttribute("Orig_EnvironmentDiffuseScale_" .. L, e.EnvironmentDiffuseScale);
+		e:SetAttribute("Orig_EnvironmentSpecularScale_" .. L, e.EnvironmentSpecularScale);
+		e:SetAttribute("OrigSaved_" .. L, true);
 	end;
-	local function j(Y)
-		local z = game:GetService("Lighting");
-		if not z:GetAttribute("OrigSaved_" .. Y) then
+	local function H(L)
+		local e = game:GetService("Lighting");
+		if not e:GetAttribute("OrigSaved_" .. L) then
 			return;
 		end;
-		z.Ambient = z:GetAttribute("Orig_Ambient_" .. Y);
-		z.OutdoorAmbient = z:GetAttribute("Orig_OutdoorAmbient_" .. Y);
-		z.Brightness = z:GetAttribute("Orig_Brightness_" .. Y);
-		z.ClockTime = z:GetAttribute("Orig_ClockTime_" .. Y);
-		z.FogColor = z:GetAttribute("Orig_FogColor_" .. Y);
-		z.FogEnd = z:GetAttribute("Orig_FogEnd_" .. Y);
-		z.FogStart = z:GetAttribute("Orig_FogStart_" .. Y);
-		z.ColorShift_Top = z:GetAttribute("Orig_ColorShift_Top_" .. Y);
-		z.ColorShift_Bottom = z:GetAttribute("Orig_ColorShift_Bottom_" .. Y);
-		z.ExposureCompensation = z:GetAttribute("Orig_ExposureCompensation_" .. Y);
-		z.GlobalShadows = z:GetAttribute("Orig_GlobalShadows_" .. Y);
-		z.EnvironmentDiffuseScale = z:GetAttribute("Orig_EnvironmentDiffuseScale_" .. Y);
-		z.EnvironmentSpecularScale = z:GetAttribute("Orig_EnvironmentSpecularScale_" .. Y);
-		z:SetAttribute("OrigSaved_" .. Y, nil);
+		e.Ambient = e:GetAttribute("Orig_Ambient_" .. L);
+		e.OutdoorAmbient = e:GetAttribute("Orig_OutdoorAmbient_" .. L);
+		e.Brightness = e:GetAttribute("Orig_Brightness_" .. L);
+		e.ClockTime = e:GetAttribute("Orig_ClockTime_" .. L);
+		e.FogColor = e:GetAttribute("Orig_FogColor_" .. L);
+		e.FogEnd = e:GetAttribute("Orig_FogEnd_" .. L);
+		e.FogStart = e:GetAttribute("Orig_FogStart_" .. L);
+		e.ColorShift_Top = e:GetAttribute("Orig_ColorShift_Top_" .. L);
+		e.ColorShift_Bottom = e:GetAttribute("Orig_ColorShift_Bottom_" .. L);
+		e.ExposureCompensation = e:GetAttribute("Orig_ExposureCompensation_" .. L);
+		e.GlobalShadows = e:GetAttribute("Orig_GlobalShadows_" .. L);
+		e.EnvironmentDiffuseScale = e:GetAttribute("Orig_EnvironmentDiffuseScale_" .. L);
+		e.EnvironmentSpecularScale = e:GetAttribute("Orig_EnvironmentSpecularScale_" .. L);
+		e:SetAttribute("OrigSaved_" .. L, nil);
 	end;
-	local function y(Y)
-		for Y, z in ipairs(Y) do
+	local function K(L)
+		for L, e in ipairs(L) do
 			pcall(function()
-				z:Destroy();
+				e:Destroy();
 			end);
 		end;
-		table.clear(Y);
+		table.clear(L);
 	end;
-	local function B(z)
-		local u = game:GetService("Lighting");
-		if z then
-			X("NS");
-			y(Y);
-			if T then
-				T:Destroy();
+	local function a(e)
+		local A = game:GetService("Lighting");
+		if e then
+			g("NS");
+			K(L);
+			if j then
+				j:Destroy();
 			end;
-			T = Instance.new("Folder");
-			T.Name = "NS_SkyX";
-			T.Parent = K;
-			local function z(z)
-				local u = Instance.new("Part");
-				u.Anchored = true;
-				u.CanCollide = false;
-				u.CanQuery = false;
-				u.Material = Enum.Material.Neon;
-				u.Color = Color3.fromRGB(255, 55, 55);
-				u.Transparency = .1;
-				u.Size = Vector3.new(2600, 26, 26);
-				u.CFrame = CFrame.new(0, 3200, -2200) * CFrame.Angles(0, 0, math.rad(z));
-				u.Parent = T;
-				table.insert(Y, u);
+			j = Instance.new("Folder");
+			j.Name = "NS_SkyX";
+			j.Parent = d;
+			local function e(e)
+				local A = Instance.new("Part");
+				A.Anchored = true;
+				A.CanCollide = false;
+				A.CanQuery = false;
+				A.Material = Enum.Material.Neon;
+				A.Color = Color3.fromRGB(255, 55, 55);
+				A.Transparency = .1;
+				A.Size = Vector3.new(2600, 26, 26);
+				A.CFrame = CFrame.new(0, 3200, -2200) * CFrame.Angles(0, 0, math.rad(e));
+				A.Parent = j;
+				table.insert(L, A);
 			end;
-			z(45);
-			z(-45);
-			local j = Instance.new("Part");
-			j.Anchored = true;
-			j.CanCollide = false;
-			j.CanQuery = false;
-			j.Material = Enum.Material.Neon;
-			j.Color = Color3.fromRGB(255, 110, 110);
-			j.Transparency = .65;
-			j.Shape = Enum.PartType.Ball;
-			j.Size = Vector3.new(420, 420, 420);
-			j.CFrame = CFrame.new(0, 3200, -2200);
-			j.Parent = T;
-			table.insert(Y, j);
-			local B = Instance.new("PointLight");
-			B.Color = Color3.fromRGB(255, 80, 80);
-			B.Range = 300;
-			B.Brightness = 3;
-			B.Parent = j;
-			table.insert(Y, B);
-			local S = Instance.new("Sky");
-			S.Name = "NS_Sky";
-			S.StarCount = 9000;
-			S.MoonAngularSize = 30;
-			S.SunAngularSize = 0;
-			S.CelestialBodiesShown = true;
-			S.Parent = u;
-			table.insert(Y, S);
-			local l = Instance.new("ColorCorrectionEffect");
-			l.Name = "NS_CC";
-			l.Brightness = .05;
-			l.Contrast = .32;
-			l.Saturation = -0.15;
-			l.TintColor = Color3.fromRGB(255, 130, 130);
-			l.Parent = u;
-			table.insert(Y, l);
-			local v = Instance.new("BloomEffect");
-			v.Name = "NS_Bloom";
-			v.Intensity = 1;
-			v.Size = 90;
-			v.Threshold = .45;
-			v.Parent = u;
-			table.insert(Y, v);
-			local x = Instance.new("BlurEffect");
-			x.Name = "NS_Blur";
-			x.Size = 3;
-			x.Parent = u;
-			table.insert(Y, x);
-			local c = Instance.new("Atmosphere");
-			c.Name = "NS_Atmo";
-			c.Density = .42;
-			c.Offset = 0;
-			c.Color = Color3.fromRGB(60, 12, 12);
-			c.Decay = Color3.fromRGB(80, 20, 20);
-			c.Glare = .5;
-			c.Haze = 1.6;
-			c.Parent = u;
-			table.insert(Y, c);
-			u.ClockTime = 0;
-			u.Brightness = 1.2;
-			u.Ambient = Color3.fromRGB(130, 110, 110);
-			u.OutdoorAmbient = Color3.fromRGB(180, 140, 140);
-			u.FogColor = Color3.fromRGB(22, 5, 5);
-			u.FogEnd = 1200;
-			u.FogStart = 150;
-			u.ColorShift_Top = Color3.fromRGB(125, 25, 25);
-			u.ColorShift_Bottom = Color3.fromRGB(65, 8, 8);
-			u.ExposureCompensation = -0.2;
-			u.GlobalShadows = true;
-			u.EnvironmentDiffuseScale = .5;
-			u.EnvironmentSpecularScale = .5;
+			e(45);
+			e(-45);
+			local H = Instance.new("Part");
+			H.Anchored = true;
+			H.CanCollide = false;
+			H.CanQuery = false;
+			H.Material = Enum.Material.Neon;
+			H.Color = Color3.fromRGB(255, 110, 110);
+			H.Transparency = .65;
+			H.Shape = Enum.PartType.Ball;
+			H.Size = Vector3.new(420, 420, 420);
+			H.CFrame = CFrame.new(0, 3200, -2200);
+			H.Parent = j;
+			table.insert(L, H);
+			local a = Instance.new("PointLight");
+			a.Color = Color3.fromRGB(255, 80, 80);
+			a.Range = 300;
+			a.Brightness = 3;
+			a.Parent = H;
+			table.insert(L, a);
+			local I = Instance.new("Sky");
+			I.Name = "NS_Sky";
+			I.StarCount = 9000;
+			I.MoonAngularSize = 30;
+			I.SunAngularSize = 0;
+			I.CelestialBodiesShown = true;
+			I.Parent = A;
+			table.insert(L, I);
+			local w = Instance.new("ColorCorrectionEffect");
+			w.Name = "NS_CC";
+			w.Brightness = .05;
+			w.Contrast = .32;
+			w.Saturation = -0.15;
+			w.TintColor = Color3.fromRGB(255, 130, 130);
+			w.Parent = A;
+			table.insert(L, w);
+			local Q = Instance.new("BloomEffect");
+			Q.Name = "NS_Bloom";
+			Q.Intensity = 1;
+			Q.Size = 90;
+			Q.Threshold = .45;
+			Q.Parent = A;
+			table.insert(L, Q);
+			local Z = Instance.new("BlurEffect");
+			Z.Name = "NS_Blur";
+			Z.Size = 3;
+			Z.Parent = A;
+			table.insert(L, Z);
+			local t = Instance.new("Atmosphere");
+			t.Name = "NS_Atmo";
+			t.Density = .42;
+			t.Offset = 0;
+			t.Color = Color3.fromRGB(60, 12, 12);
+			t.Decay = Color3.fromRGB(80, 20, 20);
+			t.Glare = .5;
+			t.Haze = 1.6;
+			t.Parent = A;
+			table.insert(L, t);
+			A.ClockTime = 0;
+			A.Brightness = 1.2;
+			A.Ambient = Color3.fromRGB(130, 110, 110);
+			A.OutdoorAmbient = Color3.fromRGB(180, 140, 140);
+			A.FogColor = Color3.fromRGB(22, 5, 5);
+			A.FogEnd = 1200;
+			A.FogStart = 150;
+			A.ColorShift_Top = Color3.fromRGB(125, 25, 25);
+			A.ColorShift_Bottom = Color3.fromRGB(65, 8, 8);
+			A.ExposureCompensation = -0.2;
+			A.GlobalShadows = true;
+			A.EnvironmentDiffuseScale = .5;
+			A.EnvironmentSpecularScale = .5;
 		else
-			y(Y);
-			if T then
-				T:Destroy();
-				T = nil;
+			K(L);
+			if j then
+				j:Destroy();
+				j = nil;
 			end;
-			j("NS");
+			H("NS");
 		end;
 	end;
-	local function S(Y)
-		local u = game:GetService("Lighting");
-		if Y then
-			X("AF");
-			y(z);
-			local Y = Instance.new("ColorCorrectionEffect");
-			Y.Name = "AF_CC";
-			Y.Brightness = .05;
-			Y.Contrast = .14;
-			Y.Saturation = .22;
-			Y.TintColor = Color3.fromRGB(255, 205, 165);
-			Y.Parent = u;
-			table.insert(z, Y);
-			local T = Instance.new("BloomEffect");
-			T.Name = "AF_Bloom";
-			T.Intensity = .32;
-			T.Size = 40;
-			T.Threshold = .92;
-			T.Parent = u;
-			table.insert(z, T);
-			local K = Instance.new("SunRaysEffect");
-			K.Name = "AF_Rays";
-			K.Intensity = .15;
-			K.Spread = .9;
-			K.Parent = u;
-			table.insert(z, K);
-			local j = Instance.new("Sky");
-			j.Name = "AF_Sky";
-			j.SunAngularSize = 18;
-			j.MoonAngularSize = 0;
-			j.StarCount = 2000;
-			j.Parent = u;
-			table.insert(z, j);
-			local B = Instance.new("Atmosphere");
-			B.Name = "AF_Atmo";
-			B.Density = .36;
-			B.Offset = .1;
-			B.Color = Color3.fromRGB(255, 185, 135);
-			B.Decay = Color3.fromRGB(255, 125, 85);
-			B.Glare = .2;
-			B.Haze = 1.2;
-			B.Parent = u;
-			table.insert(z, B);
-			u.ClockTime = 6.3;
-			u.Brightness = 2.4;
-			u.Ambient = Color3.fromRGB(85, 62, 55);
-			u.OutdoorAmbient = Color3.fromRGB(125, 92, 80);
-			u.FogColor = Color3.fromRGB(240, 185, 145);
-			u.FogEnd = 2500;
-			u.FogStart = 200;
-			u.ColorShift_Top = Color3.fromRGB(255, 185, 105);
-			u.ColorShift_Bottom = Color3.fromRGB(205, 105, 85);
-			u.ExposureCompensation = .08;
-			u.GlobalShadows = true;
-			u.EnvironmentDiffuseScale = .8;
-			u.EnvironmentSpecularScale = .6;
+	local function I(L)
+		local A = game:GetService("Lighting");
+		if L then
+			g("AF");
+			K(e);
+			local L = Instance.new("ColorCorrectionEffect");
+			L.Name = "AF_CC";
+			L.Brightness = .05;
+			L.Contrast = .14;
+			L.Saturation = .22;
+			L.TintColor = Color3.fromRGB(255, 205, 165);
+			L.Parent = A;
+			table.insert(e, L);
+			local j = Instance.new("BloomEffect");
+			j.Name = "AF_Bloom";
+			j.Intensity = .32;
+			j.Size = 40;
+			j.Threshold = .92;
+			j.Parent = A;
+			table.insert(e, j);
+			local d = Instance.new("SunRaysEffect");
+			d.Name = "AF_Rays";
+			d.Intensity = .15;
+			d.Spread = .9;
+			d.Parent = A;
+			table.insert(e, d);
+			local H = Instance.new("Sky");
+			H.Name = "AF_Sky";
+			H.SunAngularSize = 18;
+			H.MoonAngularSize = 0;
+			H.StarCount = 2000;
+			H.Parent = A;
+			table.insert(e, H);
+			local a = Instance.new("Atmosphere");
+			a.Name = "AF_Atmo";
+			a.Density = .36;
+			a.Offset = .1;
+			a.Color = Color3.fromRGB(255, 185, 135);
+			a.Decay = Color3.fromRGB(255, 125, 85);
+			a.Glare = .2;
+			a.Haze = 1.2;
+			a.Parent = A;
+			table.insert(e, a);
+			A.ClockTime = 6.3;
+			A.Brightness = 2.4;
+			A.Ambient = Color3.fromRGB(85, 62, 55);
+			A.OutdoorAmbient = Color3.fromRGB(125, 92, 80);
+			A.FogColor = Color3.fromRGB(240, 185, 145);
+			A.FogEnd = 2500;
+			A.FogStart = 200;
+			A.ColorShift_Top = Color3.fromRGB(255, 185, 105);
+			A.ColorShift_Bottom = Color3.fromRGB(205, 105, 85);
+			A.ExposureCompensation = .08;
+			A.GlobalShadows = true;
+			A.EnvironmentDiffuseScale = .8;
+			A.EnvironmentSpecularScale = .6;
 		else
-			y(z);
-			j("AF");
+			K(e);
+			H("AF");
 		end;
 	end;
-	local function l(Y)
-		local z = game:GetService("Lighting");
-		if Y then
-			X("SV");
-			y(u);
-			local Y = Instance.new("ColorCorrectionEffect");
-			Y.Name = "SV_CC";
-			Y.Brightness = .05;
-			Y.Contrast = .22;
-			Y.Saturation = -1;
-			Y.TintColor = Color3.fromRGB(222, 226, 232);
-			Y.Parent = z;
-			table.insert(u, Y);
-			local T = Instance.new("BloomEffect");
-			T.Name = "SV_Bloom";
-			T.Intensity = 1.25;
-			T.Size = 75;
-			T.Threshold = .38;
-			T.Parent = z;
-			table.insert(u, T);
-			local K = Instance.new("Sky");
-			K.Name = "SV_Sky";
-			K.StarCount = 0;
-			K.SunAngularSize = 0;
-			K.MoonAngularSize = 0;
-			K.CelestialBodiesShown = false;
-			K.Parent = z;
-			table.insert(u, K);
-			local j = Instance.new("Atmosphere");
-			j.Name = "SV_Atmo";
-			j.Density = .3;
-			j.Offset = .1;
-			j.Color = Color3.fromRGB(180, 185, 190);
-			j.Decay = Color3.fromRGB(140, 145, 150);
-			j.Glare = 0;
-			j.Haze = 1;
-			j.Parent = z;
-			table.insert(u, j);
-			z.ClockTime = 14;
-			z.Brightness = 2.2;
-			z.Ambient = Color3.fromRGB(92, 96, 100);
-			z.OutdoorAmbient = Color3.fromRGB(132, 136, 140);
-			z.FogColor = Color3.fromRGB(172, 176, 180);
-			z.FogEnd = 3000;
-			z.FogStart = 200;
-			z.ColorShift_Top = Color3.fromRGB(152, 156, 160);
-			z.ColorShift_Bottom = Color3.fromRGB(122, 126, 130);
-			z.ExposureCompensation = 0;
-			z.GlobalShadows = true;
-			z.EnvironmentDiffuseScale = .6;
-			z.EnvironmentSpecularScale = .3;
+	local function w(L)
+		local e = game:GetService("Lighting");
+		if L then
+			g("SV");
+			K(A);
+			local L = Instance.new("ColorCorrectionEffect");
+			L.Name = "SV_CC";
+			L.Brightness = .05;
+			L.Contrast = .22;
+			L.Saturation = -1;
+			L.TintColor = Color3.fromRGB(222, 226, 232);
+			L.Parent = e;
+			table.insert(A, L);
+			local j = Instance.new("BloomEffect");
+			j.Name = "SV_Bloom";
+			j.Intensity = 1.25;
+			j.Size = 75;
+			j.Threshold = .38;
+			j.Parent = e;
+			table.insert(A, j);
+			local d = Instance.new("Sky");
+			d.Name = "SV_Sky";
+			d.StarCount = 0;
+			d.SunAngularSize = 0;
+			d.MoonAngularSize = 0;
+			d.CelestialBodiesShown = false;
+			d.Parent = e;
+			table.insert(A, d);
+			local H = Instance.new("Atmosphere");
+			H.Name = "SV_Atmo";
+			H.Density = .3;
+			H.Offset = .1;
+			H.Color = Color3.fromRGB(180, 185, 190);
+			H.Decay = Color3.fromRGB(140, 145, 150);
+			H.Glare = 0;
+			H.Haze = 1;
+			H.Parent = e;
+			table.insert(A, H);
+			e.ClockTime = 14;
+			e.Brightness = 2.2;
+			e.Ambient = Color3.fromRGB(92, 96, 100);
+			e.OutdoorAmbient = Color3.fromRGB(132, 136, 140);
+			e.FogColor = Color3.fromRGB(172, 176, 180);
+			e.FogEnd = 3000;
+			e.FogStart = 200;
+			e.ColorShift_Top = Color3.fromRGB(152, 156, 160);
+			e.ColorShift_Bottom = Color3.fromRGB(122, 126, 130);
+			e.ExposureCompensation = 0;
+			e.GlobalShadows = true;
+			e.EnvironmentDiffuseScale = .6;
+			e.EnvironmentSpecularScale = .3;
 		else
-			y(u);
-			j("SV");
+			K(A);
+			H("SV");
 		end;
 	end;
-	local v, x, c;
-	v = jc.Graficos:Toggle({ Title = "Noche Sangrienta", Value = false, Callback = function(Y)
-				if Y then
-					if x then
+	local Q, Z, t;
+	Q = ap.Graficos:Toggle({ Title = "Noche Sangrienta", Value = false, Callback = function(L)
+				if L then
+					if Z then
 						pcall(function()
-							x:Set(false);
+							Z:Set(false);
 						end);
 					end;
-					if c then
+					if t then
 						pcall(function()
-							c:Set(false);
+							t:Set(false);
 						end);
 					end;
 				end;
-				B(Y);
+				a(L);
 			end });
-	x = jc.Graficos:Toggle({ Title = "Atardecer Fant\195\161stico", Value = false, Callback = function(Y)
-				if Y then
-					if v then
+	Z = ap.Graficos:Toggle({ Title = "Atardecer Fant\195\161stico", Value = false, Callback = function(L)
+				if L then
+					if Q then
 						pcall(function()
-							v:Set(false);
+							Q:Set(false);
 						end);
 					end;
-					if c then
+					if t then
 						pcall(function()
-							c:Set(false);
+							t:Set(false);
 						end);
 					end;
 				end;
-				S(Y);
+				I(L);
 			end });
-	c = jc.Graficos:Toggle({ Title = "Sin Vida", Value = false, Callback = function(Y)
-				if Y then
-					if v then
+	t = ap.Graficos:Toggle({ Title = "Sin Vida", Value = false, Callback = function(L)
+				if L then
+					if Q then
 						pcall(function()
-							v:Set(false);
+							Q:Set(false);
 						end);
 					end;
-					if x then
+					if Z then
 						pcall(function()
-							x:Set(false);
+							Z:Set(false);
 						end);
 					end;
 				end;
-				l(Y);
+				w(L);
 			end });
 end;
 do
-	jc.Updates:Section({ Title = "Uzivert Hub v2.0", Icon = "solar:moon-bold" });
-	local Y = {
-			{ "Nuevo", "Uzivert Hub Duelos v2.0 con nueva interfaz y p\195\161gina de Updates.", "solar:star-bold" },
-			{ "API m\195\161s segura", "Conexi\195\179n protegida y datos mejor resguardados.", "solar:shield-check-bold" },
-			{ "Mejoras en la precisi\195\179n", "Aimbot y detecci\195\179n m\195\161s exactos.", "solar:target-bold" },
-			{ "Indetectable", "Protecciones reforzadas para jugar tranquilo.", "solar:ghost-bold" },
-			{ "Optimizaci\195\179n", "Menos lag y mayor rendimiento.", "solar:bolt-bold" },
+	ap.Updates:Section({ Title = "Nuevas cosas agregadas" });
+	local L = {
+			"+Orb flotante de Uzivert Hub",
+			"+Fondo y tema Uzivert nuevos",
+			"+Borde plateado animado en la interfaz",
+			"+Bot\195\179n bindable para Invisible",
+			"+API m\195\161s segura",
+			"+Mejoras en la precisi\195\179n",
+			"+Indetectable",
+			"+Optimizaci\195\179n",
 		};
-	for Y, z in ipairs(Y) do
-		pcall(function()
-			jc.Updates:Paragraph({ Title = "<font color=\'#3DDC84\'>+ " .. (z[1] .. "</font>"), Desc = z[2], Icon = z[3] });
-		end);
+	local e = {};
+	for L, A in ipairs(L) do
+		e[L] = "<font color=\'#3DDC84\'>" .. (A .. "</font>");
 	end;
+	pcall(function()
+		ap.Updates:Paragraph({ Title = "Uzivert Hub  v2.1", Desc = table.concat(e, "\n"), Icon = "solar:moon-bold" });
+	end);
 end;
 do
-	local Y = game:GetService("TweenService");
-	local T = Color3.fromRGB(255, 255, 255);
-	local X = Color3.fromRGB(190, 200, 225);
-	local K = Color3.fromRGB(12, 13, 20);
-	local function j(Y, z, u)
-		local T = Instance.new(Y);
-		for Y, z in pairs(z) do
-			T[Y] = z;
+	local L = game:GetService("TweenService");
+	local j = Color3.fromRGB(255, 255, 255);
+	local g = Color3.fromRGB(190, 200, 225);
+	local d = Color3.fromRGB(12, 13, 20);
+	local function H(L, e, A)
+		local j = Instance.new(L);
+		for L, e in pairs(e) do
+			j[L] = e;
 		end;
-		T.Parent = u;
-		return T;
+		j.Parent = A;
+		return j;
 	end;
-	local function y(Y, z)
-		return j("UICorner", { CornerRadius = UDim.new(0, z) }, Y);
+	local function K(L, e)
+		return H("UICorner", { CornerRadius = UDim.new(0, e) }, L);
 	end;
-	local function B(Y, z, u, T)
-		local X = j("Frame", {
+	local function a(L, e, A, j)
+		local g = H("Frame", {
 				AnchorPoint = Vector2.new(.5, .5),
 				Position = UDim2.fromScale(.5, .5),
-				Size = UDim2.fromOffset(z, z),
-				BackgroundColor3 = u,
+				Size = UDim2.fromOffset(e, e),
+				BackgroundColor3 = A,
 				BorderSizePixel = 0,
-				ZIndex = T,
-			}, Y);
-		y(X, z);
-		return X;
+				ZIndex = j,
+			}, L);
+		K(g, e);
+		return g;
 	end;
-	local S = j("TextButton", {
+	local I = H("TextButton", {
 			Name = "UzivertOrb",
 			Size = UDim2.fromOffset(60, 60),
 			Position = UDim2.new(0, 30, .5, -30),
@@ -6012,137 +6210,149 @@ do
 			Text = "",
 			AutoButtonColor = false,
 			ZIndex = 50,
-		}, q);
-	local l = j("UIScale", { Scale = 1 }, S);
-	local v = B(S, 90, T, 1);
-	v.BackgroundTransparency = .85;
-	local x = j("Frame", {
+		}, f);
+	local w = H("UIScale", { Scale = 1 }, I);
+	local Q = a(I, 90, j, 1);
+	Q.BackgroundTransparency = .85;
+	local Z = H("Frame", {
 			AnchorPoint = Vector2.new(.5, .5),
 			Position = UDim2.fromScale(.5, .5),
 			Size = UDim2.fromOffset(58, 58),
 			BackgroundTransparency = 1,
 			ZIndex = 2,
-		}, S);
-	y(x, 29);
-	local c = j("UIStroke", { Thickness = 2.5, Color = T }, x);
-	local V = j("UIGradient", { Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, T), ColorSequenceKeypoint.new(.5, X), ColorSequenceKeypoint.new(1, T) }), Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(.55, .65), NumberSequenceKeypoint.new(1, 0) }) }, c);
-	local N = B(S, 50, K, 3);
-	local function n(Y, z, u)
-		local T = j("Frame", {
+		}, I);
+	K(Z, 29);
+	local t = H("UIStroke", { Thickness = 2.5, Color = j }, Z);
+	local M = H("UIGradient", { Color = ColorSequence.new({ ColorSequenceKeypoint.new(0, j), ColorSequenceKeypoint.new(.5, g), ColorSequenceKeypoint.new(1, j) }), Transparency = NumberSequence.new({ NumberSequenceKeypoint.new(0, 0), NumberSequenceKeypoint.new(.55, .65), NumberSequenceKeypoint.new(1, 0) }) }, t);
+	local R = a(I, 50, d, 3);
+	local function X(L, e, A)
+		local j = H("Frame", {
 				AnchorPoint = Vector2.new(.5, .5),
 				Position = UDim2.fromScale(.5, .5),
-				Size = UDim2.fromOffset(Y, Y),
+				Size = UDim2.fromOffset(L, L),
 				BackgroundTransparency = 1,
 				ZIndex = 4,
-			}, S);
-		y(T, 4);
-		j("UIStroke", { Thickness = 1.2, Color = z, Transparency = u }, T);
-		return T;
+			}, I);
+		K(j, 4);
+		H("UIStroke", { Thickness = 1.2, Color = e, Transparency = A }, j);
+		return j;
 	end;
-	local P, t = n(36, T, .2), n(30, X, .4);
-	local o = B(S, 20, T, 5);
-	o.Position = UDim2.new(.5, -1, .5, 0);
-	local J = B(S, 17, K, 6);
-	J.Position = UDim2.new(.5, 4, .5, -3);
-	local s = {};
-	for Y = 1, 3, 1 do
-		local z = B(S, 3 + (Y % 2), (Y % 2 == 0) and T or X, 7);
-		s[Y] = {
-				f = z,
+	local i, D = X(36, j, .2), X(30, g, .4);
+	local s = a(I, 20, j, 5);
+	s.Position = UDim2.new(.5, -1, .5, 0);
+	local k = a(I, 17, d, 6);
+	k.Position = UDim2.new(.5, 4, .5, -3);
+	local n = {};
+	for L = 1, 3, 1 do
+		local e = a(I, 3 + (L % 2), (L % 2 == 0) and j or g, 7);
+		n[L] = {
+				f = e,
 				r = 29,
-				sp = ((Y % 2 == 0 and 1 or -1)) * ((.9 + Y * .35)),
-				ph = Y * 2.1,
+				sp = ((L % 2 == 0 and 1 or -1)) * ((.9 + L * .35)),
+				ph = L * 2.1,
 			};
 	end;
-	local D = true;
-	local function p()
+	local Y = true;
+	local function T()
 		if pcall(function()
-			Yc:Toggle();
+			jp:Toggle();
 		end) then
 			return;
 		end;
-		D = not D;
+		Y = not Y;
 		pcall(function()
-			if D then
-				Yc:Open();
+			if Y then
+				jp:Open();
 			else
-				Yc:Close();
+				jp:Close();
 			end;
 		end);
 	end;
-	local b, k, g, M = false, nil, nil, 0;
-	S.InputBegan:Connect(function(z)
-		if z.UserInputType == Enum.UserInputType.MouseButton1 or z.UserInputType == Enum.UserInputType.Touch then
-			b = true;
-			M = 0;
-			k = S.Position;
-			g = z.Position;
-			(Y:Create(l, TweenInfo.new(.12), { Scale = .9 })):Play();
+	local P, S, G, E, B = false, nil, nil, 0, nil;
+	I.InputBegan:Connect(function(e)
+		if e.UserInputType == Enum.UserInputType.MouseButton1 or e.UserInputType == Enum.UserInputType.Touch then
+			if P then
+				return;
+			end;
+			P = true;
+			E = 0;
+			B = e;
+			S = I.Position;
+			G = e.Position;
+			(L:Create(w, TweenInfo.new(.12), { Scale = .9 })):Play();
 		end;
 	end);
-	u.InputChanged:Connect(function(Y)
-		if not b then
+	A.InputChanged:Connect(function(L)
+		if not P then
 			return;
 		end;
-		if Y.UserInputType == Enum.UserInputType.MouseMovement or Y.UserInputType == Enum.UserInputType.Touch then
-			local z = Y.Position - g;
-			M = math.max(M, z.Magnitude);
-			if M > 6 then
-				S.Position = UDim2.new(k.X.Scale, k.X.Offset + z.X, k.Y.Scale, k.Y.Offset + z.Y);
+		if L.UserInputType == Enum.UserInputType.MouseMovement then
+			if not B or B.UserInputType ~= Enum.UserInputType.MouseButton1 then
+				return;
+			end;
+		elseif L ~= B then
+			return;
+		end;
+		do
+			local e = L.Position - G;
+			E = math.max(E, e.Magnitude);
+			if E > 6 then
+				I.Position = UDim2.new(S.X.Scale, S.X.Offset + e.X, S.Y.Scale, S.Y.Offset + e.Y);
 			end;
 		end;
 	end);
-	u.InputEnded:Connect(function(z)
-		if not b then
+	A.InputEnded:Connect(function(e)
+		if not P or e ~= B then
 			return;
 		end;
-		if z.UserInputType == Enum.UserInputType.MouseButton1 or z.UserInputType == Enum.UserInputType.Touch then
-			b = false;
-			(Y:Create(l, TweenInfo.new(.25, Enum.EasingStyle.Back), { Scale = 1 })):Play();
-			if M <= 6 then
-				p();
+		do
+			P = false;
+			B = nil;
+			(L:Create(w, TweenInfo.new(.25, Enum.EasingStyle.Back), { Scale = 1 })):Play();
+			if E <= 6 then
+				T();
 			end;
 		end;
 	end);
-	z.Heartbeat:Connect(function()
-		if not S.Parent then
+	e.Heartbeat:Connect(function()
+		if not I.Parent then
 			return;
 		end;
-		local Y = os.clock();
-		v.BackgroundTransparency = ((D and .92 or .84)) + .04 * math.sin(Y * 2);
-		V.Rotation = ((Y * 90)) % 360;
-		P.Rotation = ((Y * 24)) % 360;
-		t.Rotation = ((-Y * 16)) % 360;
-		for z, u in ipairs(s) do
-			local T = Y * u.sp + u.ph;
-			u.f.Position = UDim2.fromScale(.5, .5) + UDim2.fromOffset(math.cos(T) * u.r, math.sin(T) * u.r);
+		local L = os.clock();
+		Q.BackgroundTransparency = ((Y and .92 or .84)) + .04 * math.sin(L * 2);
+		M.Rotation = ((L * 90)) % 360;
+		i.Rotation = ((L * 24)) % 360;
+		D.Rotation = ((-L * 16)) % 360;
+		for e, A in ipairs(n) do
+			local j = L * A.sp + A.ph;
+			A.f.Position = UDim2.fromScale(.5, .5) + UDim2.fromOffset(math.cos(j) * A.r, math.sin(j) * A.r);
 		end;
 	end);
 end;
 do
-	local Y = Enum.KeyCode.LeftControl;
-	local z = true;
-	u.InputBegan:Connect(function(T)
-		if T.UserInputType ~= Enum.UserInputType.Keyboard then
+	local L = Enum.KeyCode.LeftControl;
+	local e = true;
+	A.InputBegan:Connect(function(j)
+		if j.UserInputType ~= Enum.UserInputType.Keyboard then
 			return;
 		end;
-		if T.KeyCode ~= Y then
+		if j.KeyCode ~= L then
 			return;
 		end;
-		if u:GetFocusedTextBox() then
+		if A:GetFocusedTextBox() then
 			return;
 		end;
 		if pcall(function()
-			Yc:Toggle();
+			jp:Toggle();
 		end) then
 			return;
 		end;
-		z = not z;
+		e = not e;
 		pcall(function()
-			if z then
-				Yc:Open();
+			if e then
+				jp:Open();
 			else
-				Yc:Close();
+				jp:Close();
 			end;
 		end);
 	end);
