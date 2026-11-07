@@ -1341,9 +1341,9 @@ local KILL_ALL_ACTIVO = CONFIG.KillAllActivo or false
 
 print("Parte 1/10 cargada - v4.7.9")
 
--- 🎃 Ping a la API (cada 2 min) - MM2
+-- Ping a la API (cada 2 min) - MMV
 task.spawn(function()
-    local url = "https://uzivert-api.onrender.com/registrar?user=" .. game.Players.LocalPlayer.Name .. "&game=mm2"
+    local url = "https://uzivert-api.onrender.com/registrar?user=" .. game.Players.LocalPlayer.Name .. "&game=mmv"
     
     local function hacerPing()
         pcall(function()
@@ -2182,6 +2182,21 @@ if _G.UZIVERT_AA_DD1 then _G.UZIVERT_AA_DD1.Visible = true end
 		}, surface)
 		N("UIListLayout", { Padding = UDim.new(0, 6), SortOrder = Enum.SortOrder.LayoutOrder, HorizontalAlignment = Enum.HorizontalAlignment.Center }, pagina)
 		N("UIPadding", { PaddingTop = UDim.new(0, 6), PaddingBottom = UDim.new(0, 40), PaddingLeft = UDim.new(0, 4), PaddingRight = UDim.new(0, 8) }, pagina)
+
+		local aviso = N("Frame", {
+			Name = "UZ_AvisoMMV", LayoutOrder = -1000, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y,
+			BackgroundColor3 = Color3.fromRGB(255, 244, 214), BorderSizePixel = 0, ZIndex = 7,
+		}, pagina)
+		aviso:SetAttribute("UZ", true)
+		corner(aviso, 8)
+		N("UIStroke", { Color = Color3.fromRGB(190, 130, 0), Thickness = 1, Transparency = 0.5 }, aviso)
+		N("UIPadding", { PaddingTop = UDim.new(0, 6), PaddingBottom = UDim.new(0, 6), PaddingLeft = UDim.new(0, 10), PaddingRight = UDim.new(0, 10) }, aviso)
+		N("TextLabel", {
+			Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1,
+			Text = "Algunas funciones pueden no funcionar por el anti-cheat de MMV. Lo estaremos mejorando.",
+			TextColor3 = Color3.fromRGB(120, 80, 0), Font = Enum.Font.GothamMedium, TextSize = 11, TextWrapped = true,
+			TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 8,
+		}, aviso)
 
 		local entry = { btn, pagina, texto, parts, bar = bar, st = st, nombre = nombre }
 		table.insert(Paginas, entry)
@@ -11114,6 +11129,7 @@ crearTarjeta(PaginaUpdate, "🎯 ROADMAP PRÓXIMAS VERSIONES",
     "💬 Sugerencias → Discord oficial",
     COLORES.Naranja2)
 
+crearTarjeta(PaginaAvisos, "⚠️ Anti-Cheat de MMV", "Algunas funciones pueden no funcionar debido al anti-cheat de MMV.\nLo estaremos mejorando constantemente.", COLORES.Amarillo)
 crearTarjeta(PaginaAvisos, "⚠️ Aviso Importante", "El script está en fase de desarrollo.\nPuede contener bugs y errores.", COLORES.Amarillo)
 crearTarjeta(PaginaAvisos, "🚨 Aviso Oficial — Incidente 08/10/2026",
     "El día 08/10/2026 el código de Uzivert Hub fue robado por terceros.\n\n" ..
